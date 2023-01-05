@@ -17,7 +17,7 @@ public:
 	int validPlayersNum = 0;
 
 	/// <summary>
-	/// ¸üĞÂÍæ¼ÒĞÅÏ¢µÄÏß³Ìº¯Êı
+	/// æ›´æ–°ç©å®¶ä¿¡æ¯çš„çº¿ç¨‹å‡½æ•°
 	/// Thread that keeps updating data of PlayerControllers using RPM
 	/// </summary>
 	/// <param name="playerControllers"></param>
@@ -33,32 +33,32 @@ private:
 	Memory* memory;
 
 	/// <summary>
-	/// ¸üĞÂÍæ¼ÒPlayerControllerĞÅÏ¢
+	/// æ›´æ–°ç©å®¶PlayerControllerä¿¡æ¯
 	/// </summary>
-	/// <param name="playerIndex">Íæ¼ÒµÄË÷Òı£¬·¶Î§Îª[0,15],µ±indexÎª0Ê±ÎªLocalPlayer</param>
-	/// <param name="playerController">Òª¸üĞÂµÄPlayerController</param>
+	/// <param name="playerIndex">ç©å®¶çš„ç´¢å¼•ï¼ŒèŒƒå›´ä¸º[0,15],å½“indexä¸º0æ—¶ä¸ºLocalPlayer</param>
+	/// <param name="playerController">è¦æ›´æ–°çš„PlayerController</param>
 	void updatePlayerController(std::list<PlayerController>* playerControllers) {
 		int validPlayers = 0;
 
-		//±éÀúËùÓĞPlayerController
+		//éå†æ‰€æœ‰PlayerController
 		std::list<PlayerController>::iterator iterator = playerControllers->begin();
 		for (int i = 0; iterator != playerControllers->end(); ++iterator, ++i) {
 			std::vector<int64_t> offsets = Offsets::GameAssembly::playerControllerByIndex(i);
 			int64_t playerControllerAddr = memory->FindPointer( memory->gameAssemblyBaseAddress, offsets);
 
-			//¸üĞÂÍæ¼ÒĞÅÏ¢
+			//æ›´æ–°ç©å®¶ä¿¡æ¯
 			bool isPlayerValid = playerControllerAddr != NULL;
 
-			//ÓĞĞ§Íæ¼ÒĞÅÏ¢£¬¶ÁÈ¡ÄÚ´æ²¢¸üĞÂ
+			//æœ‰æ•ˆç©å®¶ä¿¡æ¯ï¼Œè¯»å–å†…å­˜å¹¶æ›´æ–°
 			if (isPlayerValid) {
 				(*iterator).update(playerControllerAddr);
-				//¸üĞÂÍæ¼Ò×ø±ê
+				//æ›´æ–°ç©å®¶åæ ‡
 				(*iterator).updatePosition(playerControllerAddr);
 
 				validPlayers++;
 			}
 			else {
-				//ÎŞĞ§Íæ¼ÒĞÅÏ¢£¬ÇÒÃ»ÓĞÖØÖÃÊı¾İ
+				//æ— æ•ˆç©å®¶ä¿¡æ¯ï¼Œä¸”æ²¡æœ‰é‡ç½®æ•°æ®
 				if ((*iterator).valid) {
 					(*iterator).markAsInvalidPlayer();
 					(*iterator).reset();
@@ -69,12 +69,12 @@ private:
 					}
 				}
 				else {
-					//ÎŞĞ§Íæ¼ÒĞÅÏ¢£¬ÒÑÖØÖÃ¹ıÊı¾İ
+					//æ— æ•ˆç©å®¶ä¿¡æ¯ï¼Œå·²é‡ç½®è¿‡æ•°æ®
 				}
 			}
 		}
 
-		//¸üĞÂÓĞĞ§Íæ¼ÒĞÅÏ¢
+		//æ›´æ–°æœ‰æ•ˆç©å®¶ä¿¡æ¯
 		this->validPlayersNum = validPlayers;
 	}
 };

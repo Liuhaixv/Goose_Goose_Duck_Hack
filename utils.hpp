@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include<string>
 #include<list>
@@ -16,10 +16,10 @@ public:
 	}
 
 	/// <summary>
-	/// Êä³ö×Ö·û´®µ½¿ØÖÆÌ¨,Èç¹ûÃ»ÓĞÖ¸¶¨µÚ¶ş¸ö²ÎÊıÔòÄ¬ÈÏÊä³öµÚÒ»¸ö×Ö·û´®²ÎÊı¡£
+	/// è¾“å‡ºå­—ç¬¦ä¸²åˆ°æ§åˆ¶å°,å¦‚æœæ²¡æœ‰æŒ‡å®šç¬¬äºŒä¸ªå‚æ•°åˆ™é»˜è®¤è¾“å‡ºç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²å‚æ•°ã€‚
 	/// </summary>
-	/// <param name="eng">Ó¢ÎÄ×Ö·û´®</param>
-	/// <param name="cn">ÖĞÎÄ×Ö·û´®</param>
+	/// <param name="eng">è‹±æ–‡å­—ç¬¦ä¸²</param>
+	/// <param name="cn">ä¸­æ–‡å­—ç¬¦ä¸²</param>
 	void print(std::string eng, std::string cn = "") {
 		if (cn == "") {
 			std::cout << eng;
@@ -35,7 +35,7 @@ public:
 	}
 
 	/// <summary>
-	/// ·µ»ØÖĞÎÄ»òÓ¢ÎÄ×Ö·û´®
+	/// è¿”å›ä¸­æ–‡æˆ–è‹±æ–‡å­—ç¬¦ä¸²
 	/// </summary>
 	/// <param name="eng"></param>
 	/// <param name="cn"></param>
@@ -45,14 +45,14 @@ public:
 	}
 
 	/// <summary>
-	/// ¼ì²éµ±Ç°ÏµÍ³ÊÇ·ñÊ¹ÓÃÖĞÎÄ
+	/// æ£€æŸ¥å½“å‰ç³»ç»Ÿæ˜¯å¦ä½¿ç”¨ä¸­æ–‡
 	/// </summary>
-	/// <returns>ÊÇ·ñÊ¹ÓÃÖĞÎÄ</returns>
+	/// <returns>æ˜¯å¦ä½¿ç”¨ä¸­æ–‡</returns>
 	static bool isChineseLanguageOS() {
 		try {
 			std::string locale = __CheckLocale();
 			if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
-				//ÖĞÎÄ 
+				//ä¸­æ–‡ 
 				return true;
 			}
 			return false;
@@ -63,11 +63,11 @@ public:
 	}
 
 	/// <summary>
-	/// ¹Ø±Õ¿ìËÙÊäÈëÄ£Ê½·ÀÖ¹³ÌĞò¿¨×¡
+	/// å…³é—­å¿«é€Ÿè¾“å…¥æ¨¡å¼é˜²æ­¢ç¨‹åºå¡ä½
 	/// Disable quick-edit in console in case that user input stuck the program
 	/// </summary>
 	static void disableQuickEdit() {
-		//Ê¹¿ØÖÆÌ¨ÎŞ·¨ÊäÈë£¬·ÀÖ¹ÒòÎªÊäÈë¶ø¿¨×¡³ÌĞò
+		//ä½¿æ§åˆ¶å°æ— æ³•è¾“å…¥ï¼Œé˜²æ­¢å› ä¸ºè¾“å…¥è€Œå¡ä½ç¨‹åº
 		DWORD prev_mode;
 		HANDLE hStidin = GetStdHandle(STD_INPUT_HANDLE);
 		GetConsoleMode(hStidin, &prev_mode);
@@ -75,147 +75,147 @@ public:
 	}
 
 	const char* getRoleName(int id) {
-		//·µ»ØÖĞÎÄ½ÇÉ«Ãû
+		//è¿”å›ä¸­æ–‡è§’è‰²å
 		if (this->nChineseOS) {
 			switch (id)
 			{
 			case gameRoleId::None:
-				return("ÎŞ");
+				return("æ— ");
 				break;
 			case gameRoleId::Goose:
-				return("¶ì");
+				return("é¹…");
 				break;
 			case gameRoleId::Duck:
-				return("Ñ¼×Ó");
+				return("é¸­å­");
 				break;
 			case gameRoleId::Dodo:
-				return("´ô´ôÄñ");
+				return("å‘†å‘†é¸Ÿ");
 				break;
 			case gameRoleId::Bounty:
-				return("ÉÍ½ğ");
+				return("èµé‡‘");
 				break;
 			case gameRoleId::Mechanic:
-				//¿ÉÒÔÊ¹ÓÃ¹ÜµÀ(¸Ã½ÇÉ«ÒÑ±»¿ª·¢ÕßÒÆ³ı)
+				//å¯ä»¥ä½¿ç”¨ç®¡é“(è¯¥è§’è‰²å·²è¢«å¼€å‘è€…ç§»é™¤)
 				return("Mechanic");
 				break;
 			case gameRoleId::Technician:
-				//¿ÉÒÔÔÚÃÔÄãµØÍ¼ÉÏ¿´µ½ÆÆ»µµÄ´óÔ¼Î»ÖÃ(¸Ã½ÇÉ«ÒÑ±»¿ª·¢ÕßÒÆ³ı)
+				//å¯ä»¥åœ¨è¿·ä½ åœ°å›¾ä¸Šçœ‹åˆ°ç ´åçš„å¤§çº¦ä½ç½®(è¯¥è§’è‰²å·²è¢«å¼€å‘è€…ç§»é™¤)
 				return("Technician");
 				break;
 			case gameRoleId::Medium:
-				return("Í¨Áé");
+				return("é€šçµ");
 				break;
 			case gameRoleId::Vigilante:
-				return("ÕıÒåÊ¹Õß");
+				return("æ­£ä¹‰ä½¿è€…");
 				break;
 			case gameRoleId::Cannibal:
-				return("Ê³ÄñÑ¼");
+				return("é£Ÿé¸Ÿé¸­");
 				break;
 			case gameRoleId::Morphling:
-				return("±äĞÎÕß(Ñ¼×Ó)");
+				return("å˜å½¢è€…(é¸­å­)");
 				break;
 			case gameRoleId::Sheriff:
-				return("¾¯³¤");
+				return("è­¦é•¿");
 				break;
 			case gameRoleId::Silencer:
-				return("¾²ÓïÕß(Ñ¼×Ó)");
+				return("é™è¯­è€…(é¸­å­)");
 				break;
 			case gameRoleId::Canadian:
-				return("¼ÓÄÃ´ó¶ì");
+				return("åŠ æ‹¿å¤§é¹…");
 				break;
 			case gameRoleId::LoverDuck:
-				return("ÁµÈË(Ñ¼×Ó)");
+				return("æ‹äºº(é¸­å­)");
 				break;
 			case gameRoleId::LoverGoose:
-				return("ÁµÈË(¶ì)");
+				return("æ‹äºº(é¹…)");
 				break;
 			case gameRoleId::Vulture:
-				return("ÍºğÕ");
+				return("ç§ƒé¹«");
 				break;
 			case gameRoleId::Professional:
-				return("×¨ÒµÉ±ÊÖ(Ñ¼×Ó)");
+				return("ä¸“ä¸šæ€æ‰‹(é¸­å­)");
 				break;
 			case gameRoleId::Spy:
-				return("¼äµı(Ñ¼×Ó)");
+				return("é—´è°(é¸­å­)");
 				break;
 			case gameRoleId::Mimic:
-				return("Ä£·ÂÕß");
+				return("æ¨¡ä»¿è€…");
 				break;
 			case gameRoleId::Detective:
-				return("ÕìÌ½");
+				return("ä¾¦æ¢");
 				break;
 			case gameRoleId::Pigeon:
-				return("¸ë×Ó");
+				return("é¸½å­");
 				break;
 			case gameRoleId::Birdwatcher:
-				return("¹ÛÄñÕß");
+				return("è§‚é¸Ÿè€…");
 				break;
 			case gameRoleId::Assassin:
-				return("´Ì¿Í(Ñ¼×Ó)");
+				return("åˆºå®¢(é¸­å­)");
 				break;
 			case gameRoleId::Falcon:
-				return("ÁÔÓ¥");
+				return("çŒé¹°");
 				break;
 			case gameRoleId::Hitman:
-				return("¹ÍÓ¶É±ÊÖ(Ñ¼×Ó)");
+				return("é›‡ä½£æ€æ‰‹(é¸­å­)");
 				break;
 			case gameRoleId::Bodyguard:
-				return("±£ïÚ¶ì");
+				return("ä¿é•–é¹…");
 				break;
 			case gameRoleId::Snitch:
-				return("¸æÃÜÕß(Ñ¼×Ó)");
+				return("å‘Šå¯†è€…(é¸­å­)");
 				break;
 			case gameRoleId::Politician:
-				return("ÕşÖÎ¼Ò");
+				return("æ”¿æ²»å®¶");
 				break;
 			case gameRoleId::Locksmith:
-				return("Ëø½³");
+				return("é”åŒ ");
 				break;
 			case gameRoleId::Mortician:
-				return("éëÒÇÔ±");
+				return("æ®¡ä»ªå‘˜");
 				break;
 			case gameRoleId::Celebrity:
-				return("Íøºì");
+				return("ç½‘çº¢");
 				break;
 			case gameRoleId::Party:
-				return("ÅÉ¶Ô¿ñ(Ñ¼×Ó)");
+				return("æ´¾å¯¹ç‹‚(é¸­å­)");
 				break;
 			case gameRoleId::Demolitionist:
-				return("±¬Õ¨Íõ(Ñ¼×Ó)");
+				return("çˆ†ç‚¸ç‹(é¸­å­)");
 				break;
 			case gameRoleId::DuelingDodo:
-				return("¾ö¶·´ô´ôÄñ");
+				return("å†³æ–—å‘†å‘†é¸Ÿ");
 				break;
 			case gameRoleId::GHGoose:
-				return("¡¾ÁÔ¶ì¡¿¶ì");
+				return("ã€çŒé¹…ã€‘é¹…");
 				break;
 			case gameRoleId::GHDuck:
-				return("¡¾ÁÔ¶ì¡¿Ñ¼×Ó");
+				return("ã€çŒé¹…ã€‘é¸­å­");
 				break;
 			case gameRoleId::GHBounty:
-				//ÄãµÄÈÎÎñÊÇ±»µÚÒ»¸öÏûÃğ£¬Èç¹ûÈÎÎñÍê³ÉÔò¿ÉÒÔ»ñµÃ½±Àø(¸Ã½ÇÉ«ÒÑ±»¿ª·¢ÕßÒÆ³ı)
-				return("¡¾ÁÔ¶ì¡¿ÉÍ½ğ¶ì");
+				//ä½ çš„ä»»åŠ¡æ˜¯è¢«ç¬¬ä¸€ä¸ªæ¶ˆç­ï¼Œå¦‚æœä»»åŠ¡å®Œæˆåˆ™å¯ä»¥è·å¾—å¥–åŠ±(è¯¥è§’è‰²å·²è¢«å¼€å‘è€…ç§»é™¤)
+				return("ã€çŒé¹…ã€‘èµé‡‘é¹…");
 				break;
 			case gameRoleId::HNSGoose:
-				return("¡¾HNS¡¿¶ì");
+				return("ã€HNSã€‘é¹…");
 				break;
 			case gameRoleId::HNSDuck:
-				return("¡¾HNS¡¿Ñ¼×Ó");
+				return("ã€HNSã€‘é¸­å­");
 				break;
 			case gameRoleId::HNSBounty:
-				return("¡¾HNS¡¿ÉÍ½ğ¶ì");
+				return("ã€HNSã€‘èµé‡‘é¹…");
 				break;
 			case gameRoleId::DNDDuck:
-				return("¡¾°ÔÍõ²Í¡¿Ñ¼×Ó");
+				return("ã€éœ¸ç‹é¤ã€‘é¸­å­");
 				break;
 			case gameRoleId::DNDFalcon:
-				return("¡¾°ÔÍõ²Í¡¿ÁÔÓ¥");
+				return("ã€éœ¸ç‹é¤ã€‘çŒé¹°");
 				break;
 			case gameRoleId::DNDVulture:
-				return("¡¾°ÔÍõ²Í¡¿ÍºğÕ");
+				return("ã€éœ¸ç‹é¤ã€‘ç§ƒé¹«");
 				break;
 			case gameRoleId::DNDMorphling:
-				return("¡¾°ÔÍõ²Í¡¿±äĞÎÑ¼");
+				return("ã€éœ¸ç‹é¤ã€‘å˜å½¢é¸­");
 				break;
 			case gameRoleId::FPGoose:
 				return("FPGoose");
@@ -224,71 +224,71 @@ public:
 				return("ExploreGoose");
 				break;
 			case gameRoleId::TTVampire:
-				return("¡¾TT¡¿ÎüÑª¹í");
+				return("ã€TTã€‘å¸è¡€é¬¼");
 				break;
 			case gameRoleId::TTPeasant:
-				return("¡¾TT¡¿´åÃñ");
+				return("ã€TTã€‘æ‘æ°‘");
 				break;
 			case gameRoleId::TTThrall:
-				return("¡¾TT¡¿¹íÅ«");
+				return("ã€TTã€‘é¬¼å¥´");
 				break;
 			case gameRoleId::Spectator:
 				return("Spectator");
 				break;
 			case gameRoleId::IdentityThief:
-				return("Éí·İÇÔÔô");
+				return("èº«ä»½çªƒè´¼");
 				break;
 			case gameRoleId::Adventurer:
-				return("Ã°ÏÕ¼Ò");
+				return("å†’é™©å®¶");
 				break;
 			case gameRoleId::Avenger:
-				return("¸´³ğÕß");
+				return("å¤ä»‡è€…");
 				break;
 			case gameRoleId::Ninja:
-				return("ÈÌÕß(Ñ¼×Ó)");
+				return("å¿è€…(é¸­å­)");
 				break;
 			case gameRoleId::Undertaker:
-				return("É¥ÔáÕß");
+				return("ä¸§è‘¬è€…");
 				break;
 			case gameRoleId::Snoop:
-				//¿ÉÒÔÒş²ØÔÚµØÍ¼µÄÒ»Ğ©µØ·½(¸Ã½ÇÉ«ÒÑ±»¿ª·¢ÕßÒÆ³ı)
+				//å¯ä»¥éšè—åœ¨åœ°å›¾çš„ä¸€äº›åœ°æ–¹(è¯¥è§’è‰²å·²è¢«å¼€å‘è€…ç§»é™¤)
 				return("Snoop");
 				break;
 			case gameRoleId::Esper:
-				return("³¬ÄÜÁ¦Õß");
+				return("è¶…èƒ½åŠ›è€…");
 				break;
 			case gameRoleId::Invisibility:
-				return("ÒşÉíÕß");
+				return("éšèº«è€…");
 				break;
 			case gameRoleId::Astral:
-				return("ĞÇ½çĞĞÕß");
+				return("æ˜Ÿç•Œè¡Œè€…");
 				break;
 			case gameRoleId::Pelican:
-				return("ğÃğÉ");
+				return("é¹ˆé¹•");
 				break;
 			case gameRoleId::TTEThrall:
-				return("¡¾TTE¡¿¹íÅ«");
+				return("ã€TTEã€‘é¬¼å¥´");
 				break;
 			case gameRoleId::TTMummy:
-				return("¡¾TT¡¿Ä¾ÄËÒÁ");
+				return("ã€TTã€‘æœ¨ä¹ƒä¼Š");
 				break;
 			case gameRoleId::SerialKiller:
-				return("Á¬»·É±ÊÖ(Ñ¼×Ó)");
+				return("è¿ç¯æ€æ‰‹(é¸­å­)");
 				break;
 			case gameRoleId::Engineer:
-				return("¹¤³ÌÊ¦");
+				return("å·¥ç¨‹å¸ˆ");
 				break;
 			case gameRoleId::Warlock:
-				return("ÊõÊ¿(Ñ¼×Ó)");
+				return("æœ¯å£«(é¸­å­)");
 				break;
 			case gameRoleId::StreetUrchin:
-				return("Á÷ÀË¶ùÍ¯");
+				return("æµæµªå„¿ç«¥");
 				break;
 			case gameRoleId::Tracker:
-				return("×·×ÙÕß");
+				return("è¿½è¸ªè€…");
 				break;
 			default:
-				return("ÎŞ");
+				return("æ— ");
 				break;
 			}
 		}
@@ -507,13 +507,13 @@ public:
 	}
 
 private:
-	//µ±Ç°²Ù×÷ÏµÍ³ÊÇ·ñÎªÖĞÎÄ
+	//å½“å‰æ“ä½œç³»ç»Ÿæ˜¯å¦ä¸ºä¸­æ–‡
 	//1 if current OS's language is Chinese
 	int nChineseOS = -1;
 
 	static std::string __CheckLocale()
 	{
-		//LCID Êµ¼ÊÊÇunsignedlongÀàĞÍ£¬ËùÒÔ¿ÉÒÔÍ¨¹ıLCID±àÂëÀ´±È½ÏÊÇÊ²Ã´ÓïÑÔ
+		//LCID å®é™…æ˜¯unsignedlongç±»å‹ï¼Œæ‰€ä»¥å¯ä»¥é€šè¿‡LCIDç¼–ç æ¥æ¯”è¾ƒæ˜¯ä»€ä¹ˆè¯­è¨€
 		LCID lcid = GetThreadLocale();
 		wchar_t name[LOCALE_NAME_MAX_LENGTH];
 		if (LCIDToLocaleName(lcid, name, LOCALE_NAME_MAX_LENGTH, 0) == 0) {

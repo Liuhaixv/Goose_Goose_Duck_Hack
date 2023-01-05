@@ -1,4 +1,4 @@
-// !! means that the information has not been collected yet.
+﻿// !! means that the information has not been collected yet.
 // Outdated. New roles added.
 #pragma once
 

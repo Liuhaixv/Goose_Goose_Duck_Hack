@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include<vector>
 
@@ -19,6 +19,7 @@ namespace Offsets {
 		constexpr int64_t fl_isSpectator = 0x37A; // Boolean
 		constexpr int64_t fl_isRemoteSpectating = 0x37B; // Boolean
 		constexpr int64_t fl_position = 0x2C8; // Value name is randomized. x, y. Float, Float
+		constexpr int64_t fl_idleTime = 0x2E4; // float
 		/*
 		[Notable offsets]
 		2B0, Player location, Float Float,   x, y
@@ -31,7 +32,7 @@ namespace Offsets {
 
 	namespace GameAssembly {
 		/// <summary>
-		/// Í¨¹ıÏÂ±ê·µ»ØPlayerControllerµÄÆ«ÒÆÊı×é<para/>
+		/// é€šè¿‡ä¸‹æ ‡è¿”å›PlayerControllerçš„åç§»æ•°ç»„<para/>
 		/// Returns int64_t array of offsets of PlayerController by its index
 		/// </summary>
 		/// <param name="index">Index of PlayerController, range=[0,15]</param>

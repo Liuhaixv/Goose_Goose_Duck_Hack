@@ -26,12 +26,12 @@ public:
 		return crosshair_status;
 	}
 
-	// use simulate mouse£¬may be replaced with writing memory method
+	// use simulate mouseï¼Œmay be replaced with writing memory method
 	void shoot()
 	{
-		mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0); //°´ÏÂ×ó¼ü
+		mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0); //æŒ‰ä¸‹å·¦é”®
 		Sleep(20);
-		mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0); //ËÉ¿ª×ó¼ü
+		mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0); //æ¾å¼€å·¦é”®
 	}
 
 	Vector3 get_camera_angles()
@@ -44,7 +44,7 @@ public:
 		return memory->read_mem<Vector3>(camera_angles_addr);
 	}
 
-	//³¬´óÊÓÒ° 0 -2.2 0.0000001
+	//è¶…å¤§è§†é‡ 0 -2.2 0.0000001
 	void set_camera_angles(Vector3 angles)
 	{
 

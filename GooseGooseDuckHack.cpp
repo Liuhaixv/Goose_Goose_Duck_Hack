@@ -12,14 +12,14 @@
 
 int main()
 {
-	//³õÊ¼»¯¹¤¾ßÀà
+	//åˆå§‹åŒ–å·¥å…·ç±»
 	Utils utils;
 
-	//¹Ø±Õ¿ìËÙ±à¼­
+	//å…³é—­å¿«é€Ÿç¼–è¾‘
 	//Disable the quick-edit mode
 	utils.disableQuickEdit();
 
-	//³õÊ¼»¯RPM¹¤¾ßÀà
+	//åˆå§‹åŒ–RPMå·¥å…·ç±»
 	Memory memory;
 	Client client(memory);
 	DataUpdater dataUpdater(memory);
@@ -30,31 +30,31 @@ int main()
 		playerControllers.push_back(playerController);
 	}
 
-	//¼ì²âPID
+	//æ£€æµ‹PID
 	if (memory.pID != NULL) {
-		utils.print("Goose Goose Duck hack running...", "¶ìÑ¼É±¸¨ÖúÔËĞĞÖĞ...");
+		utils.print("Goose Goose Duck hack running...", "é¹…é¸­æ€è¾…åŠ©è¿è¡Œä¸­...");
 		std::cout << std::endl;
 		std::cout << "test:" << sizeof(int);
 
-		//Æô¶¯Êı¾İ¸üĞÂÏß³Ì
+		//å¯åŠ¨æ•°æ®æ›´æ–°çº¿ç¨‹
 		std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater, &playerControllers);
 
-		//Ñ­»·´òÓ¡Êı¾İ
+		//å¾ªç¯æ‰“å°æ•°æ®
 		while (true) {
 			if (dataUpdater.validPlayersNum > 0) {
 				//clear console
 				system("cls");
-				//¿ªÊ¼´òÓ¡
+				//å¼€å§‹æ‰“å°
 				PlayerController::printAllPlayersInfo(playerControllers, &utils);
 			}			
 				Sleep(1000);
 		}
 	}
 	else {
-		utils.print("Not detected game, closing now... Please try again and run the game before starting the hack.", "Î´¼ì²âµ½ÓÎÏ·£¬ÕıÔÚ¹Ø±Õ......ÇëÏÈÔËĞĞÓÎÏ·ÔÙ´ò¿ª¸Ã¸¨Öú¡£");
+		utils.print("Not detected game, closing now... Please try again and run the game before starting the hack.", "æœªæ£€æµ‹åˆ°æ¸¸æˆï¼Œæ­£åœ¨å…³é—­......è¯·å…ˆè¿è¡Œæ¸¸æˆå†æ‰“å¼€è¯¥è¾…åŠ©ã€‚");
 		std::cout << std::endl;
 		utils.print("If your have launched game but still see this message, it may because you ran the game (or steam) with Administrator privilege. In that case, you must run the hack with Administrator privilege too.",
-			"Èç¹ûÄãµÄÓÎÏ·ÒÑ¾­´ò¿ªµ«ÈÔÒ»Ö±¿´µ½¸ÃĞÅÏ¢³öÏÖ£¬ºÜ¿ÉÄÜÊÇÄãÒÔ¹ÜÀíÔ±È¨ÏŞÔËĞĞÁËÓÎÏ·»òSteam£¬ÄÇÃ´ÄãĞèÒªÍ¬ÑùÊ¹ÓÃ¹ÜÀíÔ±È¨ÏŞÀ´ÔËĞĞ¸Ã¸¨Öú¡£");
+			"å¦‚æœä½ çš„æ¸¸æˆå·²ç»æ‰“å¼€ä½†ä»ä¸€ç›´çœ‹åˆ°è¯¥ä¿¡æ¯å‡ºç°ï¼Œå¾ˆå¯èƒ½æ˜¯ä½ ä»¥ç®¡ç†å‘˜æƒé™è¿è¡Œäº†æ¸¸æˆæˆ–Steamï¼Œé‚£ä¹ˆä½ éœ€è¦åŒæ ·ä½¿ç”¨ç®¡ç†å‘˜æƒé™æ¥è¿è¡Œè¯¥è¾…åŠ©ã€‚");
        
 	}
 }

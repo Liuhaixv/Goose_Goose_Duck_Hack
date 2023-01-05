@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #pragma warning(disable:4996)
 
 #include"../utils.hpp"
@@ -20,7 +20,7 @@ public:
 
 
 	//Mark if the player is valid(false if no player's info valid)
-	//±ê¼Çµ±Ç°Íæ¼Ò²ÛÎ»ÊÇ·ñÓĞĞ§(µ±Íæ¼ÒÖĞÍ¾Àë¿ª»ò¸Ã²ÛÎ»ÎŞÈËÕ¼ÓÃµ¼ÖÂÄÚ´æÖĞÎŞÓĞĞ§Íæ¼ÒÊı¾İÊ±Îªfalse)
+	//æ ‡è®°å½“å‰ç©å®¶æ§½ä½æ˜¯å¦æœ‰æ•ˆ(å½“ç©å®¶ä¸­é€”ç¦»å¼€æˆ–è¯¥æ§½ä½æ— äººå ç”¨å¯¼è‡´å†…å­˜ä¸­æ— æœ‰æ•ˆç©å®¶æ•°æ®æ—¶ä¸ºfalse)
 	bool valid = false;
 
 	DWORD_PTR ptrPlayerController = 0;
@@ -43,12 +43,11 @@ public:
 		std::list<PlayerController>::iterator iterator = playerControllers.begin();
 
 		const char separator = ' ';
-		const int nameWidth = 20;
-		const int numWidth = 8;
+		const int nameWidth = 15;
 
-		std::cout << std::left << std::setw(nameWidth) << std::setfill(separator) << (utils ? utils->str("Nickname", "Íæ¼ÒêÇ³Æ") : "Íæ¼ÒêÇ³Æ");
-		std::cout << std::left << std::setw(nameWidth) << std::setfill(separator) << (utils ? utils->str("Rolename", "½ÇÉ«") : "½ÇÉ«");
-		std::cout << std::left << std::setw(nameWidth) << std::setfill(separator) << (utils ? utils->str("Pos", "×ø±ê") : "×ø±ê");
+		std::cout << std::left << std::setw(20) << std::setfill(separator) << (utils ? utils->str("Nickname", "ç©å®¶æ˜µç§°") : "ç©å®¶æ˜µç§°");
+		std::cout << std::left << std::setw(10) << std::setfill(separator) << (utils ? utils->str("Rolename", "è§’è‰²") : "è§’è‰²");
+		std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "åæ ‡") : "åæ ‡");
 		std::cout << '\n';
 
 		for (int i = 0; iterator != playerControllers.end(); ++iterator, ++i) {
@@ -56,8 +55,8 @@ public:
 				continue;
 			}
 
-			std::cout << std::left << std::setw(nameWidth) << std::setfill(separator) << (*iterator).nickname;
-			std::cout << std::left << std::setw(nameWidth) << std::setfill(separator) << (*iterator).roleName;
+			std::cout << std::left << std::setw(20) << std::setfill(separator) << (*iterator).nickname;
+			std::cout << std::left << std::setw(10) << std::setfill(separator) << (*iterator).roleName;
 			std::cout << std::left << std::setfill(separator) << "(" << (*iterator).pos.x << ", " << (*iterator).pos.y << ")";
 			std::cout << '\n';
 		}
@@ -91,14 +90,14 @@ public:
 	}
 
 	/// <summary>
-	/// ¸üĞÂÍæ¼Ò×ø±êĞÅÏ¢<para/>
+	/// æ›´æ–°ç©å®¶åæ ‡ä¿¡æ¯<para/>
 	/// Update player's position and returns true if data valid 
 	/// </summary>
 	/// <param name="PlayerController"></param>
 	/// <returns></returns>
 	bool updatePosition(int64_t PlayerController) {
 
-		//ÎŞĞ§Íæ¼ÒÊı¾İ
+		//æ— æ•ˆç©å®¶æ•°æ®
 		//invalid data
 		if (PlayerController == NULL) {
 			markAsInvalidPlayer();
@@ -128,14 +127,14 @@ public:
 	}
 
 	/// <summary>
-	/// ¸üĞÂÍæ¼ÒÊı¾İ<para/>
+	/// æ›´æ–°ç©å®¶æ•°æ®<para/>
 	/// Update player's data and returns true if data valid 
 	/// </summary>
 	/// <param name="PlayerController"></param>
-	/// <returns>Íæ¼ÒÊı¾İÊÇ·ñÓĞĞ§</returns>
+	/// <returns>ç©å®¶æ•°æ®æ˜¯å¦æœ‰æ•ˆ</returns>
 	bool update(int64_t PlayerController) {
 
-		//ÎŞĞ§Íæ¼ÒÊı¾İ
+		//æ— æ•ˆç©å®¶æ•°æ®
 		//invalid data
 		if (PlayerController == NULL) {
 			markAsInvalidPlayer();

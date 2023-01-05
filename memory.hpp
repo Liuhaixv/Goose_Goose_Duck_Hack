@@ -20,11 +20,11 @@ public:
 
 		pID = get_porcId_by_name("Goose Goose Duck.exe");
 		if (pID == NULL) {
-			utils.print("Please Launch the game before running this debug tool!", "ÇëÔÚ´ò¿ª¸¨ÖúÇ°ÔËĞĞÓÎÏ·£¡");
+			utils.print("Please Launch the game before running this debug tool!", "è¯·åœ¨æ‰“å¼€è¾…åŠ©å‰è¿è¡Œæ¸¸æˆï¼");
 			std::cout << std::endl;
 			return;
 		}
-		utils.print("Detected game pid:", "¼ì²âµ½ÓÎÏ·½ø³Ìpid:");
+		utils.print("Detected game pid:", "æ£€æµ‹åˆ°æ¸¸æˆè¿›ç¨‹pid:");
 		std::cout << pID << std::endl;
 
 		processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
@@ -105,12 +105,12 @@ public:
 
 private:
 	/// <summary>
-	/// »ñÈ¡64Î»½ø³ÌµÄÄ£¿éµÄ»ùÖ·<para/>
+	/// è·å–64ä½è¿›ç¨‹çš„æ¨¡å—çš„åŸºå€<para/>
 	/// Get baseAddress of x64 process's module
 	/// </summary>
-	/// <param name="lpszModuleName">Name of module Ä£¿éµÄÃû³Æ</param>
-	/// <param name="pID">pid of process ½ø³Ìpid</param>
-	/// <returns>address µØÖ·</returns>
+	/// <param name="lpszModuleName">Name of module æ¨¡å—çš„åç§°</param>
+	/// <param name="pID">pid of process è¿›ç¨‹pid</param>
+	/// <returns>address åœ°å€</returns>
 	int64_t GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
 		int64_t dwModuleBaseAddress = 0;
 		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
@@ -159,7 +159,7 @@ private:
 	*/
 
 	/// <summary>
-	/// Í¨¹ıÃû³Æ»ñÈ¡½ø³Ìpid<para/>
+	/// é€šè¿‡åç§°è·å–è¿›ç¨‹pid<para/>
 	/// Get process' pid by name
 	/// </summary>
 	/// <param name="targetProcess"></param>
