@@ -34,7 +34,6 @@ int main()
     if (memory.pID != NULL) {
         utils.print("Goose Goose Duck hack running...", "鹅鸭杀辅助运行中...");
         std::cout << std::endl;
-        std::cout << "test:" << sizeof(int);
 
         //启动数据更新线程
         std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater, &playerControllers);

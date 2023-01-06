@@ -233,7 +233,7 @@ public:
 				return("【TT】鬼奴");
 				break;
 			case gameRoleId::Spectator:
-				return("Spectator");
+				return("旁观");
 				break;
 			case gameRoleId::IdentityThief:
 				return("身份窃贼");
