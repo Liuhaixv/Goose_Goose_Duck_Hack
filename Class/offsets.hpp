@@ -5,22 +5,23 @@
 namespace Offsets {
 	namespace PlayerController {
 		constexpr int64_t fn_updateRVA = 0xE12760; // AOBScan too.
-		constexpr int64_t fl_isSilenced = 0xC1; // Boolean
-		constexpr int64_t fl_isInfected = 0xC3; // Boolean
+		constexpr int64_t b_isSilenced = 0xC1; // Boolean
+		constexpr int64_t b_isInfected = 0xC3; // Boolean
         constexpr int64_t killedBy = 0xc8; // point64_ter, [instance+killedBy] +  0x14, length: [instance+killedBy] + 0x10
 		constexpr int64_t fl_playerRoleId = 0xE8; // point64_ter, [instance+playerRoleId] + 0x10, int64_t
-		constexpr int64_t fl_isPlayerRoleSet = 0xF0; // Boolean
-		constexpr int64_t fl_inVent = 0xF1; // Boolean
-		constexpr int64_t fl_facingRight = 0x130; // Boolean, can make "Moon walk".
-		constexpr int64_t fl_hasBomb = 0x134; // Boolean
-		constexpr int64_t fl_isGhost = 0x188; // Boolean
-		constexpr int64_t fl_isLocal = 0x1C0; // Boolean
+		constexpr int64_t b_isPlayerRoleSet = 0xF0; // Boolean
+		constexpr int64_t b_inVent = 0xF1; // Boolean
+		constexpr int64_t b_facingRight = 0x130; // Boolean, can make "Moon walk".
+		constexpr int64_t b_hasBomb = 0x134; // Boolean
+		constexpr int64_t b_isGhost = 0x188; // Boolean
+		constexpr int64_t b_isLocal = 0x1C0; // Boolean
 		constexpr int64_t fl_nickname = 0x1D0; // point64_ter, [instance+nickname] +  0x14, length: [instance+nickname] + 0x10
 		constexpr int64_t fl_invisibilityDistance = 0x32C; // int64_t, need this?
-		constexpr int64_t fl_isSpectator = 0x37A; // Boolean
-		constexpr int64_t fl_isRemoteSpectating = 0x37B; // Boolean
-		constexpr int64_t fl_position = 0x2C8; // Value name is randomized. x, y. Float, Float
-		constexpr int64_t fl_idleTime = 0x2E4; // float
+		constexpr int64_t b_isSpectator = 0x37A; // Boolean
+		constexpr int64_t b_isRemoteSpectating = 0x37B; // Boolean
+		constexpr int64_t v3_position = 0x2C8; // Value name is randomized. x, y. Float, Float
+		constexpr int64_t f_idleTime = 0x2E4; // float
+        constexpr int64_t b_hasKilledThisRound = 0x2EC;//Boolean
         
 		/*
 		[Notable offsets]

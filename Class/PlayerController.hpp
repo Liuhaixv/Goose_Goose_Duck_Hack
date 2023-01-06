@@ -105,7 +105,7 @@ public:
 		}
 
 		if (PlayerController == ptrPlayerController) {
-			pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::fl_position);
+			pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
 		}
 
 		return true;
@@ -167,16 +167,16 @@ public:
 
 		nickname = wstring2string(string_to_convert);
 
-		pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::fl_position);
+		pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
 
-		isPlayerRoleSet = memory->read_mem<bool>(Offsets::PlayerController::fl_isPlayerRoleSet);
-		isLocal = memory->read_mem<bool>(Offsets::PlayerController::fl_isLocal);
-		inVent = memory->read_mem<bool>(Offsets::PlayerController::fl_inVent);
-		hasBomb = memory->read_mem<bool>(Offsets::PlayerController::fl_hasBomb);
-		isGhost = memory->read_mem<bool>(Offsets::PlayerController::fl_isGhost);
-		isSpectator = memory->read_mem<bool>(Offsets::PlayerController::fl_isSpectator);
+		isPlayerRoleSet = memory->read_mem<bool>(Offsets::PlayerController::b_isPlayerRoleSet);
+		isLocal = memory->read_mem<bool>(Offsets::PlayerController::b_isLocal);
+		inVent = memory->read_mem<bool>(Offsets::PlayerController::b_inVent);
+		hasBomb = memory->read_mem<bool>(Offsets::PlayerController::b_hasBomb);
+		isGhost = memory->read_mem<bool>(Offsets::PlayerController::b_isGhost);
+		isSpectator = memory->read_mem<bool>(Offsets::PlayerController::b_isSpectator);
 		invisibilityDistance = memory->read_mem<int>(Offsets::PlayerController::fl_invisibilityDistance);
-		isRemoteSpectating = memory->read_mem<bool>(Offsets::PlayerController::fl_isRemoteSpectating);
+		isRemoteSpectating = memory->read_mem<bool>(Offsets::PlayerController::b_isRemoteSpectating);
 
 		//strcat(roleName, utils.getRoleName(playerRoleId));
 
