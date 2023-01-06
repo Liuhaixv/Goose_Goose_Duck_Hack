@@ -11,11 +11,9 @@ class PlayerController {
 public:
     PlayerController(Memory memory) {
         this->memory = &memory;
-        this->utils = new Utils;
     }
 
     ~PlayerController() {
-        delete this->utils;
     }
 
 
@@ -194,7 +192,7 @@ public:
 
         if (isPlayerRoleSet) {
             playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_playerRoleId) + 0x10);
-            strcpy(roleName, utils->getRoleName(playerRoleId));
+            strcpy(roleName, utils.getRoleName(playerRoleId));
         }
 
         return true;
@@ -202,6 +200,6 @@ public:
 
 private:
 
-    Utils* utils;
+    Utils utils;
     Memory* memory = 0;
 };
