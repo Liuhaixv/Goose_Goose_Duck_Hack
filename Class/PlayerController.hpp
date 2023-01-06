@@ -9,187 +9,199 @@
 
 class PlayerController {
 public:
-	PlayerController(Memory memory) {
-		this->memory = &memory;
-		this->utils = new Utils;
-	}
+    PlayerController(Memory memory) {
+        this->memory = &memory;
+        this->utils = new Utils;
+    }
 
-	~PlayerController() {
-		delete this->utils;
-	}
+    ~PlayerController() {
+        delete this->utils;
+    }
 
 
-	//Mark if the player is valid(false if no player's info valid)
-	//标记当前玩家槽位是否有效(当玩家中途离开或该槽位无人占用导致内存中无有效玩家数据时为false)
-	bool valid = false;
+    //Mark if the player is valid(false if no player's info valid)
+    //标记当前玩家槽位是否有效(当玩家中途离开或该槽位无人占用导致内存中无有效玩家数据时为false)
+    bool valid = false;
 
-	DWORD_PTR ptrPlayerController = 0;
-	bool isSilenced = false;
-	bool isInfected = false;
-	int playerRoleId = 0;
-	bool isPlayerRoleSet = false;
-	bool inVent = false;
-	bool hasBomb = false;
-	bool isGhost = false;
-	bool isLocal = false;
-	int invisibilityDistance = 0;
-	bool isSpectator = false;
-	bool isRemoteSpectating = false;
-	std::string nickname = "";
-	char roleName[64] = "";
-	Vector3 pos{ 0.0f, 0.0f, 0.0f };
+    DWORD_PTR ptrPlayerController = 0;
+    int playerRoleId = 0;
+    bool isSilenced = false;
+    bool isInfected = false;
+    bool isPlayerRoleSet = false;
+    bool inVent = false;
+    bool hasBomb = false;
+    bool isGhost = false;
+    bool isLocal = false;
+    bool isSpectator = false;
+    bool isRemoteSpectating = false;
 
-	static void printAllPlayersInfo(std::list<PlayerController> playerControllers, Utils* utils = nullptr) {
-		std::list<PlayerController>::iterator iterator = playerControllers.begin();
+    //本轮是否杀过人
+    bool b_hasKilledThisRound = false;
 
-		const char separator = ' ';
-		const int nameWidth = 15;
+    int invisibilityDistance = 0;
+    std::string nickname = "";
+    char roleName[64] = "";
+    Vector3 pos{ 0.0f, 0.0f, 0.0f };
 
-		std::cout << std::left << std::setw(20) << std::setfill(separator) << (utils ? utils->str("Nickname", "玩家昵称") : "玩家昵称");
-		std::cout << std::left << std::setw(10) << std::setfill(separator) << (utils ? utils->str("Rolename", "角色") : "角色");
-		std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "坐标") : "坐标");
-		std::cout << '\n';
+    static void printAllPlayersInfo(std::list<PlayerController> playerControllers, Utils* utils = nullptr) {
+        std::list<PlayerController>::iterator iterator = playerControllers.begin();
 
-		for (int i = 0; iterator != playerControllers.end(); ++iterator, ++i) {
-			if (!(*iterator).valid) {
-				continue;
-			}
+        const char separator = ' ';
+        const int nameWidth = 15;
 
-			std::cout << std::left << std::setw(20) << std::setfill(separator) << (*iterator).nickname;
-			std::cout << std::left << std::setw(10) << std::setfill(separator) << (*iterator).roleName;
-			std::cout << std::left << std::setfill(separator) << "(" << (*iterator).pos.x << ", " << (*iterator).pos.y << ")";
-			std::cout << '\n';
-		}
-		std::cout << std::endl;
-	}
+        std::cout << std::left << std::setw(20) << std::setfill(separator) << (utils ? utils->str("Nickname", "玩家昵称") : "玩家昵称");
+        std::cout << std::left << std::setw(15) << std::setfill(separator) << (utils ? utils->str("Rolename", "角色") : "角色");
+        std::cout << std::left << std::setw(10) << std::setfill(separator) << (utils ? utils->str("KilledThisRound", "本轮杀过人") : "本轮杀过人");
 
-	void markAsInvalidPlayer() {
-		this->valid = false;
-	}
+        //std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "坐标") : "坐标");
+        std::cout << '\n';
 
-	void markAsValidPlayer() {
-		this->valid = true;
-	}
+        for (int i = 0; iterator != playerControllers.end(); ++iterator, ++i) {
+            if (!(*iterator).valid) {
+                continue;
+            }
 
-	void reset() {
-		ptrPlayerController = 0;
-		isSilenced = false;
-		isInfected = false;
-		playerRoleId = -1;
-		isPlayerRoleSet = false;
-		inVent = false;
-		hasBomb = false;
-		isGhost = false;
-		isLocal = false;
-		invisibilityDistance = 0;
-		isSpectator = false;
-		isRemoteSpectating = false;
-		nickname = "";
-		roleName[0] = '\0';
-		pos = { 0.0f, 0.0f };
-	}
+            bool killedThisRound = (*iterator).b_hasKilledThisRound;
 
-	/// <summary>
-	/// 更新玩家坐标信息<para/>
-	/// Update player's position and returns true if data valid 
-	/// </summary>
-	/// <param name="PlayerController"></param>
-	/// <returns></returns>
-	bool updatePosition(int64_t PlayerController) {
+            std::cout << std::left << std::setw(20) << std::setfill(separator) << (*iterator).nickname;
+            std::cout << std::left << std::setw(15) << std::setfill(separator) << (*iterator).roleName;
+            std::cout << std::left << std::setw(10) << std::setfill(separator) << (killedThisRound ? (utils ? utils->str("Yes", "是") : "是") : "");
+            //    std::cout << std::left << std::setfill(separator) << "(" << (*iterator).pos.x << ", " << (*iterator).pos.y << ")";
+            std::cout << '\n';
+        }
+        std::cout << std::endl;
+    }
 
-		//无效玩家数据
-		//invalid data
-		if (PlayerController == NULL) {
-			markAsInvalidPlayer();
-			return false;
-		}
+    void markAsInvalidPlayer() {
+        this->valid = false;
+    }
 
-		if (PlayerController == ptrPlayerController) {
-			pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
-		}
+    void markAsValidPlayer() {
+        this->valid = true;
+    }
 
-		return true;
-	}
+    void reset() {
+        ptrPlayerController = 0;
+        isSilenced = false;
+        isInfected = false;
+        playerRoleId = -1;
+        isPlayerRoleSet = false;
+        inVent = false;
+        hasBomb = false;
+        isGhost = false;
+        isLocal = false;
+        invisibilityDistance = 0;
+        isSpectator = false;
+        isRemoteSpectating = false;
+        nickname = "";
+        roleName[0] = '\0';
+        pos = { 0.0f, 0.0f };
 
-	//https://blog.csdn.net/mercy_ps/article/details/81218608
-	std::string wstring2string(std::wstring wstr) {
-		std::string result;
+        b_hasKilledThisRound = false;
+    }
 
-		int len = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), NULL, 0, NULL, NULL);
-		char* buffer = new char[len + 1];
+    /// <summary>
+    /// 更新玩家坐标信息<para/>
+    /// Update player's position and returns true if data valid 
+    /// </summary>
+    /// <param name="PlayerController"></param>
+    /// <returns></returns>
+    bool updatePosition(int64_t PlayerController) {
 
-		WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), buffer, len, NULL, NULL);
-		buffer[len] = '\0';
+        //无效玩家数据
+        //invalid data
+        if (PlayerController == NULL) {
+            markAsInvalidPlayer();
+            return false;
+        }
 
-		result.append(buffer);
-		delete[] buffer;
-		return result;
-	}
+        if (PlayerController == ptrPlayerController) {
+            pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
+        }
 
-	/// <summary>
-	/// 更新玩家数据<para/>
-	/// Update player's data and returns true if data valid 
-	/// </summary>
-	/// <param name="PlayerController"></param>
-	/// <returns>玩家数据是否有效</returns>
-	bool update(int64_t PlayerController) {
+        return true;
+    }
 
-		//无效玩家数据
-		//invalid data
-		if (PlayerController == NULL) {
-			markAsInvalidPlayer();
-			return false;
-		}
-		else {
-			ptrPlayerController = PlayerController;
-			markAsValidPlayer();
-		}
+    //https://blog.csdn.net/mercy_ps/article/details/81218608
+    std::string wstring2string(std::wstring wstr) {
+        std::string result;
 
-		wchar_t tmpNick[42] = L"";
+        int len = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), NULL, 0, NULL, NULL);
+        char* buffer = new char[len + 1];
 
-		int64_t addr_0 = memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname);
-		byte* addr = (byte*)memory->read_mem<int64_t>(addr_0 + 0x14);
-		int64_t size = sizeof(wchar_t) * memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname) + 0x10) + 1;
+        WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), buffer, len, NULL, NULL);
+        buffer[len] = '\0';
 
-		memcpy(tmpNick, &addr, size);
+        result.append(buffer);
+        delete[] buffer;
+        return result;
+    }
 
-		tmpNick[size] = 0;
+    /// <summary>
+    /// 更新玩家数据<para/>
+    /// Update player's data and returns true if data valid 
+    /// </summary>
+    /// <param name="PlayerController"></param>
+    /// <returns>玩家数据是否有效</returns>
+    bool update(int64_t PlayerController) {
 
-		int _size = 0;
-		//for (int i = 0; i < 64; i++) {
-		//	if (tmpNick[i] == 0) {
-		//		break;
-		//	}
-		//	_size++;
-		//}
+        //无效玩家数据
+        //invalid data
+        if (PlayerController == NULL) {
+            markAsInvalidPlayer();
+            return false;
+        }
+        else {
+            ptrPlayerController = PlayerController;
+            markAsValidPlayer();
+        }
 
-		std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), size);
+        wchar_t tmpNick[42] = L"";
 
-		nickname = wstring2string(string_to_convert);
+        int64_t addr_0 = memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname);
+        byte* addr = (byte*)memory->read_mem<int64_t>(addr_0 + 0x14);
+        int64_t size = sizeof(wchar_t) * memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname) + 0x10) + 1;
 
-		pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
+        memcpy(tmpNick, &addr, size);
 
-		isPlayerRoleSet = memory->read_mem<bool>(Offsets::PlayerController::b_isPlayerRoleSet);
-		isLocal = memory->read_mem<bool>(Offsets::PlayerController::b_isLocal);
-		inVent = memory->read_mem<bool>(Offsets::PlayerController::b_inVent);
-		hasBomb = memory->read_mem<bool>(Offsets::PlayerController::b_hasBomb);
-		isGhost = memory->read_mem<bool>(Offsets::PlayerController::b_isGhost);
-		isSpectator = memory->read_mem<bool>(Offsets::PlayerController::b_isSpectator);
-		invisibilityDistance = memory->read_mem<int>(Offsets::PlayerController::fl_invisibilityDistance);
-		isRemoteSpectating = memory->read_mem<bool>(Offsets::PlayerController::b_isRemoteSpectating);
+        tmpNick[size] = 0;
 
-		//strcat(roleName, utils.getRoleName(playerRoleId));
+        int _size = 0;
+        //for (int i = 0; i < 64; i++) {
+        //	if (tmpNick[i] == 0) {
+        //		break;
+        //	}
+        //	_size++;
+        //}
 
-		if (isPlayerRoleSet) {
-			playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_playerRoleId) + 0x10);
-			strcpy(roleName, utils->getRoleName(playerRoleId));
-		}
+        std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), size);
 
-		return true;
-	}
+        nickname = wstring2string(string_to_convert);
+
+        pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
+
+        isPlayerRoleSet = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isPlayerRoleSet);
+        isLocal = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isLocal);
+        inVent = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_inVent);
+        hasBomb = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasBomb);
+        isGhost = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isGhost);
+        isSpectator = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isSpectator);
+        invisibilityDistance = memory->read_mem<int>(PlayerController + Offsets::PlayerController::fl_invisibilityDistance);
+        isRemoteSpectating = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isRemoteSpectating);
+        b_hasKilledThisRound = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasKilledThisRound);
+
+        //strcat(roleName, utils.getRoleName(playerRoleId));
+
+        if (isPlayerRoleSet) {
+            playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_playerRoleId) + 0x10);
+            strcpy(roleName, utils->getRoleName(playerRoleId));
+        }
+
+        return true;
+    }
 
 private:
 
-	Utils* utils;
-	Memory* memory = 0;
+    Utils* utils;
+    Memory* memory = 0;
 };
