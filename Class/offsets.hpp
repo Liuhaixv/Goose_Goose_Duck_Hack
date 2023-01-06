@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include<vector>
 
@@ -7,6 +7,7 @@ namespace Offsets {
 		constexpr int64_t fn_updateRVA = 0xE12760; // AOBScan too.
 		constexpr int64_t fl_isSilenced = 0xC1; // Boolean
 		constexpr int64_t fl_isInfected = 0xC3; // Boolean
+        constexpr int64_t killedBy = 0xc8; // point64_ter, [instance+killedBy] +  0x14, length: [instance+killedBy] + 0x10
 		constexpr int64_t fl_playerRoleId = 0xE8; // point64_ter, [instance+playerRoleId] + 0x10, int64_t
 		constexpr int64_t fl_isPlayerRoleSet = 0xF0; // Boolean
 		constexpr int64_t fl_inVent = 0xF1; // Boolean
@@ -20,6 +21,7 @@ namespace Offsets {
 		constexpr int64_t fl_isRemoteSpectating = 0x37B; // Boolean
 		constexpr int64_t fl_position = 0x2C8; // Value name is randomized. x, y. Float, Float
 		constexpr int64_t fl_idleTime = 0x2E4; // float
+        
 		/*
 		[Notable offsets]
 		2B0, Player location, Float Float,   x, y
