@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include<list>
 #include<thread>
@@ -46,15 +46,13 @@ int main()
 				system("cls");
 				//开始打印
 				PlayerController::printAllPlayersInfo(playerControllers, &utils);
-			}			
-				Sleep(1000);
+			}
+			Sleep(1000);
 		}
 	}
 	else {
 		utils.print("Not detected game, closing now... Please try again and run the game before starting the hack.", "未检测到游戏，正在关闭......请先运行游戏再打开该辅助。");
 		std::cout << std::endl;
-		utils.print("If your have launched game but still see this message, it may because you ran the game (or steam) with Administrator privilege. In that case, you must run the hack with Administrator privilege too.",
-			"如果你的游戏已经打开但仍一直看到该信息出现，很可能是你以管理员权限运行了游戏或Steam，那么你需要同样使用管理员权限来运行该辅助。");
-       
+		utils.print("If your have launched game but still see this message, it may because you ran the game (or steam) with Administrator privilege. In that case, you must run the hack with Administrator privilege too.", "如果你的游戏已经打开但仍一直看到该信息出现，很可能是你以管理员权限运行了游戏或Steam，那么你需要同样使用管理员权限来运行该辅助。");
 	}
 }
