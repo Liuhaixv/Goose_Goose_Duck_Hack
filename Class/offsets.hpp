@@ -22,6 +22,7 @@ namespace Offsets {
 		constexpr int64_t v3_position = 0x2C8; // Value name is randomized. x, y. Float, Float
 		constexpr int64_t f_idleTime = 0x2E4; // float
         constexpr int64_t b_hasKilledThisRound = 0x2EC;//Boolean
+        constexpr int64_t i_timeOfDeath = 0x18C;//int
         
 		/*
 		[Notable offsets]

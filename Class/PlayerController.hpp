@@ -21,22 +21,24 @@ public:
     //标记当前玩家槽位是否有效(当玩家中途离开或该槽位无人占用导致内存中无有效玩家数据时为false)
     bool valid = false;
 
-    DWORD_PTR ptrPlayerController = 0;
-    int playerRoleId = 0;
-    bool isSilenced = false;
-    bool isInfected = false;
-    bool isPlayerRoleSet = false;
-    bool inVent = false;
-    bool hasBomb = false;
-    bool isGhost = false;
-    bool isLocal = false;
-    bool isSpectator = false;
-    bool isRemoteSpectating = false;
+    DWORD_PTR ptr_PlayerController = 0;
+    int i_playerRoleId = 0;
+    bool b_isSilenced = false;
+    bool b_isInfected = false;
+    bool b_isPlayerRoleSet = false;
+    bool b_inVent = false;
+    bool b_hasBomb = false;
+    bool b_isGhost = false;
+    bool b_isLocal = false;
+    bool b_isSpectator = false;
+    bool b_isRemoteSpectating = false;
 
     //本轮是否杀过人
     bool b_hasKilledThisRound = false;
 
     int invisibilityDistance = 0;
+    int i_timeOfDeath = 0;
+
     std::string nickname = "";
     char roleName[64] = "";
     Vector3 pos{ 0.0f, 0.0f, 0.0f };
@@ -79,23 +81,25 @@ public:
     }
 
     void reset() {
-        ptrPlayerController = 0;
-        isSilenced = false;
-        isInfected = false;
-        playerRoleId = -1;
-        isPlayerRoleSet = false;
-        inVent = false;
-        hasBomb = false;
-        isGhost = false;
-        isLocal = false;
+        ptr_PlayerController = 0;
+        b_isSilenced = false;
+        b_isInfected = false;
+        i_playerRoleId = -1;
+        b_isPlayerRoleSet = false;
+        b_inVent = false;
+        b_hasBomb = false;
+        b_isGhost = false;
+        b_isLocal = false;
         invisibilityDistance = 0;
-        isSpectator = false;
-        isRemoteSpectating = false;
+        b_isSpectator = false;
+        b_isRemoteSpectating = false;
         nickname = "";
         roleName[0] = '\0';
         pos = { 0.0f, 0.0f };
 
         b_hasKilledThisRound = false;
+
+        i_timeOfDeath = 0;
     }
 
     /// <summary>
@@ -113,7 +117,7 @@ public:
             return false;
         }
 
-        if (PlayerController == ptrPlayerController) {
+        if (PlayerController == ptr_PlayerController) {
             pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
         }
 
@@ -150,7 +154,7 @@ public:
             return false;
         }
         else {
-            ptrPlayerController = PlayerController;
+            ptr_PlayerController = PlayerController;
             markAsValidPlayer();
         }
 
@@ -178,21 +182,22 @@ public:
 
         pos = memory->read_mem<Vector3>(PlayerController + Offsets::PlayerController::v3_position);
 
-        isPlayerRoleSet = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isPlayerRoleSet);
-        isLocal = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isLocal);
-        inVent = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_inVent);
-        hasBomb = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasBomb);
-        isGhost = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isGhost);
-        isSpectator = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isSpectator);
-        invisibilityDistance = memory->read_mem<int>(PlayerController + Offsets::PlayerController::fl_invisibilityDistance);
-        isRemoteSpectating = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isRemoteSpectating);
-        b_hasKilledThisRound = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasKilledThisRound);
+        b_isPlayerRoleSet = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isPlayerRoleSet);
+        b_isLocal = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isLocal);
 
-        //strcat(roleName, utils.getRoleName(playerRoleId));
+        if (b_isPlayerRoleSet) {
+            b_inVent = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_inVent);
+            b_hasBomb = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasBomb);
+            b_isGhost = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isGhost);
+            b_isSpectator = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isSpectator);
+            invisibilityDistance = memory->read_mem<int>(PlayerController + Offsets::PlayerController::fl_invisibilityDistance);
+            b_isRemoteSpectating = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_isRemoteSpectating);
+            b_hasKilledThisRound = memory->read_mem<bool>(PlayerController + Offsets::PlayerController::b_hasKilledThisRound);
+            i_playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_playerRoleId) + 0x10);
 
-        if (isPlayerRoleSet) {
-            playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_playerRoleId) + 0x10);
-            strcpy(roleName, utils.getRoleName(playerRoleId));
+            //更新死亡时间
+            i_timeOfDeath = memory->read_mem<int>(PlayerController + Offsets::PlayerController::i_timeOfDeath);
+            strcpy(roleName, utils.getRoleName(i_playerRoleId));
         }
 
         return true;
