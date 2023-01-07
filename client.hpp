@@ -1,15 +1,23 @@
 #pragma once
 
 #include "memory.hpp"
+#include "Struct/HackSettings.hpp"
+
 class Client
 {
 public:
-
+    HackSettings* hackSettings = nullptr;
 
 	Client(Memory memory)
 	{
 		this->memory = &memory;
 	}
+
+    Client(Memory memory, HackSettings hackSettings)
+    {
+        this->memory = &memory;
+        this->hackSettings = &hackSettings;
+    }
 
 	/*
 	int get_crosshair_status()

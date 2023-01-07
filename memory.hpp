@@ -39,7 +39,7 @@ public:
 
 	template <typename var>
 	bool write_mem(int64_t address, var value) {
-		return WriteProcessMemory(processHandle, address, &value, sizeof(var), NULL);
+		return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
 	}
 
 	template <typename var>

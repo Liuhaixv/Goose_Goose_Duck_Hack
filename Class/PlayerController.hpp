@@ -13,6 +13,11 @@ public:
         this->memory = &memory;
     }
 
+    PlayerController(Memory memory, Client client) {
+        this->memory = &memory;
+        this->client = &client;
+    }
+
     ~PlayerController() {
     }
 
@@ -216,6 +221,18 @@ public:
             //更新死亡时间
             i_timeOfDeath = memory->read_mem<int>(PlayerController + Offsets::PlayerController::i_timeOfDeath);
             strcpy(roleName, utils.getRoleName(i_playerRoleId));
+
+            //修改fog of war
+            if (b_isLocal) {
+                if (this->client) {
+                    HackSettings* hackSettings = this->client->hackSettings;
+                    if (hackSettings) {
+                        if (hackSettings->disableFogOfWar) {                        
+                            memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);                      
+                        }
+                    }
+                }
+            }     
         }
 
         return true;
@@ -224,5 +241,6 @@ public:
 private:
 
     Utils utils;
-    Memory* memory = 0;
+    Memory* memory = nullptr;
+    Client* client = nullptr;
 };

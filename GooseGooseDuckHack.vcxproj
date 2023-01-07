@@ -138,6 +138,7 @@
     <ClInclude Include="Class\PlayerController.hpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Struct\Common.hpp" />
+    <ClInclude Include="Struct\HackSettings.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="client.hpp" />
     <ClInclude Include="memory.hpp" />

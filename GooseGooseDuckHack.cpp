@@ -8,6 +8,7 @@
 #include"./Class/DataUpdater.hpp"
 #include "utils.hpp"
 #include"./Class/PlayerController.hpp"
+#include"Struct/HackSettings.hpp"
 
 
 int main()
@@ -19,14 +20,20 @@ int main()
     //Disable the quick-edit mode
     utils.disableQuickEdit();
 
+    //settings
+    HackSettings hackSettings;
+    hackSettings.disableFogOfWar = true;
+
     //初始化RPM工具类
     Memory memory;
-    Client client(memory);
+    Client client(memory, hackSettings);
     DataUpdater dataUpdater(memory);
+
+
 
     std::list<PlayerController> playerControllers;
     for (int i = 0; i < 16; i++) {
-        PlayerController playerController(memory);
+        PlayerController playerController(memory, client);
         playerControllers.push_back(playerController);
     }
 
