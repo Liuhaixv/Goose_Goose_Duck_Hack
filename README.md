@@ -24,7 +24,8 @@ This project is currently active in development
 3. See other player's death time
 
 # Known bugs
-1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update?
+1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator)**
+
 2. [Unicode string display issue](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/2)
 
 # Reference
