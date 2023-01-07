@@ -29,3 +29,6 @@ This project is currently active in development
 
 # Reference
 [roy6307's Public Archive](https://github.com/roy6307/Goose-Goose-Goose)
+
+
+![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)
