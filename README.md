@@ -11,7 +11,6 @@
 
 # 已知Bug
 1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决
-2. [中文等unicode显示有问题](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/2)
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -34,8 +33,6 @@ This project is currently active in development. Leave a star if you like it. Yo
 
 # Known bugs
 1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator)**
-
-2. [Unicode string display issue](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/2)
 
 # Notice
 I am not responsible for any problems caused by abusing this project
