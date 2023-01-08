@@ -228,7 +228,15 @@ public:
                     HackSettings* hackSettings = this->client->hackSettings;
                     if (hackSettings) {
                         if (hackSettings->disableFogOfWar) {                        
-                            memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);                      
+                            //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
+
+                            int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                            int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+
+                            if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
+                                memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+                                memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 5.0);
+                            }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include<vector>
 
@@ -35,6 +35,16 @@ namespace Offsets {
 
 	}
 
+    namespace LocalPlayer {
+        constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
+    }
+
+    namespace FogOfWarHandler {
+        constexpr int64_t i_layerMask = 0x18;
+        constexpr int64_t f_viewDistanceMultiplier = 0x38;
+        constexpr int64_t b_targetPlayerSet = 0x50;
+    }
+
 	namespace GameAssembly {
 		/// <summary>
 		/// 通过下标返回PlayerController的偏移数组<para/>
@@ -45,9 +55,15 @@ namespace Offsets {
 		static std::vector<int64_t> playerControllerByIndex(int64_t index) {
 			int64_t specialOffset = 0x30;
 			specialOffset += index * 0x18;
-			std::vector<int64_t> offsets = { 0x3c869B0, 0xB8, 0x20, 0x18, specialOffset, 0x0 };
+			std::vector<int64_t> offsets = { 0x3C869B0, 0xB8, 0x20, 0x18, specialOffset, 0x0 };
 
 			return offsets;
 		}
+
+        static std::vector<int64_t> localPlayer() {
+            std::vector<int64_t> offsets = { 0x3C3A608, 0xB8, 0x20, 0x0};
+
+            return offsets;
+        }
 	}
 }
