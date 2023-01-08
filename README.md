@@ -3,8 +3,8 @@
 
 # 功能
 ### 显示类
-1. 查看其他玩家的职业身份
-2. 查看其他玩家本轮是否杀过人
+1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. 查看其他玩家死亡时间
 ### 杂项
 1. 移除战争迷雾(可以隔墙看人，没有阴影隐藏其他玩家)
@@ -26,8 +26,8 @@ This project is currently active in development. Leave a star if you like it. Yo
 
 # Features
 ### Reveal Info
-1. See other players' rolenames
-2. See if other player's killed someone this round
+1. See other players' rolenames **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+2. See if other player's killed someone this round **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. See other player's death time
 ### Misc
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
