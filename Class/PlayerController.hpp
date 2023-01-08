@@ -242,8 +242,14 @@ public:
                             int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
 
                             if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
+                                //disable fow
+                                //set layermask
                                 memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
-                                memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 7.0);
+
+                                //7.5 is enough to see the whole screen
+                                //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
+                                float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
+                                memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
                             }
                         }
                     }
