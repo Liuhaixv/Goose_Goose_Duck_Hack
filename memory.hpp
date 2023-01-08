@@ -49,6 +49,11 @@ public:
 		return value;
 	}
 
+    void copy_bytes(int64_t src_address, int64_t dst_address, int64_t numOfBytes) {
+        ReadProcessMemory(processHandle, (LPCVOID)src_address, &dst_address, numOfBytes, NULL);
+    }
+
+
 	int64_t FindPointer(int64_t moduleBaseAddress, int offset_num, int64_t offsets[])
 	{
 		if (offset_num <= 0) {

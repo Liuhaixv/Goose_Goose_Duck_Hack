@@ -181,15 +181,23 @@ public:
             markAsValidPlayer();
         }
 
-        wchar_t tmpNick[42] = L"";
+        //wchar_t tmpNick[42] = L"";
+        byte tmpNick[42]{};
 
-        int64_t addr_0 = memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname);
-        byte* addr = (byte*)memory->read_mem<int64_t>(addr_0 + 0x14);
-        int64_t size = sizeof(wchar_t) * memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname) + 0x10) + 1;
+        int64_t* nickname_obj = (memory->read_mem<int64_t*>(PlayerController + Offsets::PlayerController::fl_nickname));
+        byte* p_str = (byte*)(nickname_obj)+ 0x14;
 
-        memcpy(tmpNick, &addr, size);
+        int64_t length = memory->read_mem<int>(memory->read_mem<int64_t>(PlayerController + Offsets::PlayerController::fl_nickname) + 0x10);
 
-        tmpNick[size] = 0;
+        byte* p_tmpNick = tmpNick;
+        for (int i = 0; i < length * 2 + 1; i++) {
+            byte byte_ = memory->read_mem<byte>((int64_t)(p_str + i));
+            //byte byte_= *(p_str + i);
+            *(p_tmpNick + i) = byte_;
+        }
+
+        //memcpy(tmpNick, p_str, length * 2 + 1);
+        //memory->copy_bytes((int64_t)&addr, (int64_t)tmpNick, length * 2 + 1);
 
         int _size = 0;
         //for (int i = 0; i < 64; i++) {
@@ -199,7 +207,7 @@ public:
         //	_size++;
         //}
 
-        std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), size);
+        std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), length);
 
         nickname = wstring2string(string_to_convert);
 
