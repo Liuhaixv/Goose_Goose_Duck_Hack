@@ -80,13 +80,13 @@ public:
 		return Address;
 	}
 
-	int64_t FindPointer(int64_t moduleBaseAddress, std::vector<int64_t> offsets)
+	int64_t FindPointer(int64_t baseAddress, std::vector<int64_t> offsets)
 	{
 		if (offsets.size() <= 0) {
 			return NULL;
 		}
 
-		int64_t Address = moduleBaseAddress + offsets[0];
+		int64_t Address = baseAddress + offsets[0];
 		Address = read_mem<int64_t>(Address);
 		//ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 

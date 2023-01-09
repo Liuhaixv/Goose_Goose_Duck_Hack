@@ -30,13 +30,25 @@ public:
     //穿墙模式
 
     /// <summary>
+    /// 开启穿墙模式
     /// Enable noclip to disable collider, which makes you able to walk through any obstacle like walls and tables<paragm/>
-    /// 1
     /// </summary>
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
-    static void noclip(PlayerController* localPlayer, bool enable = true) {
+    bool noclip(PlayerController* localPlayer, bool enable = true) {
+        std::vector<int64_t> offsets{
+                Offsets::PlayerController::ptr_bodyCollider,
+                Offsets::CapsuleCollider2D::i_unknownClass0,
+                Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
 
+        int64_t b_enableCollider = this->memory->FindPointer(localPlayer->address,
+            offsets);
+
+        if (b_enableCollider == NULL) {
+            return false;
+        }
+
+        this->memory->write_mem<bool>(b_enableCollider, enable);
     }
 
     void printAllPlayersInfo(Utils* utils = nullptr) {
