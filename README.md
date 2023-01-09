@@ -34,7 +34,7 @@ This project is currently active in development. Leave a star if you like it. Yo
 3. See other player's death time
 
 ### Rage
-1. Press`Left ALT key` to do noclip, which makes you able to walk through doors and walls
+1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
 
 ### Misc
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
