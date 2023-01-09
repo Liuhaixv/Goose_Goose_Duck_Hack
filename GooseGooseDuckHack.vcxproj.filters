@@ -50,6 +50,9 @@
     <ClInclude Include="Class\LocalPlayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Class\HotkeyUpdater.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

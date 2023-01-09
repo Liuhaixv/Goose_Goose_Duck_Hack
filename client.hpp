@@ -48,7 +48,7 @@ public:
             return false;
         }
 
-        this->memory->write_mem<bool>(b_enableCollider, enable);
+        this->memory->write_mem<bool>(b_enableCollider, !enable);
     }
 
     void printAllPlayersInfo(Utils* utils = nullptr) {

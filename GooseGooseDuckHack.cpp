@@ -5,10 +5,14 @@
 #include <stdlib.h>
 
 #include "client.hpp"
-#include"./Class/DataUpdater.hpp"
 #include "utils.hpp"
-#include"./Class/PlayerController.hpp"
+
 #include"Struct/HackSettings.hpp"
+
+#include"./Class/DataUpdater.hpp"
+#include"./Class/HotkeyUpdater.hpp"
+
+#include"./Class/PlayerController.hpp"
 
 
 int main()
@@ -28,6 +32,7 @@ int main()
     Memory memory;
     Client client(&memory, &hackSettings);
 
+    HotkeyUpdater hotkeyUpdater(&hackSettings);
     DataUpdater dataUpdater(&client);
 
     //检测PID
@@ -37,6 +42,8 @@ int main()
 
         //启动数据更新线程
         std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
+        //监听热键
+        std::thread hackSettingsUpdater(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
 
         //循环打印数据
         while (true) {

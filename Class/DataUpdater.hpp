@@ -37,6 +37,15 @@ private:
     Client* client = nullptr;
     Memory* memory = nullptr;
 
+    void noclip(PlayerController* playerController) {
+        //开启穿墙
+        if (playerController->b_isLocal) {
+            if (this->client && this->client->hackSettings) {
+                client->noclip(playerController, this->client->hackSettings->enableNoclip);
+            }
+        }
+    }
+
     void removeFogOfWar(PlayerController* playerController) {
         //修改fog of war
         if (playerController->b_isLocal) {
@@ -103,6 +112,7 @@ private:
             }
 
             removeFogOfWar(ptr_playerController);
+            noclip(ptr_playerController);
         }
         //更新有效玩家信息
         //Update valid players' num
