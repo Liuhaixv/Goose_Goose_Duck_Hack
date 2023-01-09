@@ -84,7 +84,6 @@ public:
         if (this->address == NULL) {
             return false;
         }
-
         try {
             this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position);
         }
@@ -95,22 +94,7 @@ public:
         return true;
     }
 
-
-
-    /// <summary>
-    /// 更新玩家数据<para/>
-    /// Update player's data and returns true if data valid 
-    /// </summary>
-    /// <param name="PlayerController"></param>
-    /// <returns>玩家数据是否有效</returns>
-    bool update() {
-        //无效指针
-        //invalid pointer address
-        if (this->address == NULL) {
-            return false;
-        }
-
-        //wchar_t tmpNick[42] = L"";
+    bool updateNickname() {
         byte tmpNick[42]{};
 
         int64_t* nickname_obj = (memory->read_mem<int64_t*>(this->address + Offsets::PlayerController::fl_nickname));
@@ -125,27 +109,63 @@ public:
             *(p_tmpNick + i) = byte_;
         }
 
-        //memcpy(tmpNick, p_str, length * 2 + 1);
-        //memory->copy_bytes((int64_t)&addr, (int64_t)tmpNick, length * 2 + 1);
-
-        int _size = 0;
-        //for (int i = 0; i < 64; i++) {
-        //	if (tmpNick[i] == 0) {
-        //		break;
-        //	}
-        //	_size++;
-        //}
-
         std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), length);
 
-        nickname = Utils::wstring2string(string_to_convert);
+        this->nickname = Utils::wstring2string(string_to_convert);
+    }
 
-        v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position);
+    /// <summary>
+    /// Reset and update after replacing address
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    bool update(int64_t address) {
+        if (address == NULL) {
+            return false;
+        }
 
+        if (address != this->address) {
+            reset();
+            this->address = address;
+        }
+
+        return update();
+    }
+
+    
+
+private:
+    Utils utils;
+    Memory* memory = nullptr;
+    Client* client = nullptr;
+
+    /// <summary>
+    /// 更新玩家数据<para/>
+    /// Update player's data and returns true if data valid 
+    /// </summary>
+    /// <param name="PlayerController"></param>
+    /// <returns>玩家数据是否有效</returns>
+    bool update() {
+        //无效指针
+        //invalid pointer address
+        if (this->address == NULL) {
+            return false;
+        }
+
+        //更新昵称
+        if (this->nickname != "") {
+            updateNickname();
+        }
+
+        //局内角色已确定(游戏开始)
         b_isPlayerRoleSet = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet);
+        //是否为本地玩家
         b_isLocal = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal);
 
         if (b_isPlayerRoleSet) {
+            //更新玩家坐标
+            updatePosition();
+
             b_inVent = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_inVent);
             b_hasBomb = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb);
             b_isGhost = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost);
@@ -187,13 +207,6 @@ public:
                 }
             }
         }
-
         return true;
     }
-
-private:
-
-    Utils utils;
-    Memory* memory = nullptr;
-    Client* client = nullptr;
 };
