@@ -6,6 +6,10 @@
 1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. 查看其他玩家死亡时间
+
+### 功能类
+1. 按住`左ALT键`穿墙
+
 ### 杂项
 1. 移除战争迷雾(可以隔墙看人，没有阴影隐藏其他玩家)
 
@@ -28,6 +32,10 @@ This project is currently active in development. Leave a star if you like it. Yo
 1. See other players' rolenames **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 2. See if other player's killed someone this round **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. See other player's death time
+
+### Rage
+1. Press`Left ALT key` to do noclip, which makes you able to walk through doors and walls
+
 ### Misc
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
 
