@@ -26,16 +26,9 @@ int main()
 
     //初始化RPM工具类
     Memory memory;
-    Client client(memory, hackSettings);
-    DataUpdater dataUpdater(memory);
+    Client client(&memory, &hackSettings);
 
-
-
-    std::list<PlayerController> playerControllers;
-    for (int i = 0; i < 16; i++) {
-        PlayerController playerController(memory, client);
-        playerControllers.push_back(playerController);
-    }
+    DataUpdater dataUpdater(&client);
 
     //检测PID
     if (memory.pID != NULL) {
@@ -43,7 +36,7 @@ int main()
         std::cout << std::endl;
 
         //启动数据更新线程
-        std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater, &playerControllers);
+        std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
 
         //循环打印数据
         while (true) {
@@ -51,7 +44,7 @@ int main()
                 //clear console
                 system("cls");
                 //开始打印
-                PlayerController::printAllPlayersInfo(playerControllers, &utils);
+                client.printAllPlayersInfo(&utils);
             }
             Sleep(1000);
         }

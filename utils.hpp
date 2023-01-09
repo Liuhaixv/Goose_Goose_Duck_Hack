@@ -15,6 +15,21 @@ public:
 		}
 	}
 
+    //https://blog.csdn.net/mercy_ps/article/details/81218608
+    static std::string wstring2string(std::wstring wstr) {
+        std::string result;
+
+        int len = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), NULL, 0, NULL, NULL);
+        char* buffer = new char[len + 1];
+
+        WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), wstr.size(), buffer, len, NULL, NULL);
+        buffer[len] = '\0';
+
+        result.append(buffer);
+        delete[] buffer;
+        return result;
+    }
+
 	/// <summary>
 	/// 输出字符串到控制台,如果没有指定第二个参数则默认输出第一个字符串参数。
 	/// </summary>
