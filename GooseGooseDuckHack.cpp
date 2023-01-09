@@ -27,15 +27,8 @@ int main()
     //初始化RPM工具类
     Memory memory;
     Client client(memory, hackSettings);
-    DataUpdater dataUpdater(memory);
 
-
-
-    std::list<PlayerController> playerControllers;
-    for (int i = 0; i < 16; i++) {
-        PlayerController playerController(memory, client);
-        playerControllers.push_back(playerController);
-    }
+    DataUpdater dataUpdater(&client);
 
     //检测PID
     if (memory.pID != NULL) {

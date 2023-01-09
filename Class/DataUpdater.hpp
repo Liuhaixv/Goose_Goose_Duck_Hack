@@ -10,22 +10,23 @@
 /// </summary>
 class DataUpdater {
 public:
-	DataUpdater(Memory memory) {
-		this->memory = &memory;
+	DataUpdater(Client* client) {
+        this->memory = client->getMemory();
 	}
 
 	int validPlayersNum = 0;
 
 	/// <summary>
-	/// 更新玩家信息的线程函数
+	/// 更新玩家信息的线程函数<para/>
 	/// Thread that keeps updating data of PlayerControllers using RPM
 	/// </summary>
 	/// <param name="playerControllers"></param>
-	void playerControllerUpdater(std::list<PlayerController> *playerControllers) {
+    /// <param name="num">Number of players</param>
+	void playerControllerUpdater(PlayerController playerControllers[], int num) {
 		validPlayersNum = 0;
 
 		while (true) {
-			updatePlayerController(playerControllers);
+			updatePlayerController(playerControllers, num);
 			Sleep(1000);
 		}
 	}
@@ -37,7 +38,7 @@ private:
 	/// </summary>
 	/// <param name="playerIndex">玩家的索引，范围为[0,15],当index为0时为LocalPlayer</param>
 	/// <param name="playerController">要更新的PlayerController</param>
-	void updatePlayerController(std::list<PlayerController>* playerControllers) {
+	void updatePlayerController(PlayerController playerControllers[], int num) {
 		int validPlayers = 0;
 
 		//遍历所有PlayerController
