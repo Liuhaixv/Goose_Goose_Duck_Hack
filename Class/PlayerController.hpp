@@ -3,18 +3,18 @@
 
 #include"../Class/offsets.hpp"
 #include"../Struct/Common.hpp"
+#include"../memory.hpp"
 
 #include<Windows.h>
 
 class PlayerController {
 public:
     PlayerController() {
-        this->address = NULL;
+        this->memory = nullptr;
     }
 
-    //Init instance with known PlayerController address
-    PlayerController(int64_t ptr_address) {
-        this->address = ptr_address;
+    PlayerController(Memory* memory) {
+        this->memory = memory;
     }
 
     ~PlayerController() {
@@ -44,6 +44,10 @@ public:
     std::string nickname = "";
     char roleName[64] = "";
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
+
+    void setMemory(Memory* memory) {
+        this->memory = memory;
+    }
 
     void reset() {
         this->address = 0;
@@ -94,7 +98,7 @@ public:
         return true;
     }
 
-    bool updateNickname() {
+    void updateNickname() {
         byte tmpNick[42]{};
 
         int64_t* nickname_obj = (memory->read_mem<int64_t*>(this->address + Offsets::PlayerController::fl_nickname));
@@ -132,12 +136,10 @@ public:
         return update();
     }
 
-    
+
 
 private:
-    Utils utils;
     Memory* memory = nullptr;
-    Client* client = nullptr;
 
     /// <summary>
     /// 更新玩家数据<para/>
@@ -153,7 +155,7 @@ private:
         }
 
         //更新昵称
-        if (this->nickname != "") {
+        if (this->nickname == "") {
             updateNickname();
         }
 
@@ -178,34 +180,6 @@ private:
             //更新死亡时间
             i_timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
             strcpy(roleName, utils.getRoleName(i_playerRoleId));
-
-            //修改fog of war
-            if (b_isLocal) {
-                if (this->client) {
-                    HackSettings* hackSettings = this->client->hackSettings;
-                    if (hackSettings) {
-                        if (hackSettings->disableFogOfWar) {
-                            //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
-
-                            int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                            int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
-
-                            if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
-                                //disable fow
-                                //set layermask
-                                memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
-
-                                //7.5 is enough to see the whole screen
-                                //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                                float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
-                                if (f_viewDistanceMultiplier != 0) {
-                                    memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
         return true;
     }

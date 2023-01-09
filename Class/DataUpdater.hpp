@@ -3,6 +3,7 @@
 #include<list>
 
 #include"../memory.hpp"
+#include"../client.hpp"
 #include"PlayerController.hpp"
 
 /// <summary>
@@ -11,6 +12,7 @@
 class DataUpdater {
 public:
     DataUpdater(Client* client) {
+        this->client = client;
         this->memory = client->getMemory();
     }
 
@@ -22,25 +24,56 @@ public:
     /// </summary>
     /// <param name="playerControllers"></param>
     /// <param name="num">Number of players</param>
-    void playerControllerUpdater(PlayerController playerControllers[], int num) {
+    void playerControllerUpdater() {
+        PlayerController* playerControllers = client->playerControllers;
+        int players = client->n_players;
+
         while (true) {
-            updatePlayerController(playerControllers, num);
+            updatePlayerController(playerControllers, players);
             Sleep(1000);
         }
     }
 private:
-    Memory* memory;
+    Client* client = nullptr;
+    Memory* memory = nullptr;
+
+    void removeFogOfWar(PlayerController* playerController) {
+        //修改fog of war
+        if (playerController->b_isLocal) {
+            if (this->client && this->client->hackSettings) {
+                if (this->client->hackSettings->disableFogOfWar) {
+                    //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
+
+                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+
+                    if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
+                        //disable fow
+                        //set layermask
+                        memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+
+                        //7.5 is enough to see the whole screen
+                        //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
+                        float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
+                        if (f_viewDistanceMultiplier != 0) {
+                            memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// 更新玩家PlayerController信息
     /// </summary>
-    /// <param name="playerIndex">玩家的索引，范围为[0,15],当index为0时为LocalPlayer</param>
-    /// <param name="playerController">要更新的PlayerController</param>
-    void updatePlayerController(PlayerController playerControllers[], int num) {
+    /// <param name="playerControllers"></param>
+    /// <param name="playersNum"></param>
+    void updatePlayerController(PlayerController playerControllers[], int playersNum) {
         int validPlayers = 0;
 
         //遍历所有PlayerController
-        for (int i = 0; i < num; ++i) {
+        for (int i = 0; i < playersNum; ++i) {
             //获取当前遍历的玩家槽位中的PlayerController
             //Current pointer of iterated PlayerController in array
             PlayerController* ptr_playerController = &(playerControllers[i]);
@@ -52,6 +85,7 @@ private:
             //内存中当前玩家槽位不存在数据
             //Data not available
             if (playerControllerAddr == NULL) {
+                ptr_playerController->address = NULL;
                 continue;
             }
 
@@ -67,6 +101,8 @@ private:
             if (successUpdated) {
                 validPlayers++;
             }
+
+            removeFogOfWar(ptr_playerController);
         }
         //更新有效玩家信息
         //Update valid players' num

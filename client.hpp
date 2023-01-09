@@ -2,31 +2,31 @@
 
 #include "memory.hpp"
 #include "Struct/HackSettings.hpp"
+#include "Class/PlayerController.hpp"
+
 
 class Client
 {
 public:
     HackSettings* hackSettings = nullptr;
 
-    PlayerController playerControllers[16];
+    static const int n_players = 16;
+    PlayerController playerControllers[n_players];
 
-	Client(Memory memory)
-	{
-		this->memory = &memory;
-	}
-
-    Client(Memory memory, HackSettings hackSettings)
+    Client(Memory* memory, HackSettings* hackSettings = nullptr)
     {
-        this->memory = &memory;
-        this->hackSettings = &hackSettings;
+        this->memory = memory;
+        this->hackSettings = hackSettings;
+
+        for (int i = 0; i < n_players; i++) {
+            playerControllers[i].setMemory(this->memory);
+        }
     }
 
     Memory* getMemory() {
         return this->memory;
     }
 
-  
-    //
     //穿墙模式
 
     /// <summary>
@@ -36,11 +36,10 @@ public:
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
     static void noclip(PlayerController* localPlayer, bool enable = true) {
-    
+
     }
 
-    static void printAllPlayersInfo(std::list<PlayerController> playerControllers, Utils* utils = nullptr) {
-        std::list<PlayerController>::iterator iterator = playerControllers.begin();
+    void printAllPlayersInfo(Utils* utils = nullptr) {
 
         const char separator = '-';
         const int nameWidth = 15;
@@ -58,19 +57,21 @@ public:
         */
         //std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "坐标") : "坐标");
 
-        for (int i = 0; iterator != playerControllers.end(); ++iterator, ++i) {
-            if (!(*iterator).address) {
+        for (int i = 0; i < Client::n_players; ++i) {
+            PlayerController* ptr_PlayerController = &(this->playerControllers[i]);
+
+            if (ptr_PlayerController->address == NULL) {
                 continue;
             }
 
-            bool killedThisRound = (*iterator).b_hasKilledThisRound;
-            int deathTime = (*iterator).i_timeOfDeath;
+            bool killedThisRound = ptr_PlayerController->b_hasKilledThisRound;
+            int deathTime = ptr_PlayerController->i_timeOfDeath;
 
             std::cout << std::format("{:25}{:15}{:15}{:10}",
-                (*iterator).nickname,
-                (*iterator).roleName,
+                ptr_PlayerController->nickname,
+                ptr_PlayerController->roleName,
                 killedThisRound ? (utils ? utils->str("Yes", "是") : "是") : "",
-                (*iterator).i_timeOfDeath ? std::to_string(((*iterator).i_timeOfDeath)) : ""
+                ptr_PlayerController->i_timeOfDeath ? std::to_string((ptr_PlayerController->i_timeOfDeath)) : ""
             );
             /*
             std::cout << std::left << std::setw(25) << std::setfill(separator) << (*iterator).nickname;
@@ -86,5 +87,5 @@ public:
     }
 
 private:
-	Memory* memory = 0;
+    Memory* memory = 0;
 };
