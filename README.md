@@ -4,6 +4,9 @@
 
 鹅鸭杀外部辅助程序，目前持续更新中，可以点亮Star收藏关注一波。有功能需求可以提Issue，我都会回复。
 
+# 进程
+当前正在开发GUI界面，完成开发后后续会添加绘制，通过线条显示玩家位置及昵称
+
 # 功能
 ### 显示类
 1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
@@ -35,6 +38,9 @@ External Hack for Goose Goose Duck.
 
 # Description
 This project is currently active in development. Leave a star if you like it. You can make request for features you want , just create issues and I will reply.
+
+# Progress
+Developing GUI, other features like ESP with line revealing players' position and nickname will be added later when GUI development has done.
 
 # Features
 ### Reveal Info
