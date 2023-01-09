@@ -5,6 +5,7 @@
 namespace Offsets {
 	namespace PlayerController {
 		constexpr int64_t fn_updateRVA = 0xE12760; // AOBScan too.
+        constexpr int64_t ptr_bodyCollider = 0xA8;// CapsuleCollider2D
 		constexpr int64_t b_isSilenced = 0xC1; // Boolean
 		constexpr int64_t b_isInfected = 0xC3; // Boolean
         constexpr int64_t killedBy = 0xC8; // point64_ter, [instance+killedBy] +  0x14, length: [instance+killedBy] + 0x10
@@ -44,6 +45,13 @@ namespace Offsets {
         constexpr int64_t f_baseViewDistance = 0x2c;
         constexpr int64_t f_viewDistanceMultiplier = 0x38;
         constexpr int64_t b_targetPlayerSet = 0x50;
+    }
+
+    namespace CapsuleCollider2D {
+        constexpr int64_t i_unknownClass0 = 0x30;
+        namespace UnknownClass0 {
+            constexpr int64_t b_enableCollider = 0x39;
+        }
     }
 
 	namespace GameAssembly {
