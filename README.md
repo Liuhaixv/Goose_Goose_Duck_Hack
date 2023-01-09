@@ -26,7 +26,7 @@
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="移除战争迷雾"/><span/>
 
 # 已知Bug
-1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决
+1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/19#issuecomment-1376168944)
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -60,7 +60,8 @@ Developing GUI, other features like ESP with line revealing players' position an
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="removed_fow"/><span/>
 
 # Known bugs
-1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator)**
+1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
+[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3#issuecomment-1376171693)
 
 # Notice
 I am not responsible for any problems caused by abusing this project
