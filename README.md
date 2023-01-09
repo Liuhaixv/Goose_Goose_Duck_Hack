@@ -41,6 +41,7 @@ This project is currently active in development. Leave a star if you like it. Yo
 
 ### Rage
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
+
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
 
