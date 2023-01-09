@@ -10,8 +10,14 @@
 ### 功能类
 1. 按住`左ALT键`穿墙
 
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
+
+
 ### 杂项
 1. 移除战争迷雾(可以隔墙看人，没有阴影隐藏其他玩家)
+<div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/normal.png" alt="正常画面"/><div/>
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="移除战争迷雾"/><span/>
 
 # 已知Bug
 1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决
@@ -36,8 +42,13 @@ This project is currently active in development. Leave a star if you like it. Yo
 ### Rage
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
 
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
+
 ### Misc
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
+<div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/normal.png" alt="normal"/><div/>
+<span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="removed_fow"/><span/>
 
 # Known bugs
 1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator)**
