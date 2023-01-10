@@ -4,14 +4,19 @@
 #include<list>
 #include<iomanip>
 #include<winnls.h>
+#include<iostream>
 
 #include"Data/GameData.hpp"
 
 class Utils {
 public:
+    //当前操作系统是否为中文
+    //true if current OS's language is Chinese
+    bool b_chineseOS = false;
+
 	Utils() {
-		if (nChineseOS < 0) {
-			nChineseOS = isChineseLanguageOS();
+		if (b_chineseOS < 0) {
+			b_chineseOS = isChineseLanguageOS();
 		}
 	}
 
@@ -40,7 +45,7 @@ public:
 			std::cout << eng;
 		}
 		else {
-			if (this->nChineseOS) {
+			if (this->b_chineseOS) {
 				std::cout << cn;
 			}
 			else {
@@ -56,26 +61,10 @@ public:
 	/// <param name="cn"></param>
 	/// <returns></returns>
 	std::string str(std::string eng, std::string cn) {
-		return (this->nChineseOS) ? cn : eng;
+		return (this->b_chineseOS) ? cn : eng;
 	}
 
-	/// <summary>
-	/// 检查当前系统是否使用中文
-	/// </summary>
-	/// <returns>是否使用中文</returns>
-	static bool isChineseLanguageOS() {
-		try {
-			std::string locale = __CheckLocale();
-			if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
-				//中文 
-				return true;
-			}
-			return false;
-		}
-		catch (...) {
-			return false;
-		}
-	}
+	
 
 	/// <summary>
 	/// 关闭快速输入模式防止程序卡住
@@ -91,7 +80,7 @@ public:
 
 	const char* getRoleName(int id) {
 		//返回中文角色名
-		if (this->nChineseOS) {
+		if (this->b_chineseOS) {
 			switch (id)
 			{
 			case gameRoleId::None:
@@ -522,9 +511,23 @@ public:
 	}
 
 private:
-	//当前操作系统是否为中文
-	//1 if current OS's language is Chinese
-	int nChineseOS = -1;
+    /// <summary>
+    /// 检查当前系统是否使用中文
+    /// </summary>
+    /// <returns>是否使用中文</returns>
+    static bool isChineseLanguageOS() {
+        try {
+            std::string locale = __CheckLocale();
+            if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
+                //中文 
+                return true;
+            }
+            return false;
+        }
+        catch (...) {
+            return false;
+        }
+    }
 
 	static std::string __CheckLocale()
 	{

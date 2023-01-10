@@ -27,9 +27,9 @@
 
 void getScaledResolution(int& x, int& y);
 
+Utils utils;
+
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
-    //初始化工具类
-    Utils utils;
 
     //关闭快速编辑
     //Disable the quick-edit mode
@@ -73,7 +73,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
         }
         */
 
-        //GUI线程循环
+        //GUI线程
         UI::Render(&hackSettings,instance, cmd_show);
     }
     else {

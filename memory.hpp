@@ -8,7 +8,7 @@
 
 #include"utils.hpp"
 
-Utils utils;
+extern Utils utils;
 
 class Memory {
 public:

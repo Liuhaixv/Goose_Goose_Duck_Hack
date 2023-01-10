@@ -8,6 +8,8 @@ ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 HackSettings* UI::hackSettings = nullptr;
 HWND UI::hwnd = NULL;
 
+extern Utils utils;
+
 void getScaledResolution(int& resolutionX, int& resolutionY);
 
 bool UI::CreateDeviceD3D(HWND hWnd)
@@ -243,7 +245,17 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
         const float fScale = 2.0f;
         ImFontConfig cfg;
         cfg.SizePixels = 13 * fScale;
-        ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+
+        //中文字体
+        //chinese font
+        if (utils.b_chineseOS) {
+            //TODO
+        }
+        else {
+            //默认字体
+            //default font
+            ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+        }
     }
 
     ImGui::GetIO().IniFilename = nullptr;
