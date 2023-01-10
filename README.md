@@ -1,8 +1,11 @@
-# 鹅鸭杀辅助
+﻿# 鹅鸭杀辅助
 [![支付宝](https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue)](https://raw.githubusercontent.com/Liuhaixv/Goose_Goose_Duck_Hack/main/img/alipay.jpg)
 [![微信](https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen)](https://raw.githubusercontent.com/Liuhaixv/Goose_Goose_Duck_Hack/main/img/wechat.jpg)
 
 鹅鸭杀外部辅助程序，目前持续更新中，可以点亮Star收藏关注一波。有功能需求可以提Issue，我都会回复。
+
+# 进程
+当前正在开发GUI界面，完成开发后后续会添加绘制，通过线条显示玩家位置及昵称
 
 # 功能
 ### 显示类
@@ -23,7 +26,7 @@
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="移除战争迷雾"/><span/>
 
 # 已知Bug
-1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决
+1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/19#issuecomment-1376168944)
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -35,6 +38,9 @@ External Hack for Goose Goose Duck.
 
 # Description
 This project is currently active in development. Leave a star if you like it. You can make request for features you want , just create issues and I will reply.
+
+# Progress
+Developing GUI, other features like ESP with line revealing players' position and nickname will be added later when GUI development has done.
 
 # Features
 ### Reveal Info
@@ -54,7 +60,8 @@ This project is currently active in development. Leave a star if you like it. Yo
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/main/img/removed_fow.png" alt="removed_fow"/><span/>
 
 # Known bugs
-1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator)**
+1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
+[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3#issuecomment-1376171693)
 
 # Notice
 I am not responsible for any problems caused by abusing this project
