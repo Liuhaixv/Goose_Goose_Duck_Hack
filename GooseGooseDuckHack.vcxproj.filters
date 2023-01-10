@@ -104,7 +104,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gui.hpp">
+    <ClInclude Include="Struct\GuiSettings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Drawing.h">

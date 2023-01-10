@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include"../Struct/HackSettings.hpp"
+#include"../UI.h"
 #include <Windows.h>
 
 /// <summary>
@@ -30,8 +31,26 @@ public:
             else {
                 hackSettings->enableNoclip = false;
             }
+
+            bool insert = GetAsyncKeyState(VK_INSERT);
+            //Insert to enable GUI menu
+            //Insert键开关菜单
+            if (insert)
+            {
+                if (!pressingInsert) {
+                    pressingInsert = true;
+                    //switch
+                    hackSettings->guiSettings.b_enableMenu = !hackSettings->guiSettings.b_enableMenu;
+                    UI::makeWindowClickable(UI::hwnd, hackSettings->guiSettings.b_enableMenu);
+                }
+            }
+            else {
+                pressingInsert = false;
+            }
         }
     }
 private:
     HackSettings* hackSettings = nullptr;
+
+    bool pressingInsert = GetAsyncKeyState(VK_LMENU);
 };

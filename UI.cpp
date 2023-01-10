@@ -5,6 +5,9 @@ ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
 ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
+HackSettings* UI::hackSettings = nullptr;
+HWND UI::hwnd = NULL;
+
 void getScaledResolution(int& resolutionX, int& resolutionY);
 
 bool UI::CreateDeviceD3D(HWND hWnd)
@@ -142,8 +145,10 @@ LRESULT WINAPI UI::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void UI::Render(HINSTANCE instance, INT cmd_show)
+void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
 {
+    UI::hackSettings = hackSettings;
+
     ImGui_ImplWin32_EnableDpiAwareness();
     const WNDCLASSEX wc = {
         sizeof(WNDCLASSEX),
@@ -173,8 +178,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         nullptr
     );
 
-    //不可点击,鼠标操作穿透窗口
-    //SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED);
+    UI::hwnd = hwnd;
 
     SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 

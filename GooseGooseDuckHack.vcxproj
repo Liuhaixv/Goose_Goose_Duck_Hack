@@ -157,7 +157,7 @@
     <ClInclude Include="Class\PlayerController.hpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Drawing.h" />
-    <ClInclude Include="gui.hpp" />
+    <ClInclude Include="Struct\GuiSettings.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />

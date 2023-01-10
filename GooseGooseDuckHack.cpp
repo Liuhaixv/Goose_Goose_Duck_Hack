@@ -74,7 +74,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
         */
 
         //GUI线程循环
-        UI::Render(instance, cmd_show);
+        UI::Render(&hackSettings,instance, cmd_show);
     }
     else {
         //utils.print("Not detected game, closing now... Please try again and run the game before starting the hack.", "未检测到游戏，正在关闭......请先运行游戏再打开该辅助。");
