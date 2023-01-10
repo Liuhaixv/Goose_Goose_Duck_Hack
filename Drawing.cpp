@@ -88,11 +88,13 @@ void drawMenu() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
+        //菜单1
         if (ImGui::BeginTabItem((const char*)u8"角色信息"))
         {
             ImGui::Text((const char*)u8"玩家信息在这里显示");
             ImGui::EndTabItem();
         }
+        //菜单2
         if (ImGui::BeginTabItem((const char*)u8"设置"))
         {
             ImGui::Checkbox((const char*)u8"隐藏战争迷雾", &UI::hackSettings->disableFogOfWar);
@@ -107,4 +109,12 @@ void drawMenu() {
 
 void drawESP() {
     //TODO
+    /*
+    ImGui::GetBackgroundDrawList()->AddCircleFilled(
+        { 500,500 },
+        30,
+        ImColor{ 1.0f, 1.0f, 0.0f }
+    );
+    */
+    ImGui::GetBackgroundDrawList()->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y}, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
 }
