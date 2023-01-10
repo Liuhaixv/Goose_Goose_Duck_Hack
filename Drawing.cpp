@@ -111,14 +111,22 @@ void drawESP() {
     //TODO
     ///*
     ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImDrawList* drawList = ImGui::GetBackgroundDrawList(viewport);
 
-    ImGui::GetBackgroundDrawList(viewport)->AddCircleFilled(
+    drawList->AddCircleFilled(
         { 500,500 },
         30,
         ImColor{ 1.0f, 1.0f, 0.0f }
     );
 
-    ImGui::GetBackgroundDrawList(viewport)->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
+    drawList->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 6.0f);
+
+    ImColor lineColor{ 0.0f,1.0f,0.0f };
+    float lineThichness = 4;
+    drawList->AddLine({0, ImGui::GetIO().DisplaySize.y / 2 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 2 },
+        lineColor, lineThichness);
+    drawList->AddLine({ ImGui::GetIO().DisplaySize.x /2, 0 } , { ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y },
+        lineColor, lineThichness);
     //*/
 
     /*
