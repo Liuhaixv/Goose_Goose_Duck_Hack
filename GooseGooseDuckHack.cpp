@@ -12,6 +12,8 @@
 
 #include"./Class/DataUpdater.hpp"
 #include"./Class/HotkeyUpdater.hpp"
+#include"./Class/GameProcessUpdater.hpp"
+
 #include"./Class/PlayerController.hpp"
 
 //Windows
@@ -30,57 +32,90 @@ void getScaledResolution(int& x, int& y);
 Utils utils;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
-
-    //关闭快速编辑
-    //Disable the quick-edit mode
-    //utils.disableQuickEdit();
-
+    //初始化辅助设置类
     //settings
     HackSettings hackSettings;
-    hackSettings.disableFogOfWar = false;
+    {
+        //修改设置
+        //Edit hacksettings
+        hackSettings.disableFogOfWar = false;
+    }
 
     //初始化RPM工具类
+    //Init RPM classes
     Memory memory;
     Client client(&memory, &hackSettings);
 
+    //初始化更新类线程
+    //Init updaters
     HotkeyUpdater hotkeyUpdater(&hackSettings);
     DataUpdater dataUpdater(&client);
+    MemoryUpdater memoryUpdater(&memory, &hackSettings);
 
-    //GUI
+    //监听热键
+    //Listen to keyboard
+    std::thread hackSettingsUpdater(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
+    //启动游戏内存数据更新线程
+    //Game data updater
+    std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
+    //启动游戏进程查找线程
+    //Game process finder
+    std::thread gameProcessUpdater(&MemoryUpdater::gameProcessUpdater, &memoryUpdater);
 
 
+    //GUI循环
+    UI::Render(&hackSettings, instance, cmd_show);
+    //UI::Render(&hackSettings, instance, cmd_show);
 
-    //检测PID
-    if (memory.pID != NULL) {
-        //utils.print("Goose Goose Duck hack running...", "鹅鸭杀辅助运行中...");
-        //std::cout << std::endl;
+    /*
+    while (true) {
+        while (memory.processHandle != NULL && memory.gameAssemblyBaseAddress ) {
+            if (!hackSettings.process) {
 
-        //启动数据更新线程
-        std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
-        //监听热键
-        std::thread hackSettingsUpdater(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
-
-        /*
-        //循环打印数据
-        while (true) {
-            if (dataUpdater.validPlayersNum > 0) {
-                //clear console
-                system("cls");
-                //开始打印
-                client.printAllPlayersInfo(&utils);
+                std::cout << "Game found" << std::endl;
+                hackSettings.process = true;
             }
-            Sleep(1000);
-        }
-        */
 
-        //GUI线程
-        UI::Render(&hackSettings,instance, cmd_show);
+            while (client.in_game()) {
+                if (!hackSettings.game) {
+                    hackSettings.game = true;
+                    client.update_gamemory.de();
+                    hacks.init();
+                }
+
+
+                int round_index = client.get_round_index();
+
+                //update last_time_round_index_changed
+                if (round_index != hackSettings.round_index) {
+                    time_t current_time = time(NULL);
+                    hackSettings.last_time_round_index_changed = current_time;
+                }
+                //update round_index
+                hackSettings.round_index = round_index;
+
+                // SendMessage(ol.hwnd, WM_PAINT, NULL, NULL);
+                Sleep(1000);
+            }
+
+            hackSettings.game = false;
+            Sleep(5000);
+        }
+
+        std::cout << "Game not found, sleeping for 5 secs" << std::endl;
+
+        hackSettings.process = false;
+        ++connect_count;
+        Sleep(5000);
+        if (connect_count >= 2) {
+            connect_count = 0;
+            memory.~memory.ry();
+            client.~Client();
+            hacks.~Hacks();
+
+            new(&memory. memory.ry();
+            new(&client) Client(&memory.;
+        }
     }
-    else {
-        //utils.print("Not detected game, closing now... Please try again and run the game before starting the hack.", "未检测到游戏，正在关闭......请先运行游戏再打开该辅助。");
-        //std::cout << std::endl;
-        //utils.print("If your have launched game but still see this message, it may because you ran the game (or steam) with Administrator privilege. In that case, you must run the hack with Administrator privilege too.", "如果你的游戏已经打开但仍一直看到该信息出现，很可能是你以管理员权限运行了游戏或Steam，那么你需要同样使用管理员权限来运行该辅助。");
-        //std::cout << std::endl << std::endl;
-        //system("pause");
-    }
+    */
 }
