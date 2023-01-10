@@ -5,6 +5,9 @@ ImVec2 Drawing::vWindowSize = { 500, 500 };
 ImGuiWindowFlags Drawing::WindowFlags = ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize;
 //bool Drawing::bDraw = true;
 
+void drawMenu();
+void drawESP();
+
 void Drawing::Active()
 {
     UI::hackSettings->guiSettings.b_draw = true;
@@ -21,12 +24,12 @@ void Drawing::Draw() {
     {
         //绘制菜单
         if (UI::hackSettings->guiSettings.b_enableMenu) {
-            ImGui::ShowDemoWindow();
+            drawMenu();
         }
 
         //ESP
         if (UI::hackSettings->guiSettings.b_enableESP) {
-            //TODO
+            drawESP();
         }
         else {
 
@@ -53,4 +56,12 @@ void Drawing::Draw() {
             */
         }
     }
+}
+
+void drawMenu() {
+
+}
+
+void drawESP() {
+    //TODO
 }
