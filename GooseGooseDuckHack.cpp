@@ -37,7 +37,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 
     //settings
     HackSettings hackSettings;
-    hackSettings.disableFogOfWar = true;
+    hackSettings.disableFogOfWar = false;
 
     //初始化RPM工具类
     Memory memory;

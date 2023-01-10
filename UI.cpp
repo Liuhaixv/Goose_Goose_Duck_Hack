@@ -246,19 +246,25 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
         ImFontConfig cfg;
         cfg.SizePixels = 13 * fScale;
 
+        //ImGui::GetIO().Fonts->AddFontDefault();
+
         //中文字体
         //chinese font
         if (utils.b_chineseOS) {
             //TODO
+            ImGui::GetIO().Fonts->AddFontFromFileTTF(
+                "c:/Windows/Fonts/simhei.ttf",
+                cfg.SizePixels,
+                NULL,
+                ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
         }
         else {
-            //默认字体
-            //default font
             ImGui::GetIO().Fonts->AddFontDefault(&cfg);
         }
     }
 
-    ImGui::GetIO().IniFilename = nullptr;
+    //保存GUI窗口信息
+    ImGui::GetIO().IniFilename = "imgui.ini";
 
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(pd3dDevice, pd3dDeviceContext);

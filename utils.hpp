@@ -15,9 +15,7 @@ public:
     bool b_chineseOS = false;
 
 	Utils() {
-		if (b_chineseOS < 0) {
-			b_chineseOS = isChineseLanguageOS();
-		}
+		b_chineseOS = isChineseLanguageOS();
 	}
 
     //https://blog.csdn.net/mercy_ps/article/details/81218608
