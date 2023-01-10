@@ -21,17 +21,11 @@ void Drawing::Draw()
 	{
 		ImGui::ShowDemoWindow();
 
-		
-		ImGui::SetNextWindowSize(vWindowSize);
-		ImGui::SetNextWindowBgAlpha(1.0f);
-		ImGui::Begin("esp", &bDraw, WindowFlags);
-
         ImGui::GetBackgroundDrawList()->AddCircleFilled(
             { 500,500 },
-            100,
+            30,
             ImColor{ 1.0f, 1.0f, 0.0f }
         );
-		ImGui::End();
         /*
 		ImGui::SetNextWindowPos(ImVec2(0, 0));
 		ImGui::SetNextWindowSize(ImVec2(1024, 768));

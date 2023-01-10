@@ -1,6 +1,5 @@
 ﻿#include "UI.h"
 
-
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
@@ -160,18 +159,22 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     //const HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("ImGui Standalone"), WS_OVERLAPPEDWINDOW, 100, 100, 50, 50, NULL, NULL, wc.hInstance, NULL);
 
     //Get resolution
-    int resolutionX, resolutionY;
+    int resolutionX = 500, resolutionY=500;
     getScaledResolution(resolutionX, resolutionY);
 
+
     const HWND hwnd = CreateWindowEx(
-        WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED,
+        WS_EX_TOPMOST | WS_EX_TRANSPARENT,
         wc.lpszClassName,
         "External Overlay",
         WS_POPUP,
-        0, 0, resolutionX, resolutionX, nullptr, nullptr,
+        0, 0, resolutionX, resolutionY, nullptr, nullptr,
         wc.hInstance,
         nullptr
     );
+
+    //不可点击,鼠标操作穿透窗口
+    //SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED);
 
     SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 
@@ -218,10 +221,11 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     ImGui::StyleColorsDark();
 
     ImGuiStyle& style = ImGui::GetStyle();
+
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        style.WindowRounding = 4.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        //style.WindowRounding = 4.0f;
+        //style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
     const HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
@@ -275,7 +279,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         pd3dDeviceContext->ClearRenderTargetView(pMainRenderTargetView, clear_color_with_alpha);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-        if (io.ConfigFlags)
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
@@ -298,12 +302,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
 //获取缩放后的分辨率
 void getScaledResolution(int& x, int& y) {
-    /*
-    * 会导致docking失效
     HDC hdc = GetDC(NULL);
     x = GetDeviceCaps(hdc, HORZRES);
     y = GetDeviceCaps(hdc, VERTRES);
-    */
-    x = 2560;
-    y = 1440;
 }
