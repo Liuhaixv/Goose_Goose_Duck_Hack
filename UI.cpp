@@ -171,7 +171,7 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
 
 
     const HWND hwnd = CreateWindowEx(
-        WS_EX_TOPMOST | WS_EX_TRANSPARENT,
+        WS_EX_TOPMOST | WS_EX_TRANSPARENT |WS_EX_LAYERED,
         wc.lpszClassName,
         "External Overlay",
         WS_POPUP,

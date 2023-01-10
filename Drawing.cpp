@@ -109,12 +109,25 @@ void drawMenu() {
 
 void drawESP() {
     //TODO
-    /*
-    ImGui::GetBackgroundDrawList()->AddCircleFilled(
+    ///*
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+    ImGui::GetBackgroundDrawList(viewport)->AddCircleFilled(
         { 500,500 },
         30,
         ImColor{ 1.0f, 1.0f, 0.0f }
     );
+
+    ImGui::GetBackgroundDrawList(viewport)->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
+    //*/
+
+    /*
+    ImGui::GetForegroundDrawList()->AddCircleFilled(
+        { 500,500 },
+        30,
+        ImColor{ 1.0f, 1.0f, 0.0f }
+    );
+
+    ImGui::GetForegroundDrawList()->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
     */
-    ImGui::GetBackgroundDrawList()->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y}, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
 }
