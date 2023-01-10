@@ -251,7 +251,6 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
         //中文字体
         //chinese font
         if (utils.b_chineseOS) {
-            //TODO
             ImGui::GetIO().Fonts->AddFontFromFileTTF(
                 "c:/Windows/Fonts/simhei.ttf",
                 cfg.SizePixels,
@@ -303,6 +302,7 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
 
         //检测是否需要创建新window来容纳GUI窗口
         //TODO 将菜单窗口和绘制窗口分离，菜单窗口设置为可点击，绘制窗口设置为不可点击（鼠标点击穿透窗口到游戏）
+        //imgui.cpp:6748 通过判断窗口是否在主窗口的矩形范围内来决定是否创建新的Viewport
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             ImGui::UpdatePlatformWindows();
