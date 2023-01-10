@@ -7,6 +7,8 @@
 # 进程
 当前正在开发GUI界面，完成开发后后续会添加绘制，通过线条显示玩家位置及昵称
 
+[Issue #20](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/20)
+
 # 功能
 ### 显示类
 1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
@@ -41,6 +43,8 @@ This project is currently active in development. Leave a star if you like it. Yo
 
 # Progress
 Developing GUI, other features like ESP with line revealing players' position and nickname will be added later when GUI development has done.
+
+[Issue #20](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/20)
 
 # Features
 ### Reveal Info
