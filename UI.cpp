@@ -301,6 +301,8 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
         pd3dDeviceContext->ClearRenderTargetView(pMainRenderTargetView, clear_color_with_alpha);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+        //检测是否需要创建新window来容纳GUI窗口
+        //TODO 将菜单窗口和绘制窗口分离，菜单窗口设置为可点击，绘制窗口设置为不可点击（鼠标点击穿透窗口到游戏）
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             ImGui::UpdatePlatformWindows();
