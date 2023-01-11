@@ -100,11 +100,16 @@ void drawMenu() {
         //菜单3
         if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
         {
+            float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
+            if (minSpeed <= 0) {
+                minSpeed = 5.0f;
+            }
+
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
                 &hackSettings.guiSettings.f_baseMovementSpeed,
-                hackSettings.gameOriginalData.f_baseMovementSpeed,
-                hackSettings.gameOriginalData.f_baseMovementSpeed * 2
+                minSpeed,
+                minSpeed * 2
             );
 
             ImGui::EndTabItem();
