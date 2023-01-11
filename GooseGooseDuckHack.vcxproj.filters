@@ -62,7 +62,7 @@
     <ClInclude Include="utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Class\offsets.hpp">
+    <ClInclude Include="Data\offsets.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Class\DataUpdater.hpp">
@@ -123,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\GameOriginalData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

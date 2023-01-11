@@ -3,6 +3,7 @@
 #include "memory.hpp"
 #include "Struct/HackSettings.hpp"
 #include "Class/PlayerController.hpp"
+#include"Class/LocalPlayer.hpp"
 #include<format>
 
 class Client
@@ -11,7 +12,7 @@ public:
     HackSettings* hackSettings = nullptr;
 
     static const int n_players = 16;
-    PlayerController localPlayer;
+    LocalPlayer localPlayer;
     PlayerController playerControllers[n_players];
 
     Client(Memory* memory, HackSettings* hackSettings = nullptr)
@@ -29,28 +30,23 @@ public:
         return this->memory;
     }
 
-    //穿墙模式
+    /// <summary>
+    /// 游戏开始
+    /// </summary>
+    void onGameStarted() {
+        //更新游戏内初始数据
+        updateGameOriginalData();
+    }
 
     /// <summary>
-    /// 开启穿墙模式
-    /// Enable noclip to disable collider, which makes you able to walk through any obstacle like walls and tables<paragm/>
+    /// 游戏结束
     /// </summary>
-    /// <param name="localPlayer"></param>
-    /// <param name="enable"></param>
-    bool noclip(PlayerController* localPlayer, bool enable = true) {
-        std::vector<int64_t> offsets{
-                Offsets::PlayerController::ptr_bodyCollider,
-                Offsets::CapsuleCollider2D::i_unknownClass0,
-                Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
+    void onGameEnded() {
 
-        int64_t b_enableCollider = this->memory->FindPointer(localPlayer->address,
-            offsets);
+    }
 
-        if (b_enableCollider == NULL) {
-            return false;
-        }
-
-        this->memory->write_mem<bool>(b_enableCollider, !enable);
+    void updateGameOriginalData() {
+        hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
     }
 
     void printAllPlayersInfo(Utils* utils = nullptr) {

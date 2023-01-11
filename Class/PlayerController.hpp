@@ -1,7 +1,7 @@
 ﻿#pragma once
 #pragma warning(disable:4996)
 
-#include"../Class/offsets.hpp"
+#include"../Data/offsets.hpp"
 #include"../Struct/Common.hpp"
 #include"../memory.hpp"
 
@@ -134,8 +134,6 @@ public:
         return update();
     }
 
-
-
 private:
     Memory* memory = nullptr;
 
@@ -148,7 +146,7 @@ private:
     bool update() {
         //无效指针
         //invalid pointer address
-        if (this->address == NULL) {
+        if (this->memory == NULL ||this->address == NULL) {
             return false;
         }
 
