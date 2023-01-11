@@ -37,6 +37,14 @@ namespace Offsets {
 	}
 
     namespace LocalPlayer {
+        namespace LocalPlayer_c {
+            namespace StaticField {
+                constexpr int64_t f_baseMovementSpeed = 0x10;
+            }
+            constexpr int64_t ptr_staticFields = 0xB8;
+        }
+        constexpr int64_t ptr_LocalPlayer_class = 0x0;
+        constexpr int64_t staticField = 0x10;
         constexpr int64_t ptr_playerController = 0x18;//PlayerController of localplayer
         constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
     }

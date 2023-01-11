@@ -97,6 +97,19 @@ void drawMenu() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
+        //菜单3
+        if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
+        {
+            ImGui::SliderFloat(
+                str("Movement speed", "移速"),
+                &hackSettings.guiSettings.f_baseMovementSpeed,
+                hackSettings.gameOriginalData.f_baseMovementSpeed,
+                hackSettings.gameOriginalData.f_baseMovementSpeed * 2
+            );
+
+            ImGui::EndTabItem();
+        }
+
         //菜单1
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
@@ -147,6 +160,8 @@ void drawMenu() {
 
             ImGui::EndTabItem();
         }
+
+
 
         ImGui::EndTabBar();
     }

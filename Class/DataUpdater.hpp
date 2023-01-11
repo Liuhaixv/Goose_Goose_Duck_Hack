@@ -6,6 +6,7 @@
 #include"../client.hpp"
 #include"../Class/Hack.hpp"
 #include"PlayerController.hpp"
+#include"LocalPlayer.hpp"
 
 extern Hack hack;
 
@@ -29,7 +30,7 @@ public:
     /// <param name="num">Number of players</param>
     void playerControllerUpdater() {
         PlayerController* playerControllers = client->playerControllers;
-        PlayerController* localPlayer = &client->localPlayer;
+        LocalPlayer* localPlayer = &client->localPlayer;
         int players = client->n_players;
 
         while (true) {
@@ -40,7 +41,9 @@ public:
     }
 private:
     Client* client = nullptr;
-    Memory* memory = nullptr; 
+    Memory* memory = nullptr;
+
+    bool b_isPlayerRoleSet = false;
 
     void enableFogOfWar(PlayerController* playerController) {
         //
@@ -73,19 +76,50 @@ private:
     /// 更新本地玩家
     /// </summary>
     /// <param name="playerController"></param>
-    void updateLocalPlayer(PlayerController* playerController) {
+    void updateLocalPlayer(LocalPlayer* localPlayer) {
         //获取内存中对应玩家槽位的实例地址
         std::vector<int64_t> offsets = Offsets::GameAssembly::localPlayer();
-        offsets.pop_back();
-        offsets.push_back(Offsets::LocalPlayer::ptr_playerController);
-        offsets.push_back(0x0);
+        //offsets.pop_back();
+        //offsets.push_back(Offsets::LocalPlayer::ptr_playerController);
+        //offsets.push_back(0x0);
 
         int64_t localPlayerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
 
-        updatePlayerController(playerController, localPlayerAddr);
+        if (localPlayerAddr == NULL) {
+            return;
+        }
 
-        hack.removeFogOfWar(playerController);
-        hack.noclip(playerController);
+        //Update localplayer
+        localPlayer->update(localPlayerAddr);
+
+        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController);
+
+        //Update playerController
+        updatePlayerController(&localPlayer->playerController, localPlayerController);
+
+        if (localPlayer->playerController.address == NULL) {
+            return;
+        }
+
+        if (localPlayer->playerController.b_isPlayerRoleSet) {
+            //游戏刚开始
+            if (!b_isPlayerRoleSet) {
+                client->onGameStarted();
+                b_isPlayerRoleSet = true;
+            }
+        }
+        else {
+            //游戏刚结束
+            if (b_isPlayerRoleSet) {
+                client->onGameEnded();
+                b_isPlayerRoleSet = false;
+            }
+        }
+
+
+        hack.removeFogOfWar(&localPlayer->playerController);
+        hack.noclip(&localPlayer->playerController);
+        hack.speedHack(localPlayer);
     }
 
     bool updatePlayerController(PlayerController* dst, int64_t address) {

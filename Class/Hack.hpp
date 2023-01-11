@@ -17,9 +17,9 @@ public:
         this->client = client;
     }
 
-    void removeFogOfWar(PlayerController* playerController) {
+    void removeFogOfWar(PlayerController* localPlayerController) {
         //修改fog of war
-        if (playerController->b_isLocal) {
+        if (localPlayerController->b_isLocal) {
             if (this->client && this->client->hackSettings) {
                 if (this->client->hackSettings->disableFogOfWar) {
 
@@ -46,16 +46,57 @@ public:
         }
     }
 
-    void noclip(PlayerController* playerController) {
+    /// <summary>
+    /// 开启穿墙模式
+    /// Enable noclip to disable collider, which makes you able to walk through any obstacle like walls and tables<paragm/>
+    /// </summary>
+    /// <param name="localPlayer"></param>
+    /// <param name="enable"></param>
+    bool enableNoclip(PlayerController* localPlayer, bool enable = true) {
+        Memory* memory = this->client->getMemory();
+        std::vector<int64_t> offsets{
+                Offsets::PlayerController::ptr_bodyCollider,
+                Offsets::CapsuleCollider2D::i_unknownClass0,
+                Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
+
+        int64_t b_enableCollider = memory->FindPointer(localPlayer->address,
+            offsets);
+
+        if (b_enableCollider == NULL) {
+            return false;
+        }
+
+        memory->write_mem<bool>(b_enableCollider, !enable);
+    }
+
+    void noclip(PlayerController* localPlayerController) {
         //开启穿墙
-        if (playerController->b_isLocal) {
+        if (localPlayerController && localPlayerController->b_isLocal) {
             if (this->client && this->client->hackSettings) {
                 if (this->client->hackSettings->guiSettings.b_alwaysEnableNoclip) {
-                    client->noclip(playerController, 1);
+                    enableNoclip(localPlayerController);
                 }
                 else {
-                    client->noclip(playerController, this->client->hackSettings->enableNoclip);
+                    enableNoclip(localPlayerController, this->client->hackSettings->enableNoclip);
                 }
+            }
+        }
+    }
+
+    void speedHack(LocalPlayer* localPlayer) {
+        float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
+        if (targetSpeed >= 0) {
+            Memory* memory = this->client->getMemory();
+            //开启穿墙
+            if (localPlayer) {
+                std::vector<int64_t> offsets = {
+                    Offsets::LocalPlayer::ptr_LocalPlayer_class,
+                    Offsets::LocalPlayer::LocalPlayer_c::ptr_staticFields,
+                    Offsets::LocalPlayer::LocalPlayer_c::StaticField::f_baseMovementSpeed
+                };
+                int64_t baseMovementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
+
+                memory->write_mem<float>(baseMovementSpeed_addr, targetSpeed);
             }
         }
     }
