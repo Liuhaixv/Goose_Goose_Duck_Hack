@@ -43,7 +43,7 @@ public:
                     pressingInsert = true;
                     //switch
                     hackSettings->guiSettings.b_enableMenu = !hackSettings->guiSettings.b_enableMenu;
-                    UI::makeWindowClickable(UI::hwnd, hackSettings->guiSettings.b_enableMenu);
+                    //UI::makeWindowClickable(UI::hwnd, hackSettings->guiSettings.b_enableMenu);
                 }
             }
             else {

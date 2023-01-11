@@ -84,7 +84,11 @@ void drawMenu() {
 
     //ImGui::Begin("A", ptr_bOpen, ImGuiWindowFlags_NoInputs);
     // 
-    ImGui::Begin((const char*)u8"主菜单", ptr_bOpen, ImGuiWindowFlags_None);
+    ImGui::Begin((const char*)u8"主菜单");
+
+    //游戏状态指示
+    //ImGui::
+
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
