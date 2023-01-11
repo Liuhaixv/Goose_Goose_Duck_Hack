@@ -70,7 +70,7 @@ private:
         }
     }
 
-    
+
 
     /// <summary>
     /// 更新本地玩家
@@ -98,7 +98,7 @@ private:
         updatePlayerController(&localPlayer->playerController, localPlayerController);
 
         if (localPlayer->playerController.address == NULL) {
-            return;
+            localPlayer->playerController.reset();
         }
 
         if (localPlayer->playerController.b_isPlayerRoleSet) {
@@ -113,9 +113,13 @@ private:
             if (b_isPlayerRoleSet) {
                 client->onGameEnded();
                 b_isPlayerRoleSet = false;
+                b_isPlayerRoleSet = false;
             }
         }
 
+        if (localPlayer->playerController.address == NULL) {
+            return;
+        }
 
         hack.removeFogOfWar(&localPlayer->playerController);
         hack.noclip(&localPlayer->playerController);
