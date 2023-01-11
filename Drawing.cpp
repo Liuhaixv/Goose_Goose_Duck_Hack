@@ -6,6 +6,7 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 //bool Drawing::bDraw = true;
 
 extern Utils utils;
+extern HackSettings hackSettings;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cn
@@ -16,12 +17,12 @@ void drawESP();
 
 void Drawing::Active()
 {
-    UI::hackSettings->guiSettings.b_draw = true;
+    hackSettings.guiSettings.b_draw = true;
 }
 
 bool Drawing::isActive()
 {
-    return (UI::hackSettings->guiSettings.b_draw == true);
+    return (hackSettings.guiSettings.b_draw == true);
 }
 
 void Drawing::Draw() {
@@ -29,12 +30,12 @@ void Drawing::Draw() {
     if (isActive())
     {
         //绘制菜单
-        if (UI::hackSettings->guiSettings.b_enableMenu) {
+        if (hackSettings.guiSettings.b_enableMenu) {
             drawMenu();
         }
 
         //ESP
-        if (UI::hackSettings->guiSettings.b_enableESP) {
+        if (hackSettings.guiSettings.b_enableESP) {
             drawESP();
         }
         else {
@@ -119,15 +120,23 @@ void drawMenu() {
             }
             ImGui::EndTabItem();
         }
+
         //菜单2
-        if (ImGui::BeginTabItem((const char*)u8"设置"))
+        if (ImGui::BeginTabItem(str("Misc","功能类")))
         {
-            ImGui::Checkbox((const char*)u8"隐藏战争迷雾", &UI::hackSettings->disableFogOfWar);
+            ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.disableFogOfWar);
             HelpMarker(
-                (const char*)u8"可以透过墙看到和听到其他玩家，隐藏视野阴影"
-                );
+                str("Remove shadows and let you see other players behind walls","可以透过墙看到和听到其他玩家，隐藏视野阴影")
+            );
+
+            ImGui::Checkbox(str("Noclip", "穿墙"), &hackSettings.guiSettings.b_alwaysEnableNoclip);
+            HelpMarker(
+                str("Walk through anything\nYou can press Left ALT to temporarily enable noclip", "穿墙模式\n长按左ALT键来临时穿墙")
+            );
+
             ImGui::EndTabItem();
         }
+
         ImGui::EndTabBar();
     }
 }

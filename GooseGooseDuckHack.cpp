@@ -29,11 +29,13 @@
 #include "UI.h"
 
 Utils utils;
+Hack hack;
+
+//初始化辅助设置类
+//settings
+HackSettings hackSettings;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
-    //初始化辅助设置类
-    //settings
-    HackSettings hackSettings;
     {
         //修改设置
         //Edit hacksettings
@@ -44,6 +46,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //Init RPM classes
     Memory memory;
     Client client(&memory, &hackSettings);
+    hack.setClient(&client);
 
     //初始化更新类线程
     //Init updaters
@@ -63,5 +66,5 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
 
     //GUI循环
     //GUI loop
-    UI::Render(&hackSettings, instance, cmd_show);   
+    UI::Render( instance, cmd_show);   
 }
