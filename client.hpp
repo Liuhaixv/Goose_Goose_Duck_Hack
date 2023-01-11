@@ -11,6 +11,7 @@ public:
     HackSettings* hackSettings = nullptr;
 
     static const int n_players = 16;
+    PlayerController localPlayer;
     PlayerController playerControllers[n_players];
 
     Client(Memory* memory, HackSettings* hackSettings = nullptr)
@@ -18,6 +19,7 @@ public:
         this->memory = memory;
         this->hackSettings = hackSettings;
 
+        localPlayer.setMemory(this->memory);
         for (int i = 0; i < n_players; i++) {
             playerControllers[i].setMemory(this->memory);
         }

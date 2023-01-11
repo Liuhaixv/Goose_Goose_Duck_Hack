@@ -26,9 +26,11 @@ public:
     /// <param name="num">Number of players</param>
     void playerControllerUpdater() {
         PlayerController* playerControllers = client->playerControllers;
+        PlayerController* localPlayer = &client->localPlayer;
         int players = client->n_players;
 
         while (true) {
+            updateLocalPlayer(localPlayer);
             updatePlayerController(playerControllers, players);
             Sleep(1000);
         }
@@ -74,6 +76,43 @@ private:
     }
 
     /// <summary>
+    /// 更新本地玩家
+    /// </summary>
+    /// <param name="playerController"></param>
+    void updateLocalPlayer(PlayerController* playerController) {
+        //获取内存中对应玩家槽位的实例地址
+        std::vector<int64_t> offsets = Offsets::GameAssembly::localPlayer();
+        offsets.pop_back();
+        offsets.push_back(Offsets::LocalPlayer::ptr_playerController);
+        offsets.push_back(0x0);
+
+        int64_t localPlayerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
+
+        updatePlayerController(playerController, localPlayerAddr);
+
+        removeFogOfWar(playerController);
+        noclip(playerController);
+    }
+
+    bool updatePlayerController(PlayerController* dst, int64_t address) {
+        //内存中当前玩家槽位不存在数据
+        //Data not available
+        if (address == NULL) {
+            dst->address = NULL;
+            return false;
+        }
+
+        //槽位对应的内存地址不符，可能是因为有玩家退出游戏导致槽位玩家变更
+        //if (ptr_playerController->address != playerControllerAddr) {
+        //    ptr_playerController->update(playerControllerAddr);
+        //}
+
+        //读取内存并更新
+        //Update from memory
+        bool successUpdated = dst->update(address);
+    }
+
+    /// <summary>
     /// 更新玩家PlayerController信息
     /// </summary>
     /// <param name="playerControllers"></param>
@@ -91,28 +130,10 @@ private:
             std::vector<int64_t> offsets = Offsets::GameAssembly::playerControllerByIndex(i);
             int64_t playerControllerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
 
-            //内存中当前玩家槽位不存在数据
-            //Data not available
-            if (playerControllerAddr == NULL) {
-                ptr_playerController->address = NULL;
-                continue;
-            }
-
-            //槽位对应的内存地址不符，可能是因为有玩家退出游戏导致槽位玩家变更
-            //if (ptr_playerController->address != playerControllerAddr) {
-            //    ptr_playerController->update(playerControllerAddr);
-            //}
-
-            //读取内存并更新
-            //Update from memory
-            bool successUpdated = ptr_playerController->update(playerControllerAddr);
-
-            if (successUpdated) {
+            if (updatePlayerController(ptr_playerController, playerControllerAddr)) {
                 validPlayers++;
             }
 
-            removeFogOfWar(ptr_playerController);
-            noclip(ptr_playerController);
         }
         //更新有效玩家信息
         //Update valid players' num

@@ -37,6 +37,7 @@ namespace Offsets {
 	}
 
     namespace LocalPlayer {
+        constexpr int64_t ptr_playerController = 0x18;//PlayerController of localplayer
         constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
     }
 
