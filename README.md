@@ -18,6 +18,7 @@ GUI界面已开发完成，后续会添加绘制，通过线条显示玩家位�
 
 ### 功能类
 1. 按住`左ALT键`穿墙
+2. 调节移动速度
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -60,6 +61,7 @@ GUI development is done already, other features like ESP with line revealing pla
 
 ### Rage
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
+2. Movement speed hack
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
