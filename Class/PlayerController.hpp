@@ -105,6 +105,7 @@ public:
         int64_t length = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname) + 0x10);
 
         if (length == 0) {
+            this->nickname = "";
             return;
         }
 
