@@ -166,12 +166,12 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
     //const HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("ImGui Standalone"), WS_OVERLAPPEDWINDOW, 100, 100, 50, 50, NULL, NULL, wc.hInstance, NULL);
 
     //Get resolution
-    int resolutionX = 500, resolutionY=500;
+    int resolutionX = 500, resolutionY = 500;
     getScaledResolution(resolutionX, resolutionY);
 
 
     const HWND hwnd = CreateWindowEx(
-        WS_EX_TOPMOST | WS_EX_TRANSPARENT |WS_EX_LAYERED,
+        WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED,
         wc.lpszClassName,
         "External Overlay",
         WS_POPUP,
@@ -220,7 +220,7 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
 
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;          
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 
@@ -240,27 +240,30 @@ void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
     GetMonitorInfo(monitor, &info);
     const int monitor_height = info.rcMonitor.bottom - info.rcMonitor.top;
 
+    ImFontConfig cfg;
+
+    const float fScale = 2.0f;
+    cfg.SizePixels = 13;
+
     if (monitor_height > 1080)
     {
-        const float fScale = 2.0f;
-        ImFontConfig cfg;
         cfg.SizePixels = 13 * fScale;
-
-        //ImGui::GetIO().Fonts->AddFontDefault();
-
-        //中文字体
-        //chinese font
-        if (utils.b_chineseOS) {
-            ImGui::GetIO().Fonts->AddFontFromFileTTF(
-                "c:/Windows/Fonts/simhei.ttf",
-                cfg.SizePixels,
-                NULL,
-                ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
-        }
-        else {
-            ImGui::GetIO().Fonts->AddFontDefault(&cfg);
-        }
     }
+    //ImGui::GetIO().Fonts->AddFontDefault();
+
+    //中文字体
+    //chinese font
+    if (utils.b_chineseOS) {
+        ImGui::GetIO().Fonts->AddFontFromFileTTF(
+            "c:/Windows/Fonts/simhei.ttf",
+            cfg.SizePixels,
+            NULL,
+            ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
+    }
+    else {
+        ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+    }
+
 
     //保存GUI窗口信息
     ImGui::GetIO().IniFilename = "imgui.ini";
