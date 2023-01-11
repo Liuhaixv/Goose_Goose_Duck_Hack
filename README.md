@@ -83,6 +83,5 @@ I am not responsible for any problems caused by abusing this project
 
 ---
 
-[![](https://img.shields.io/badge/LatestRelease-%E4%B8%8B%E8%BD%BD-brightgreen)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/GooseGooseDuckHack.zip)
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/GooseGooseDuckHack.zip)
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/GooseGooseDuckHack.zip)
