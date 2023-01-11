@@ -7,35 +7,54 @@
 #include <vector>
 
 #include"utils.hpp"
+#include "Enum/OpenProcessState.hpp"
 
 extern Utils utils;
 
 class Memory {
 public:
+    std::string processName = "Goose Goose Duck.exe";
 	DWORD pID = NULL;
 	HANDLE processHandle = NULL;
 	int64_t gameAssemblyBaseAddress = NULL;
 
 	Memory() {
-
-		pID = get_porcId_by_name("Goose Goose Duck.exe");
-		if (pID == NULL) {
-			utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
-			std::cout << std::endl;
-			return;
-		}
-		utils.print("Detected game pid:", "检测到游戏进程pid:");
-		std::cout << pID << std::endl;
-
-		processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
-		if (processHandle == INVALID_HANDLE_VALUE || processHandle == NULL) { // error handling
-			std::cout << "Failed to open process" << std::endl;
-			return;
-		}
-
-		char gameAssemblyModuleName[] = "GameAssembly.dll";
-		gameAssemblyBaseAddress = GetModuleBaseAddress(_T(gameAssemblyModuleName), pID);
+        searchGameProcess();		
 	}
+
+    /// <summary>
+    /// 搜索游戏进程
+    /// </summary>
+    /// <returns></returns>
+    OpenProcessState searchGameProcess() {
+        pID = get_porcId_by_name(processName);
+        //TODO: 转移到GUI
+        if (pID == NULL) {
+            utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
+            std::cout << std::endl;
+            return OpenProcessState::GameNotFound;
+        }
+        utils.print("Detected game pid:", "检测到游戏进程pid:");
+        std::cout << pID << std::endl;
+
+        processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
+        if (processHandle == INVALID_HANDLE_VALUE || processHandle == NULL) { // error handling
+            //-1: Game found but failed to open
+            std::cout << "Failed to open process" << std::endl;
+            return OpenProcessState::GameFoundButFailedToOpen;
+        }
+
+        char gameAssemblyModuleName[] = "GameAssembly.dll";
+        gameAssemblyBaseAddress = GetModuleBaseAddress(_T(gameAssemblyModuleName), pID);
+
+        //Game found but failed to load dll module
+        if (gameAssemblyBaseAddress == NULL) {
+            return OpenProcessState::FailedToLoadDLL;
+        }
+
+        //Success
+        return OpenProcessState::GameFoundAndLoadedDLL;
+    }
 
 	template <typename var>
 	bool write_mem(int64_t address, var value) {
@@ -117,7 +136,7 @@ private:
 	/// <param name="pID">pid of process 进程pid</param>
 	/// <returns>address 地址</returns>
 	int64_t GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
-		int64_t dwModuleBaseAddress = 0;
+		int64_t dwModuleBaseAddress = NULL;
 		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
 		MODULEENTRY32 ModuleEntry32 = { 0 };
 		ModuleEntry32.dwSize = sizeof(MODULEENTRY32);

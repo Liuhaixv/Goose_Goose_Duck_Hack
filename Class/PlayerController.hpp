@@ -18,9 +18,7 @@ public:
     }
 
     ~PlayerController() {
-        if (this->address) {
-            reset();
-        }
+
     }
 
     int64_t address = NULL;

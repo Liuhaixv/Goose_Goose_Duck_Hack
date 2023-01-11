@@ -13,6 +13,8 @@ public:
         this->hackSettings = hackSettings;
     }
 
+
+    //TODO: 移到专门的Hack线程类
     /// <summary>
     /// 监听键盘热键修改设置<para/>
     /// Thread that keeps updating hackSettings by listening to keyboard

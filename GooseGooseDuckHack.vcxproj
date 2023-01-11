@@ -153,11 +153,11 @@
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\LocalPlayer.hpp" />
+    <ClInclude Include="Class\GameProcessUpdater.hpp" />
     <ClInclude Include="Class\offsets.hpp" />
     <ClInclude Include="Class\PlayerController.hpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Drawing.h" />
-    <ClInclude Include="Struct\GuiSettings.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -166,8 +166,11 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="Struct\GameStateSettings.hpp" />
+    <ClInclude Include="Struct\GuiSettings.hpp" />
     <ClInclude Include="Struct\Common.hpp" />
     <ClInclude Include="Struct\HackSettings.hpp" />
+    <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="client.hpp" />
