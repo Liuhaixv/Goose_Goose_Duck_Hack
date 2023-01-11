@@ -65,10 +65,10 @@ namespace Offsets {
     }
 
     namespace CapsuleCollider2D {
-        constexpr int64_t i_unknownClass0 = 0x30;
         namespace UnknownClass0 {
             constexpr int64_t b_enableCollider = 0x39;
         }
+        constexpr int64_t ptr_unknownClass0 = 0x30;
     }
 }
 

@@ -56,7 +56,7 @@ public:
         Memory* memory = this->client->getMemory();
         std::vector<int64_t> offsets{
                 Offsets::PlayerController::ptr_bodyCollider,
-                Offsets::CapsuleCollider2D::i_unknownClass0,
+                Offsets::CapsuleCollider2D::ptr_unknownClass0,
                 Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
 
         int64_t b_enableCollider = memory->FindPointer(localPlayer->address,
