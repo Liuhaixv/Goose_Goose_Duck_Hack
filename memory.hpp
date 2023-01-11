@@ -172,16 +172,12 @@ private:
     }
 
     void readAllMemoryRegions() {
-        DWORD procid = DWORD(22100);
-
         unsigned char* addr = 0;
-
-        HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, procid);
 
         MEMORY_BASIC_INFORMATION mbi;
 
         //枚举所有内存区域
-        while (VirtualQueryEx(hProc, addr, &mbi, sizeof(mbi)))
+        while (VirtualQueryEx(processHandle, addr, &mbi, sizeof(mbi)))
         {
             if (mbi.State == MEM_COMMIT && mbi.Protect != PAGE_NOACCESS && mbi.Protect != PAGE_GUARD)
             {

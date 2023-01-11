@@ -6,10 +6,10 @@ namespace Offsets {
     namespace PlayerController {
         namespace Class {
             namespace StaticField {
-                constexpr int64_t f_baseMovementSpeed = 0x10;
+                constexpr int64_t playersList = 0x10;// Dictionary<string, PlayerController> 
                 constexpr int64_t playersListWithAgoraIDs = 0x20;// Dictionary<int, PlayerController>
             }
-            constexpr int64_t ptr_staticFields = 0xB8;
+            constexpr int64_t ptr_staticFields = 0xB8;//TODO
         }
         constexpr int64_t ptr_Class = 0x0;
 
@@ -47,7 +47,8 @@ namespace Offsets {
     namespace LocalPlayer {
         namespace Class {
             namespace StaticField {
-                constexpr int64_t f_baseMovementSpeed = 0x10;
+                constexpr int64_t f_movementSpeed = 0x10;
+                constexpr int64_t BaseMovementSpeed = 0xC;//Read only
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
@@ -74,7 +75,7 @@ namespace Offsets {
 
 namespace GameAssembly {
     namespace Class {
-        constexpr int64_t PlayerControllerClass = 0x3C869B0;
+        constexpr int64_t PlayerControllerClass = 0x3D0D0E8;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
     }
     /// <summary>
     /// 通过下标返回PlayerController的偏移数组<para/>
@@ -96,7 +97,7 @@ namespace GameAssembly {
     }
 
     static std::vector<int64_t> localPlayer() {
-        std::vector<int64_t> offsets = { 0x3C3A608, 0xB8, 0x20, 0x0 };
+        std::vector<int64_t> offsets = { 0x3CBF250, 0xB8, 0x20, 0x0 };
 
         return offsets;
     }
