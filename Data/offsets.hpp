@@ -12,7 +12,7 @@ namespace Offsets {
             constexpr int64_t ptr_staticFields = 0xB8;
         }
         constexpr int64_t ptr_Class = 0x0;
-        constexpr int64_t fn_updateRVA = 0xE12760; // AOBScan too.
+
         constexpr int64_t ptr_bodyCollider = 0xA8;// CapsuleCollider2D
         constexpr int64_t b_isSilenced = 0xC1; // Boolean
         constexpr int64_t b_isInfected = 0xC3; // Boolean
