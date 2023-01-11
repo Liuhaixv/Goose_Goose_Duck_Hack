@@ -3,7 +3,7 @@
 #include "memory.hpp"
 #include "Struct/HackSettings.hpp"
 #include "Class/PlayerController.hpp"
-
+#include<format>
 
 class Client
 {
@@ -63,6 +63,7 @@ public:
             utils ? utils->str("Rolename", "角色") : "角色",
             utils ? utils->str("KilledThisRound", "本轮杀过人") : "本轮杀过人",
             utils ? utils->str("DeadTime", "死亡时间") : "死亡时间");
+
         /*
         std::cout << std::left << std::setw(25) << std::setfill(separator) << (utils ? utils->str("Nickname", "玩家昵称") : "玩家昵称");
         std::cout << std::left << std::setw(15) << std::setfill(separator) << (utils ? utils->str("Rolename", "角色") : "角色");

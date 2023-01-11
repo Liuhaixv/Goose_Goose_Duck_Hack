@@ -20,10 +20,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 class UI
 {
 public:
-    static HackSettings* hackSettings;
     static HWND hwnd;
 
-    static void Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show);
+    static void Render(HINSTANCE instance, INT cmd_show);
 
     //可点击,鼠标操作不能穿透窗口
     //SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TRANSPARENT);

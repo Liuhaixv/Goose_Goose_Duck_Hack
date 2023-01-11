@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\Hack.hpp" />
     <ClCompile Include="Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />

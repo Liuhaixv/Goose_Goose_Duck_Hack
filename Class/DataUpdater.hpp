@@ -4,7 +4,10 @@
 
 #include"../memory.hpp"
 #include"../client.hpp"
+#include"../Class/Hack.hpp"
 #include"PlayerController.hpp"
+
+extern Hack hack;
 
 /// <summary>
 /// Thread functions that update data.
@@ -37,16 +40,7 @@ public:
     }
 private:
     Client* client = nullptr;
-    Memory* memory = nullptr;
-
-    void noclip(PlayerController* playerController) {
-        //开启穿墙
-        if (playerController->b_isLocal) {
-            if (this->client && this->client->hackSettings) {
-                client->noclip(playerController, this->client->hackSettings->enableNoclip);
-            }
-        }
-    }
+    Memory* memory = nullptr; 
 
     void enableFogOfWar(PlayerController* playerController) {
         //
@@ -73,32 +67,7 @@ private:
         }
     }
 
-    void removeFogOfWar(PlayerController* playerController) {
-        //修改fog of war
-        if (playerController->b_isLocal) {
-            if (this->client && this->client->hackSettings) {
-                if (this->client->hackSettings->disableFogOfWar) {
-                    //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
-
-                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
-
-                    if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
-                        //disable fow
-                        //set layermask
-                        memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
-
-                        //7.5 is enough to see the whole screen
-                        //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                        float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
-                        if (f_viewDistanceMultiplier != 0) {
-                            memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    
 
     /// <summary>
     /// 更新本地玩家
@@ -115,8 +84,8 @@ private:
 
         updatePlayerController(playerController, localPlayerAddr);
 
-        removeFogOfWar(playerController);
-        noclip(playerController);
+        hack.removeFogOfWar(playerController);
+        hack.noclip(playerController);
     }
 
     bool updatePlayerController(PlayerController* dst, int64_t address) {

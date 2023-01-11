@@ -5,7 +5,6 @@ ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
 ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
-HackSettings* UI::hackSettings = nullptr;
 HWND UI::hwnd = NULL;
 
 extern Utils utils;
@@ -147,10 +146,8 @@ LRESULT WINAPI UI::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void UI::Render(HackSettings* hackSettings, HINSTANCE instance, INT cmd_show)
+void UI::Render(HINSTANCE instance, INT cmd_show)
 {
-    UI::hackSettings = hackSettings;
-
     ImGui_ImplWin32_EnableDpiAwareness();
     const WNDCLASSEX wc = {
         sizeof(WNDCLASSEX),
