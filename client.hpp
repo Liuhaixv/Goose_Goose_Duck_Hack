@@ -42,7 +42,8 @@ public:
     /// 游戏结束
     /// </summary>
     void onGameEnded() {
-
+        //TODO: reset player's speed when game finished
+        //TODO: add switch to speedHack
     }
 
     void updateGameOriginalData() {
