@@ -18,6 +18,12 @@
     <ClCompile Include="GooseGooseDuckHack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Drawing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,12 +43,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,6 +80,24 @@
     <ClInclude Include="Class\HotkeyUpdater.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Struct\GuiSettings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\GameProcessUpdater.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\GameStateSettings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum\OpenProcessState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,18 +120,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Struct\GuiSettings.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\GameProcessUpdater.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

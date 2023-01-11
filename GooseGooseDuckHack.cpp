@@ -10,6 +10,7 @@
 
 #include"Struct/HackSettings.hpp"
 
+//Updaters
 #include"./Class/DataUpdater.hpp"
 #include"./Class/HotkeyUpdater.hpp"
 #include"./Class/GameProcessUpdater.hpp"
@@ -26,8 +27,6 @@
 #include<imgui_impl_win32.h>
 //UI
 #include "UI.h"
-
-void getScaledResolution(int& x, int& y);
 
 Utils utils;
 
@@ -50,7 +49,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //Init updaters
     HotkeyUpdater hotkeyUpdater(&hackSettings);
     DataUpdater dataUpdater(&client);
-    MemoryUpdater memoryUpdater(&memory, &hackSettings);
+    MemoryUpdater memoryUpdater(&memory, &client, &hackSettings);
 
     //监听热键
     //Listen to keyboard
@@ -62,60 +61,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //Game process finder
     std::thread gameProcessUpdater(&MemoryUpdater::gameProcessUpdater, &memoryUpdater);
 
-
     //GUI循环
-    UI::Render(&hackSettings, instance, cmd_show);
-    //UI::Render(&hackSettings, instance, cmd_show);
-
-    /*
-    while (true) {
-        while (memory.processHandle != NULL && memory.gameAssemblyBaseAddress ) {
-            if (!hackSettings.process) {
-
-                std::cout << "Game found" << std::endl;
-                hackSettings.process = true;
-            }
-
-            while (client.in_game()) {
-                if (!hackSettings.game) {
-                    hackSettings.game = true;
-                    client.update_gamemory.de();
-                    hacks.init();
-                }
-
-
-                int round_index = client.get_round_index();
-
-                //update last_time_round_index_changed
-                if (round_index != hackSettings.round_index) {
-                    time_t current_time = time(NULL);
-                    hackSettings.last_time_round_index_changed = current_time;
-                }
-                //update round_index
-                hackSettings.round_index = round_index;
-
-                // SendMessage(ol.hwnd, WM_PAINT, NULL, NULL);
-                Sleep(1000);
-            }
-
-            hackSettings.game = false;
-            Sleep(5000);
-        }
-
-        std::cout << "Game not found, sleeping for 5 secs" << std::endl;
-
-        hackSettings.process = false;
-        ++connect_count;
-        Sleep(5000);
-        if (connect_count >= 2) {
-            connect_count = 0;
-            memory.~memory.ry();
-            client.~Client();
-            hacks.~Hacks();
-
-            new(&memory. memory.ry();
-            new(&client) Client(&memory.;
-        }
-    }
-    */
+    //GUI loop
+    UI::Render(&hackSettings, instance, cmd_show);   
 }
