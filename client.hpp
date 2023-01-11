@@ -31,11 +31,20 @@ public:
     }
 
     /// <summary>
+    /// 重置GUI设置
+    /// </summary>
+    void resetGuiSettings() {
+        GuiSettings* a = &this->hackSettings->guiSettings;
+        a->f_baseMovementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+    }
+
+    /// <summary>
     /// 游戏开始
     /// </summary>
     void onGameStarted() {
         //更新游戏内初始数据
         updateGameOriginalData();
+        resetGuiSettings();
     }
 
     /// <summary>
@@ -44,6 +53,8 @@ public:
     void onGameEnded() {
         //TODO: reset player's speed when game finished
         //TODO: add switch to speedHack
+        updateGameOriginalData();
+        resetGuiSettings();
     }
 
     void updateGameOriginalData() {
