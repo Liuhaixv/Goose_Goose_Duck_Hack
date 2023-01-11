@@ -104,6 +104,10 @@ public:
 
         int64_t length = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname) + 0x10);
 
+        if (length == 0) {
+            return;
+        }
+
         byte* p_tmpNick = tmpNick;
         for (int i = 0; i < length * 2 + 1; i++) {
             byte byte_ = memory->read_mem<byte>((int64_t)(p_str + i));
