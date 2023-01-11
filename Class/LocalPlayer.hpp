@@ -36,9 +36,9 @@ public:
         }
         try {
             std::vector<int64_t> offsets = {
-                Offsets::LocalPlayer::ptr_LocalPlayer_class,
-               Offsets::LocalPlayer::LocalPlayer_c::ptr_staticFields,
-               Offsets::LocalPlayer::LocalPlayer_c::StaticField::f_baseMovementSpeed};
+                Offsets::LocalPlayer::ptr_Class,
+               Offsets::LocalPlayer::Class::ptr_staticFields,
+               Offsets::LocalPlayer::Class::StaticField::f_baseMovementSpeed};
 
             int64_t addr = memory->FindPointer(this->address, offsets);
             if (addr == NULL) {
