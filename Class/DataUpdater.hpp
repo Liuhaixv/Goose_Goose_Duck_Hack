@@ -119,7 +119,7 @@ private:
 
         hack.removeFogOfWar(&localPlayer->playerController);
         hack.noclip(&localPlayer->playerController);
-        hack.speedHack(&localPlayer->playerController);
+        hack.speedHack(localPlayer);
     }
 
     bool updatePlayerController(PlayerController* dst, int64_t address) {

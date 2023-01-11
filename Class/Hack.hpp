@@ -71,7 +71,7 @@ public:
 
     void noclip(PlayerController* localPlayerController) {
         //开启穿墙
-        if (localPlayerController->b_isLocal) {
+        if (localPlayerController && localPlayerController->b_isLocal) {
             if (this->client && this->client->hackSettings) {
                 if (this->client->hackSettings->guiSettings.b_alwaysEnableNoclip) {
                     enableNoclip(localPlayerController);
@@ -83,9 +83,22 @@ public:
         }
     }
 
-    void speedHack(PlayerController* localPlayerController) {
-        double targetSpeed = 1;
-        //TODO
+    void speedHack(LocalPlayer* localPlayer) {
+        float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
+        if (targetSpeed >= 0) {
+            Memory* memory = this->client->getMemory();
+            //开启穿墙
+            if (localPlayer) {
+                std::vector<int64_t> offsets = {
+                    Offsets::LocalPlayer::ptr_LocalPlayer_class,
+                    Offsets::LocalPlayer::LocalPlayer_c::ptr_staticFields,
+                    Offsets::LocalPlayer::LocalPlayer_c::StaticField::f_baseMovementSpeed
+                };
+                int64_t baseMovementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
+
+                memory->write_mem<float>(baseMovementSpeed_addr, targetSpeed);
+            }
+        }
     }
 
 private:

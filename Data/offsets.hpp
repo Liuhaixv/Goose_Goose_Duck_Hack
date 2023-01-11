@@ -39,7 +39,7 @@ namespace Offsets {
     namespace LocalPlayer {
         namespace LocalPlayer_c {
             namespace StaticField {
-                constexpr int64_t f_baseMovementSpeed = 0xC;
+                constexpr int64_t f_baseMovementSpeed = 0x10;
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
