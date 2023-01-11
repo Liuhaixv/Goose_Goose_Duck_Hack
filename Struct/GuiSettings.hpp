@@ -5,5 +5,5 @@ struct GuiSettings {
     //打开设置菜单
     bool b_enableMenu = true;    
     //开启玩家绘制
-    bool b_enableESP = true;
+    bool b_enableESP = false;
 };
