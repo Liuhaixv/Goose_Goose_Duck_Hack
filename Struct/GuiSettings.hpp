@@ -6,6 +6,6 @@ struct GuiSettings {
     bool b_enableMenu = true;
 
     //开启玩家绘制
-    bool b_enableESP = false;
+    bool b_enableESP = true;
     bool b_alwaysEnableNoclip = false;
 };

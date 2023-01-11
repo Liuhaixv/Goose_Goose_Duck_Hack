@@ -82,7 +82,7 @@ static void HelpMarker(const char* desc)
 }
 
 void drawMenu() {
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
@@ -122,16 +122,27 @@ void drawMenu() {
         }
 
         //菜单2
-        if (ImGui::BeginTabItem(str("Misc","功能类")))
+        if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.disableFogOfWar);
             HelpMarker(
-                str("Remove shadows and let you see other players behind walls","可以透过墙看到和听到其他玩家，隐藏视野阴影")
+                str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
             );
 
             ImGui::Checkbox(str("Noclip", "穿墙"), &hackSettings.guiSettings.b_alwaysEnableNoclip);
             HelpMarker(
                 str("Walk through anything\nYou can press Left ALT to temporarily enable noclip", "穿墙模式\n长按左ALT键来临时穿墙")
+            );
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单2
+        if (ImGui::BeginTabItem(str("ESP", "透视")))
+        {
+            ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
+            HelpMarker(
+                str("Whether draw overlay of ESP onto screen", "是否开启绘制")
             );
 
             ImGui::EndTabItem();
@@ -147,11 +158,13 @@ void drawESP() {
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImDrawList* drawList = ImGui::GetBackgroundDrawList(viewport);
 
+    /*
     drawList->AddCircleFilled(
         { 500,500 },
         30,
         ImColor{ 1.0f, 1.0f, 0.0f }
     );
+    */
 
     drawList->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 6.0f);
 
