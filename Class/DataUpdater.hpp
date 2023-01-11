@@ -48,6 +48,31 @@ private:
         }
     }
 
+    void enableFogOfWar(PlayerController* playerController) {
+        //
+        // MaskLayer int:131090
+        //修改fog of war
+        if (playerController->b_isLocal) {
+            if (this->client && this->client->hackSettings) {
+                if (!this->client->hackSettings->disableFogOfWar) {
+                    //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
+
+                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+
+                    memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 131090);
+
+                    //7.5 is enough to see the whole screen
+                    //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
+                    // float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
+                    //if (f_viewDistanceMultiplier != 0) {
+                    //    memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                    //}
+                }
+            }
+        }
+    }
+
     void removeFogOfWar(PlayerController* playerController) {
         //修改fog of war
         if (playerController->b_isLocal) {

@@ -7,6 +7,10 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 
 extern Utils utils;
 
+//#define str(eng,cn) (const char*)u8##cn
+//#define str(eng,cn) (const char*)u8##cn
+#define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:eng
+
 void drawMenu();
 void drawESP();
 
@@ -84,7 +88,7 @@ void drawMenu() {
 
     //ImGui::Begin("A", ptr_bOpen, ImGuiWindowFlags_NoInputs);
     // 
-    ImGui::Begin((const char*)u8"主菜单");
+    ImGui::Begin(str("Main", "主菜单"));
 
     //游戏状态指示
     //ImGui::
@@ -93,9 +97,26 @@ void drawMenu() {
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
         //菜单1
-        if (ImGui::BeginTabItem((const char*)u8"角色信息"))
+        if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
-            ImGui::Text((const char*)u8"玩家信息在这里显示");
+            if (ImGui::BeginTable("table1", 3,
+                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+            ))
+            {
+                ImGui::TableSetupColumn(str("One","一"));
+                ImGui::TableSetupColumn("Two");
+                ImGui::TableSetupColumn("Three");
+                ImGui::TableHeadersRow();
+
+                for (int row = 0; row < 3; row++)
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
+                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
+                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
+                }
+                ImGui::EndTable();
+            }
             ImGui::EndTabItem();
         }
         //菜单2
