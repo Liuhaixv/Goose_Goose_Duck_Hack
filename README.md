@@ -5,7 +5,8 @@
 鹅鸭杀外部辅助程序，目前持续更新中，可以点亮Star收藏关注一波。有功能需求可以提Issue，我都会回复。
 
 # 进程
-当前正在开发GUI界面，完成开发后后续会添加绘制，通过线条显示玩家位置及昵称
+GUI界面已开发完成，后续会添加绘制，通过线条显示玩家位置及昵称等功能
+![image](https://user-images.githubusercontent.com/49237108/211719344-0d137512-43f1-4c18-baaa-a76f809ee76e.png)
 
 [Issue #20](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/20)
 
@@ -46,7 +47,8 @@ External Hack for Goose Goose Duck.
 This project is currently active in development. Leave a star if you like it. You can make request for features you want , just create issues and I will reply.
 
 # Progress
-Developing GUI, other features like ESP with line revealing players' position and nickname will be added later when GUI development has done.
+GUI development is done already, other features like ESP with line revealing players' position and nickname will be added later
+![](https://user-images.githubusercontent.com/49237108/211718541-8b5a9623-a853-479a-b4ce-3fed341d7d32.png)
 
 [Issue #20](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/20)
 
