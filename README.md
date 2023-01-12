@@ -1,4 +1,4 @@
-[﻿# 鹅鸭杀辅助
+# 鹅鸭杀辅助
 [![支付宝](https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue)](https://raw.githubusercontent.com/Liuhaixv/Goose_Goose_Duck_Hack/main/img/alipay.jpg)
 [![微信](https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen)](https://raw.githubusercontent.com/Liuhaixv/Goose_Goose_Duck_Hack/main/img/wechat.jpg)
 
