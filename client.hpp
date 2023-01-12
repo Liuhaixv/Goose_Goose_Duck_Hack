@@ -58,7 +58,7 @@ public:
     }
 
     void updateGameOriginalData() {
-        hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getMovementSpeed();
+        hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
     }
 
     void printAllPlayersInfo(Utils* utils = nullptr) {
