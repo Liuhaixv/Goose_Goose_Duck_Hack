@@ -132,7 +132,7 @@ void drawMinimap() {
 }
 
 void drawMenu() {
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
@@ -165,13 +165,14 @@ void drawMenu() {
         //菜单1
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
-            if (ImGui::BeginTable("table1", 3,
+            if (ImGui::BeginTable("table1", 4,
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
             ))
             {
                 ImGui::TableSetupColumn(str("Nickname","昵称"));
                 ImGui::TableSetupColumn(str("Role", "角色"));
                 ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
+                ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
@@ -192,6 +193,13 @@ void drawMenu() {
                     else {
                         ImGui::TableNextColumn(); ImGui::Text(str("",""));
                     }
+                    if (player->i_timeOfDeath != 0) {
+                        ImGui::TableNextColumn(); ImGui::Text("%d", player->i_timeOfDeath);
+                    }
+                    else {
+                        ImGui::TableNextColumn(); ImGui::Text("");
+                    }
+
                 }
                 ImGui::EndTable();
             }
