@@ -40,8 +40,8 @@ public:
     int i_timeOfDeath = 0;
 
     std::string nickname = "";
+    std::string roleName = "";
 
-    char roleName[64] = "";
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
     void setMemory(Memory* memory) {
@@ -71,7 +71,7 @@ public:
         i_timeOfDeath = 0;
 
         nickname = "";
-        roleName[0] = '\0';
+        roleName = "";
         v3_position = { 0.0f, 0.0f, 0.0f };
     }
 
@@ -98,27 +98,31 @@ public:
     }
 
     void updateNickname() {
-        char16_t tmpNick[40]{};
 
         int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
         int64_t firstChar = nickname + 0x14;
 
         int length = memory->read_mem<int>(nickname + 0x10);
 
+        char16_t buffer[20];
+
+
         if (length == 0) {
-            this->nickname = "";
+            buffer[0] = 0;
             return;
         }
 
-        for (int i = 0; i < length + 1; i++) {
-            char16_t c = memory->read_mem<char16_t>(firstChar + i);
+        for (int i = 0; i < length; i++) {
+            char16_t c = memory->read_mem<char16_t>(firstChar + sizeof(char16_t) * i);
             //byte byte_= *(p_str + i);
-            *(tmpNick + i) = c;
+            buffer[i] = c;
         }
+        buffer[length] = 0;
 
-        //std::wstring string_to_convert = std::wstring(tmpNick, length);
+        //std::wstring wstr(reinterpret_cast<wchar_t*>(buffer), length);
+        //this->nickname = utils.wstring2string(wstr);
 
-        //this->nickname = Utils::wstring2string(string_to_convert);
+        this->nickname = utils.u8From16(buffer);
     }
 
     /// <summary>
@@ -174,7 +178,7 @@ private:
         }
 
         //更新昵称
-        if (this->nickname == "") {
+        if (this->nickname[0] == 0) {
             updateNickname();
         }
 
@@ -198,7 +202,9 @@ private:
 
             //更新死亡时间
             i_timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
-            strcpy(roleName, utils.getRoleName(i_playerRoleId));
+
+            std::u8string rolename = utils.getRoleName(i_playerRoleId);
+            roleName = std::string(rolename.begin(), rolename.end());
         }
         return true;
     }

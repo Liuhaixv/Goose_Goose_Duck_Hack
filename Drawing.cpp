@@ -17,6 +17,8 @@ extern Client* g_client;
 void drawMenu();
 void drawESP();
 
+
+
 void Drawing::Active()
 {
     hackSettings.guiSettings.b_draw = true;
@@ -101,7 +103,9 @@ void drawMenu() {
     {
         //菜单3
         if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
-        {
+        {         
+            ImGui::Text(g_client->localPlayer.playerController.nickname.c_str());
+
             float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
             if (minSpeed <= 0) {
                 minSpeed = 5.0f;
@@ -126,6 +130,7 @@ void drawMenu() {
             {
                 ImGui::TableSetupColumn(str("Nickname","昵称"));
                 ImGui::TableSetupColumn(str("Role", "角色"));
+                ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
@@ -134,7 +139,13 @@ void drawMenu() {
                     ImGui::TableNextRow();
 
                     ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].nickname.c_str());
-                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].roleName);
+                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].roleName.c_str());
+                    if (g_client->playerControllers[row].b_hasKilledThisRound) {
+                        ImGui::TableNextColumn(); ImGui::Text(str("Yes","是"));
+                    }
+                    else {
+                        ImGui::TableNextColumn(); ImGui::Text(str("",""));
+                    }
                 }
                 ImGui::EndTable();
             }
