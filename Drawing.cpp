@@ -1,4 +1,6 @@
-﻿#include "Drawing.h"
+﻿#define STB_IMAGE_IMPLEMENTATION
+
+#include "Drawing.h"
 #include "client.hpp"
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
@@ -16,8 +18,6 @@ extern Client* g_client;
 
 void drawMenu();
 void drawESP();
-
-
 
 void Drawing::Active()
 {
@@ -68,6 +68,7 @@ void Drawing::Draw() {
         }
     }
 }
+
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
@@ -182,6 +183,16 @@ void drawMenu() {
 
         ImGui::EndTabBar();
     }
+    ImGui::End();
+
+    ImGui::Begin("Minimap");
+    /*TODO
+    ImGui::Text("pointer = %p", my_texture);
+    ImGui::Text("size = %d x %d", my_image_width, my_image_height);
+    ImGui::Image((void*)my_texture, ImVec2(my_image_width, my_image_height));
+    */
+    ImGui::End();
+
 }
 
 void drawESP() {
