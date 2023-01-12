@@ -12,12 +12,12 @@ struct GameMap {
 
     const char8_t* engName = nullptr;
     const char8_t* cnName = nullptr;
-    ID3D11ShaderResourceView* texture;
+    ID3D11ShaderResourceView* texture = nullptr;
     int width = 0;
     int height = 0;
 
-    //图片坐标偏移
+    //坐标相对图片偏移
     Vector2 offset{0.0f, 0.0f};
-    //图标坐标缩放
+    //坐标相对图片缩放
     float scale = 1.0f;
 };

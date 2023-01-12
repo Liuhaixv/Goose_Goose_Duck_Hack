@@ -3,6 +3,8 @@
 #include "Drawing.h"
 #include "client.hpp"
 
+#define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
+
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
 ImVec2 Drawing::vWindowSize = { 500, 500 };
 ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize;
@@ -13,9 +15,10 @@ extern HackSettings hackSettings;
 extern Client* g_client;
 
 //#define str(eng,cn) (const char*)u8##cn
-//#define str(eng,cn) (const char*)u8##cn
+//#define str(eng,cn) (const char*)u8##cnshij
 #define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:eng
 
+void drawMinimap();
 void drawMenu();
 void drawESP();
 
@@ -33,6 +36,8 @@ void Drawing::Draw() {
     static bool* b_previousEnableMenu = nullptr;
     if (isActive())
     {
+        drawMinimap();
+
         //绘制菜单
         if (hackSettings.guiSettings.b_enableMenu) {
             drawMenu();
@@ -84,6 +89,46 @@ static void HelpMarker(const char* desc)
         ImGui::PopTextWrapPos();
         ImGui::EndTooltip();
     }
+}
+
+void drawMinimap() {
+    ImGui::Begin("Minimap");
+
+    GameMap* gameMap = nullptr;
+
+    const char* engMaps[] = {"ANCIENT_SANDS", "THE_BASEMENT", "JUNGLE_TEMPLE", "GOOSECHAPEL", "MALLARD_MANOR","NEXUS_COLONY", "BLACKSWAN"};
+    static bool toggles[] = { true, false, false, false, false };
+
+
+    static int selected_map = -1;
+
+    if (ImGui::Button(str("Select map", "选择地图")))
+        ImGui::OpenPopup("select_map");
+    ImGui::SameLine();
+    ImGui::TextUnformatted(selected_map == -1 ? "<None>" : engMaps[selected_map]);
+    if (ImGui::BeginPopup("select_map"))
+    {
+        ImGui::Text("Aquarium");
+        ImGui::Separator();
+        for (int i = 0; i < IM_ARRAYSIZE(engMaps); i++)
+            if (ImGui::Selectable(engMaps[i])) {
+                //修改当前地图图片
+                selected_map = i;
+            }
+        ImGui::EndPopup();
+    }
+    if (selected_map < 0) {
+        //尚未选择地图
+        //Have not selected map
+    }
+    else {
+        gameMap = &UI::miniMaps.at(selected_map);
+        ImGui::Text("pointer = %p", gameMap);
+        ImGui::Text("size = %d x %d", gameMap->width, gameMap->height);
+        ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+    }
+
+    ImGui::End();
 }
 
 void drawMenu() {
@@ -184,15 +229,6 @@ void drawMenu() {
         ImGui::EndTabBar();
     }
     ImGui::End();
-
-    ImGui::Begin("Minimap");
-    /*TODO
-    ImGui::Text("pointer = %p", my_texture);
-    ImGui::Text("size = %d x %d", my_image_width, my_image_height);
-    ImGui::Image((void*)my_texture, ImVec2(my_image_width, my_image_height));
-    */
-    ImGui::End();
-
 }
 
 void drawESP() {

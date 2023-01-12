@@ -5,6 +5,8 @@ ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
 ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
+std::map<int, GameMap> UI::miniMaps;
+
 HWND UI::hwnd = NULL;
 
 extern Utils utils;
@@ -62,12 +64,32 @@ bool UI::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** ou
 
 void UI::loadMapsTexture() {
 
-    GameMap map(u8"Ancient Sands", u8"古代沙地");
-    int my_image_width = 0;
-    int my_image_height = 0;
-    ID3D11ShaderResourceView* my_texture = NULL;
-    bool ret = UI::LoadTextureFromFile("../../MyImage01.jpg", &my_texture, &my_image_width, &my_image_height);
-    IM_ASSERT(ret);
+    GameMap map0(u8"Ancient Sands", u8"古代沙地");
+    GameMap map1(u8"The Basement", u8"地下室");
+    GameMap map2(u8"Jungle Temple", u8"丛林神殿");
+    GameMap map3(u8"GooseChapel", u8"鹅教堂");
+    GameMap map4(u8"Mallard Manor", u8"马拉德庄园");
+    GameMap map5(u8"NEXUS Colony", u8"连结殖民地");
+    GameMap map6(u8"BlackSwan", u8"黑天鹅");
+    GameMap map7(u8"SS MotherGoose", u8"老妈鹅星球飞船");
+
+    UI::LoadTextureFromFile("./img/maps/0.png", &map0.texture, &map0.width, &map0.height);
+    UI::LoadTextureFromFile("./img/maps/1.png", &map1.texture, &map1.width, &map1.height);
+    UI::LoadTextureFromFile("./img/maps/2.png", &map2.texture, &map2.width, &map2.height);
+    UI::LoadTextureFromFile("./img/maps/3.png", &map3.texture, &map3.width, &map3.height);
+    UI::LoadTextureFromFile("./img/maps/4.png", &map4.texture, &map4.width, &map4.height);
+    UI::LoadTextureFromFile("./img/maps/5.png", &map5.texture, &map5.width, &map5.height);
+    UI::LoadTextureFromFile("./img/maps/6.png", &map6.texture, &map6.width, &map6.height);
+    UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
+
+    UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
+    UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));
+    UI::miniMaps.insert(std::pair<int, GameMap>(JUNGLE_TEMPLE, map2));
+    UI::miniMaps.insert(std::pair<int, GameMap>(GOOSECHAPEL, map3));
+    UI::miniMaps.insert(std::pair<int, GameMap>(MALLARD_MANOR, map4));
+    UI::miniMaps.insert(std::pair<int, GameMap>(NEXUS_COLONY, map5));
+    UI::miniMaps.insert(std::pair<int, GameMap>(BLACKSWAN, map6));
+    UI::miniMaps.insert(std::pair<int, GameMap>(SS_MOTHERGOOSE, map7));
 }
 
 bool UI::CreateDeviceD3D(HWND hWnd)
@@ -153,7 +175,7 @@ void UI::CleanupDeviceD3D()
     {
         pd3dDeviceContext->Release();
         pd3dDeviceContext = nullptr;
-    }
+}
 
     if (pd3dDevice)
     {
