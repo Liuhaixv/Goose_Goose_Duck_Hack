@@ -97,7 +97,7 @@ public:
                 std::vector<int64_t> offsets = {
                     Offsets::LocalPlayer::ptr_Class,
                     Offsets::LocalPlayer::Class::ptr_staticFields,
-                    Offsets::LocalPlayer::Class::StaticField::f_baseMovementSpeed
+                    Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
                 };
                 int64_t baseMovementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
 

@@ -6,13 +6,13 @@ namespace Offsets {
     namespace PlayerController {
         namespace Class {
             namespace StaticField {
-                constexpr int64_t f_baseMovementSpeed = 0x10;
+                constexpr int64_t playersList = 0x10;// Dictionary<string, PlayerController> 
                 constexpr int64_t playersListWithAgoraIDs = 0x20;// Dictionary<int, PlayerController>
             }
-            constexpr int64_t ptr_staticFields = 0xB8;
+            constexpr int64_t ptr_staticFields = 0xB8;//TODO
         }
         constexpr int64_t ptr_Class = 0x0;
-        constexpr int64_t fn_updateRVA = 0xE12760; // AOBScan too.
+
         constexpr int64_t ptr_bodyCollider = 0xA8;// CapsuleCollider2D
         constexpr int64_t b_isSilenced = 0xC1; // Boolean
         constexpr int64_t b_isInfected = 0xC3; // Boolean
@@ -47,7 +47,8 @@ namespace Offsets {
     namespace LocalPlayer {
         namespace Class {
             namespace StaticField {
-                constexpr int64_t f_baseMovementSpeed = 0x10;
+                constexpr int64_t f_movementSpeed = 0x10;
+                constexpr int64_t f_baseMovementSpeed = 0xC;//Read only
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
@@ -58,7 +59,7 @@ namespace Offsets {
     }
 
     namespace FogOfWarHandler {
-        constexpr int64_t i_layerMask = 0x18;
+        constexpr int64_t i_layerMask = 0x18;//Bit
         constexpr int64_t f_baseViewDistance = 0x2c;
         constexpr int64_t f_viewDistanceMultiplier = 0x38;
         constexpr int64_t b_targetPlayerSet = 0x50;
@@ -74,7 +75,7 @@ namespace Offsets {
 
 namespace GameAssembly {
     namespace Class {
-        constexpr int64_t PlayerControllerClass = 0x3C869B0;
+        constexpr int64_t PlayerControllerClass = 0x3D0D0E8;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
     }
     /// <summary>
     /// 通过下标返回PlayerController的偏移数组<para/>
@@ -96,7 +97,7 @@ namespace GameAssembly {
     }
 
     static std::vector<int64_t> localPlayer() {
-        std::vector<int64_t> offsets = { 0x3C3A608, 0xB8, 0x20, 0x0 };
+        std::vector<int64_t> offsets = { 0x3CBF250, 0xB8, 0x20, 0x0 };
 
         return offsets;
     }

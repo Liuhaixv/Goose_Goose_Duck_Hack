@@ -1,4 +1,5 @@
 ﻿#include "Drawing.h"
+#include "client.hpp"
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
 ImVec2 Drawing::vWindowSize = { 500, 500 };
@@ -7,6 +8,7 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 
 extern Utils utils;
 extern HackSettings hackSettings;
+extern Client* g_client;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cn
@@ -14,6 +16,8 @@ extern HackSettings hackSettings;
 
 void drawMenu();
 void drawESP();
+
+
 
 void Drawing::Active()
 {
@@ -87,19 +91,16 @@ void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
 
-    //ImGui::Begin("A", ptr_bOpen, ImGuiWindowFlags_NoInputs);
-    // 
-    ImGui::Begin(str("Main", "主菜单"));
-
-    //游戏状态指示
-    //ImGui::
+    ImGui::Begin(str("Liuhaixv@github.com  ||  Press Insert to switch", "Liuhaixv@github.com  ||  Insert开关菜单"));
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
         //菜单3
         if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
-        {
+        {         
+            ImGui::Text(g_client->localPlayer.playerController.nickname.c_str());
+
             float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
             if (minSpeed <= 0) {
                 minSpeed = 5.0f;
@@ -122,17 +123,29 @@ void drawMenu() {
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
             ))
             {
-                ImGui::TableSetupColumn(str("One","一"));
-                ImGui::TableSetupColumn("Two");
-                ImGui::TableSetupColumn("Three");
+                ImGui::TableSetupColumn(str("Nickname","昵称"));
+                ImGui::TableSetupColumn(str("Role", "角色"));
+                ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
+                //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
-                for (int row = 0; row < 3; row++)
+                PlayerController* player = g_client->playerControllers;
+                for (int row = 0; row < g_client->n_players; (row++, player++))
                 {
+                    //跳过无效玩家和本地玩家
+                    if (player->address == NULL || player->b_isLocal) {
+                        continue;
+                    }
                     ImGui::TableNextRow();
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
+
+                    ImGui::TableNextColumn(); ImGui::Text(player->nickname.c_str());
+                    ImGui::TableNextColumn(); ImGui::Text(player->roleName.c_str());
+                    if (player->b_hasKilledThisRound) {
+                        ImGui::TableNextColumn(); ImGui::Text(str("Yes","是"));
+                    }
+                    else {
+                        ImGui::TableNextColumn(); ImGui::Text(str("",""));
+                    }
                 }
                 ImGui::EndTable();
             }
@@ -158,15 +171,14 @@ void drawMenu() {
         //菜单2
         if (ImGui::BeginTabItem(str("ESP", "透视")))
         {
+            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
             ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
             HelpMarker(
-                str("Whether draw overlay of ESP onto screen", "是否开启绘制")
+                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
             );
 
             ImGui::EndTabItem();
         }
-
-
 
         ImGui::EndTabBar();
     }
