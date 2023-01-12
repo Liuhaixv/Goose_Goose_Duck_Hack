@@ -1,4 +1,5 @@
 ﻿#include "Drawing.h"
+#include "client.hpp"
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
 ImVec2 Drawing::vWindowSize = { 500, 500 };
@@ -7,6 +8,7 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 
 extern Utils utils;
 extern HackSettings hackSettings;
+extern Client* g_client;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cn
@@ -122,17 +124,16 @@ void drawMenu() {
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
             ))
             {
-                ImGui::TableSetupColumn(str("One","一"));
-                ImGui::TableSetupColumn("Two");
-                ImGui::TableSetupColumn("Three");
+                ImGui::TableSetupColumn(str("Nickname","昵称"));
+                ImGui::TableSetupColumn(str("Role", "角色"));
+                //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
-                for (int row = 0; row < 3; row++)
+                for (int row = 0; row < g_client->n_players; row++)
                 {
                     ImGui::TableNextRow();
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
-                    ImGui::TableNextColumn(); ImGui::Text("Oh dear");
+                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].nickname.c_str());
+                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].roleName);
                 }
                 ImGui::EndTable();
             }
