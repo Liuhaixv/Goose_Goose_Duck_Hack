@@ -134,13 +134,18 @@ void drawMenu() {
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
-                for (int row = 0; row < g_client->n_players; row++)
+                PlayerController* player = g_client->playerControllers;
+                for (int row = 0; row < g_client->n_players; (row++, player++))
                 {
+                    //跳过无效玩家和本地玩家
+                    if (player->address == NULL || player->b_isLocal) {
+                        continue;
+                    }
                     ImGui::TableNextRow();
 
-                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].nickname.c_str());
-                    ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].roleName.c_str());
-                    if (g_client->playerControllers[row].b_hasKilledThisRound) {
+                    ImGui::TableNextColumn(); ImGui::Text(player->nickname.c_str());
+                    ImGui::TableNextColumn(); ImGui::Text(player->roleName.c_str());
+                    if (player->b_hasKilledThisRound) {
                         ImGui::TableNextColumn(); ImGui::Text(str("Yes","是"));
                     }
                     else {
@@ -178,14 +183,6 @@ void drawMenu() {
 
             ImGui::EndTabItem();
         }
-        //菜单2
-        if (ImGui::BeginTabItem("a"))
-        {
-
-            ImGui::EndTabItem();
-        }
-
-
 
         ImGui::EndTabBar();
     }
