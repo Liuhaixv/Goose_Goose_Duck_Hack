@@ -169,7 +169,7 @@ void drawMinimap() {
 }
 
 void drawMenu() {
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
