@@ -176,9 +176,10 @@ void drawMenu() {
         //菜单2
         if (ImGui::BeginTabItem(str("ESP", "透视")))
         {
+            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
             ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
             HelpMarker(
-                str("Whether draw overlay of ESP onto screen", "是否开启绘制")
+                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
             );
 
             ImGui::EndTabItem();
