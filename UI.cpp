@@ -82,6 +82,10 @@ void UI::loadMapsTexture() {
     UI::LoadTextureFromFile("./img/maps/6.png", &map6.texture, &map6.width, &map6.height);
     UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
 
+    //处理缩放
+    map1.scale = 78.48 / map1.width;
+    map1.offset = { -45.28, -24.87 };
+
     UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
     UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));
     UI::miniMaps.insert(std::pair<int, GameMap>(JUNGLE_TEMPLE, map2));

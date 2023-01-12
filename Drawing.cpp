@@ -91,12 +91,37 @@ static void HelpMarker(const char* desc)
     }
 }
 
+
+/// <summary>
+/// 在地图上绘制玩家
+/// </summary>
+void drawPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+    static float circleRadius = 10;
+
+    PlayerController* playerControllers = g_client->playerControllers;
+
+    PlayerController* ptr = playerControllers;
+
+    for (int i = 0; i < g_client->n_players; (i++, ptr++)) {
+        Vector3* position = &ptr->v3_position;
+
+        Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x, mapLeftBottomPointOnScreen.y + relativePosition.y };
+
+        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
+    }
+}
+
 void drawMinimap() {
+    ImGuiIO& io = ImGui::GetIO();
+
     ImGui::Begin("Minimap");
 
     GameMap* gameMap = nullptr;
 
-    const char* engMaps[] = {"ANCIENT_SANDS", "THE_BASEMENT", "JUNGLE_TEMPLE", "GOOSECHAPEL", "MALLARD_MANOR","NEXUS_COLONY", "BLACKSWAN"};
+    const char* engMaps[] = { "ANCIENT_SANDS", "THE_BASEMENT", "JUNGLE_TEMPLE", "GOOSECHAPEL", "MALLARD_MANOR","NEXUS_COLONY", "BLACKSWAN" };
     static bool toggles[] = { true, false, false, false, false };
 
 
@@ -126,13 +151,25 @@ void drawMinimap() {
         ImGui::Text("pointer = %p", gameMap);
         ImGui::Text("size = %d x %d", gameMap->width, gameMap->height);
         ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+        if (ImGui::IsItemHovered())
+        {
+            Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
+            //处理点击传送的逻辑
+            ImGui::BeginTooltip();
+            ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
+            ImGui::EndTooltip();
+        }
+        //在地图上绘制玩家位置
+        drawPlayersOnMap(*gameMap, pos);
     }
 
     ImGui::End();
 }
 
 void drawMenu() {
-    //ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
 
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
@@ -142,10 +179,11 @@ void drawMenu() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
+        PlayerController* playerController = &g_client->localPlayer.playerController;
         //菜单3
         if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
-        {         
-            ImGui::Text(g_client->localPlayer.playerController.nickname.c_str());
+        {
+            ImGui::Text(playerController->nickname.c_str());
 
             float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
             if (minSpeed <= 0) {
@@ -159,20 +197,23 @@ void drawMenu() {
                 minSpeed * 2
             );
 
+            ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
+
             ImGui::EndTabItem();
         }
 
         //菜单1
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
-            if (ImGui::BeginTable("table1", 4,
+            if (ImGui::BeginTable("table1", 5,
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
             ))
             {
-                ImGui::TableSetupColumn(str("Nickname","昵称"));
+                ImGui::TableSetupColumn(str("Nickname", "昵称"));
                 ImGui::TableSetupColumn(str("Role", "角色"));
                 ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
                 ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
+                ImGui::TableSetupColumn(str("Pos", "坐标"));
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
@@ -188,10 +229,10 @@ void drawMenu() {
                     ImGui::TableNextColumn(); ImGui::Text(player->nickname.c_str());
                     ImGui::TableNextColumn(); ImGui::Text(player->roleName.c_str());
                     if (player->b_hasKilledThisRound) {
-                        ImGui::TableNextColumn(); ImGui::Text(str("Yes","是"));
+                        ImGui::TableNextColumn(); ImGui::Text(str("Yes", "是"));
                     }
                     else {
-                        ImGui::TableNextColumn(); ImGui::Text(str("",""));
+                        ImGui::TableNextColumn(); ImGui::Text(str("", ""));
                     }
                     if (player->i_timeOfDeath != 0) {
                         ImGui::TableNextColumn(); ImGui::Text("%d", player->i_timeOfDeath);
@@ -199,6 +240,7 @@ void drawMenu() {
                     else {
                         ImGui::TableNextColumn(); ImGui::Text("");
                     }
+                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", player->v3_position.x, player->v3_position.y);
 
                 }
                 ImGui::EndTable();
@@ -257,9 +299,9 @@ void drawESP() {
 
     ImColor lineColor{ 0.0f,1.0f,0.0f };
     float lineThichness = 4;
-    drawList->AddLine({0, ImGui::GetIO().DisplaySize.y / 2 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 2 },
+    drawList->AddLine({ 0, ImGui::GetIO().DisplaySize.y / 2 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y / 2 },
         lineColor, lineThichness);
-    drawList->AddLine({ ImGui::GetIO().DisplaySize.x /2, 0 } , { ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y },
+    drawList->AddLine({ ImGui::GetIO().DisplaySize.x / 2, 0 }, { ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y },
         lineColor, lineThichness);
     //*/
 
