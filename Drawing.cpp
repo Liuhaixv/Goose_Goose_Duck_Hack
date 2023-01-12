@@ -93,7 +93,7 @@ void drawMenu() {
 
     //ImGui::Begin("A", ptr_bOpen, ImGuiWindowFlags_NoInputs);
     // 
-    ImGui::Begin(str("Main", "主菜单"));
+    ImGui::Begin(str("Liuhaixv@github.com  ||  Press Insert to switch", "Liuhaixv@github.com  ||  Insert开关菜单"));
 
     //游戏状态指示
     //ImGui::
