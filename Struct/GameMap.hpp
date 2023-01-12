@@ -30,8 +30,8 @@ struct GameMap {
         if (region_x < 0.0f) { region_x = 0.0f; }
         if (region_y < 0.0f) { region_y = 0.0f; }
                 
-        region_x *= this->scale;
-        region_y *= this->scale;
+        region_x *= this->scaleToGamePosition;
+        region_y *= this->scaleToGamePosition;
         region_x += this->offset.x;
         region_y += this->offset.y;
 
@@ -44,8 +44,8 @@ struct GameMap {
 
         region_x -= this->offset.x;
         region_y -= this->offset.y;
-        region_x /= this->scale;
-        region_y /= this->scale;
+        region_x /= this->scaleToGamePosition;
+        region_y /= this->scaleToGamePosition;
 
         region_y *= -1;
 
@@ -55,5 +55,8 @@ struct GameMap {
     //坐标相对图片偏移
     Vector2 offset{0.0f, 0.0f};
     //坐标相对图片缩放。图片坐标 * scale + offset => 游戏内坐标
-    float scale = 1.0f;
+    float scaleToGamePosition = 1.0f;
+
+    //显示图片的缩放
+    float scaleToDisplay = 1.0f;
 };

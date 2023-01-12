@@ -49,27 +49,6 @@ void Drawing::Draw() {
         }
         else {
 
-            /*
-            ImGui::ShowDemoWindow();
-
-            ImGui::GetBackgroundDrawList()->AddCircleFilled(
-                { 500,500 },
-                30,
-                ImColor{ 1.0f, 1.0f, 0.0f }
-            );
-
-            ImGui::SetNextWindowPos(ImVec2(0, 0));
-            ImGui::SetNextWindowSize(ImVec2(1024, 768));
-            ImGui::SetNextWindowBgAlpha(0.0f);
-            ImGui::Begin("Overlay", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoBackground);
-
-            auto pDrawList = ImGui::GetWindowDrawList();
-
-            pDrawList->AddRect(ImVec2(10, 10), ImVec2(100, 100), ImColor(255, 0, 0));
-            pDrawList->AddText(ImVec2(10, 10), ImColor(255, 0, 0), "test");
-
-            ImGui::End();
-            */
         }
     }
 }
@@ -107,7 +86,7 @@ void drawPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
         Vector3* position = &ptr->v3_position;
 
         Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
-        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x, mapLeftBottomPointOnScreen.y + relativePosition.y };
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x * map.scaleToDisplay, mapLeftBottomPointOnScreen.y + relativePosition.y * map.scaleToDisplay };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
         drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
@@ -121,7 +100,18 @@ void drawMinimap() {
 
     GameMap* gameMap = nullptr;
 
-    const char* engMaps[] = { "ANCIENT_SANDS", "THE_BASEMENT", "JUNGLE_TEMPLE", "GOOSECHAPEL", "MALLARD_MANOR","NEXUS_COLONY", "BLACKSWAN" };
+
+    const char* mapNames[] = {
+        str("Ancient Sands", "古代沙地"),
+        str("The Basement","地下室"),
+        str("Jungle Temple","丛林神殿"),
+        str("GooseChapel","鹅教堂"),
+        str("Mallard Manor","马拉德庄园"),
+        str("Nexus Colony","连结殖民地"),
+        str("Black Swan","黑天鹅"),
+        str("SS MotherGoose","老妈鹅星球飞船")
+    };
+
     static bool toggles[] = { true, false, false, false, false };
 
 
@@ -130,13 +120,13 @@ void drawMinimap() {
     if (ImGui::Button(str("Select map", "选择地图")))
         ImGui::OpenPopup("select_map");
     ImGui::SameLine();
-    ImGui::TextUnformatted(selected_map == -1 ? "<None>" : engMaps[selected_map]);
+    ImGui::TextUnformatted(selected_map == -1 ? str("<None>", "无") : mapNames[selected_map]);
     if (ImGui::BeginPopup("select_map"))
     {
         ImGui::Text("Aquarium");
         ImGui::Separator();
-        for (int i = 0; i < IM_ARRAYSIZE(engMaps); i++)
-            if (ImGui::Selectable(engMaps[i])) {
+        for (int i = 0; i < IM_ARRAYSIZE(mapNames); i++)
+            if (ImGui::Selectable(mapNames[i])) {
                 //修改当前地图图片
                 selected_map = i;
             }
@@ -145,36 +135,99 @@ void drawMinimap() {
     if (selected_map < 0) {
         //尚未选择地图
         //Have not selected map
+        ImGui::Text(str("You have not selected map", "你还没有选择地图"));
     }
     else {
+        //读取地图
         gameMap = &UI::miniMaps.at(selected_map);
-        ImGui::Text("pointer = %p", gameMap);
-        ImGui::Text("size = %d x %d", gameMap->width, gameMap->height);
-        ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
 
-        ImVec2 pos = ImGui::GetCursorScreenPos();
-        if (ImGui::IsItemHovered())
-        {
-            Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
-            //处理点击传送的逻辑
-            ImGui::BeginTooltip();
-            ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
-            ImGui::EndTooltip();
+        //ImGui::Text("pointer = %p", gameMap);
+        //ImGui::Text("size = %d x %d", gameMap->width, gameMap->height);
+
+        ImVec2 leftTopOfImage = ImGui::GetCursorScreenPos();
+
+        //ImGui::GetForegroundDrawList()->AddCircleFilled({ leftTopOfImage.x,leftTopOfImage.y }, 5, ImColor(1.0f, 0.0f, 0.0f));
+        //ImVec2 roomForImage = { view.x, view.y -  };
+
+
+        //检查长宽是否为0
+        if (gameMap->width > 0 && gameMap->height > 0) {
+            static bool minimapShowedBefore = false;
+
+            ImVec2 pos;
+
+            //显示默认大小
+            if (!minimapShowedBefore) {
+                minimapShowedBefore = true;
+
+                ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+
+                pos = ImGui::GetCursorScreenPos();
+                if (ImGui::IsItemHovered())
+                {
+                    Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
+                    //处理点击传送的逻辑
+                    ImGui::BeginTooltip();
+                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
+                    ImGui::EndTooltip();
+                }
+            }
+            //根据地图尺寸调整窗口大小
+            else {
+
+                //当前窗口剩余可容纳图片的范围
+
+                ImVec2 roomSpaceForImage = ImGui::GetContentRegionAvail();
+                //ImGui::Text("roomSpaceForImage. %.1f, %.1f", roomSpaceForImage.x ,roomSpaceForImage.y);
+
+                // ImVec2 minimapWindow =
+                if (roomSpaceForImage.x > 10 && roomSpaceForImage.y > 10) {
+                    //width / height
+                    float roomSpaceRatio = roomSpaceForImage.x / roomSpaceForImage.y;
+                    float mapImageRatio = 1.0f * gameMap->width / gameMap->height;
+
+                    //宽大于图片等比缩放所需的长度，
+                    //此时按照剩余空间的高和图片的高来缩放
+                    if (roomSpaceRatio >= mapImageRatio) {
+                        gameMap->scaleToDisplay = roomSpaceForImage.y / gameMap->height;
+                    }
+                    else {
+                        //高大于图片等比缩放所需的长度，
+                        //此时按照剩余空间的宽和图片的宽来缩放
+                        gameMap->scaleToDisplay = roomSpaceForImage.x / gameMap->width;
+                    }
+
+                    //显示地图图片
+                    ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width * gameMap->scaleToDisplay, gameMap->height * gameMap->scaleToDisplay));
+
+                    //处理鼠标移动到图片上的逻辑
+                    pos = ImGui::GetCursorScreenPos();
+                    if (ImGui::IsItemHovered())
+                    {
+                        Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
+                        //处理点击传送的逻辑
+                        ImGui::BeginTooltip();
+                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
+                        ImGui::EndTooltip();
+                    }
+                }
+            }
+            //ImGui::GetForegroundDrawList()->AddCircleFilled({ pos.x,pos.y }, 20, ImColor(1.0f, 0.0f, 0.0f));
+            //在地图上绘制玩家位置
+            drawPlayersOnMap(*gameMap, pos);
         }
-        //在地图上绘制玩家位置
-        drawPlayersOnMap(*gameMap, pos);
     }
 
     ImGui::End();
 }
 
 void drawMenu() {
-    //ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
 
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
 
-    ImGui::Begin(str("Liuhaixv@github.com  ||  Press Insert to switch", "Liuhaixv@github.com  ||  Insert开关菜单"));
+    ImGui::Begin(str("Main", "主菜单"));
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
@@ -272,6 +325,18 @@ void drawMenu() {
             HelpMarker(
                 str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
             );
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单2
+        if (ImGui::BeginTabItem(str("README", "说明")))
+        {
+            ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
+            ImGui::SameLine();
+            if (ImGui::Button(str("Link to project", "查看项目"))) {
+                ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
+            }
 
             ImGui::EndTabItem();
         }
