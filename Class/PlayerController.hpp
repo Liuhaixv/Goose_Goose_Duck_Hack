@@ -76,6 +76,46 @@ public:
     }
 
     /// <summary>
+    /// 传送玩家到指定的点
+    /// </summary>
+    /// <param name="position"></param>
+    bool teleportTo(Vector2 to) {
+        //无效指针
+        //invalid pointer address
+        if (this->address == NULL) {
+            return false;
+        }
+
+        //检查是否为本地玩家
+        if (!this->b_isLocal) {
+            return false;
+        }
+
+        std::vector<int64_t> offsets = {
+            Offsets::PlayerController::ptr_Rigidbody2D,
+            Offsets::Rigidbody2D::ptr_UnknownClass0,
+            Offsets::Rigidbody2D::UnknownClass0::ptr_UnknownFields,
+            Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position
+        };
+
+        int64_t position = memory->FindPointer(this->address, offsets);
+
+        //读取要写入的位置的地址无效
+        if (position == NULL) {
+            return false;
+        }
+
+        try {
+            memory->write_mem<Vector2>(position, to);
+        }
+        catch (...) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// 更新玩家坐标信息<para/>
     /// Update player's position and returns true if data valid 
     /// </summary>

@@ -156,65 +156,86 @@ void drawMinimap() {
 
             ImVec2 pos;
 
-            //显示默认大小
-            if (!minimapShowedBefore) {
-                minimapShowedBefore = true;
+            //处理显示地图的尺寸问题
+            {
+                //显示默认大小
+                if (!minimapShowedBefore) {
+                    minimapShowedBefore = true;
+                }
+                //根据地图尺寸调整窗口大小
+                else {
+                    //当前窗口剩余可容纳图片的范围
+                    ImVec2 roomSpaceForImage = ImGui::GetContentRegionAvail();
+                    //ImGui::Text("roomSpaceForImage. %.1f, %.1f", roomSpaceForImage.x ,roomSpaceForImage.y);
 
-                ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+                    if (roomSpaceForImage.x > 10 && roomSpaceForImage.y > 10) {
+                        //width / height
+                        float roomSpaceRatio = roomSpaceForImage.x / roomSpaceForImage.y;
+                        float mapImageRatio = 1.0f * gameMap->width / gameMap->height;
 
-                pos = ImGui::GetCursorScreenPos();
-                if (ImGui::IsItemHovered())
-                {
-                    Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
-                    //处理点击传送的逻辑
-                    ImGui::BeginTooltip();
+                        //宽大于图片等比缩放所需的长度，
+                        //此时按照剩余空间的高和图片的高来缩放
+                        if (roomSpaceRatio >= mapImageRatio) {
+                            gameMap->scaleToDisplay = roomSpaceForImage.y / gameMap->height;
+                        }
+                        else {
+                            //高大于图片等比缩放所需的长度，
+                            //此时按照剩余空间的宽和图片的宽来缩放
+                            gameMap->scaleToDisplay = roomSpaceForImage.x / gameMap->width;
+                        }
+                    }
+                }
+            }
+
+            //显示游戏地图
+            bool gameMapClicked = ImGui::ImageButton((void*)gameMap->texture, ImVec2(gameMap->width * gameMap->scaleToDisplay, gameMap->height * gameMap->scaleToDisplay));
+
+            //记录本次鼠标悬停在游戏地图上这段时间是否有过TP
+            static bool hasTPedWhenHoveringOnGameMap = false;
+            //记录上一次TP的坐标
+            static Vector2 lastTPedPosition;
+
+            //处理鼠标移动到图片上的逻辑
+            pos = ImGui::GetCursorScreenPos();
+            if (ImGui::IsItemHovered())
+            {
+                Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
+
+                
+
+                //处理点击传送的逻辑
+                ImGui::BeginTooltip();
+
+
+                //地图刚被点击
+                if (gameMapClicked) {
+                    //TODO 传送玩家
+                    //shouldTP = true;
+                    hasTPedWhenHoveringOnGameMap = true;
+                    lastTPedPosition = point;
+                }
+
+                if (!hasTPedWhenHoveringOnGameMap) {
                     ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
-                    ImGui::EndTooltip();
                 }
+                else {
+                    //尚未点击
+                    ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                }
+
+                ImGui::EndTooltip();
             }
-            //根据地图尺寸调整窗口大小
             else {
-
-                //当前窗口剩余可容纳图片的范围
-
-                ImVec2 roomSpaceForImage = ImGui::GetContentRegionAvail();
-                //ImGui::Text("roomSpaceForImage. %.1f, %.1f", roomSpaceForImage.x ,roomSpaceForImage.y);
-
-                // ImVec2 minimapWindow =
-                if (roomSpaceForImage.x > 10 && roomSpaceForImage.y > 10) {
-                    //width / height
-                    float roomSpaceRatio = roomSpaceForImage.x / roomSpaceForImage.y;
-                    float mapImageRatio = 1.0f * gameMap->width / gameMap->height;
-
-                    //宽大于图片等比缩放所需的长度，
-                    //此时按照剩余空间的高和图片的高来缩放
-                    if (roomSpaceRatio >= mapImageRatio) {
-                        gameMap->scaleToDisplay = roomSpaceForImage.y / gameMap->height;
-                    }
-                    else {
-                        //高大于图片等比缩放所需的长度，
-                        //此时按照剩余空间的宽和图片的宽来缩放
-                        gameMap->scaleToDisplay = roomSpaceForImage.x / gameMap->width;
-                    }
-
-                    //显示地图图片
-                    ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width * gameMap->scaleToDisplay, gameMap->height * gameMap->scaleToDisplay));
-
-                    //处理鼠标移动到图片上的逻辑
-                    pos = ImGui::GetCursorScreenPos();
-                    if (ImGui::IsItemHovered())
-                    {
-                        Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
-                        //处理点击传送的逻辑
-                        ImGui::BeginTooltip();
-                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
-                        ImGui::EndTooltip();
-                    }
-                }
+                //游戏地图没有鼠标焦点
+                hasTPedWhenHoveringOnGameMap = false;
             }
+
             //ImGui::GetForegroundDrawList()->AddCircleFilled({ pos.x,pos.y }, 20, ImColor(1.0f, 0.0f, 0.0f));
             //在地图上绘制玩家位置
             drawPlayersOnMap(*gameMap, pos);
+        }
+        else {
+            //不显示游戏地图
         }
     }
 

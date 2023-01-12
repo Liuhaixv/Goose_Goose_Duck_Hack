@@ -3,6 +3,17 @@
 #include<vector>
 
 namespace Offsets {
+    namespace Rigidbody2D {
+        namespace UnknownClass0 {
+            namespace UnknownFields {
+                constexpr int64_t v2_position_readonly = 0x24;
+                constexpr int64_t v2_position = 0x2C;//Vector2
+            }
+            constexpr int64_t ptr_UnknownFields = 0x78;
+        }
+        constexpr int64_t ptr_UnknownClass0 = 0x10;
+    }
+
     namespace PlayerController {
         namespace Class {
             namespace StaticField {
@@ -12,6 +23,8 @@ namespace Offsets {
             constexpr int64_t ptr_staticFields = 0xB8;//TODO
         }
         constexpr int64_t ptr_Class = 0x0;
+
+        constexpr int64_t ptr_Rigidbody2D = 0x58;//Rigidbody2D
 
         constexpr int64_t ptr_bodyCollider = 0xA8;// CapsuleCollider2D
         constexpr int64_t b_isSilenced = 0xC1; // Boolean
