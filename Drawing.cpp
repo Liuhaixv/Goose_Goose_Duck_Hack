@@ -91,12 +91,7 @@ void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
 
-    //ImGui::Begin("A", ptr_bOpen, ImGuiWindowFlags_NoInputs);
-    // 
     ImGui::Begin(str("Liuhaixv@github.com  ||  Press Insert to switch", "Liuhaixv@github.com  ||  Insert开关菜单"));
-
-    //游戏状态指示
-    //ImGui::
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))

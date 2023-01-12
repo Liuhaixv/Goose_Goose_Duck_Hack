@@ -48,7 +48,7 @@ namespace Offsets {
         namespace Class {
             namespace StaticField {
                 constexpr int64_t f_movementSpeed = 0x10;
-                constexpr int64_t BaseMovementSpeed = 0xC;//Read only
+                constexpr int64_t f_baseMovementSpeed = 0xC;//Read only
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
