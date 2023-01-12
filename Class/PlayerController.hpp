@@ -136,11 +136,29 @@ public:
             this->address = address;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         return update();
     }
 
 private:
     Memory* memory = nullptr;
+
+    //检查该地址是PlayerController实例
+    bool validateAddress(int64_t address) {
+        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::PlayerControllerClass);
+
+        if (playerControllerClass == NULL) {
+            //Error finding class
+            return false;
+        }
+
+        int64_t playerControllerClass_ = memory->read_mem<int64_t>(address);
+
+        return playerControllerClass == playerControllerClass_;
+    }
 
     /// <summary>
     /// 更新玩家数据<para/>
