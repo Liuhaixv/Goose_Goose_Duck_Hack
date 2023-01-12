@@ -40,6 +40,7 @@ public:
     int i_timeOfDeath = 0;
 
     std::string nickname = "";
+
     char roleName[64] = "";
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
@@ -97,28 +98,27 @@ public:
     }
 
     void updateNickname() {
-        byte tmpNick[42]{};
+        char16_t tmpNick[40]{};
 
-        int64_t* nickname_obj = (memory->read_mem<int64_t*>(this->address + Offsets::PlayerController::fl_nickname));
-        byte* p_str = (byte*)(nickname_obj)+0x14;
+        int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
+        int64_t firstChar = nickname + 0x14;
 
-        int64_t length = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname) + 0x10);
+        int length = memory->read_mem<int>(nickname + 0x10);
 
         if (length == 0) {
             this->nickname = "";
             return;
         }
 
-        byte* p_tmpNick = tmpNick;
-        for (int i = 0; i < length * 2 + 1; i++) {
-            byte byte_ = memory->read_mem<byte>((int64_t)(p_str + i));
+        for (int i = 0; i < length + 1; i++) {
+            char16_t c = memory->read_mem<char16_t>(firstChar + i);
             //byte byte_= *(p_str + i);
-            *(p_tmpNick + i) = byte_;
+            *(tmpNick + i) = c;
         }
 
-        std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), length);
+        //std::wstring string_to_convert = std::wstring(tmpNick, length);
 
-        this->nickname = Utils::wstring2string(string_to_convert);
+        //this->nickname = Utils::wstring2string(string_to_convert);
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ private:
     bool update() {
         //无效指针
         //invalid pointer address
-        if (this->memory == NULL ||this->address == NULL) {
+        if (this->memory == NULL || this->address == NULL) {
             return false;
         }
 

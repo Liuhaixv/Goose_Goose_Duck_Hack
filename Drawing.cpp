@@ -132,6 +132,7 @@ void drawMenu() {
                 for (int row = 0; row < g_client->n_players; row++)
                 {
                     ImGui::TableNextRow();
+
                     ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].nickname.c_str());
                     ImGui::TableNextColumn(); ImGui::Text(g_client->playerControllers[row].roleName);
                 }
@@ -163,6 +164,12 @@ void drawMenu() {
             HelpMarker(
                 str("Whether draw overlay of ESP onto screen", "是否开启绘制")
             );
+
+            ImGui::EndTabItem();
+        }
+        //菜单2
+        if (ImGui::BeginTabItem("a"))
+        {
 
             ImGui::EndTabItem();
         }
