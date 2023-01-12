@@ -16,8 +16,44 @@ struct GameMap {
     int width = 0;
     int height = 0;
 
+    /// <summary>
+    /// ImGuiIO& io; //显示器屏幕坐标
+    /// ImVector2& pos; //窗口组件坐标
+    /// io.MousePos.x - pos.x;
+    /// </summary>
+    /// <param name="screenRelativePoint"></param>
+    /// <returns></returns>
+    Vector2 screenPointToPositionIngame(Vector2 screenRelativePoint) {
+        float region_x = screenRelativePoint.x;
+        float region_y = screenRelativePoint.y * -1;
+
+        if (region_x < 0.0f) { region_x = 0.0f; }
+        if (region_y < 0.0f) { region_y = 0.0f; }
+                
+        region_x *= this->scale;
+        region_y *= this->scale;
+        region_x += this->offset.x;
+        region_y += this->offset.y;
+
+        return { region_x, region_y };
+    }
+
+    Vector2 positionIngameToScreenPoint(Vector2 positionIngame) {
+        float region_x = positionIngame.x;
+        float region_y = positionIngame.y;
+
+        region_x -= this->offset.x;
+        region_y -= this->offset.y;
+        region_x /= this->scale;
+        region_y /= this->scale;
+
+        region_y *= -1;
+
+        return { region_x, region_y };
+    }
+
     //坐标相对图片偏移
     Vector2 offset{0.0f, 0.0f};
-    //坐标相对图片缩放
+    //坐标相对图片缩放。图片坐标 * scale + offset => 游戏内坐标
     float scale = 1.0f;
 };
