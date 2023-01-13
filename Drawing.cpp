@@ -77,7 +77,7 @@ static void HelpMarker(const char* desc)
 
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
-    static float circleRadius = 10;
+    static float circleRadius = 5;
 
     LocalPlayer* localPlayer = &g_client->localPlayer;
 

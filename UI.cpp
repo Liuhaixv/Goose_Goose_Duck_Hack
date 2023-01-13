@@ -83,9 +83,31 @@ void UI::loadMapsTexture() {
     UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
 
     //处理缩放
+    map0.scaleToGamePosition = 0.086;
+    map0.offset = { -53.24, -29.55 };
+
     map1.scaleToGamePosition = 78.48 / map1.width;
-    //(5.84, 8.35) -(10.8, 5.26)
-    map1.offset = {-45.6, -24.82};
+    map1.offset = { -45.6, -24.82 };
+
+    map2.scaleToGamePosition = 0.0847;
+    map2.offset = { -41.08, -40.58 };
+
+    map3.scaleToGamePosition = 0.08;
+    map3.offset = { -36.21,-40.23 };
+
+    map4.scaleToGamePosition = 0.0585;
+    map4.offset = { -28.12, -42.44};
+
+    map5.scaleToGamePosition = 0.0948;
+    map5.offset = { -68.08,-44.96 };
+
+    //TODO
+    map6.scaleToGamePosition = 0.0585;
+    map6.offset = { -28.12, -42.44 };
+
+    
+    map7.scaleToGamePosition = 0.0947;
+    map7.offset = { -66.84, -28.49};
 
     UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
     UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));
