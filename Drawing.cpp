@@ -347,7 +347,22 @@ void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
-    ImGui::Begin(str("Main", "主菜单"));
+    ImGui::Begin(str("Main", "主菜单"),NULL, ImGuiWindowFlags_MenuBar);
+
+    if (ImGui::BeginMenuBar())
+    {
+        ImGui::Text(str("Game status: ","游戏状态: "));
+        ImGui::SameLine();
+        if (hackSettings.gameStateSettings.b_gameProcessRunning) {
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Game Running", "运行中"));
+            //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+        }
+        else {
+            ImGui::TextDisabled(str("Not Running", "未运行"));
+        }
+        
+        ImGui::EndMenuBar();
+    }
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))

@@ -19,5 +19,5 @@ struct GuiSettings {
     float f_baseMovementSpeed = -1;
 
     //
-    bool b_debug = false;
+    bool b_debug = true;
 };
