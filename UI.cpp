@@ -85,7 +85,7 @@ void UI::loadMapsTexture() {
     //处理缩放
     map1.scaleToGamePosition = 78.48 / map1.width;
     //(5.84, 8.35) -(10.8, 5.26)
-    map1.offset = { 5.84-10.8, 8.35-5.26};
+    map1.offset = {-45.6, -24.82};
 
     UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
     UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));

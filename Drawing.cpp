@@ -200,7 +200,14 @@ void drawMinimap() {
             ImGui::SliderFloat("debug_map_offsets_X", &gameMap->offset.x, -50, 50);
             ImGui::SliderFloat("debug_map_offsets_Y", &gameMap->offset.y, -50, 50);
             ImGui::Text("Scale To Game Position:");
-            ImGui::SliderFloat("Scale", &gameMap->scaleToGamePosition, 0.02, 0.05, "%.4f");
+
+            static float min_scale = 0.01;
+            static float max_scale = 1;
+
+            //TODO添加最大最小值输入框
+            ImGui::SliderFloat("Scale", &gameMap->scaleToGamePosition, min_scale, max_scale, "%.4f");
+            ImGui::InputFloat("min_scale", &min_scale);
+            ImGui::InputFloat("max_scale", &max_scale);
 
             ImGui::EndPopup();
         }
@@ -218,7 +225,7 @@ void drawMinimap() {
         if (gameMap->width > 0 && gameMap->height > 0) {
             static bool minimapShowedBefore = false;
 
-            ImVec2 pos;
+            ImVec2 mousePositionLeftBottomOfGamemap;
 
             //处理显示地图的尺寸问题
             {
@@ -259,13 +266,12 @@ void drawMinimap() {
             //记录上一次TP的坐标
             static Vector2 lastTPedPosition;
 
+            //图片最左下角的坐标
+            mousePositionLeftBottomOfGamemap = ImGui::GetCursorScreenPos();
             //处理鼠标移动到图片上的逻辑
-            pos = ImGui::GetCursorScreenPos();
             if (ImGui::IsItemHovered())
             {
-                Vector2 positionInGame = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
-
-                
+                Vector2 positionInGame = gameMap->screenPointToPositionIngame({ io.MousePos.x - mousePositionLeftBottomOfGamemap.x,  mousePositionLeftBottomOfGamemap.y - io.MousePos.y });
 
                 //处理点击传送的逻辑
                 ImGui::BeginTooltip();
@@ -296,8 +302,8 @@ void drawMinimap() {
 
             //ImGui::GetForegroundDrawList()->AddCircleFilled({ pos.x,pos.y }, 20, ImColor(1.0f, 0.0f, 0.0f));
             //在地图上绘制玩家位置
-            drawOtherPlayersOnMap(*gameMap, pos);
-            drawLocalPlayerOnMap(*gameMap, pos);
+            drawOtherPlayersOnMap(*gameMap, mousePositionLeftBottomOfGamemap);
+            drawLocalPlayerOnMap(*gameMap, mousePositionLeftBottomOfGamemap);
         }
         else {
             //不显示游戏地图

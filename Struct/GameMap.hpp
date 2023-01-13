@@ -28,13 +28,14 @@ struct GameMap {
 
         float region_x = screenRelativePoint.x;
         //反向Y轴
-        float region_y = screenRelativePoint.y * -1;
+        float region_y = screenRelativePoint.y;
 
         if (region_x < 0.0f) { region_x = 0.0f; }
         if (region_y < 0.0f) { region_y = 0.0f; }
                 
         region_x *= this->scaleToGamePosition;
         region_y *= this->scaleToGamePosition;
+
         region_x += this->offset.x;
         region_y += this->offset.y;
 
@@ -47,6 +48,7 @@ struct GameMap {
 
         region_x -= this->offset.x;
         region_y -= this->offset.y;
+
         region_x /= this->scaleToGamePosition;
         region_y /= this->scaleToGamePosition;
 
