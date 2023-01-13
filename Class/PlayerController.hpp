@@ -139,9 +139,6 @@ public:
 
     //TODO: 导致程序崩溃？
     void updateNickname() {
-        if (!PlayerController::validateAddress(this->address)) {
-            return;
-        }
 
         int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
         int64_t firstChar = nickname + 0x14;
@@ -180,13 +177,13 @@ public:
             return false;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         if (address != this->address) {
             reset();
             this->address = address;
-        }
-
-        if (!validateAddress(address)) {
-            return false;
         }
 
         return update();
