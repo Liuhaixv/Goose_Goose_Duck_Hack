@@ -7,8 +7,6 @@ ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
 std::map<int, GameMap> UI::miniMaps;
 
-HWND UI::hwnd = NULL;
-
 extern Utils utils;
 
 void getScaledResolution(int& resolutionX, int& resolutionY);
@@ -268,12 +266,10 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         nullptr };
 
     ::RegisterClassEx(&wc);
-    //const HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("ImGui Standalone"), WS_OVERLAPPEDWINDOW, 100, 100, 50, 50, NULL, NULL, wc.hInstance, NULL);
 
     //Get resolution
     int resolutionX = 500, resolutionY = 500;
     getScaledResolution(resolutionX, resolutionY);
-
 
     const HWND hwnd = CreateWindowEx(
         WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED,
@@ -284,8 +280,6 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         wc.hInstance,
         nullptr
     );
-
-    UI::hwnd = hwnd;
 
     SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 
@@ -322,6 +316,21 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
+    //初始化自定义ini       
+    {
+        /*
+        ImGuiSettingsHandler ini_handler;
+        ini_handler.TypeName = "Window";
+        ini_handler.TypeHash = ImHashStr("Window");
+        ini_handler.ClearAllFn = WindowSettingsHandler_ClearAll;
+        ini_handler.ReadOpenFn = WindowSettingsHandler_ReadOpen;
+        ini_handler.ReadLineFn = WindowSettingsHandler_ReadLine;
+        ini_handler.ApplyAllFn = WindowSettingsHandler_ApplyAll;
+        ini_handler.WriteAllFn = WindowSettingsHandler_WriteAll;
+        AddSettingsHandler(&ini_handler);
+        */
+    }
 
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
