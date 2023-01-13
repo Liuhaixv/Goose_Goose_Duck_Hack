@@ -57,6 +57,20 @@ public:
         resetGuiSettings();
     }
 
+    bool teleportTo(Vector2 to) {
+        if (this->localPlayer.address == NULL) {
+            return false;
+        }
+
+        PlayerController* playerController = &this->localPlayer.playerController;
+
+        if (playerController == NULL || playerController->address == NULL) {
+            return false;
+        }
+
+        return playerController->teleportTo(to);
+    }
+
     void updateGameOriginalData() {
         hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
     }

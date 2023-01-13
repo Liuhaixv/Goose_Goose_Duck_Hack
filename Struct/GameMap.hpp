@@ -17,43 +17,46 @@ struct GameMap {
     int height = 0;
 
     /// <summary>
-    /// ImGuiIO& io; //显示器屏幕坐标
-    /// ImVector2& pos; //窗口组件坐标
-    /// io.MousePos.x - pos.x;
-    /// </summary>
-    /// <param name="screenRelativePoint"></param>
+    /// 图片最左下角 = (0, 0)
+    /// Y↑
+    /// X→
     /// <returns></returns>
-    Vector2 screenPointToPositionIngame(Vector2 screenRelativePoint) {
-        float region_x = screenRelativePoint.x;
-        float region_y = screenRelativePoint.y * -1;
+    /// </summary>
+    Vector2 relativePositionLeftBottom_to_PositionInGame(Vector2 relativePosition) {
+        //因为游戏内坐标很小，所以这里坐标换算中先处理缩放
 
-        if (region_x < 0.0f) { region_x = 0.0f; }
-        if (region_y < 0.0f) { region_y = 0.0f; }
-                
-        region_x *= this->scaleToGamePosition;
-        region_y *= this->scaleToGamePosition;
-        region_x += this->offset.x;
-        region_y += this->offset.y;
+        float x = relativePosition.x;
+        float y = relativePosition.y;
 
-        return { region_x, region_y };
+        //先将图片的分辨率px缩放到接近游戏内坐标的比例                       
+        x = x * this->scaleToGamePosition / this->scaleToDisplay;
+        y = y * this->scaleToGamePosition / this->scaleToDisplay;
+
+        //地图的最左下角并不是从(0, 0)坐标开始的
+        //所以这里需要加上对应的偏移
+        x += this->offset.x;
+        y += this->offset.y;
+
+        return { x, y };
     }
 
-    Vector2 positionIngameToScreenPoint(Vector2 positionIngame) {
-        float region_x = positionIngame.x;
-        float region_y = positionIngame.y;
 
-        region_x -= this->offset.x;
-        region_y -= this->offset.y;
-        region_x /= this->scaleToGamePosition;
-        region_y /= this->scaleToGamePosition;
+    Vector2 positionInGame_to_relativePositionLeftBottom(Vector2 positionIngame) {
+        float x = positionIngame.x;
+        float y = positionIngame.y;
 
-        region_y *= -1;
+        //首先减去游戏内最左下角的偏移, 使得左下角与(0, 0)对齐
+        x -= this->offset.x;
+        y -= this->offset.y;
 
-        return { region_x, region_y };
+        x = x * this->scaleToDisplay / this->scaleToGamePosition;
+        y = y * this->scaleToDisplay / this->scaleToGamePosition;
+
+        return { x, y };
     }
 
     //坐标相对图片偏移
-    Vector2 offset{0.0f, 0.0f};
+    Vector2 offset{ 0.0f, 0.0f };
     //坐标相对图片缩放。图片坐标 * scale + offset => 游戏内坐标
     float scaleToGamePosition = 1.0f;
 
