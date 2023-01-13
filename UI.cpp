@@ -7,8 +7,6 @@ ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
 std::map<int, GameMap> UI::miniMaps;
 
-HWND UI::hwnd = NULL;
-
 extern Utils utils;
 
 void getScaledResolution(int& resolutionX, int& resolutionY);
@@ -81,6 +79,33 @@ void UI::loadMapsTexture() {
     UI::LoadTextureFromFile("./img/maps/5.png", &map5.texture, &map5.width, &map5.height);
     UI::LoadTextureFromFile("./img/maps/6.png", &map6.texture, &map6.width, &map6.height);
     UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
+
+    //处理缩放
+    map0.scaleToGamePosition = 0.086;
+    map0.offset = { -53.24, -29.55 };
+
+    map1.scaleToGamePosition = 78.48 / map1.width;
+    map1.offset = { -45.6, -24.82 };
+
+    map2.scaleToGamePosition = 0.0847;
+    map2.offset = { -41.08, -40.58 };
+
+    map3.scaleToGamePosition = 0.08;
+    map3.offset = { -36.21,-40.23 };
+
+    map4.scaleToGamePosition = 0.0585;
+    map4.offset = { -28.12, -42.44};
+
+    map5.scaleToGamePosition = 0.0948;
+    map5.offset = { -68.08,-44.96 };
+
+    //TODO
+    map6.scaleToGamePosition = 0.0585;
+    map6.offset = { -28.12, -42.44 };
+
+    
+    map7.scaleToGamePosition = 0.0947;
+    map7.offset = { -66.84, -28.49};
 
     UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
     UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));
@@ -241,12 +266,10 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         nullptr };
 
     ::RegisterClassEx(&wc);
-    //const HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("ImGui Standalone"), WS_OVERLAPPEDWINDOW, 100, 100, 50, 50, NULL, NULL, wc.hInstance, NULL);
 
     //Get resolution
     int resolutionX = 500, resolutionY = 500;
     getScaledResolution(resolutionX, resolutionY);
-
 
     const HWND hwnd = CreateWindowEx(
         WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED,
@@ -257,8 +280,6 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         wc.hInstance,
         nullptr
     );
-
-    UI::hwnd = hwnd;
 
     SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
 
@@ -295,6 +316,21 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
+    //初始化自定义ini       
+    {
+        /*
+        ImGuiSettingsHandler ini_handler;
+        ini_handler.TypeName = "Window";
+        ini_handler.TypeHash = ImHashStr("Window");
+        ini_handler.ClearAllFn = WindowSettingsHandler_ClearAll;
+        ini_handler.ReadOpenFn = WindowSettingsHandler_ReadOpen;
+        ini_handler.ReadLineFn = WindowSettingsHandler_ReadLine;
+        ini_handler.ApplyAllFn = WindowSettingsHandler_ApplyAll;
+        ini_handler.WriteAllFn = WindowSettingsHandler_WriteAll;
+        AddSettingsHandler(&ini_handler);
+        */
+    }
 
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;

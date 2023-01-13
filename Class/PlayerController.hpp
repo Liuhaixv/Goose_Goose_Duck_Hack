@@ -76,6 +76,46 @@ public:
     }
 
     /// <summary>
+    /// 传送玩家到指定的点
+    /// </summary>
+    /// <param name="position"></param>
+    bool teleportTo(Vector2 to) {
+        //无效指针
+        //invalid pointer address
+        if (this->address == NULL) {
+            return false;
+        }
+
+        //检查是否为本地玩家
+        if (!this->b_isLocal) {
+            return false;
+        }
+
+        std::vector<int64_t> offsets = {
+            Offsets::PlayerController::ptr_Rigidbody2D,
+            Offsets::Rigidbody2D::ptr_UnknownClass0,
+            Offsets::Rigidbody2D::UnknownClass0::ptr_UnknownFields,
+            Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position
+        };
+
+        int64_t position = memory->FindPointer(this->address, offsets);
+
+        //读取要写入的位置的地址无效
+        if (position == NULL) {
+            return false;
+        }
+
+        try {
+            memory->write_mem<Vector2>(position, to);
+        }
+        catch (...) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// 更新玩家坐标信息<para/>
     /// Update player's position and returns true if data valid 
     /// </summary>
@@ -97,14 +137,19 @@ public:
         return true;
     }
 
+    //TODO: 导致程序崩溃？
     void updateNickname() {
+        if (!PlayerController::validateAddress(this->address)) {
+            return;
+        }
 
         int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
         int64_t firstChar = nickname + 0x14;
 
+        //字符个数
         int length = memory->read_mem<int>(nickname + 0x10);
 
-        char16_t buffer[20];
+        char16_t buffer[40];
 
 
         if (length == 0) {
@@ -152,7 +197,8 @@ private:
 
     //检查该地址是PlayerController实例
     bool validateAddress(int64_t address) {
-        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::PlayerControllerClass);
+
+        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass);
 
         if (playerControllerClass == NULL) {
             //Error finding class

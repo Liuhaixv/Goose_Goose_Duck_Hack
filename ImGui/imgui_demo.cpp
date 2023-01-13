@@ -1047,7 +1047,7 @@ static void ShowDemoWindowWidgets()
                 "Call io.Fonts->AddFontFromFileTTF() manually to load extra character ranges. "
                 "Read docs/FONTS.md for details.");
             ImGui::Text("Hiragana: \xe3\x81\x8b\xe3\x81\x8d\xe3\x81\x8f\xe3\x81\x91\xe3\x81\x93 (kakikukeko)"); // Normally we would use u8"blah blah" with the proper characters directly in the string.
-            ImGui::Text("Kanjis: \xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e (nihongo)");
+            ImGui::Text("Kanjis: \xe6\x97\xa5\xe6\x9Drc\xac\xe8\xaa\x9e (nihongo)");
             static char buf[32] = "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e";
             //static char buf[32] = u8"NIHONGO"; // <- this is how you would write it with C++11, using real kanjis
             ImGui::InputText("UTF-8 input", buf, IM_ARRAYSIZE(buf));
@@ -1099,7 +1099,9 @@ static void ShowDemoWindowWidgets()
                 float region_y = io.MousePos.y - pos.y - region_sz * 0.5f;
                 float zoom = 4.0f;
                 if (region_x < 0.0f) { region_x = 0.0f; }
+
                 else if (region_x > my_tex_w - region_sz) { region_x = my_tex_w - region_sz; }
+
                 if (region_y < 0.0f) { region_y = 0.0f; }
                 else if (region_y > my_tex_h - region_sz) { region_y = my_tex_h - region_sz; }
                 ImGui::Text("Min: (%.2f, %.2f)", region_x, region_y);

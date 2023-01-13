@@ -36,7 +36,7 @@ public:
         while (true) {
             updateLocalPlayer(localPlayer);
             updatePlayerController(playerControllers, players);
-            Sleep(1000);
+            Sleep(30);
         }
     }
 private:
