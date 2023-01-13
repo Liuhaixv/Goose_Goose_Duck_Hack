@@ -6,8 +6,8 @@
 
 # 进程
 
-当前正在开发小地图传送功能
-[Issue#56](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/56)
+当前正在开发记录玩家死亡时附近的人的功能
+[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # 功能
 ### 显示类
@@ -51,8 +51,9 @@ External Hack for Goose Goose Duck.
 This project is currently active in development. Leave a star if you like it. You can make request for features you want , just create issues and I will reply.
 
 # Progress
-Developing teleport function of minimap
-[Issue#56](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/56)
+
+Developing new function, reveal players near the dead player
+[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # Features
 ### Reveal Info
