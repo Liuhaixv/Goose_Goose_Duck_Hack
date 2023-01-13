@@ -39,11 +39,11 @@ void Drawing::Draw() {
         if (hackSettings.guiSettings.b_debug) {
             ImGui::ShowDemoWindow();
         }
-        drawMinimap();
 
         //绘制菜单
         if (hackSettings.guiSettings.b_enableMenu) {
             drawMenu();
+            drawMinimap();
         }
 
         //ESP
@@ -294,15 +294,30 @@ void drawMinimap() {
                     lastTPedPosition = positionInGame;
                 }
 
-                if (!hasTPedWhenHoveringOnGameMap) {
-                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)\n相对图片左下角(%.1f, %.1f)"),
-                        positionInGame.x, positionInGame.y,
-                        io.MousePos.x - mousePositionLeftBottomOfGamemap.x, mousePositionLeftBottomOfGamemap.y - io.MousePos.y
-                    );
+                //Debug
+                if (hackSettings.guiSettings.b_debug) {
+                    if (!hasTPedWhenHoveringOnGameMap) {
+                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)\n相对图片左下角(%.1f, %.1f)"),
+                            positionInGame.x, positionInGame.y,
+                            io.MousePos.x - mousePositionLeftBottomOfGamemap.x, mousePositionLeftBottomOfGamemap.y - io.MousePos.y
+                        );
+                    }
+                    else {
+                        //尚未点击
+                        ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    }
                 }
+                //Release
                 else {
-                    //尚未点击
-                    ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    if (!hasTPedWhenHoveringOnGameMap) {
+                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"),
+                            positionInGame.x, positionInGame.y
+                        );
+                    }
+                    else {
+                        //尚未点击
+                        ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    }
                 }
 
                 ImGui::EndTooltip();
