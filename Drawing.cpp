@@ -290,7 +290,10 @@ void drawMinimap() {
                 }
 
                 if (!hasTPedWhenHoveringOnGameMap) {
-                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), positionInGame.x, positionInGame.y);
+                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)\n相对图片左下角(%.1f, %.1f)"),
+                        positionInGame.x, positionInGame.y,
+                        io.MousePos.x - mousePositionLeftBottomOfGamemap.x, mousePositionLeftBottomOfGamemap.y - io.MousePos.y
+                    );
                 }
                 else {
                     //尚未点击
