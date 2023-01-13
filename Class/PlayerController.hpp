@@ -246,12 +246,26 @@ private:
             b_hasKilledThisRound = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound);
             i_playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId) + 0x10);
 
+            float timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
+
+            //玩家刚死亡
+            if (i_timeOfDeath == 0 && timeOfDeath > 0) {
+                this->onDeath();
+            }
+
             //更新死亡时间
-            i_timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
+            i_timeOfDeath = timeOfDeath;
 
             std::u8string rolename = utils.getRoleName(i_playerRoleId);
             roleName = std::string(rolename.begin(), rolename.end());
         }
         return true;
+    }
+
+    /// <summary>
+    /// 玩家死亡事件
+    /// </summary>
+    void onDeath() {
+        //g_client->onPlayerDeath(this);
     }
 };

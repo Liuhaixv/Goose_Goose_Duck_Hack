@@ -21,10 +21,6 @@ public:
 
     Memory() {
         searchGameProcess();
-        if (processHandle != NULL) {
-            //读取内存地址范围
-            readAllMemoryRegions();
-        }
     }
 
     /// <summary>
@@ -58,6 +54,12 @@ public:
         }
 
         //Success
+
+        if (processHandle != NULL) {
+            //读取内存地址范围
+            readAllMemoryRegions();
+        }
+
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 
