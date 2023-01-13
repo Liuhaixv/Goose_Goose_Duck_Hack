@@ -88,7 +88,7 @@ namespace Offsets {
 
 namespace GameAssembly {
     namespace Class {
-        constexpr int64_t PlayerControllerClass = 0x3D0D0E8;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t PlayerControllerClass = 0x3D97140;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
     }
     /// <summary>
     /// 通过下标返回PlayerController的偏移数组<para/>
@@ -110,7 +110,7 @@ namespace GameAssembly {
     }
 
     static std::vector<int64_t> localPlayer() {
-        std::vector<int64_t> offsets = { 0x3CBF250, 0xB8, 0x20, 0x0 };
+        std::vector<int64_t> offsets = { 0x3D48AE8, 0xB8, 0x20, 0x0 };
 
         return offsets;
     }
