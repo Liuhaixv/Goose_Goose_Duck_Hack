@@ -120,6 +120,10 @@ public:
             return false;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         if (address != this->address) {
             reset();
             this->address = address;
@@ -142,5 +146,20 @@ private:
         this->playerController.update(playerController);
 
         return true;
+    }
+
+    //检查该地址是LocalPlayer实例
+    bool validateAddress(int64_t address) {
+
+        int64_t localPlayerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_LocalPlayerClass);
+
+        if (localPlayerClass == NULL) {
+            //Error finding class
+            return false;
+        }
+
+        int64_t localPlayerClass_ = memory->read_mem<int64_t>(address);
+
+        return localPlayerClass == localPlayerClass_;
     }
 };
