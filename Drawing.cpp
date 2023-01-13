@@ -157,9 +157,6 @@ void drawMinimap() {
         str("SS MotherGoose","老妈鹅星球飞船")
     };
 
-    static bool toggles[] = { true, false, false, false, false };
-
-
     static int selected_map = -1;
 
     if (ImGui::Button(str("Select map", "选择地图")))

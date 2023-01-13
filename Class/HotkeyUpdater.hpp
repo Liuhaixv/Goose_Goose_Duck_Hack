@@ -22,46 +22,28 @@ public:
         {
             Sleep(2);
 
-            //Left ALT to enable noclip
-            //左ALT键开启穿墙
-            if (GetAsyncKeyState(VK_LMENU))
+            //长按类
             {
-                hackSettings->enableNoclip = true;
-            }
-            else {
-                hackSettings->enableNoclip = false;
-            }
-
-            bool insert = GetAsyncKeyState(VK_INSERT);
-            //Insert to enable GUI menu
-            //Insert键开关菜单
-            if (insert)
-            {
-                if (!pressingInsert) {
-                    pressingInsert = true;
-                    //switch
-                    hackSettings->guiSettings.b_enableMenu = !hackSettings->guiSettings.b_enableMenu;
-                    //UI::makeWindowClickable(UI::hwnd, hackSettings->guiSettings.b_enableMenu);
+                //Left ALT to enable noclip
+                //左ALT键开启穿墙
+                if (GetAsyncKeyState(VK_LMENU))
+                {
+                    hackSettings->enableNoclip = true;
+                }
+                else {
+                    hackSettings->enableNoclip = false;
                 }
             }
-            else {
-                pressingInsert = false;
-            }
 
-            bool del = GetAsyncKeyState(VK_DELETE);
-            //DEL键开关地图
-            if (del)
-            {
-                if (!pressingDel) {
-                    pressingDel = true;
+            //开关类
 
-                    hackSettings->guiSettings.b_enableMinimap = !hackSettings->guiSettings.b_enableMinimap;
-
-                }
-            }
-            else {
-                pressingDel = false;
-            }
+            //Insert switch main menu
+            checkSwitchHotkey(VK_INSERT, &this->pressingInsert, &hackSettings->guiSettings.b_enableMenu);
+            //Delete to switch minimap
+            checkSwitchHotkey(VK_DELETE,&this->pressingDel, &hackSettings->guiSettings.b_enableMinimap );
+            //TODO:END key to quit program
+            //END键结束辅助
+            checkSwitchHotkey(VK_END,&this->pressingEnd, &hackSettings->b_quitProgram );              
         }
     }
 private:
@@ -69,4 +51,26 @@ private:
 
     bool pressingInsert = GetAsyncKeyState(VK_LMENU);
     bool pressingDel = GetAsyncKeyState(VK_DELETE);
+    bool pressingEnd = GetAsyncKeyState(VK_END);
+
+    void checkSwitchHotkey(int VK, bool* wasPressingKey, bool* b_switch) {
+        bool pressingAtThisTime = GetAsyncKeyState(VK);
+
+        //当前正在按下热键
+        if (pressingAtThisTime)
+        {
+            //之前没有按过热键，说明现在是刚刚按下热键，此时修改开关的bool值
+            if (!(*wasPressingKey)) {
+                //之前没按过，现在已经是按下的状态了
+                *wasPressingKey = true;
+
+                //切换开关
+                *b_switch = !(*b_switch);
+            }
+        }
+        else {
+            //没有按热键
+            *wasPressingKey = false;
+        }
+    }
 };
