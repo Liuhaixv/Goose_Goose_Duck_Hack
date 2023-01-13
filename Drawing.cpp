@@ -36,6 +36,9 @@ void Drawing::Draw() {
     static bool* b_previousEnableMenu = nullptr;
     if (isActive())
     {
+        if (hackSettings.guiSettings.b_debug) {
+            ImGui::ShowDemoWindow();
+        }
         drawMinimap();
 
         //绘制菜单
@@ -158,9 +161,11 @@ void drawMinimap() {
     ImGui::SameLine();
     ImGui::TextUnformatted(selected_map == -1 ? str("<None>", "无") : mapNames[selected_map]);
 
-    ImGui::SameLine();
-    if (ImGui::Button(str("Debug map offsets", "调试地图偏移"))) {
-        ImGui::OpenPopup("debug_map_offsets");
+    if (hackSettings.guiSettings.b_debug) {
+        ImGui::SameLine();
+        if (ImGui::Button(str("Debug map offsets", "调试地图偏移"))) {
+            ImGui::OpenPopup("debug_map_offsets");
+        }
     }
 
     //选择地图图片
@@ -321,8 +326,6 @@ void drawMinimap() {
 }
 
 void drawMenu() {
-    ImGui::ShowDemoWindow();
-
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
 

@@ -35,7 +35,7 @@ struct GameMap {
         //地图的最左下角并不是从(0, 0)坐标开始的
         //所以这里需要加上对应的偏移
         x += this->offset.x;
-        x += this->offset.y;
+        y += this->offset.y;
 
         return { x, y };
     }
