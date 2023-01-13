@@ -124,7 +124,7 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
         Vector3* position = &ptr->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
-        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y + relativePosition.y };
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
         drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
