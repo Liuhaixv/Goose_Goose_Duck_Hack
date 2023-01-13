@@ -90,8 +90,8 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
 
     Vector3* position = &playerController->v3_position;
 
-    Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
-    Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x * map.scaleToDisplay, mapLeftBottomPointOnScreen.y + relativePosition.y * map.scaleToDisplay };
+    Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
+    Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x, mapLeftBottomPointOnScreen.y - relativePosition.y };
 
     drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 1.0f, 1.0f));
     drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), str("You", "你"));
@@ -120,8 +120,8 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
 
         Vector3* position = &ptr->v3_position;
 
-        Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
-        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x * map.scaleToDisplay, mapLeftBottomPointOnScreen.y + relativePosition.y * map.scaleToDisplay };
+        Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y + relativePosition.y };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
         drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
@@ -271,7 +271,11 @@ void drawMinimap() {
             //处理鼠标移动到图片上的逻辑
             if (ImGui::IsItemHovered())
             {
-                Vector2 positionInGame = gameMap->screenPointToPositionIngame({ io.MousePos.x - mousePositionLeftBottomOfGamemap.x,  mousePositionLeftBottomOfGamemap.y - io.MousePos.y });
+                Vector2 positionInGame = gameMap->relativePositionLeftBottom_to_PositionInGame({
+                    io.MousePos.x - mousePositionLeftBottomOfGamemap.x,
+                    //因为屏幕坐标Y轴是和游戏内Y轴相反的
+                    mousePositionLeftBottomOfGamemap.y - io.MousePos.y
+                });
 
                 //处理点击传送的逻辑
                 ImGui::BeginTooltip();
