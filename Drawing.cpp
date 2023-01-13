@@ -199,7 +199,7 @@ void drawMinimap() {
             pos = ImGui::GetCursorScreenPos();
             if (ImGui::IsItemHovered())
             {
-                Vector2 point = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
+                Vector2 positionInGame = gameMap->screenPointToPositionIngame({ io.MousePos.x - pos.x, io.MousePos.y - pos.y });
 
                 
 
@@ -210,13 +210,13 @@ void drawMinimap() {
                 //地图刚被点击
                 if (gameMapClicked) {
                     //TODO 传送玩家
-                    //shouldTP = true;
+                    g_client->teleportTo(positionInGame);
                     hasTPedWhenHoveringOnGameMap = true;
-                    lastTPedPosition = point;
+                    lastTPedPosition = positionInGame;
                 }
 
                 if (!hasTPedWhenHoveringOnGameMap) {
-                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), point.x, point.y);
+                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"), positionInGame.x, positionInGame.y);
                 }
                 else {
                     //尚未点击
