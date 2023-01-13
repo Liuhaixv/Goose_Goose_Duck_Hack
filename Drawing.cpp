@@ -40,10 +40,14 @@ void Drawing::Draw() {
             ImGui::ShowDemoWindow();
         }
 
+
+        if (hackSettings.guiSettings.b_enableMinimap) {
+            drawMinimap();
+        }
+
         //绘制菜单
         if (hackSettings.guiSettings.b_enableMenu) {
             drawMenu();
-            drawMinimap();
         }
 
         //ESP
@@ -134,7 +138,7 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
 
 void drawMinimap() {
     ImGuiIO& io = ImGui::GetIO();
-
+    ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin("Minimap");
 
     GameMap* gameMap = nullptr;
@@ -343,7 +347,7 @@ void drawMinimap() {
 void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
-
+    ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin(str("Main", "主菜单"));
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;

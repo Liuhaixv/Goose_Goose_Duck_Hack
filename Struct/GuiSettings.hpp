@@ -2,6 +2,11 @@
 struct GuiSettings {
     //全局开关
     bool b_draw = true;
+
+    //打开地图
+    bool b_enableMinimap = true;
+
+
     //打开设置菜单
     bool b_enableMenu = true;
 

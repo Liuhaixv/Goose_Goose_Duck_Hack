@@ -49,10 +49,27 @@ public:
             else {
                 pressingInsert = false;
             }
+
+
+            bool del = GetAsyncKeyState(VK_DELETE);
+            //DEL键开关地图
+            if (del)
+            {
+                if (!pressingDel) {
+                    pressingDel = true;
+
+                    hackSettings->guiSettings.b_enableMinimap = !hackSettings->guiSettings.b_enableMinimap;
+
+                }
+            }
+            else {
+                pressingDel = false;
+            }
         }
     }
 private:
     HackSettings* hackSettings = nullptr;
 
     bool pressingInsert = GetAsyncKeyState(VK_LMENU);
+    bool pressingDel = GetAsyncKeyState(VK_LMENU);
 };
