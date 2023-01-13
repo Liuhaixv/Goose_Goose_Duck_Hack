@@ -13,8 +13,6 @@ public:
         this->hackSettings = hackSettings;
     }
 
-
-    //TODO: 移到专门的Hack线程类
     /// <summary>
     /// 监听键盘热键修改设置<para/>
     /// Thread that keeps updating hackSettings by listening to keyboard
@@ -50,7 +48,6 @@ public:
                 pressingInsert = false;
             }
 
-
             bool del = GetAsyncKeyState(VK_DELETE);
             //DEL键开关地图
             if (del)
@@ -71,5 +68,5 @@ private:
     HackSettings* hackSettings = nullptr;
 
     bool pressingInsert = GetAsyncKeyState(VK_LMENU);
-    bool pressingDel = GetAsyncKeyState(VK_LMENU);
+    bool pressingDel = GetAsyncKeyState(VK_DELETE);
 };

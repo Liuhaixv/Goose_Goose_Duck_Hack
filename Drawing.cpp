@@ -138,6 +138,8 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
 
 void drawMinimap() {
     ImGuiIO& io = ImGui::GetIO();
+
+    //设置小地图初始化大小
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin("Minimap");
 
@@ -284,7 +286,7 @@ void drawMinimap() {
                     io.MousePos.x - mousePositionLeftBottomOfGamemap.x,
                     //因为屏幕坐标Y轴是和游戏内Y轴相反的
                     mousePositionLeftBottomOfGamemap.y - io.MousePos.y
-                });
+                    });
 
                 //处理点击传送的逻辑
                 ImGui::BeginTooltip();
