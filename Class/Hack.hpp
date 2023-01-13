@@ -85,6 +85,10 @@ public:
 
     //TODO: reset player's speed when game finished
     void speedHack(LocalPlayer* localPlayer) {
+        if (!this->client->hackSettings->guiSettings.b_enableSpeedHack) {
+            return;
+        }
+
         float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
 
         if (targetSpeed < 0) {

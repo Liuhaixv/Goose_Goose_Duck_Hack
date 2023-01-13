@@ -141,7 +141,7 @@ void drawMinimap() {
 
     //设置小地图初始化大小
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
-    ImGui::Begin("Minimap");
+    ImGui::Begin("Minimap",NULL, ImGuiWindowFlags_NoScrollbar);
 
     GameMap* gameMap = nullptr;
 
@@ -363,6 +363,8 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
+            ImGui::Checkbox(str("Enable","启用"), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::SameLine();
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
                 &hackSettings.guiSettings.f_baseMovementSpeed,

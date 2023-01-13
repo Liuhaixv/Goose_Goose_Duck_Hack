@@ -36,6 +36,8 @@ Hack hack;
 HackSettings hackSettings;
 Client* g_client;
 
+
+
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置

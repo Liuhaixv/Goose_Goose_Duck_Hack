@@ -21,7 +21,7 @@ public:
 
     }
 
-    int64_t address = NULL;
+    int64_t address = NULL;    
 
     bool b_isSilenced = false;
     bool b_isInfected = false;
@@ -35,7 +35,7 @@ public:
     //本轮是否杀过人
     bool b_hasKilledThisRound = false;
 
-    int i_playerRoleId = 0;
+    int i_playerRoleId = 0; 
     int invisibilityDistance = 0;
     int i_timeOfDeath = 0;
 
@@ -194,6 +194,10 @@ public:
 
 private:
     Memory* memory = nullptr;
+
+    std::vector<PlayerController*> getPlayersNearby() {
+
+    }
 
     //检查该地址是PlayerController实例
     bool validateAddress(int64_t address) {
