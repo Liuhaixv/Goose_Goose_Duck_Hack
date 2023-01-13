@@ -71,10 +71,36 @@ static void HelpMarker(const char* desc)
 }
 
 
+
+bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+    static float circleRadius = 10;
+
+    LocalPlayer* localPlayer = &g_client->localPlayer;
+
+    if (localPlayer->address == NULL) {
+        return false;
+    }
+
+    PlayerController* playerController = &localPlayer->playerController;
+
+    if (playerController->address == NULL || playerController->b_isLocal == false) {
+        return false;
+    }
+
+    Vector3* position = &playerController->v3_position;
+
+    Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
+    Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x * map.scaleToDisplay, mapLeftBottomPointOnScreen.y + relativePosition.y * map.scaleToDisplay };
+
+    drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 1.0f, 1.0f));
+    drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), str("You", "你"));
+}
+
 /// <summary>
 /// 在地图上绘制玩家
 /// </summary>
-void drawPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
+bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     static float circleRadius = 10;
 
@@ -83,6 +109,15 @@ void drawPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     PlayerController* ptr = playerControllers;
 
     for (int i = 0; i < g_client->n_players; (i++, ptr++)) {
+        if (ptr->address == NULL) {
+            continue;
+        }
+
+        //单独处理本地玩家的绘制
+        if (ptr->b_isLocal) {
+            continue;
+        }
+
         Vector3* position = &ptr->v3_position;
 
         Vector2 relativePosition = map.positionIngameToScreenPoint({ position->x, position->y });
@@ -91,6 +126,7 @@ void drawPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
         drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
     }
+    return true;
 }
 
 void drawMinimap() {
@@ -121,6 +157,13 @@ void drawMinimap() {
         ImGui::OpenPopup("select_map");
     ImGui::SameLine();
     ImGui::TextUnformatted(selected_map == -1 ? str("<None>", "无") : mapNames[selected_map]);
+
+    ImGui::SameLine();
+    if (ImGui::Button(str("Debug map offsets", "调试地图偏移"))) {
+        ImGui::OpenPopup("debug_map_offsets");
+    }
+
+    //选择地图图片
     if (ImGui::BeginPopup("select_map"))
     {
         ImGui::Text("Aquarium");
@@ -132,6 +175,7 @@ void drawMinimap() {
             }
         ImGui::EndPopup();
     }
+
     if (selected_map < 0) {
         //尚未选择地图
         //Have not selected map
@@ -140,6 +184,26 @@ void drawMinimap() {
     else {
         //读取地图
         gameMap = &UI::miniMaps.at(selected_map);
+
+        //弹出调试界面
+        if (ImGui::BeginPopup("debug_map_offsets"))
+        {
+            static Vector2 tpPosition = { 0.0f,0.0f };
+            if (ImGui::Button(str("TP to: ", "传送到: "))) {
+                g_client->teleportTo(tpPosition);
+            }
+            ImGui::InputFloat("debug_map_tp_X", &tpPosition.x);
+            ImGui::InputFloat("debug_map_tp_Y", &tpPosition.y);
+
+
+            ImGui::Text("Offsets:");
+            ImGui::SliderFloat("debug_map_offsets_X", &gameMap->offset.x, -50, 50);
+            ImGui::SliderFloat("debug_map_offsets_Y", &gameMap->offset.y, -50, 50);
+            ImGui::Text("Scale To Game Position:");
+            ImGui::SliderFloat("Scale", &gameMap->scaleToGamePosition, 0.02, 0.05, "%.4f");
+
+            ImGui::EndPopup();
+        }
 
         //ImGui::Text("pointer = %p", gameMap);
         //ImGui::Text("size = %d x %d", gameMap->width, gameMap->height);
@@ -232,7 +296,8 @@ void drawMinimap() {
 
             //ImGui::GetForegroundDrawList()->AddCircleFilled({ pos.x,pos.y }, 20, ImColor(1.0f, 0.0f, 0.0f));
             //在地图上绘制玩家位置
-            drawPlayersOnMap(*gameMap, pos);
+            drawOtherPlayersOnMap(*gameMap, pos);
+            drawLocalPlayerOnMap(*gameMap, pos);
         }
         else {
             //不显示游戏地图

@@ -24,7 +24,10 @@ struct GameMap {
     /// <param name="screenRelativePoint"></param>
     /// <returns></returns>
     Vector2 screenPointToPositionIngame(Vector2 screenRelativePoint) {
+        //因为游戏内坐标很小，所以这里坐标换算中先处理缩放
+
         float region_x = screenRelativePoint.x;
+        //反向Y轴
         float region_y = screenRelativePoint.y * -1;
 
         if (region_x < 0.0f) { region_x = 0.0f; }
