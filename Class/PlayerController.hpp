@@ -40,7 +40,8 @@ public:
     int i_timeOfDeath = 0;
 
     std::string nickname = "";
-    char roleName[64] = "";
+    std::string roleName = "";
+
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
     void setMemory(Memory* memory) {
@@ -70,8 +71,48 @@ public:
         i_timeOfDeath = 0;
 
         nickname = "";
-        roleName[0] = '\0';
+        roleName = "";
         v3_position = { 0.0f, 0.0f, 0.0f };
+    }
+
+    /// <summary>
+    /// 传送玩家到指定的点
+    /// </summary>
+    /// <param name="position"></param>
+    bool teleportTo(Vector2 to) {
+        //无效指针
+        //invalid pointer address
+        if (this->address == NULL) {
+            return false;
+        }
+
+        //检查是否为本地玩家
+        if (!this->b_isLocal) {
+            return false;
+        }
+
+        std::vector<int64_t> offsets = {
+            Offsets::PlayerController::ptr_Rigidbody2D,
+            Offsets::Rigidbody2D::ptr_UnknownClass0,
+            Offsets::Rigidbody2D::UnknownClass0::ptr_UnknownFields,
+            Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position
+        };
+
+        int64_t position = memory->FindPointer(this->address, offsets);
+
+        //读取要写入的位置的地址无效
+        if (position == NULL) {
+            return false;
+        }
+
+        try {
+            memory->write_mem<Vector2>(position, to);
+        }
+        catch (...) {
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -96,24 +137,33 @@ public:
         return true;
     }
 
+    //TODO: 导致程序崩溃？
     void updateNickname() {
-        byte tmpNick[42]{};
 
-        int64_t* nickname_obj = (memory->read_mem<int64_t*>(this->address + Offsets::PlayerController::fl_nickname));
-        byte* p_str = (byte*)(nickname_obj)+0x14;
+        int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
+        int64_t firstChar = nickname + 0x14;
 
-        int64_t length = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname) + 0x10);
+        int length = memory->read_mem<int>(nickname + 0x10);
 
-        byte* p_tmpNick = tmpNick;
-        for (int i = 0; i < length * 2 + 1; i++) {
-            byte byte_ = memory->read_mem<byte>((int64_t)(p_str + i));
-            //byte byte_= *(p_str + i);
-            *(p_tmpNick + i) = byte_;
+        char16_t buffer[20];
+
+
+        if (length == 0) {
+            buffer[0] = 0;
+            return;
         }
 
-        std::wstring string_to_convert = std::wstring(reinterpret_cast<wchar_t*>(tmpNick), length);
+        for (int i = 0; i < length; i++) {
+            char16_t c = memory->read_mem<char16_t>(firstChar + sizeof(char16_t) * i);
+            //byte byte_= *(p_str + i);
+            buffer[i] = c;
+        }
+        buffer[length] = 0;
 
-        this->nickname = Utils::wstring2string(string_to_convert);
+        //std::wstring wstr(reinterpret_cast<wchar_t*>(buffer), length);
+        //this->nickname = utils.wstring2string(wstr);
+
+        this->nickname = utils.u8From16(buffer);
     }
 
     /// <summary>
@@ -131,11 +181,29 @@ public:
             this->address = address;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         return update();
     }
 
 private:
     Memory* memory = nullptr;
+
+    //检查该地址是PlayerController实例
+    bool validateAddress(int64_t address) {
+        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::PlayerControllerClass);
+
+        if (playerControllerClass == NULL) {
+            //Error finding class
+            return false;
+        }
+
+        int64_t playerControllerClass_ = memory->read_mem<int64_t>(address);
+
+        return playerControllerClass == playerControllerClass_;
+    }
 
     /// <summary>
     /// 更新玩家数据<para/>
@@ -146,12 +214,12 @@ private:
     bool update() {
         //无效指针
         //invalid pointer address
-        if (this->memory == NULL ||this->address == NULL) {
+        if (this->memory == NULL || this->address == NULL) {
             return false;
         }
 
         //更新昵称
-        if (this->nickname == "") {
+        if (this->nickname[0] == 0) {
             updateNickname();
         }
 
@@ -175,7 +243,9 @@ private:
 
             //更新死亡时间
             i_timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
-            strcpy(roleName, utils.getRoleName(i_playerRoleId));
+
+            std::u8string rolename = utils.getRoleName(i_playerRoleId);
+            roleName = std::string(rolename.begin(), rolename.end());
         }
         return true;
     }

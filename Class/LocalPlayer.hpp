@@ -25,10 +25,10 @@ public:
     PlayerController playerController;
   
     /// <summary>
-    /// 获取移动速度
+    /// 获取当前移动速度
     /// </summary>
     /// <returns></returns>
-    float getBaseMovementSpeed() {
+    float getMovementSpeed() {
         //无效指针
         //invalid pointer address
         if (this->address == NULL) {
@@ -36,9 +36,9 @@ public:
         }
         try {
             std::vector<int64_t> offsets = {
-                Offsets::LocalPlayer::ptr_LocalPlayer_class,
-               Offsets::LocalPlayer::LocalPlayer_c::ptr_staticFields,
-               Offsets::LocalPlayer::LocalPlayer_c::StaticField::f_baseMovementSpeed};
+                Offsets::LocalPlayer::ptr_Class,
+               Offsets::LocalPlayer::Class::ptr_staticFields,
+               Offsets::LocalPlayer::Class::StaticField::f_movementSpeed};
 
             int64_t addr = memory->FindPointer(this->address, offsets);
             if (addr == NULL) {
@@ -59,6 +59,41 @@ public:
 
         return true;
     }
+    /// <summary>
+    /// 获取初始速度
+    /// </summary>
+    /// <returns></returns>
+    float getBaseMovementSpeed() {
+        //无效指针
+        //invalid pointer address
+        if (this->address == NULL) {
+            return -1;
+        }
+        try {
+            std::vector<int64_t> offsets = {
+                Offsets::LocalPlayer::ptr_Class,
+               Offsets::LocalPlayer::Class::ptr_staticFields,
+               Offsets::LocalPlayer::Class::StaticField::f_baseMovementSpeed };
+
+            int64_t addr = memory->FindPointer(this->address, offsets);
+            if (addr == NULL) {
+                return -1;
+            }
+
+            float result = memory->read_mem<float>(addr);
+
+            if (result <= 0) {
+                return -1;
+            }
+
+            return result;
+        }
+        catch (...) {
+            return -1;
+        }
+
+        return true;
+    }    
 
     void setMemory(Memory* memory) {
         this->memory = memory;

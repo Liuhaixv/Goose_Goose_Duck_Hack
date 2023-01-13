@@ -8,19 +8,24 @@
 
 #include"utils.hpp"
 #include "Enum/OpenProcessState.hpp"
+#include <map>
 
 extern Utils utils;
 
 class Memory {
 public:
     std::string processName = "Goose Goose Duck.exe";
-	DWORD pID = NULL;
-	HANDLE processHandle = NULL;
-	int64_t gameAssemblyBaseAddress = NULL;
+    DWORD pID = NULL;
+    HANDLE processHandle = NULL;
+    int64_t gameAssemblyBaseAddress = NULL;
 
-	Memory() {
-        searchGameProcess();		
-	}
+    Memory() {
+        searchGameProcess();
+        if (processHandle != NULL) {
+            //读取内存地址范围
+            readAllMemoryRegions();
+        }
+    }
 
     /// <summary>
     /// 搜索游戏进程
@@ -56,160 +61,217 @@ public:
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 
-	template <typename var>
-	bool write_mem(int64_t address, var value) {
-		return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
-	}
+    template <typename var>
+    bool write_mem(int64_t address, var value) {
+        return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
+    }
 
-	template <typename var>
-	var read_mem(int64_t address) {
-		var value;
-		ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), NULL);
-		return value;
-	}
+    template <typename var>
+    var read_mem(int64_t address) {
+        var value;
+        ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), NULL);
+        return value;
+    }
 
     void copy_bytes(int64_t src_address, int64_t dst_address, int64_t numOfBytes) {
         ReadProcessMemory(processHandle, (LPCVOID)src_address, &dst_address, numOfBytes, NULL);
     }
 
 
-	int64_t FindPointer(int64_t moduleBaseAddress, int offset_num, int64_t offsets[])
-	{
-		if (offset_num <= 0) {
-			return NULL;
-		}
+    int64_t FindPointer(int64_t moduleBaseAddress, int offset_num, int64_t offsets[])
+    {
+        if (offset_num <= 0) {
+            return NULL;
+        }
 
-		int64_t Address = moduleBaseAddress + offsets[0];
-		Address = read_mem<int64_t>(Address);
-		//ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
+        int64_t Address = moduleBaseAddress + offsets[0];
+        Address = read_mem<int64_t>(Address);
+        //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
-		if (Address == 0) {
-			return NULL;
-		}
+        if (Address == 0) {
+            return NULL;
+        }
 
-		for (int i = 1; i < offset_num; i++) //Loop trough the offsets
-		{
-			Address = read_mem<int64_t>(Address);
-			//ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
-			if (Address == 0) {
-				return NULL;
-			}
-			Address += offsets[i];
-		}
-		return Address;
-	}
+        for (int i = 1; i < offset_num; i++) //Loop trough the offsets
+        {
+            Address = read_mem<int64_t>(Address);
+            //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
+            if (Address == 0) {
+                return NULL;
+            }
+            Address += offsets[i];
+        }
+        return Address;
+    }
 
-	int64_t FindPointer(int64_t baseAddress, std::vector<int64_t> offsets)
-	{
-		if (offsets.size() <= 0) {
-			return NULL;
-		}
+    int64_t FindPointer(int64_t baseAddress, std::vector<int64_t> offsets)
+    {
+        if (offsets.size() <= 0) {
+            return NULL;
+        }
 
-		int64_t Address = baseAddress + offsets[0];
-		Address = read_mem<int64_t>(Address);
-		//ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
+        int64_t Address = baseAddress + offsets[0];
+        Address = read_mem<int64_t>(Address);
+        //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
-		if (offsets.size() <= 1) {
-			return Address;
-		}
+        if (offsets.size() <= 1) {
+            if (isAddressInMemoryRegions(Address)) {
+                return Address;
+            }
+            return NULL;
+        }
 
-		Address += offsets[1];
+        Address += offsets[1];
 
-		for (int i = 2; i < offsets.size(); i++) //Loop trough the offsets
-		{
-			Address = read_mem<int64_t>(Address);
-			//ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
-			if (Address == 0) {
-				return NULL;
-			}
-			Address += offsets[i];
-		}
-		return Address;
-	}
+        for (int i = 2; i < offsets.size(); i++) //Loop trough the offsets
+        {
+            Address = read_mem<int64_t>(Address);
+
+            //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
+
+            if (Address == 0 || !isAddressInMemoryRegions(Address)) {
+                return NULL;
+            }
+            Address += offsets[i];
+        }
+        return Address;
+    }
+
+
 
 private:
-	/// <summary>
-	/// 获取64位进程的模块的基址<para/>
-	/// Get baseAddress of x64 process's module
-	/// </summary>
-	/// <param name="lpszModuleName">Name of module 模块的名称</param>
-	/// <param name="pID">pid of process 进程pid</param>
-	/// <returns>address 地址</returns>
-	int64_t GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
-		int64_t dwModuleBaseAddress = NULL;
-		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
-		MODULEENTRY32 ModuleEntry32 = { 0 };
-		ModuleEntry32.dwSize = sizeof(MODULEENTRY32);
 
-		if (Module32First(hSnapshot, &ModuleEntry32)) //store first Module in ModuleEntry32
-		{
-			do {
-				if (_tcscmp(ModuleEntry32.szModule, lpszModuleName) == 0) // if Found Module matches Module we look for -> done!
-				{
-					dwModuleBaseAddress = (int64_t)ModuleEntry32.modBaseAddr;
-					break;
-				}
-			} while (Module32Next(hSnapshot, &ModuleEntry32)); // go through Module entries in Snapshot and store in ModuleEntry32
+    std::map<int64_t, int64_t> map;
+    /// <summary>
+    /// 获取64位进程的模块的基址<para/>
+    /// Get baseAddress of x64 process's module
+    /// </summary>
+    /// <param name="lpszModuleName">Name of module 模块的名称</param>
+    /// <param name="pID">pid of process 进程pid</param>
+    /// <returns>address 地址</returns>
+    int64_t GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
+        int64_t dwModuleBaseAddress = NULL;
+        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
+        MODULEENTRY32 ModuleEntry32 = { 0 };
+        ModuleEntry32.dwSize = sizeof(MODULEENTRY32);
 
-
-		}
-		CloseHandle(hSnapshot);
-		return dwModuleBaseAddress;
-	}
-
-	/*
-	//works in x86
-	DWORD GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
-		DWORD dwModuleBaseAddress = 0;
-		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
-		MODULEENTRY32 ModuleEntry32 = { 0 };
-		ModuleEntry32.dwSize = sizeof(MODULEENTRY32);
-
-		if (Module32First(hSnapshot, &ModuleEntry32)) //store first Module in ModuleEntry32
-		{
-			do {
-				if (_tcscmp(ModuleEntry32.szModule, lpszModuleName) == 0) // if Found Module matches Module we look for -> done!
-				{
-					dwModuleBaseAddress = (DWORD)ModuleEntry32.modBaseAddr;
-					break;
-				}
-			} while (Module32Next(hSnapshot, &ModuleEntry32)); // go through Module entries in Snapshot and store in ModuleEntry32
+        if (Module32First(hSnapshot, &ModuleEntry32)) //store first Module in ModuleEntry32
+        {
+            do {
+                if (_tcscmp(ModuleEntry32.szModule, lpszModuleName) == 0) // if Found Module matches Module we look for -> done!
+                {
+                    dwModuleBaseAddress = (int64_t)ModuleEntry32.modBaseAddr;
+                    break;
+                }
+            } while (Module32Next(hSnapshot, &ModuleEntry32)); // go through Module entries in Snapshot and store in ModuleEntry32
 
 
-		}
-		CloseHandle(hSnapshot);
-		return dwModuleBaseAddress;
-	}
-	*/
+        }
+        CloseHandle(hSnapshot);
+        return dwModuleBaseAddress;
+    }
 
-	/// <summary>
-	/// 通过名称获取进程pid<para/>
-	/// Get process' pid by name
-	/// </summary>
-	/// <param name="targetProcess"></param>
-	/// <returns></returns>
-	static DWORD get_porcId_by_name(const std::string_view targetProcess) {
-		DWORD procId = 0;
-		HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-		if (hSnap != INVALID_HANDLE_VALUE)
-		{
-			PROCESSENTRY32 procEntry;
-			procEntry.dwSize = sizeof(procEntry);
-			if (Process32First(hSnap, &procEntry))
-			{
-				do
-				{
-					if (!targetProcess.compare(procEntry.szExeFile))
-					{
-						procId = procEntry.th32ProcessID;
-						//std::cout << "found pID:" << procId << std::endl;
-						//break;
-					}
-				} while (Process32Next(hSnap, &procEntry));
-			}
-		}
-		CloseHandle(hSnap);
+    void readAllMemoryRegions() {
+        unsigned char* addr = 0;
 
-		return procId;
-	}
+        MEMORY_BASIC_INFORMATION mbi;
+
+        //枚举所有内存区域
+        while (VirtualQueryEx(processHandle, addr, &mbi, sizeof(mbi)))
+        {
+            if (mbi.State == MEM_COMMIT && mbi.Protect != PAGE_NOACCESS && mbi.Protect != PAGE_GUARD)
+            {
+                //std::cout << "base : 0x" << std::hex << mbi.BaseAddress << " end : 0x" << std::hex << (uintptr_t)mbi.BaseAddress + mbi.RegionSize << " Protection :" << mbi.Protect << "\n";
+                //加入内存范围
+                map.insert(std::pair<int64_t, int64_t>((int64_t)mbi.BaseAddress, (int64_t)mbi.RegionSize));
+            }
+            addr += mbi.RegionSize;
+        }
+    }
+
+    /// <summary>
+    /// 判断地址是否在进程的内存范围内
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    bool isAddressInMemoryRegions(int64_t address) {
+
+        if (address < (*map.begin()).first) {
+            //std::cout << "内存地址小于最小范围!" << std::endl;
+            return false;
+        }
+
+        std::map<int64_t, int64_t>::iterator low, prev;
+        low = map.lower_bound(address);
+
+        if (low == map.end()) {
+            low = std::prev(map.end());
+        }
+        else if (low != map.begin()) {
+            low = std::prev(low);
+        }
+
+        //std::cout << std::hex << (*low).first;
+
+        if (address < (*low).first + (*low).second) {
+            return true;
+        }
+        return false;
+    }
+
+    /*
+    //works in x86
+    DWORD GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
+        DWORD dwModuleBaseAddress = 0;
+        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID); // make snapshot of all modules within process
+        MODULEENTRY32 ModuleEntry32 = { 0 };
+        ModuleEntry32.dwSize = sizeof(MODULEENTRY32);
+
+        if (Module32First(hSnapshot, &ModuleEntry32)) //store first Module in ModuleEntry32
+        {
+            do {
+                if (_tcscmp(ModuleEntry32.szModule, lpszModuleName) == 0) // if Found Module matches Module we look for -> done!
+                {
+                    dwModuleBaseAddress = (DWORD)ModuleEntry32.modBaseAddr;
+                    break;
+                }
+            } while (Module32Next(hSnapshot, &ModuleEntry32)); // go through Module entries in Snapshot and store in ModuleEntry32
+
+
+        }
+        CloseHandle(hSnapshot);
+        return dwModuleBaseAddress;
+    }
+    */
+
+    /// <summary>
+    /// 通过名称获取进程pid<para/>
+    /// Get process' pid by name
+    /// </summary>
+    /// <param name="targetProcess"></param>
+    /// <returns></returns>
+    static DWORD get_porcId_by_name(const std::string_view targetProcess) {
+        DWORD procId = 0;
+        HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (hSnap != INVALID_HANDLE_VALUE)
+        {
+            PROCESSENTRY32 procEntry;
+            procEntry.dwSize = sizeof(procEntry);
+            if (Process32First(hSnap, &procEntry))
+            {
+                do
+                {
+                    if (!targetProcess.compare(procEntry.szExeFile))
+                    {
+                        procId = procEntry.th32ProcessID;
+                        //std::cout << "found pID:" << procId << std::endl;
+                        //break;
+                    }
+                } while (Process32Next(hSnap, &procEntry));
+            }
+        }
+        CloseHandle(hSnap);
+
+        return procId;
+    }
 };

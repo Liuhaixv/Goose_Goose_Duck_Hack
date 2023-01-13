@@ -36,7 +36,7 @@ public:
         while (true) {
             updateLocalPlayer(localPlayer);
             updatePlayerController(playerControllers, players);
-            Sleep(1000);
+            Sleep(30);
         }
     }
 private:
@@ -54,7 +54,7 @@ private:
                 if (!this->client->hackSettings->disableFogOfWar) {
                     //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
-                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
                     int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
 
                     memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 131090);
@@ -70,7 +70,7 @@ private:
         }
     }
 
-    
+
 
     /// <summary>
     /// 更新本地玩家
@@ -78,7 +78,7 @@ private:
     /// <param name="playerController"></param>
     void updateLocalPlayer(LocalPlayer* localPlayer) {
         //获取内存中对应玩家槽位的实例地址
-        std::vector<int64_t> offsets = Offsets::GameAssembly::localPlayer();
+        std::vector<int64_t> offsets = GameAssembly::localPlayer();
         //offsets.pop_back();
         //offsets.push_back(Offsets::LocalPlayer::ptr_playerController);
         //offsets.push_back(0x0);
@@ -98,7 +98,7 @@ private:
         updatePlayerController(&localPlayer->playerController, localPlayerController);
 
         if (localPlayer->playerController.address == NULL) {
-            return;
+            localPlayer->playerController.reset();
         }
 
         if (localPlayer->playerController.b_isPlayerRoleSet) {
@@ -113,9 +113,13 @@ private:
             if (b_isPlayerRoleSet) {
                 client->onGameEnded();
                 b_isPlayerRoleSet = false;
+                b_isPlayerRoleSet = false;
             }
         }
 
+        if (localPlayer->playerController.address == NULL) {
+            return;
+        }
 
         hack.removeFogOfWar(&localPlayer->playerController);
         hack.noclip(&localPlayer->playerController);
@@ -155,7 +159,7 @@ private:
             PlayerController* ptr_playerController = &(playerControllers[i]);
 
             //获取内存中对应玩家槽位的实例地址
-            std::vector<int64_t> offsets = Offsets::GameAssembly::playerControllerByIndex(i);
+            std::vector<int64_t> offsets = GameAssembly::playerControllerByIndex(i);
             int64_t playerControllerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
 
             if (updatePlayerController(ptr_playerController, playerControllerAddr)) {

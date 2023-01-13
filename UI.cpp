@@ -5,11 +5,119 @@ ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
 ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
+std::map<int, GameMap> UI::miniMaps;
+
 HWND UI::hwnd = NULL;
 
 extern Utils utils;
 
 void getScaledResolution(int& resolutionX, int& resolutionY);
+
+// Simple helper function to load an image into a DX11 texture with common settings
+bool UI::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+
+    ID3D11Device* pd3dDevice = UI::pd3dDevice;
+    // Load from disk into a raw RGBA buffer
+    int image_width = 0;
+    int image_height = 0;
+    unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+    if (image_data == NULL)
+        return false;
+
+    // Create texture
+    D3D11_TEXTURE2D_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.Width = image_width;
+    desc.Height = image_height;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    desc.SampleDesc.Count = 1;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    desc.CPUAccessFlags = 0;
+
+    ID3D11Texture2D* pTexture = NULL;
+    D3D11_SUBRESOURCE_DATA subResource;
+    subResource.pSysMem = image_data;
+    subResource.SysMemPitch = desc.Width * 4;
+    subResource.SysMemSlicePitch = 0;
+    pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+
+    // Create texture view
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    ZeroMemory(&srvDesc, sizeof(srvDesc));
+    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MipLevels = desc.MipLevels;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+    pTexture->Release();
+
+    *out_width = image_width;
+    *out_height = image_height;
+    stbi_image_free(image_data);
+
+    return true;
+}
+
+void UI::loadMapsTexture() {
+
+    GameMap map0(u8"Ancient Sands", u8"古代沙地");
+    GameMap map1(u8"The Basement", u8"地下室");
+    GameMap map2(u8"Jungle Temple", u8"丛林神殿");
+    GameMap map3(u8"GooseChapel", u8"鹅教堂");
+    GameMap map4(u8"Mallard Manor", u8"马拉德庄园");
+    GameMap map5(u8"NEXUS Colony", u8"连结殖民地");
+    GameMap map6(u8"BlackSwan", u8"黑天鹅");
+    GameMap map7(u8"SS MotherGoose", u8"老妈鹅星球飞船");
+
+    UI::LoadTextureFromFile("./img/maps/0.png", &map0.texture, &map0.width, &map0.height);
+    UI::LoadTextureFromFile("./img/maps/1.png", &map1.texture, &map1.width, &map1.height);
+    UI::LoadTextureFromFile("./img/maps/2.png", &map2.texture, &map2.width, &map2.height);
+    UI::LoadTextureFromFile("./img/maps/3.png", &map3.texture, &map3.width, &map3.height);
+    UI::LoadTextureFromFile("./img/maps/4.png", &map4.texture, &map4.width, &map4.height);
+    UI::LoadTextureFromFile("./img/maps/5.png", &map5.texture, &map5.width, &map5.height);
+    UI::LoadTextureFromFile("./img/maps/6.png", &map6.texture, &map6.width, &map6.height);
+    UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
+
+    //处理缩放
+    map0.scaleToGamePosition = 0.086;
+    map0.offset = { -53.24, -29.55 };
+
+    map1.scaleToGamePosition = 78.48 / map1.width;
+    map1.offset = { -45.6, -24.82 };
+
+    map2.scaleToGamePosition = 0.0847;
+    map2.offset = { -41.08, -40.58 };
+
+    map3.scaleToGamePosition = 0.08;
+    map3.offset = { -36.21,-40.23 };
+
+    map4.scaleToGamePosition = 0.0585;
+    map4.offset = { -28.12, -42.44};
+
+    map5.scaleToGamePosition = 0.0948;
+    map5.offset = { -68.08,-44.96 };
+
+    //TODO
+    map6.scaleToGamePosition = 0.0585;
+    map6.offset = { -28.12, -42.44 };
+
+    
+    map7.scaleToGamePosition = 0.0947;
+    map7.offset = { -66.84, -28.49};
+
+    UI::miniMaps.insert(std::pair<int, GameMap>(ANCIENT_SANDS, map0));
+    UI::miniMaps.insert(std::pair<int, GameMap>(THE_BASEMENT, map1));
+    UI::miniMaps.insert(std::pair<int, GameMap>(JUNGLE_TEMPLE, map2));
+    UI::miniMaps.insert(std::pair<int, GameMap>(GOOSECHAPEL, map3));
+    UI::miniMaps.insert(std::pair<int, GameMap>(MALLARD_MANOR, map4));
+    UI::miniMaps.insert(std::pair<int, GameMap>(NEXUS_COLONY, map5));
+    UI::miniMaps.insert(std::pair<int, GameMap>(BLACKSWAN, map6));
+    UI::miniMaps.insert(std::pair<int, GameMap>(SS_MOTHERGOOSE, map7));
+}
 
 bool UI::CreateDeviceD3D(HWND hWnd)
 {
@@ -94,7 +202,7 @@ void UI::CleanupDeviceD3D()
     {
         pd3dDeviceContext->Release();
         pd3dDeviceContext = nullptr;
-    }
+}
 
     if (pd3dDevice)
     {
@@ -270,8 +378,10 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
     const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    bool bDone = false;
+    //读取地图图片
+    loadMapsTexture();
 
+    bool bDone = false;
     while (!bDone)
     {
         MSG msg;

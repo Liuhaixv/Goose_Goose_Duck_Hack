@@ -34,6 +34,7 @@ Hack hack;
 //初始化辅助设置类
 //settings
 HackSettings hackSettings;
+Client* g_client;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
@@ -47,6 +48,8 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     Memory memory;
     Client client(&memory, &hackSettings);
     hack.setClient(&client);
+
+    g_client = &client;
 
     //初始化更新类线程
     //Init updaters

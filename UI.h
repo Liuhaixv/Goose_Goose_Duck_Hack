@@ -14,6 +14,10 @@
 #include<dwmapi.h>
 
 #include"utils.hpp"
+#include"Struct/GameMap.hpp"
+
+#include "stb_image.h"
+#include <map>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -21,6 +25,8 @@ class UI
 {
 public:
     static HWND hwnd;
+
+    static std::map<int, GameMap> miniMaps;
 
     static void Render(HINSTANCE instance, INT cmd_show);
 
@@ -37,6 +43,7 @@ public:
             SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED);
         }
     }
+
 private:
 
 	static ID3D11Device* pd3dDevice;
@@ -48,5 +55,8 @@ private:
 	static void CleanupDeviceD3D();
 	static void CreateRenderTarget();
 	static void CleanupRenderTarget();
+
+    static void loadMapsTexture();
+    static bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 	static LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };

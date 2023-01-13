@@ -26,7 +26,7 @@ public:
                     //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
                     Memory* memory = this->client->getMemory();
 
-                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, Offsets::GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
                     int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
 
                     if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
@@ -56,7 +56,7 @@ public:
         Memory* memory = this->client->getMemory();
         std::vector<int64_t> offsets{
                 Offsets::PlayerController::ptr_bodyCollider,
-                Offsets::CapsuleCollider2D::i_unknownClass0,
+                Offsets::CapsuleCollider2D::ptr_unknownClass0,
                 Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
 
         int64_t b_enableCollider = memory->FindPointer(localPlayer->address,
@@ -86,14 +86,18 @@ public:
     //TODO: reset player's speed when game finished
     void speedHack(LocalPlayer* localPlayer) {
         float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
-        if (targetSpeed >= 0) {
+
+        if (targetSpeed < 0) {
+            targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
+            this->client->hackSettings->guiSettings.f_baseMovementSpeed = targetSpeed;
+        }else{
             Memory* memory = this->client->getMemory();
             //开启穿墙
             if (localPlayer) {
                 std::vector<int64_t> offsets = {
-                    Offsets::LocalPlayer::ptr_LocalPlayer_class,
-                    Offsets::LocalPlayer::LocalPlayer_c::ptr_staticFields,
-                    Offsets::LocalPlayer::LocalPlayer_c::StaticField::f_baseMovementSpeed
+                    Offsets::LocalPlayer::ptr_Class,
+                    Offsets::LocalPlayer::Class::ptr_staticFields,
+                    Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
                 };
                 int64_t baseMovementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
 
