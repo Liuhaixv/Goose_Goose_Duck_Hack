@@ -39,7 +39,11 @@ void Drawing::Draw() {
         if (hackSettings.guiSettings.b_debug) {
             ImGui::ShowDemoWindow();
         }
-        drawMinimap();
+
+
+        if (hackSettings.guiSettings.b_enableMinimap) {
+            drawMinimap();
+        }
 
         //绘制菜单
         if (hackSettings.guiSettings.b_enableMenu) {
@@ -134,7 +138,7 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
 
 void drawMinimap() {
     ImGuiIO& io = ImGui::GetIO();
-
+    ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin("Minimap");
 
     GameMap* gameMap = nullptr;
@@ -294,15 +298,30 @@ void drawMinimap() {
                     lastTPedPosition = positionInGame;
                 }
 
-                if (!hasTPedWhenHoveringOnGameMap) {
-                    ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)\n相对图片左下角(%.1f, %.1f)"),
-                        positionInGame.x, positionInGame.y,
-                        io.MousePos.x - mousePositionLeftBottomOfGamemap.x, mousePositionLeftBottomOfGamemap.y - io.MousePos.y
-                    );
+                //Debug
+                if (hackSettings.guiSettings.b_debug) {
+                    if (!hasTPedWhenHoveringOnGameMap) {
+                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)\n相对图片左下角(%.1f, %.1f)"),
+                            positionInGame.x, positionInGame.y,
+                            io.MousePos.x - mousePositionLeftBottomOfGamemap.x, mousePositionLeftBottomOfGamemap.y - io.MousePos.y
+                        );
+                    }
+                    else {
+                        //尚未点击
+                        ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    }
                 }
+                //Release
                 else {
-                    //尚未点击
-                    ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    if (!hasTPedWhenHoveringOnGameMap) {
+                        ImGui::Text(str("Click to TP\n(%.1f, %.1f)", "点击传送\n(%.1f, %.1f)"),
+                            positionInGame.x, positionInGame.y
+                        );
+                    }
+                    else {
+                        //尚未点击
+                        ImGui::Text(str("You have been teleported to\n(%.1f, %.1f)", "你已被传送至\n(%.1f, %.1f)"), lastTPedPosition.x, lastTPedPosition.y);
+                    }
                 }
 
                 ImGui::EndTooltip();
@@ -328,7 +347,7 @@ void drawMinimap() {
 void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
-
+    ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin(str("Main", "主菜单"));
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
