@@ -54,12 +54,6 @@ public:
         }
 
         //Success
-
-        if (processHandle != NULL) {
-            //读取内存地址范围
-            readAllMemoryRegions();
-        }
-
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 
@@ -108,7 +102,7 @@ public:
 
     int64_t FindPointer(int64_t baseAddress, std::vector<int64_t> offsets)
     {
-        if (offsets.size() <= 0) {
+        if (offsets.size() == 0) {
             return NULL;
         }
 
@@ -116,7 +110,7 @@ public:
         Address = read_mem<int64_t>(Address);
         //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
-        if (offsets.size() <= 1) {
+        if (offsets.size() == 1) {
             if (isAddressInMemoryRegions(Address)) {
                 return Address;
             }
@@ -173,52 +167,15 @@ private:
         return dwModuleBaseAddress;
     }
 
-    void readAllMemoryRegions() {
-        unsigned char* addr = 0;
-
-        MEMORY_BASIC_INFORMATION mbi;
-
-        //枚举所有内存区域
-        while (VirtualQueryEx(processHandle, addr, &mbi, sizeof(mbi)))
-        {
-            if (mbi.State == MEM_COMMIT && mbi.Protect != PAGE_NOACCESS && mbi.Protect != PAGE_GUARD)
-            {
-                //std::cout << "base : 0x" << std::hex << mbi.BaseAddress << " end : 0x" << std::hex << (uintptr_t)mbi.BaseAddress + mbi.RegionSize << " Protection :" << mbi.Protect << "\n";
-                //加入内存范围
-                map.insert(std::pair<int64_t, int64_t>((int64_t)mbi.BaseAddress, (int64_t)mbi.RegionSize));
-            }
-            addr += mbi.RegionSize;
-        }
-    }
-
     /// <summary>
     /// 判断地址是否在进程的内存范围内
     /// </summary>
     /// <param name="address"></param>
     /// <returns></returns>
     bool isAddressInMemoryRegions(int64_t address) {
-
-        if (address < (*map.begin()).first) {
-            //std::cout << "内存地址小于最小范围!" << std::endl;
-            return false;
-        }
-
-        std::map<int64_t, int64_t>::iterator low, prev;
-        low = map.lower_bound(address);
-
-        if (low == map.end()) {
-            low = std::prev(map.end());
-        }
-        else if (low != map.begin()) {
-            low = std::prev(low);
-        }
-
-        //std::cout << std::hex << (*low).first;
-
-        if (address < (*low).first + (*low).second) {
-            return true;
-        }
-        return false;
+        MEMORY_BASIC_INFORMATION info;
+        VirtualQueryEx(this->processHandle, (LPCVOID)address, &info, sizeof(info));
+        return info.State == MEM_COMMIT;
     }
 
     /*

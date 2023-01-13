@@ -34,8 +34,21 @@ public:
         int players = client->n_players;
 
         while (true) {
-            updateLocalPlayer(localPlayer);
-            updatePlayerController(playerControllers, players);
+            bool localPlayerUpdated = false;
+            updateLocalPlayer(localPlayer, &localPlayerUpdated);
+
+            if (localPlayerUpdated) {
+                updatePlayerController(playerControllers, players);
+            }
+            else {
+                //TODO: LocalPlayer更新失败，重置所有玩家
+                for (int i = 0; i < client->n_players; i++) {
+                    if (client->playerControllers[i].address) {
+                        client->playerControllers->reset();
+                    }
+                }
+            }
+
             Sleep(30);
         }
     }
@@ -76,7 +89,7 @@ private:
     /// 更新本地玩家
     /// </summary>
     /// <param name="playerController"></param>
-    void updateLocalPlayer(LocalPlayer* localPlayer) {
+    void updateLocalPlayer(LocalPlayer* localPlayer, bool* localPlayerUpdated) {
         //获取内存中对应玩家槽位的实例地址
         std::vector<int64_t> offsets = GameAssembly::localPlayer();
         //offsets.pop_back();
@@ -86,11 +99,12 @@ private:
         int64_t localPlayerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
 
         if (localPlayerAddr == NULL) {
+            *localPlayerUpdated = false;
             return;
         }
 
         //Update localplayer
-        localPlayer->update(localPlayerAddr);
+        *localPlayerUpdated = localPlayer->update(localPlayerAddr);
 
         int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController);
 
@@ -130,7 +144,7 @@ private:
         //内存中当前玩家槽位不存在数据
         //Data not available
         if (address == NULL) {
-            dst->address = NULL;
+            dst->reset();
             return false;
         }
 
