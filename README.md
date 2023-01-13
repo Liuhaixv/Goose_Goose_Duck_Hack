@@ -15,6 +15,7 @@
 2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. 查看其他玩家死亡时间
 4. **[新]** 独立小地图窗口显示所有玩家位置
+5. **[新]** 点击地图即可传送到想要的位置
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
  
 
@@ -59,6 +60,7 @@ Developing teleport function of minimap
 2. See if other player's killed someone this round **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
 3. See other player's death time
 4. **[New]** minimap that shows all players' nicknames and positions   
+5. **[New]** Click on minimap to teleport 
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
 
 ### Rage
