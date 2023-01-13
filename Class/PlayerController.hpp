@@ -193,7 +193,8 @@ private:
 
     //检查该地址是PlayerController实例
     bool validateAddress(int64_t address) {
-        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::PlayerControllerClass);
+
+        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass);
 
         if (playerControllerClass == NULL) {
             //Error finding class
