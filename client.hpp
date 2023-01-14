@@ -71,7 +71,7 @@ public:
     void onPlayerDeath(PlayerController* playerController) {
         //TODO: 统计死亡位置附近的玩家
     }
-
+    
     bool teleportTo(Vector2 to) {
         if (this->localPlayer.address == NULL) {
             return false;

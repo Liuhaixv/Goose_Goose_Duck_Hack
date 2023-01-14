@@ -6,13 +6,13 @@
 
 # 进程
 
-当前正在开发小地图传送功能
-[Issue#56](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/56)
+当前正在开发记录玩家死亡时附近的人的功能
+[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # 功能
 ### 显示类
-1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
-2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+1. 查看其他玩家的职业身份 **(目前有Bug，详见 [公告](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
+2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [公告](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
 3. 查看其他玩家死亡时间
 4. **[新]** 独立小地图窗口显示所有玩家位置
 5. **[新]** 点击地图即可传送到想要的位置
@@ -31,6 +31,10 @@
 1. 移除战争迷雾(可以隔墙看人，没有阴影隐藏其他玩家)
 <div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/normal.png" alt="正常画面" width="800"/><div/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/removed_fow.png" alt="移除战争迷雾" width="800"/><span/>
+
+# 热键
+1. `Insert` 菜单
+2. `Delete`小地图
 
 # 已知Bug
 1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/19#issuecomment-1376168944)
@@ -51,13 +55,14 @@ External Hack for Goose Goose Duck.
 This project is currently active in development. Leave a star if you like it. You can make request for features you want , just create issues and I will reply.
 
 # Progress
-Developing teleport function of minimap
-[Issue#56](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/56)
+
+Developing new function, reveal players near the dead player
+[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # Features
 ### Reveal Info
-1. See other players' rolenames **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
-2. See if other player's killed someone this round **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+1. See other players' rolenames **(Not fully working, see [Announcement](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
+2. See if other player's killed someone this round **(Not fully working, see [Announcement](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
 3. See other player's death time
 4. **[New]** minimap that shows all players' nicknames and positions   
 5. **[New]** Click on minimap to teleport 
@@ -74,6 +79,10 @@ Developing teleport function of minimap
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
 <div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/normal.png" alt="normal"  width="800"/><div/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/removed_fow.png" alt="removed_fow"  width="800"/><span/>
+
+# Hotkeys
+1. `Insert` Main menu
+2. `Delete` minimap
 
 # Known bugs
 1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**

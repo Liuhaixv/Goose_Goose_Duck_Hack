@@ -35,6 +35,7 @@ public:
         int players = client->n_players;
 
         while (true) {
+
             bool localPlayerUpdated = false;
             updateLocalPlayer(localPlayer, &localPlayerUpdated);
 
@@ -49,7 +50,7 @@ public:
                     }
                 }
             }
-
+            
             Sleep(30);
         }
     }

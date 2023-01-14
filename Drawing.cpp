@@ -346,6 +346,7 @@ void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
+
     ImGui::Begin(str("Main", "主菜单"),NULL, ImGuiWindowFlags_MenuBar);
     
     if (ImGui::BeginMenuBar())
@@ -430,8 +431,8 @@ void drawMenu() {
                     else {
                         ImGui::TableNextColumn(); ImGui::Text("");
                     }
-                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", ptr_playerController->v3_position.x, ptr_playerController->v3_position.y);
 
+                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", ptr_playerController->v3_position.x, ptr_playerController->v3_position.y);
                 }
                 ImGui::EndTable();
             }
@@ -486,10 +487,8 @@ void drawMenu() {
             if (hackSettings.guiSettings.b_debug) {
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
             }
-
             ImGui::EndTabItem();
         }
-
         ImGui::EndTabBar();
     }
     ImGui::End();

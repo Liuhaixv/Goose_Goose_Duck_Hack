@@ -142,6 +142,9 @@ public:
 
     //TODO: 导致程序崩溃？
     void updateNickname() {
+        if (!PlayerController::validateAddress(this->address)) {
+            return;
+        }
 
         int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
         int64_t firstChar = nickname + 0x14;
@@ -202,7 +205,9 @@ private:
     //检查该地址是PlayerController实例
     bool validateAddress(int64_t address) {
 
+
         int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass, NULL);
+
 
         if (playerControllerClass == NULL) {
             //Error finding class
