@@ -94,9 +94,14 @@ namespace Offsets {
 }
 
 namespace GameAssembly {
+    namespace Method {
+        namespace UICooldownButton {
+            constexpr int64_t Update = 0xC1C440;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+        }
+    }
     namespace BytesPatch {
         namespace CooldownTime {
-            constexpr int64_t address = 0xC1C4E8;
+            constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0xA8;
             constexpr std::string raw = "\x73";
             constexpr std::string removeCooldownTime = "\x53";
         }
