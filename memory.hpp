@@ -181,9 +181,6 @@ private:
     /// <param name="address"></param>
     /// <returns></returns>
     bool isAddressInMemoryRegions(int64_t address) {
-        if (address > 0xfffffffffffff) {
-            int a = 1;
-        }
         MEMORY_BASIC_INFORMATION info;
         VirtualQueryEx(this->processHandle, (LPCVOID)address, &info, sizeof(info));
         return info.State == MEM_COMMIT;
