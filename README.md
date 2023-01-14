@@ -32,6 +32,10 @@
 <div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/normal.png" alt="正常画面" width="800"/><div/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/removed_fow.png" alt="移除战争迷雾" width="800"/><span/>
 
+# 热键
+1. `Insert` 菜单
+2. `Delete`小地图
+
 # 已知Bug
 1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/19#issuecomment-1376168944)
 
@@ -75,6 +79,10 @@ Developing new function, reveal players near the dead player
 1. Removed **Fog of War**, which makes you able to see other players behind walls, remove shadows that hide players
 <div><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/normal.png" alt="normal"  width="800"/><div/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/removed_fow.png" alt="removed_fow"  width="800"/><span/>
+
+# Hotkeys
+1. `Insert` Main menu
+2. `Delete` minimap
 
 # Known bugs
 1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
