@@ -22,6 +22,7 @@
 ### 功能类
 1. 按住`左ALT键`穿墙
 2. 调节移动速度
+3. 技能无冷却
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -71,6 +72,7 @@ Developing new function, reveal players near the dead player
 ### Rage
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
 2. Movement speed hack
+3. Remove skill's cooldown
     
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
