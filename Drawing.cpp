@@ -111,27 +111,26 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     static float circleRadius = 10;
 
-    PlayerController* playerControllers = g_client->playerControllers;
+    auto playerControllers = g_client->playerControllers;
+    //PlayerController* playerControllers = g_client->playerControllers;
 
-    PlayerController* ptr = playerControllers;
-
-    for (int i = 0; i < g_client->n_players; (i++, ptr++)) {
-        if (ptr->address == NULL) {
+    for (auto ptr_playerController : playerControllers) {
+        if (ptr_playerController->address == NULL) {
             continue;
         }
 
         //单独处理本地玩家的绘制
-        if (ptr->b_isLocal) {
+        if (ptr_playerController->b_isLocal) {
             continue;
         }
 
-        Vector3* position = &ptr->v3_position;
+        Vector3* position = &ptr_playerController->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr_playerController->nickname.c_str());
     }
     return true;
 }
@@ -407,30 +406,31 @@ void drawMenu() {
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
-                PlayerController* player = g_client->playerControllers;
-                for (int row = 0; row < g_client->n_players; (row++, player++))
+                //PlayerController* player = g_client->playerControllers;
+                auto playerControllers =  g_client->playerControllers;
+                for (auto ptr_playerController : playerControllers)
                 {
                     //跳过无效玩家和本地玩家
-                    if (player->address == NULL || player->b_isLocal || player->nickname=="") {
+                    if (ptr_playerController->address == NULL || ptr_playerController->b_isLocal || ptr_playerController->nickname=="") {
                         continue;
                     }
                     ImGui::TableNextRow();
 
-                    ImGui::TableNextColumn(); ImGui::Text(player->nickname.c_str());
-                    ImGui::TableNextColumn(); ImGui::Text(player->roleName.c_str());
-                    if (player->b_hasKilledThisRound) {
+                    ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->nickname.c_str());
+                    ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->roleName.c_str());
+                    if (ptr_playerController->b_hasKilledThisRound) {
                         ImGui::TableNextColumn(); ImGui::Text(str("Yes", "是"));
                     }
                     else {
                         ImGui::TableNextColumn(); ImGui::Text(str("", ""));
                     }
-                    if (player->i_timeOfDeath != 0) {
-                        ImGui::TableNextColumn(); ImGui::Text("%d", player->i_timeOfDeath);
+                    if (ptr_playerController->i_timeOfDeath != 0) {
+                        ImGui::TableNextColumn(); ImGui::Text("%d", ptr_playerController->i_timeOfDeath);
                     }
                     else {
                         ImGui::TableNextColumn(); ImGui::Text("");
                     }
-                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", player->v3_position.x, player->v3_position.y);
+                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", ptr_playerController->v3_position.x, ptr_playerController->v3_position.y);
 
                 }
                 ImGui::EndTable();

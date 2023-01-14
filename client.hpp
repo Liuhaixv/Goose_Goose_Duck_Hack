@@ -13,7 +13,7 @@ public:
 
     static const int n_players = 16;
     LocalPlayer localPlayer;
-    PlayerController playerControllers[n_players];
+    std::vector<PlayerController*> playerControllers;
 
     Client(Memory* memory, HackSettings* hackSettings = nullptr)
     {
@@ -22,8 +22,15 @@ public:
 
         localPlayer.setMemory(this->memory);
         for (int i = 0; i < n_players; i++) {
-            playerControllers[i].setMemory(this->memory);
+            playerControllers.push_back(new PlayerController(this->memory));
         }
+    }
+
+    ~Client() {
+        for (auto ptr_playerController : playerControllers) {
+            delete ptr_playerController;
+        }
+        playerControllers.clear();
     }
 
     Memory* getMemory() {
@@ -105,7 +112,7 @@ public:
         //std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "坐标") : "坐标");
 
         for (int i = 0; i < Client::n_players; ++i) {
-            PlayerController* ptr_PlayerController = &(this->playerControllers[i]);
+            PlayerController* ptr_PlayerController = this->playerControllers[i];
 
             if (ptr_PlayerController->address == NULL) {
                 continue;

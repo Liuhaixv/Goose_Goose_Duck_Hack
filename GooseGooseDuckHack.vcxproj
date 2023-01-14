@@ -155,7 +155,6 @@
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
-    <ClInclude Include="Client.h" />
     <ClInclude Include="Data\offsets.hpp" />
     <ClInclude Include="Class\PlayerController.hpp" />
     <ClInclude Include="Data\GameData.hpp" />

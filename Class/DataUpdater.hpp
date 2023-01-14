@@ -29,7 +29,8 @@ public:
     /// <param name="playerControllers"></param>
     /// <param name="num">Number of players</param>
     void playerControllerUpdater() {
-        PlayerController* playerControllers = client->playerControllers;
+        //PlayerController* playerControllers = client->playerControllers;
+        auto playerControllers = client->playerControllers;
         LocalPlayer* localPlayer = &client->localPlayer;
         int players = client->n_players;
 
@@ -42,9 +43,9 @@ public:
             }
             else {
                 //TODO: LocalPlayer更新失败，重置所有玩家
-                for (int i = 0; i < client->n_players; i++) {
-                    if (client->playerControllers[i].address) {
-                        client->playerControllers->reset();
+                for (auto ptr_playerController : playerControllers) {
+                    if (ptr_playerController->address) {
+                        ptr_playerController->reset();
                     }
                 }
             }
@@ -164,14 +165,14 @@ private:
     /// </summary>
     /// <param name="playerControllers"></param>
     /// <param name="playersNum"></param>
-    void updatePlayerController(PlayerController playerControllers[], int playersNum) {
+    void updatePlayerController(std::vector<PlayerController*> playerControllers, int playersNum) {
         int validPlayers = 0;
 
         //遍历所有PlayerController
         for (int i = 0; i < playersNum; ++i) {
             //获取当前遍历的玩家槽位中的PlayerController
             //Current pointer of iterated PlayerController in array
-            PlayerController* ptr_playerController = &(playerControllers[i]);
+            PlayerController* ptr_playerController = playerControllers[i];
 
             //获取内存中对应玩家槽位的实例地址
             std::vector<int64_t> offsets = GameAssembly::playerControllerByIndex(i);
