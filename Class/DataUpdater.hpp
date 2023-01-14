@@ -68,7 +68,7 @@ private:
                     //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
                     int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr, NULL);
 
                     memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 131090);
 
@@ -106,7 +106,7 @@ private:
         //Update localplayer
         *localPlayerUpdated = localPlayer->update(localPlayerAddr);
 
-        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController);
+        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController, NULL);
 
         //Update playerController
         updatePlayerController(&localPlayer->playerController, localPlayerController);

@@ -411,7 +411,7 @@ void drawMenu() {
                 for (int row = 0; row < g_client->n_players; (row++, player++))
                 {
                     //跳过无效玩家和本地玩家
-                    if (player->address == NULL || player->b_isLocal) {
+                    if (player->address == NULL || player->b_isLocal || player->nickname=="") {
                         continue;
                     }
                     ImGui::TableNextRow();

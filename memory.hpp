@@ -69,8 +69,11 @@ public:
     }
 
     template <typename var>
-    var read_mem(int64_t address) {
+    var read_mem(int64_t address, var defaultValue) {
         var value;
+        if (!this->isAddressInMemoryRegions(address)) {
+            return defaultValue;
+        }
         ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), NULL);
         return value;
     }
@@ -86,7 +89,7 @@ public:
         }
 
         int64_t Address = moduleBaseAddress + offsets[0];
-        Address = read_mem<int64_t>(Address);
+        Address = read_mem<int64_t>(Address, 0);
         //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
         if (Address == 0) {
@@ -95,7 +98,7 @@ public:
 
         for (int i = 1; i < offset_num; i++) //Loop trough the offsets
         {
-            Address = read_mem<int64_t>(Address);
+            Address = read_mem<int64_t>(Address, 0);
             //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
             if (Address == 0) {
                 return NULL;
@@ -112,7 +115,7 @@ public:
         }
 
         int64_t Address = baseAddress + offsets[0];
-        Address = read_mem<int64_t>(Address);
+        Address = read_mem<int64_t>(Address, 0);
         //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
         if (offsets.size() == 1) {
@@ -126,7 +129,7 @@ public:
 
         for (int i = 2; i < offsets.size(); i++) //Loop trough the offsets
         {
-            Address = read_mem<int64_t>(Address);
+            Address = read_mem<int64_t>(Address, 0);
 
             //ReadProcessMemory(processHandle, (LPCVOID)Address, &Address, sizeof(DWORD), NULL);
 
@@ -178,6 +181,9 @@ private:
     /// <param name="address"></param>
     /// <returns></returns>
     bool isAddressInMemoryRegions(int64_t address) {
+        if (address > 0xfffffffffffff) {
+            int a = 1;
+        }
         MEMORY_BASIC_INFORMATION info;
         VirtualQueryEx(this->processHandle, (LPCVOID)address, &info, sizeof(info));
         return info.State == MEM_COMMIT;
