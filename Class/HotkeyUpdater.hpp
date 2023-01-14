@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include"../Struct/HackSettings.hpp"
-#include"../UI.h"
 #include <Windows.h>
 
 /// <summary>

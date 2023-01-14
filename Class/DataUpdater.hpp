@@ -2,10 +2,8 @@
 
 #include<list>
 
-#include"../Memory.hpp"
 #include"../Client.hpp"
 #include"../Class/Hack.hpp"
-#include"PlayerController.hpp"
 #include"LocalPlayer.hpp"
 
 extern Hack hack;
