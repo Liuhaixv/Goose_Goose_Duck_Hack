@@ -178,8 +178,8 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
-    <ClInclude Include="client.hpp" />
-    <ClInclude Include="memory.hpp" />
+    <ClInclude Include="Client.hpp" />
+    <ClInclude Include="Memory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

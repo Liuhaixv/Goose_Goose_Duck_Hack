@@ -79,8 +79,6 @@ public:
         return (this->b_chineseOS) ? cn : eng;
     }
 
-
-
     /// <summary>
     /// 关闭快速输入模式防止程序卡住
     /// Disable quick-edit in console in case that user input stuck the program

@@ -103,8 +103,8 @@ namespace GameAssembly {
     static std::vector<int64_t> playerControllerByIndex(int64_t index) {
         int64_t specialOffset = 0x30;
         specialOffset += index * 0x18;
-        std::vector<int64_t> offsets = {
 
+        std::vector<int64_t> offsets = { 
             GameAssembly::Class::ptr_PlayerControllerClass,
             Offsets::PlayerController::Class::ptr_staticFields,
             Offsets::PlayerController::Class::StaticField::playersListWithAgoraIDs,

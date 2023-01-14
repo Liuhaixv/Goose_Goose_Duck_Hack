@@ -18,6 +18,6 @@ struct GuiSettings {
     bool b_enableSpeedHack = false;
     float f_baseMovementSpeed = -1;
 
-    //
+    //debugmode
     bool b_debug = false;
 };

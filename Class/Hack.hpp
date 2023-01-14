@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include"../client.hpp"
+#include"../Client.hpp"
 #include"../Class/PlayerController.hpp"
 
 class Hack {
@@ -27,16 +27,16 @@ public:
                     Memory* memory = this->client->getMemory();
 
                     int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr, NULL);
 
-                    if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet)) {
+                    if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
                         //disable fow
                         //set layermask
                         memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                        float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier);
+                        float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
                         if (f_viewDistanceMultiplier != 0) {
                             memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
                         }
@@ -53,6 +53,8 @@ public:
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
     bool enableNoclip(PlayerController* localPlayer, bool enable = true) {
+        bool shouldEnableCollider = !enable;
+
         Memory* memory = this->client->getMemory();
         std::vector<int64_t> offsets{
                 Offsets::PlayerController::ptr_bodyCollider,
@@ -66,7 +68,12 @@ public:
             return false;
         }
 
-        memory->write_mem<bool>(b_enableCollider, !enable);
+        bool colliderEnabled = memory->read_mem<bool>(b_enableCollider, false);
+
+        //enable就是启用穿墙，即禁用碰撞
+        if (colliderEnabled != shouldEnableCollider) {
+            memory->write_mem<bool>(b_enableCollider, shouldEnableCollider);
+        }
     }
 
     void noclip(PlayerController* localPlayerController) {
@@ -84,7 +91,12 @@ public:
     }
 
     //TODO: reset player's speed when game finished
+    //TODO: reset player's speed when disabled speedHack
     void speedHack(LocalPlayer* localPlayer) {
+        if (!this->client->hackSettings->guiSettings.b_enableSpeedHack) {
+            return;
+        }
+
         float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
 
         if (targetSpeed < 0) {

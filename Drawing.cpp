@@ -1,7 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
-#include "client.hpp"
+#include "Client.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -111,27 +111,26 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     static float circleRadius = 10;
 
-    PlayerController* playerControllers = g_client->playerControllers;
+    auto playerControllers = g_client->playerControllers;
+    //PlayerController* playerControllers = g_client->playerControllers;
 
-    PlayerController* ptr = playerControllers;
-
-    for (int i = 0; i < g_client->n_players; (i++, ptr++)) {
-        if (ptr->address == NULL) {
+    for (auto ptr_playerController : playerControllers) {
+        if (ptr_playerController->address == NULL) {
             continue;
         }
 
         //单独处理本地玩家的绘制
-        if (ptr->b_isLocal) {
+        if (ptr_playerController->b_isLocal) {
             continue;
         }
 
-        Vector3* position = &ptr->v3_position;
+        Vector3* position = &ptr_playerController->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr->nickname.c_str());
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr_playerController->nickname.c_str());
     }
     return true;
 }
@@ -141,7 +140,7 @@ void drawMinimap() {
 
     //设置小地图初始化大小
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
-    ImGui::Begin("Minimap");
+    ImGui::Begin("Minimap",NULL, ImGuiWindowFlags_NoScrollbar);
 
     GameMap* gameMap = nullptr;
 
@@ -347,14 +346,30 @@ void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
-    ImGui::Begin(str("Main", "主菜单"));
+
+    ImGui::Begin(str("Main", "主菜单"),NULL, ImGuiWindowFlags_MenuBar);
+    
+    if (ImGui::BeginMenuBar())
+    {
+        ImGui::Text(str("Game status: ","游戏状态: "));
+        ImGui::SameLine();
+        if (hackSettings.gameStateSettings.b_gameProcessRunning) {
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Game Running", "运行中"));
+            //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+        }
+        else {
+            ImGui::TextDisabled(str("Not Running", "未运行"));
+        }
+        
+        ImGui::EndMenuBar();
+    }
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
         PlayerController* playerController = &g_client->localPlayer.playerController;
-        //菜单3
-        if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
+        //菜单1
+        if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
             ImGui::Text(playerController->nickname.c_str());
 
@@ -363,6 +378,8 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
+            ImGui::Checkbox(str("Enable","启用"), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::SameLine();
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
                 &hackSettings.guiSettings.f_baseMovementSpeed,
@@ -375,7 +392,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单1
+        //菜单2
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
             if (ImGui::BeginTable("table1", 5,
@@ -390,38 +407,39 @@ void drawMenu() {
                 //ImGui::TableSetupColumn("Three");
                 ImGui::TableHeadersRow();
 
-                PlayerController* player = g_client->playerControllers;
-                for (int row = 0; row < g_client->n_players; (row++, player++))
+                //PlayerController* player = g_client->playerControllers;
+                auto playerControllers =  g_client->playerControllers;
+                for (auto ptr_playerController : playerControllers)
                 {
                     //跳过无效玩家和本地玩家
-                    if (player->address == NULL || player->b_isLocal) {
+                    if (ptr_playerController->address == NULL || ptr_playerController->b_isLocal || ptr_playerController->nickname=="") {
                         continue;
                     }
                     ImGui::TableNextRow();
 
-                    ImGui::TableNextColumn(); ImGui::Text(player->nickname.c_str());
-                    ImGui::TableNextColumn(); ImGui::Text(player->roleName.c_str());
-                    if (player->b_hasKilledThisRound) {
+                    ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->nickname.c_str());
+                    ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->roleName.c_str());
+                    if (ptr_playerController->b_hasKilledThisRound) {
                         ImGui::TableNextColumn(); ImGui::Text(str("Yes", "是"));
                     }
                     else {
                         ImGui::TableNextColumn(); ImGui::Text(str("", ""));
                     }
-                    if (player->i_timeOfDeath != 0) {
-                        ImGui::TableNextColumn(); ImGui::Text("%d", player->i_timeOfDeath);
+                    if (ptr_playerController->i_timeOfDeath != 0) {
+                        ImGui::TableNextColumn(); ImGui::Text("%d", ptr_playerController->i_timeOfDeath);
                     }
                     else {
                         ImGui::TableNextColumn(); ImGui::Text("");
                     }
-                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", player->v3_position.x, player->v3_position.y);
 
+                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", ptr_playerController->v3_position.x, ptr_playerController->v3_position.y);
                 }
                 ImGui::EndTable();
             }
             ImGui::EndTabItem();
         }
 
-        //菜单2
+        //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.disableFogOfWar);
@@ -437,19 +455,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单2
-        if (ImGui::BeginTabItem(str("ESP", "透视")))
-        {
-            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
-            ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
-            HelpMarker(
-                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
-            );
-
-            ImGui::EndTabItem();
-        }
-
-        //菜单2
+        //菜单4
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
@@ -461,6 +467,28 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
+        //菜单5
+        if (hackSettings.guiSettings.b_debug && ImGui::BeginTabItem(str("ESP", "透视")))
+        {
+            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
+            ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
+            HelpMarker(
+                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
+            );
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单6
+        if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
+        {
+            ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
+
+            if (hackSettings.guiSettings.b_debug) {
+                ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
+            }
+            ImGui::EndTabItem();
+        }
         ImGui::EndTabBar();
     }
     ImGui::End();

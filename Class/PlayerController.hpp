@@ -3,7 +3,7 @@
 
 #include"../Data/offsets.hpp"
 #include"../Struct/Common.hpp"
-#include"../memory.hpp"
+#include"../Memory.hpp"
 
 #include<Windows.h>
 
@@ -21,7 +21,10 @@ public:
 
     }
 
-    int64_t address = NULL;
+    //记录死亡时附近的玩家信息
+    std::vector<PlayerController> playersNearbyOnDeath;
+
+    int64_t address = NULL;    
 
     bool b_isSilenced = false;
     bool b_isInfected = false;
@@ -35,7 +38,7 @@ public:
     //本轮是否杀过人
     bool b_hasKilledThisRound = false;
 
-    int i_playerRoleId = 0;
+    int i_playerRoleId = 0; 
     int invisibilityDistance = 0;
     int i_timeOfDeath = 0;
 
@@ -128,7 +131,7 @@ public:
             return false;
         }
         try {
-            this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position);
+            this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position, {0.0f, 0.0f, 0.0f});
         }
         catch (...) {
             return false;
@@ -143,11 +146,11 @@ public:
             return;
         }
 
-        int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname);
+        int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
         int64_t firstChar = nickname + 0x14;
 
         //字符个数
-        int length = memory->read_mem<int>(nickname + 0x10);
+        int length = memory->read_mem<int>(nickname + 0x10, 0);
 
         char16_t buffer[40];
 
@@ -158,7 +161,7 @@ public:
         }
 
         for (int i = 0; i < length; i++) {
-            char16_t c = memory->read_mem<char16_t>(firstChar + sizeof(char16_t) * i);
+            char16_t c = memory->read_mem<char16_t>(firstChar + sizeof(char16_t) * i, NULL);
             //byte byte_= *(p_str + i);
             buffer[i] = c;
         }
@@ -180,13 +183,13 @@ public:
             return false;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         if (address != this->address) {
             reset();
             this->address = address;
-        }
-
-        if (!validateAddress(address)) {
-            return false;
         }
 
         return update();
@@ -195,17 +198,23 @@ public:
 private:
     Memory* memory = nullptr;
 
+    std::vector<PlayerController*> getPlayersNearby() {
+
+    }
+
     //检查该地址是PlayerController实例
     bool validateAddress(int64_t address) {
 
-        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass);
+
+        int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass, NULL);
+
 
         if (playerControllerClass == NULL) {
             //Error finding class
             return false;
         }
 
-        int64_t playerControllerClass_ = memory->read_mem<int64_t>(address);
+        int64_t playerControllerClass_ = memory->read_mem<int64_t>(address, NULL);
 
         return playerControllerClass == playerControllerClass_;
     }
@@ -229,29 +238,43 @@ private:
         }
 
         //局内角色已确定(游戏开始)
-        b_isPlayerRoleSet = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet);
+        b_isPlayerRoleSet = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet, false);
         //是否为本地玩家
-        b_isLocal = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal);
+        b_isLocal = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
 
         if (b_isPlayerRoleSet) {
             //更新玩家坐标
             updatePosition();
 
-            b_inVent = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_inVent);
-            b_hasBomb = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb);
-            b_isGhost = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost);
-            b_isSpectator = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isSpectator);
-            invisibilityDistance = memory->read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance);
-            b_isRemoteSpectating = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating);
-            b_hasKilledThisRound = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound);
-            i_playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId) + 0x10);
+            b_inVent = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_inVent, false);
+            b_hasBomb = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb, false);
+            b_isGhost = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost, false);
+            b_isSpectator = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isSpectator, false);
+            invisibilityDistance = memory->read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
+            b_isRemoteSpectating = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
+            b_hasKilledThisRound = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
+            i_playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, 0) + 0x10, 0);
+
+            float timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);
+
+            //玩家刚死亡
+            if (i_timeOfDeath == 0 && timeOfDeath > 0) {
+                this->onDeath();
+            }
 
             //更新死亡时间
-            i_timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath);
+            i_timeOfDeath = timeOfDeath;
 
             std::u8string rolename = utils.getRoleName(i_playerRoleId);
             roleName = std::string(rolename.begin(), rolename.end());
         }
         return true;
+    }
+
+    /// <summary>
+    /// 玩家死亡事件
+    /// </summary>
+    void onDeath() {
+        //g_client->onPlayerDeath(this);
     }
 };

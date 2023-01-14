@@ -3,7 +3,7 @@
 #include"../utils.hpp"
 #include"../Data/offsets.hpp"
 #include"../Struct/Common.hpp"
-#include"../memory.hpp"
+#include"../Memory.hpp"
 #include"PlayerController.hpp"
 
 #include<Windows.h>
@@ -45,7 +45,7 @@ public:
                 return -1;
             }
 
-            float result = memory->read_mem<float>(addr);
+            float result = memory->read_mem<float>(addr, -1.0f);
 
             if (result <= 0) {
                 return -1;
@@ -80,7 +80,7 @@ public:
                 return -1;
             }
 
-            float result = memory->read_mem<float>(addr);
+            float result = memory->read_mem<float>(addr, -1.0f);
 
             if (result <= 0) {
                 return -1;
@@ -120,6 +120,10 @@ public:
             return false;
         }
 
+        if (!validateAddress(address)) {
+            return false;
+        }
+
         if (address != this->address) {
             reset();
             this->address = address;
@@ -138,9 +142,24 @@ private:
             return false;
         }
 
-        int64_t playerController = memory->read_mem<int64_t>(this->address + Offsets::LocalPlayer::ptr_playerController);
+        int64_t playerController = memory->read_mem<int64_t>(this->address + Offsets::LocalPlayer::ptr_playerController, NULL);
         this->playerController.update(playerController);
 
         return true;
+    }
+
+    //检查该地址是LocalPlayer实例
+    bool validateAddress(int64_t address) {
+
+        int64_t localPlayerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_LocalPlayerClass, NULL);
+
+        if (localPlayerClass == NULL) {
+            //Error finding class
+            return false;
+        }
+
+        int64_t localPlayerClass_ = memory->read_mem<int64_t>(address, NULL);
+
+        return localPlayerClass == localPlayerClass_;
     }
 };

@@ -2,8 +2,8 @@
 
 #include<list>
 
-#include"../memory.hpp"
-#include"../client.hpp"
+#include"../Memory.hpp"
+#include"../Client.hpp"
 #include"../Class/Hack.hpp"
 #include"PlayerController.hpp"
 #include"LocalPlayer.hpp"
@@ -29,13 +29,28 @@ public:
     /// <param name="playerControllers"></param>
     /// <param name="num">Number of players</param>
     void playerControllerUpdater() {
-        PlayerController* playerControllers = client->playerControllers;
+        //PlayerController* playerControllers = client->playerControllers;
+        auto playerControllers = client->playerControllers;
         LocalPlayer* localPlayer = &client->localPlayer;
         int players = client->n_players;
 
         while (true) {
-            updateLocalPlayer(localPlayer);
-            updatePlayerController(playerControllers, players);
+
+            bool localPlayerUpdated = false;
+            updateLocalPlayer(localPlayer, &localPlayerUpdated);
+
+            if (localPlayerUpdated) {
+                updatePlayerController(playerControllers, players);
+            }
+            else {
+                //TODO: LocalPlayer更新失败，重置所有玩家
+                for (auto ptr_playerController : playerControllers) {
+                    if (ptr_playerController->address) {
+                        ptr_playerController->reset();
+                    }
+                }
+            }
+            
             Sleep(30);
         }
     }
@@ -55,7 +70,7 @@ private:
                     //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
                     int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr);
+                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr, NULL);
 
                     memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 131090);
 
@@ -76,7 +91,7 @@ private:
     /// 更新本地玩家
     /// </summary>
     /// <param name="playerController"></param>
-    void updateLocalPlayer(LocalPlayer* localPlayer) {
+    void updateLocalPlayer(LocalPlayer* localPlayer, bool* localPlayerUpdated) {
         //获取内存中对应玩家槽位的实例地址
         std::vector<int64_t> offsets = GameAssembly::localPlayer();
         //offsets.pop_back();
@@ -86,13 +101,14 @@ private:
         int64_t localPlayerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
 
         if (localPlayerAddr == NULL) {
+            *localPlayerUpdated = false;
             return;
         }
 
         //Update localplayer
-        localPlayer->update(localPlayerAddr);
+        *localPlayerUpdated = localPlayer->update(localPlayerAddr);
 
-        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController);
+        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController, NULL);
 
         //Update playerController
         updatePlayerController(&localPlayer->playerController, localPlayerController);
@@ -122,7 +138,8 @@ private:
         }
 
         hack.removeFogOfWar(&localPlayer->playerController);
-        hack.noclip(&localPlayer->playerController);
+        //TODO: Bugged 会导致游戏崩溃
+        //hack.noclip(&localPlayer->playerController);
         hack.speedHack(localPlayer);
     }
 
@@ -130,7 +147,7 @@ private:
         //内存中当前玩家槽位不存在数据
         //Data not available
         if (address == NULL) {
-            dst->address = NULL;
+            dst->reset();
             return false;
         }
 
@@ -149,14 +166,14 @@ private:
     /// </summary>
     /// <param name="playerControllers"></param>
     /// <param name="playersNum"></param>
-    void updatePlayerController(PlayerController playerControllers[], int playersNum) {
+    void updatePlayerController(std::vector<PlayerController*> playerControllers, int playersNum) {
         int validPlayers = 0;
 
         //遍历所有PlayerController
         for (int i = 0; i < playersNum; ++i) {
             //获取当前遍历的玩家槽位中的PlayerController
             //Current pointer of iterated PlayerController in array
-            PlayerController* ptr_playerController = &(playerControllers[i]);
+            PlayerController* ptr_playerController = playerControllers[i];
 
             //获取内存中对应玩家槽位的实例地址
             std::vector<int64_t> offsets = GameAssembly::playerControllerByIndex(i);
