@@ -3,7 +3,7 @@
 
 #include"../Data/offsets.hpp"
 #include"../Struct/Common.hpp"
-#include"../memory.hpp"
+#include"../Memory.hpp"
 
 #include<Windows.h>
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "memory.hpp"
+#include "Memory.hpp"
 #include "Struct/HackSettings.hpp"
 #include "Class/PlayerController.hpp"
 #include"Class/LocalPlayer.hpp"

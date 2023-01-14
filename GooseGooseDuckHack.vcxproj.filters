@@ -50,10 +50,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client.hpp">
+    <ClInclude Include="Client.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="memory.hpp">
+    <ClInclude Include="Memory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Class\PlayerController.hpp">
@@ -135,6 +135,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enum\EnumGameMaps.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

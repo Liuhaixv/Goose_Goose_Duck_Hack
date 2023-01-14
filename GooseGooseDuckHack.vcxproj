@@ -155,6 +155,7 @@
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Data\offsets.hpp" />
     <ClInclude Include="Class\PlayerController.hpp" />
     <ClInclude Include="Data\GameData.hpp" />
@@ -178,8 +179,8 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
-    <ClInclude Include="client.hpp" />
-    <ClInclude Include="memory.hpp" />
+    <ClInclude Include="Client.hpp" />
+    <ClInclude Include="Memory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include"../client.hpp"
+#include"../Client.hpp"
 #include"../Class/PlayerController.hpp"
 
 class Hack {

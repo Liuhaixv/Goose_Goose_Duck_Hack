@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <tchar.h>
 
-#include"client.hpp"
+#include"Client.hpp"
 #include"utils.hpp"
 
 #include"Struct/HackSettings.hpp"

@@ -2,8 +2,8 @@
 
 #include<list>
 
-#include"../memory.hpp"
-#include"../client.hpp"
+#include"../Memory.hpp"
+#include"../Client.hpp"
 #include"../Class/Hack.hpp"
 #include"PlayerController.hpp"
 #include"LocalPlayer.hpp"

@@ -1,7 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
-#include "client.hpp"
+#include "Client.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
