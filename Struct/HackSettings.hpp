@@ -10,6 +10,8 @@ struct HackSettings {
     bool disableFogOfWar = false;
     bool enableNoclip = false;
 
+    bool b_removeSkillCoolDown = false;
+
     bool b_debug_disableWriteMemory = false;
     //bool b_debug_disableReadMemory = false;
 

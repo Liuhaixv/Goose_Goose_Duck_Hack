@@ -87,9 +87,21 @@ namespace Offsets {
         }
         constexpr int64_t ptr_unknownClass0 = 0x30;
     }
+
+    namespace UICooldownButton {
+        constexpr int64_t f_cooldownTime = 0x70;
+    }
 }
 
 namespace GameAssembly {
+    namespace BytesPatch {
+        namespace CooldownTime {
+            constexpr int64_t address = 0xC1C4E8;
+            constexpr std::string raw = "\x73";
+            constexpr std::string removeCooldownTime = "\x53";
+        }
+    }
+
     namespace Class {
         constexpr int64_t ptr_PlayerControllerClass = 0x3D97140;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x3D69DF0;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *

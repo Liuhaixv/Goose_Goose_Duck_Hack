@@ -155,6 +155,7 @@
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\LocalPlayer.hpp" />

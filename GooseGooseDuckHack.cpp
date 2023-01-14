@@ -14,6 +14,7 @@
 #include"./Class/DataUpdater.hpp"
 #include"./Class/HotkeyUpdater.hpp"
 #include"./Class/GameProcessUpdater.hpp"
+#include"./Class/BytesPatchUpdater.hpp"
 
 #include"./Class/PlayerController.hpp"
 
@@ -36,8 +37,6 @@ Hack hack;
 HackSettings hackSettings;
 Client* g_client;
 
-
-
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置
@@ -57,6 +56,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //Init updaters
     HotkeyUpdater hotkeyUpdater(&hackSettings);
     DataUpdater dataUpdater(&client);
+    BytesPatchUpdater bytesUpdater(&memory);
     MemoryUpdater memoryUpdater(&memory, &client, &hackSettings);
 
     //监听热键
@@ -65,6 +65,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //启动游戏内存数据更新线程
     //Game data updater
     std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
+    //启动字节补丁线程
+    //Game process finder
+    std::thread bytesPatchUpdater(&BytesPatchUpdater::bytesPatchUpdater, &bytesUpdater);
     //启动游戏进程查找线程
     //Game process finder
     std::thread gameProcessUpdater(&MemoryUpdater::gameProcessUpdater, &memoryUpdater);

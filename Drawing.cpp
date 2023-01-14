@@ -102,6 +102,8 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
 
     drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 1.0f, 1.0f));
     drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), str("You", "你"));
+
+    return true;
 }
 
 /// <summary>
@@ -378,6 +380,8 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
+
+            ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
             ImGui::Checkbox(str("Enable","启用"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
@@ -387,7 +391,8 @@ void drawMenu() {
                 minSpeed * 2
             );
 
-            ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
+            //玩家移速
+            //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
 
             ImGui::EndTabItem();
         }

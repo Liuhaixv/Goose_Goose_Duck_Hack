@@ -15,7 +15,7 @@ public:
     LocalPlayer localPlayer;
     std::vector<PlayerController*> playerControllers;
 
-    Client(Memory* memory, HackSettings* hackSettings = nullptr)
+    Client(Memory* memory, HackSettings* hackSettings)
     {
         this->memory = memory;
         this->hackSettings = hackSettings;
