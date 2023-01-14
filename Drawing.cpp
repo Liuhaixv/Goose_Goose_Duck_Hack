@@ -455,18 +455,6 @@ void drawMenu() {
         }
 
         //菜单4
-        if (ImGui::BeginTabItem(str("ESP", "透视")))
-        {
-            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
-            ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
-            HelpMarker(
-                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
-            );
-
-            ImGui::EndTabItem();
-        }
-
-        //菜单5
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
@@ -474,6 +462,18 @@ void drawMenu() {
             if (ImGui::Button(str("Link to project", "查看项目"))) {
                 ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
             }
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单5
+        if (hackSettings.guiSettings.b_debug && ImGui::BeginTabItem(str("ESP", "透视")))
+        {
+            ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
+            ImGui::Checkbox(str("Enable ESP", "全局开关"), &hackSettings.guiSettings.b_enableESP);
+            HelpMarker(
+                str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
+            );
 
             ImGui::EndTabItem();
         }
