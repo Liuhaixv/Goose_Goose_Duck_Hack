@@ -22,7 +22,7 @@ struct GameMap {
     /// X→
     /// <returns></returns>
     /// </summary>
-    Vector2 relativePositionLeftBottom_to_PositionInGame(Vector2 relativePosition) {
+    Vector2 relativePositionLeftBottom_to_PositionInGame(const Vector2 &relativePosition) {
         //因为游戏内坐标很小，所以这里坐标换算中先处理缩放
 
         float x = relativePosition.x;
@@ -41,7 +41,7 @@ struct GameMap {
     }
 
 
-    Vector2 positionInGame_to_relativePositionLeftBottom(Vector2 positionIngame) {
+    Vector2 positionInGame_to_relativePositionLeftBottom(const Vector2 &positionIngame) {
         float x = positionIngame.x;
         float y = positionIngame.y;
 
