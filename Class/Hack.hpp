@@ -53,6 +53,8 @@ public:
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
     bool enableNoclip(PlayerController* localPlayer, bool enable = true) {
+        bool shouldEnableCollider = !enable;
+
         Memory* memory = this->client->getMemory();
         std::vector<int64_t> offsets{
                 Offsets::PlayerController::ptr_bodyCollider,
@@ -66,7 +68,12 @@ public:
             return false;
         }
 
-        memory->write_mem<bool>(b_enableCollider, !enable);
+        bool colliderEnabled = memory->read_mem<bool>(b_enableCollider);
+
+        //enable就是启用穿墙，即禁用碰撞
+        if (colliderEnabled != shouldEnableCollider) {
+            memory->write_mem<bool>(b_enableCollider, shouldEnableCollider);
+        }
     }
 
     void noclip(PlayerController* localPlayerController) {
