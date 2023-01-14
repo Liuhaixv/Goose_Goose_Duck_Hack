@@ -21,6 +21,9 @@ public:
 
     }
 
+    //记录死亡时附近的玩家信息
+    std::vector<PlayerController> playersNearbyOnDeath;
+
     int64_t address = NULL;    
 
     bool b_isSilenced = false;
