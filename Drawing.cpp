@@ -348,7 +348,7 @@ void drawMenu() {
     bool* ptr_bOpen = &b_open;
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
     ImGui::Begin(str("Main", "主菜单"),NULL, ImGuiWindowFlags_MenuBar);
-
+    
     if (ImGui::BeginMenuBar())
     {
         ImGui::Text(str("Game status: ","游戏状态: "));
@@ -368,8 +368,8 @@ void drawMenu() {
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
         PlayerController* playerController = &g_client->localPlayer.playerController;
-        //菜单3
-        if (ImGui::BeginTabItem(str("LocalPlayer Info", "本地玩家信息")))
+        //菜单1
+        if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
             ImGui::Text(playerController->nickname.c_str());
 
@@ -392,7 +392,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单1
+        //菜单2
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
             if (ImGui::BeginTable("table1", 5,
@@ -438,7 +438,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单2
+        //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.disableFogOfWar);
@@ -454,7 +454,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单2
+        //菜单4
         if (ImGui::BeginTabItem(str("ESP", "透视")))
         {
             ImGui::Text(str("Button below is just for testing if overlay works", "下面的按钮目前只是为了测试绘制能否正常工作"));
@@ -466,13 +466,25 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单2
+        //菜单5
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
             ImGui::SameLine();
             if (ImGui::Button(str("Link to project", "查看项目"))) {
                 ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
+            }
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单6
+        if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
+        {
+            ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
+
+            if (hackSettings.guiSettings.b_debug) {
+                ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
             }
 
             ImGui::EndTabItem();

@@ -10,6 +10,9 @@ struct HackSettings {
     bool disableFogOfWar = false;
     bool enableNoclip = false;
 
+    bool b_debug_disableWriteMemory = false;
+    //bool b_debug_disableReadMemory = false;
+
     GameOriginalData gameOriginalData;
     GameStateSettings gameStateSettings;
     GuiSettings guiSettings;

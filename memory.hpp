@@ -6,11 +6,14 @@
 #include <tchar.h> // _tcscmp
 #include <vector>
 
+#include"Struct/HackSettings.hpp"
+
 #include"utils.hpp"
 #include "Enum/OpenProcessState.hpp"
 #include <map>
 
 extern Utils utils;
+extern HackSettings hackSettings;
 
 class Memory {
 public:
@@ -59,6 +62,9 @@ public:
 
     template <typename var>
     bool write_mem(int64_t address, var value) {
+        if (hackSettings.b_debug_disableWriteMemory) {
+            return true;
+        }
         return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
     }
 
@@ -69,10 +75,9 @@ public:
         return value;
     }
 
-    void copy_bytes(int64_t src_address, int64_t dst_address, int64_t numOfBytes) {
-        ReadProcessMemory(processHandle, (LPCVOID)src_address, &dst_address, numOfBytes, NULL);
-    }
-
+    //void copy_bytes(int64_t src_address, int64_t dst_address, int64_t numOfBytes) {
+    //    ReadProcessMemory(processHandle, (LPCVOID)src_address, &dst_address, numOfBytes, NULL);
+    //}
 
     int64_t FindPointer(int64_t moduleBaseAddress, int offset_num, int64_t offsets[])
     {
