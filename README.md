@@ -11,8 +11,8 @@
 
 # 功能
 ### 显示类
-1. 查看其他玩家的职业身份 **(目前有Bug，详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
-2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+1. 查看其他玩家的职业身份 **(目前有Bug，详见 [公告](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
+2. 查看其他玩家本轮是否杀过人 **(目前有Bug, 详见 [公告](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
 3. 查看其他玩家死亡时间
 4. **[新]** 独立小地图窗口显示所有玩家位置
 5. **[新]** 点击地图即可传送到想要的位置
@@ -61,8 +61,8 @@ Developing new function, reveal players near the dead player
 
 # Features
 ### Reveal Info
-1. See other players' rolenames **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
-2. See if other player's killed someone this round **(Not fully working, see [Issue#3](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3))**
+1. See other players' rolenames **(Not fully working, see [Announcement](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
+2. See if other player's killed someone this round **(Not fully working, see [Announcement](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90))**
 3. See other player's death time
 4. **[New]** minimap that shows all players' nicknames and positions   
 5. **[New]** Click on minimap to teleport 
