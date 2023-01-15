@@ -207,19 +207,20 @@ bool drawPlayerDeathSnapshot(PlayerController* deadPlayer, const char* str_id) {
     //当前已选择的地图
     int i_selectedMinimap = hackSettings.guiSettings.i_selectedMinimap;
 
-    if (i_selectedMinimap < 0) {
-        return false;
-    }
-
-    GameMap* gameMap = &UI::miniMaps.at(i_selectedMinimap);
-
     if (ImGui::BeginPopup(str_id, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+        if (i_selectedMinimap < 0) {
+            ImGui::Text(str("You have to select a map from minimap first to enable this feature.", "你必须先在minimap中选择地图才能查看玩家位置"));
+        }
+        else {
+            GameMap* gameMap = &UI::miniMaps.at(i_selectedMinimap);
 
-        //图片左下角
-        auto mousePositionLeftBottomOfGamemap = ImGui::GetCursorScreenPos();
-        drawPlayersNearbyDeadPlayer(*gameMap, deadPlayer, mousePositionLeftBottomOfGamemap);
+            ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+
+            //图片左下角
+            auto mousePositionLeftBottomOfGamemap = ImGui::GetCursorScreenPos();
+            drawPlayersNearbyDeadPlayer(*gameMap, deadPlayer, mousePositionLeftBottomOfGamemap);
+        }
         ImGui::EndPopup();
     }
     return true;
@@ -544,14 +545,19 @@ void drawMenu() {
                     //TODO: 添加一个按钮，首先判断玩家是否死亡，死亡的话就显示按钮。按钮点击即可显示地图，显示当时玩家的位置
 
                     ImGui::TableNextColumn();
-                    if (ImGui::Button((std::string(str("Show", "显示")) + "##" + std::to_string(i)).c_str())) {
-                        ImGui::OpenPopup(playerDeathSnapshotPopup);
-                        deadplayerIndex = i;
-                    }
-                    if (deadplayerIndex >= 0) {
-                        if (!hasOpenedPopup) {
-                            hasOpenedPopup = true;
-                            drawPlayerDeathSnapshot(g_client->playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
+
+                    //只有死亡玩家有按钮
+                    if (ptr_playerController->i_timeOfDeath > 0) {
+                        if (ImGui::Button((std::string(str("Show", "显示")) + "##" + std::to_string(i)).c_str())) {
+                            ImGui::OpenPopup(playerDeathSnapshotPopup);
+                            deadplayerIndex = i;
+                        }
+
+                        if (deadplayerIndex >= 0) {
+                            if (!hasOpenedPopup) {
+                                hasOpenedPopup = true;
+                                drawPlayerDeathSnapshot(g_client->playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
+                            }
                         }
                     }
                 }
