@@ -15,7 +15,7 @@ public:
         playerController.setMemory(this->memory);
     }
 
-    LocalPlayer(Memory* memory) {
+    LocalPlayer(IN Memory* memory) {
         this->memory = memory;
         playerController.setMemory(this->memory);
     }
@@ -23,7 +23,7 @@ public:
     int64_t address = NULL;
 
     PlayerController playerController;
-  
+
     /// <summary>
     /// 获取当前移动速度
     /// </summary>
@@ -38,7 +38,7 @@ public:
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,
                Offsets::LocalPlayer::Class::ptr_staticFields,
-               Offsets::LocalPlayer::Class::StaticField::f_movementSpeed};
+               Offsets::LocalPlayer::Class::StaticField::f_movementSpeed };
 
             int64_t addr = memory->FindPointer(this->address, offsets);
             if (addr == NULL) {
@@ -93,9 +93,9 @@ public:
         }
 
         return true;
-    }    
+    }
 
-    void setMemory(Memory* memory) {
+    void setMemory(IN Memory* memory) {
         this->memory = memory;
         playerController.setMemory(this->memory);
     }
@@ -107,7 +107,7 @@ public:
     }
 
     void resetMemberFields() {
-        
+
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ private:
     }
 
     //检查该地址是LocalPlayer实例
-    bool validateAddress(int64_t address) {
+    bool validateAddress(IN int64_t address) {
 
         int64_t localPlayerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_LocalPlayerClass, NULL);
 

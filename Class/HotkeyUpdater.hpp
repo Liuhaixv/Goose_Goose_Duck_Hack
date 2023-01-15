@@ -8,7 +8,7 @@
 /// </summary>
 class HotkeyUpdater {
 public:
-    HotkeyUpdater(HackSettings* hackSettings) {
+    HotkeyUpdater(IN HackSettings* hackSettings) {
         this->hackSettings = hackSettings;
     }
 
@@ -39,10 +39,10 @@ public:
             //Insert switch main menu
             checkSwitchHotkey(VK_INSERT, &this->pressingInsert, &hackSettings->guiSettings.b_enableMenu);
             //Delete to switch minimap
-            checkSwitchHotkey(VK_DELETE,&this->pressingDel, &hackSettings->guiSettings.b_enableMinimap );
+            checkSwitchHotkey(VK_DELETE, &this->pressingDel, &hackSettings->guiSettings.b_enableMinimap);
             //TODO:END key to quit program
             //END键结束辅助
-            checkSwitchHotkey(VK_END,&this->pressingEnd, &hackSettings->b_quitProgram );              
+            checkSwitchHotkey(VK_END, &this->pressingEnd, &hackSettings->b_quitProgram);
         }
     }
 private:

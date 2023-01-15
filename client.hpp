@@ -68,11 +68,11 @@ public:
     /// 有玩家死亡
     /// </summary>
     /// <param name="playerController"></param>
-    void onPlayerDeath(PlayerController* playerController) {
+    void onPlayerDeath(IN PlayerController* playerController) {
         //TODO: 统计死亡位置附近的玩家
     }
     
-    bool teleportTo(Vector2 to) {
+    bool teleportTo(IN const Vector2& to) {
         if (this->localPlayer.address == NULL) {
             return false;
         }

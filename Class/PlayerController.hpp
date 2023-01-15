@@ -13,7 +13,7 @@ public:
         this->memory = nullptr;
     }
 
-    PlayerController(Memory* memory) {
+    PlayerController(IN Memory* memory) {
         this->memory = memory;
     }
 
@@ -47,7 +47,7 @@ public:
 
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
-    void setMemory(Memory* memory) {
+    void setMemory(IN Memory* memory) {
         this->memory = memory;
     }
 
@@ -82,7 +82,7 @@ public:
     /// 传送玩家到指定的点
     /// </summary>
     /// <param name="position"></param>
-    bool teleportTo(Vector2 to) {
+    bool teleportTo(IN const Vector2& to) {
         //无效指针
         //invalid pointer address
         if (this->address == NULL) {
@@ -178,7 +178,7 @@ public:
     /// </summary>
     /// <param name="address"></param>
     /// <returns></returns>
-    bool update(int64_t address) {
+    bool update(IN int64_t address) {
         if (address == NULL) {
             return false;
         }
@@ -203,7 +203,7 @@ private:
     }
 
     //检查该地址是PlayerController实例
-    bool validateAddress(int64_t address) {
+    bool validateAddress(IN int64_t address) {
 
 
         int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass, NULL);

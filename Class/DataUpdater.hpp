@@ -62,7 +62,7 @@ private:
     /// 更新本地玩家
     /// </summary>
     /// <param name="playerController"></param>
-    void updateLocalPlayer(LocalPlayer* localPlayer, bool* localPlayerUpdated) {
+    void updateLocalPlayer(LocalPlayer* localPlayer, OUT bool* localPlayerUpdated) {
         //获取内存中对应玩家槽位的实例地址
         std::vector<int64_t> offsets = GameAssembly::localPlayer();
         //offsets.pop_back();

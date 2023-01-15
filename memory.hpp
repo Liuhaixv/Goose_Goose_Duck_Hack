@@ -61,7 +61,7 @@ public:
     }
 
     template <typename var>
-    bool write_mem(int64_t address, var value) {
+    bool write_mem(IN int64_t address, IN var value) {
         if (hackSettings.b_debug_disableWriteMemory) {
             return true;
         }
@@ -69,7 +69,7 @@ public:
     }
 
     template <typename var>
-    var read_mem(int64_t address, var defaultValue) {
+    var read_mem(IN int64_t address, IN var defaultValue) {
         var value;
         if (!this->isAddressInMemoryRegions(address)) {
             return defaultValue;
@@ -82,7 +82,7 @@ public:
     //    ReadProcessMemory(processHandle, (LPCVOID)src_address, &dst_address, numOfBytes, NULL);
     //}
 
-    int64_t FindPointer(int64_t moduleBaseAddress, int offset_num, int64_t offsets[])
+    int64_t FindPointer(IN int64_t moduleBaseAddress, IN int offset_num, IN int64_t offsets[])
     {
         if (offset_num <= 0) {
             return NULL;
@@ -108,7 +108,7 @@ public:
         return Address;
     }
 
-    int64_t FindPointer(int64_t baseAddress, std::vector<int64_t> offsets)
+    int64_t FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offsets)
     {
         if (offsets.size() == 0) {
             return NULL;
@@ -180,7 +180,7 @@ private:
     /// </summary>
     /// <param name="address"></param>
     /// <returns></returns>
-    bool isAddressInMemoryRegions(int64_t address) {
+    bool isAddressInMemoryRegions(IN int64_t address) {
         MEMORY_BASIC_INFORMATION info;
         VirtualQueryEx(this->processHandle, (LPCVOID)address, &info, sizeof(info));
         return info.State == MEM_COMMIT;
