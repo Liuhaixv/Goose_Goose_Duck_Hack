@@ -7,7 +7,6 @@
 # 进程
 
 当前正在修复Bug
-[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # 功能
 ### 显示类
@@ -59,7 +58,6 @@ This project is currently active in development. Leave a star if you like it. Yo
 # Progress
 
 Fixing bugs
-[Issue#18](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/18)
 
 # Features
 ### Reveal Info
