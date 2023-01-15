@@ -8,6 +8,8 @@
 #include<winnls.h>
 #include<iostream>
 
+#include"Enum/ActivationState.hpp"
+
 //编码转换
 #include<codecvt>
 
@@ -21,6 +23,31 @@ public:
 
     Utils() {
         b_chineseOS = isChineseLanguageOS();
+    }
+
+    ActivationState shouldActivateOnce(IN const bool& settingEnabled,IN OUT bool* b_activatedAlready) {
+        //当前启用
+        if (settingEnabled)
+        {
+            //之前没有激活启用，说明现在是刚刚启用，此时返回1
+            if (!(*b_activatedAlready)) {
+                //之前没激活过，现在已经是激活的状态了
+                *b_activatedAlready = true;
+
+                return ActivationState::SHOULD_ACTIVATE_NOW;
+            }
+        }
+        else {
+            //之前是激活启用状态，说明现在是刚刚禁用，此时返回True
+            if (*b_activatedAlready) {
+                *b_activatedAlready = false;
+
+                return ActivationState::SHOULD_DEACTIVATE_NOW;
+            }
+        }
+
+        //已经激活过或者一直没有激活过
+        return ActivationState::IDLE_DO_NOTHING;
     }
 
     /// <summary>

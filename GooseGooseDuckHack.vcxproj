@@ -165,6 +165,7 @@
     <ClCompile Include="Class\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Drawing.h" />
+    <ClInclude Include="Enum\ActivationState.hpp" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />

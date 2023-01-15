@@ -16,7 +16,7 @@ struct GuiSettings {
 
     //速度修改
     bool b_enableSpeedHack = false;
-    float f_baseMovementSpeed = -1;
+    float f_movementSpeed = -1;
 
     //debugmode
     bool b_debug = false;

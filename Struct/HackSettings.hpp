@@ -8,7 +8,7 @@ struct HackSettings {
     bool b_quitProgram = false;
 
     bool disableFogOfWar = false;
-    bool enableNoclip = false;
+    bool tempEnableNoclip = false;
 
     bool b_removeSkillCoolDown = false;
 

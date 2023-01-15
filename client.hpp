@@ -42,7 +42,7 @@ public:
     /// </summary>
     void resetGuiSettings() {
         GuiSettings* a = &this->hackSettings->guiSettings;
-        a->f_baseMovementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+        a->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
     }
 
     /// <summary>

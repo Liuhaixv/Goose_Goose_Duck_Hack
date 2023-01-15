@@ -27,10 +27,10 @@ public:
                 //左ALT键开启穿墙
                 if (GetAsyncKeyState(VK_LMENU))
                 {
-                    hackSettings->enableNoclip = true;
+                    hackSettings->tempEnableNoclip = true;
                 }
                 else {
-                    hackSettings->enableNoclip = false;
+                    hackSettings->tempEnableNoclip = false;
                 }
             }
 

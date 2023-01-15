@@ -5,8 +5,10 @@
 #include"../Client.hpp"
 #include"../Class/Hack.hpp"
 #include"LocalPlayer.hpp"
+#include"../utils.hpp"
 
 extern Hack hack;
+extern Utils utils;
 
 /// <summary>
 /// Thread functions that update data.
@@ -109,8 +111,7 @@ private:
         }
 
         hack.removeFogOfWar(&localPlayer->playerController);
-        //TODO: Bugged 会导致游戏崩溃
-        //hack.noclip(&localPlayer->playerController);
+        hack.noclip(&localPlayer->playerController);//TODO: Bugged 会导致游戏崩溃
         hack.speedHack(localPlayer);
     }
 

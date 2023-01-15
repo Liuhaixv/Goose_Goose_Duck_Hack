@@ -3,6 +3,7 @@
 #include"../Client.hpp"
 #include"../Class/PlayerController.h"
 #include"../Data/offsets.hpp"
+#include"../Enum/ActivationState.hpp"
 
 class Hack {
 public:
@@ -18,32 +19,45 @@ public:
         this->client = client;
     }
 
+    //只需要激活一次
     void removeFogOfWar(PlayerController* localPlayerController) {
-        //修改fog of war
-        if (localPlayerController->b_isLocal) {
-            if (this->client && this->client->hackSettings) {
-                if (this->client->hackSettings->disableFogOfWar) {
 
-                    //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
-                    Memory* memory = this->client->getMemory();
+        ActivationState state = utils.shouldActivateOnce(hackSettings.disableFogOfWar, &this->hasDisabledFOW);
+        if (state == IDLE_DO_NOTHING) {
+            return;
+        }
 
-                    int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr, NULL);
+        bool shouldEnableCollider = false;
+        if (state == SHOULD_ACTIVATE_NOW) {
+            //修改fog of war
+            if (localPlayerController->b_isLocal) {
+                if (this->client && this->client->hackSettings) {
+                    if (this->client->hackSettings->disableFogOfWar) {
 
-                    if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
-                        //disable fow
-                        //set layermask
-                        memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+                        //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
+                        Memory* memory = this->client->getMemory();
 
-                        //7.5 is enough to see the whole screen
-                        //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                        float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
-                        if (f_viewDistanceMultiplier != 0) {
-                            memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                        int64_t fogOfWarHandler_addr = memory->FindPointer(memory->gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
+                        int64_t fogOfWarHandler = memory->read_mem<int64_t>(fogOfWarHandler_addr, NULL);
+
+                        if (memory->read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
+                            //disable fow
+                            //set layermask
+                            memory->write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+
+                            //7.5 is enough to see the whole screen
+                            //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
+                            float f_viewDistanceMultiplier = memory->read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
+                            if (f_viewDistanceMultiplier != 0) {
+                                memory->write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                            }
                         }
                     }
                 }
             }
+        }
+        else if (state == SHOULD_DEACTIVATE_NOW) {
+            //TODO: 反激活，启用战争迷雾
         }
     }
 
@@ -53,8 +67,18 @@ public:
     /// </summary>
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
-    bool enableNoclip(PlayerController* localPlayer, bool enable = true) {
-        bool shouldEnableCollider = !enable;
+    bool enableNoclip(PlayerController* localPlayer, bool shouldEnable) {
+        ActivationState state = utils.shouldActivateOnce(shouldEnable, &this->hasEnabledNoclip);
+        if (state == IDLE_DO_NOTHING) {
+            return false;
+        }
+        bool shouldEnableCollider = false;
+        if (state == SHOULD_ACTIVATE_NOW) {
+            shouldEnableCollider = false;
+        }
+        else if (state == SHOULD_DEACTIVATE_NOW) {
+            shouldEnableCollider = true;
+        }
 
         Memory* memory = this->client->getMemory();
         std::vector<int64_t> offsets{
@@ -81,12 +105,8 @@ public:
         //开启穿墙
         if (localPlayerController && localPlayerController->b_isLocal) {
             if (this->client && this->client->hackSettings) {
-                if (this->client->hackSettings->guiSettings.b_alwaysEnableNoclip) {
-                    enableNoclip(localPlayerController);
-                }
-                else {
-                    enableNoclip(localPlayerController, this->client->hackSettings->enableNoclip);
-                }
+             enableNoclip(localPlayerController,
+                 this->client->hackSettings->guiSettings.b_alwaysEnableNoclip || this->client->hackSettings->tempEnableNoclip);
             }
         }
     }
@@ -98,12 +118,18 @@ public:
             return;
         }
 
-        float targetSpeed = this->client->hackSettings->guiSettings.f_baseMovementSpeed;
+        static float targetSpeed = this->client->hackSettings->guiSettings.f_movementSpeed;
+
+        //目标速度未变化，直接返回
+        if (targetSpeed == this->client->hackSettings->guiSettings.f_movementSpeed) {
+            return;
+        }
 
         if (targetSpeed < 0) {
             targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
-            this->client->hackSettings->guiSettings.f_baseMovementSpeed = targetSpeed;
-        }else{
+            this->client->hackSettings->guiSettings.f_movementSpeed = targetSpeed;
+        }
+        else {
             Memory* memory = this->client->getMemory();
             //开启穿墙
             if (localPlayer) {
@@ -112,13 +138,16 @@ public:
                     Offsets::LocalPlayer::Class::ptr_staticFields,
                     Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
                 };
-                int64_t baseMovementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
+                int64_t movementSpeed_addr = memory->FindPointer(localPlayer->address, offsets);
 
-                memory->write_mem<float>(baseMovementSpeed_addr, targetSpeed);
+                memory->write_mem<float>(movementSpeed_addr, targetSpeed);
             }
         }
     }
 
 private:
     Client* client = nullptr;
+
+    bool hasDisabledFOW = false;
+    bool hasEnabledNoclip = false;
 };
