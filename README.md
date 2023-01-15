@@ -16,6 +16,7 @@
 3. 查看其他玩家死亡时间
 4. **[新]** 独立小地图窗口显示所有玩家位置
 5. **[新]** 点击地图即可传送到想要的位置
+6. **[新]** 查看任意玩家死亡时所有人的位置
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
  
 
@@ -67,6 +68,7 @@ Developing new function, reveal players near the dead player
 3. See other player's death time
 4. **[New]** minimap that shows all players' nicknames and positions   
 5. **[New]** Click on minimap to teleport 
+6. **[New]** Inspect all players' positions near dead player
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
 
 ### Rage
