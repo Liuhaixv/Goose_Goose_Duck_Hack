@@ -117,7 +117,7 @@ void PlayerController::resetMemberFields()
 /// 添加其他玩家的数据到playersNearbyOnDeath向量保存起来
 /// </summary>
 /// <param name="suspectKiller">可能的凶手</param>
-void addPlayersNearby(IN PlayerController *suspectKiller)
+void PlayerController::addPlayersNearby(IN PlayerController *suspectKiller)
 {
     // TODO
     if (suspectKiller == NULL)
