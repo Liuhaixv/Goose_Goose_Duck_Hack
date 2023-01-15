@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include"../Client.hpp"
-#include"../Class/PlayerController.hpp"
+#include"../Class/PlayerController.h"
 
 class Hack {
 public:

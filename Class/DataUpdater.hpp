@@ -195,6 +195,7 @@ private:
         }
         */
 
+        /*
         static std::vector<PlayerController*> deadPlayersThatHasNotRecordedPlayersNearBy;
 
         //首先统计需要保存死亡数据的玩家
@@ -259,5 +260,6 @@ private:
                 }
             }
         }
+        */
     }
 };

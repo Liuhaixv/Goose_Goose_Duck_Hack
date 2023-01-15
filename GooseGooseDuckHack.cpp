@@ -16,7 +16,7 @@
 #include"./Class/GameProcessUpdater.hpp"
 #include"./Class/BytesPatchUpdater.hpp"
 
-#include"./Class/PlayerController.hpp"
+#include"./Class/PlayerController.h"
 
 //Windows
 #include<Windows.h>
