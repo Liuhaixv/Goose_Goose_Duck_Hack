@@ -1,0 +1,24 @@
+﻿
+
+// Namespace: Handlers.GameHandlers.TaskHandlers
+public class TaskTargetingHandler : MonoBehaviour // TypeDefIndex: 1958
+{
+	// Fields
+	public static TaskTargetingHandler Instance; // 0x0
+	public GameObject targetArrowPrefab; // 0x18
+	[FormerlySerializedAs("targettedTaskImage")]
+	public Image targetedTaskImage; // 0x20
+	[FormerlySerializedAs("targettedTaskText")]
+	public TextMeshProUGUI targetedTaskText; // 0x28
+	public GameObject dotDotDotTask; // 0x30
+	public readonly List<TargetHandler> activeArrows; // 0x38 //当前已经激活的箭头
+	public TaskPrefabHandler CurrentTargetingTask; // 0x40
+	public bool isTargetingTask; // 0x48
+	private int MJGOMHJBOCO; // 0x4C
+	private int GAKMHLIPBID; // 0x50
+
+    // Methods
+
+	// RVA: 0xDF97F0 Offset: 0xDF85F0 VA: 0x180DF97F0
+	public void TargetPlayer(PlayerController GFBFPJCBKMO, TargetHandler.MEAEEPIEFIM LOOEFMECPGF = 0) { }
+

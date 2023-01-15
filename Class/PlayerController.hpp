@@ -21,7 +21,11 @@ public:
 
     }
 
+    //最大记录范围
+    const float f_maxRangeRecordingPlayersNearby = 5.0f;
+
     //记录死亡时附近的玩家信息
+    bool b_hasRecordedPlayersNearby = false;
     std::vector<PlayerController> playersNearbyOnDeath;
 
     int64_t address = NULL;    
@@ -58,6 +62,9 @@ public:
     }
 
     void resetMemberFields() {
+        b_hasRecordedPlayersNearby = false;
+        this->playersNearbyOnDeath.clear();
+
         b_isSilenced = false;
         b_isInfected = false;
         b_isPlayerRoleSet = false;
@@ -76,6 +83,14 @@ public:
         nickname = "";
         roleName = "";
         v3_position = { 0.0f, 0.0f, 0.0f };
+    }
+
+    /// <summary>
+    /// 添加其他玩家的数据到playersNearbyOnDeath向量保存起来
+    /// </summary>
+    /// <param name="suspectKiller">可能的凶手</param>
+    void addPlayersNearby(IN PlayerController* suspectKiller) {
+        //TODO
     }
 
     /// <summary>

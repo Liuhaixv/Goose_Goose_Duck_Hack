@@ -1,0 +1,31 @@
+﻿任务目标使用的箭头目标
+
+// Namespace: Handlers.GameHandlers.TaskHandlers
+public class TargetHandler : MonoBehaviour // TypeDefIndex: 1934
+{
+	// Fields
+	public bool useStaticPosition; // 0x18
+	public Vector3 targetingPosition; // 0x1C
+	public Transform targetingObject; // 0x28
+	public TargetHandler.MEAEEPIEFIM targetingType; // 0x30
+	public TaskPrefabHandler targetingTask; // 0x38
+	private Image PGHGAKCFIKO; // 0x40
+	[SerializeField]
+	private Sprite whiteArrowSprite; // 0x48
+	private float GBJJIMCIDLP; // 0x50
+	private float ACIJBJEHFIL; // 0x54
+}
+
+// Namespace: 
+public enum TargetHandler.MEAEEPIEFIM // TypeDefIndex: 1933
+{
+	// Fields
+	public int value__; // 0x0
+	public const TargetHandler.MEAEEPIEFIM None = 0;
+	public const TargetHandler.MEAEEPIEFIM Task = 1;
+	public const TargetHandler.MEAEEPIEFIM Sabotage = 2;
+	public const TargetHandler.MEAEEPIEFIM Body = 3;
+	public const TargetHandler.MEAEEPIEFIM Player = 4;
+	public const TargetHandler.MEAEEPIEFIM Kill = 5;
+	public const TargetHandler.MEAEEPIEFIM Stalk = 6;
+}
