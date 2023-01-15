@@ -304,6 +304,12 @@ public:
             case gameRoleId::Tracker:
                 return(u8"追踪者");
                 break;
+            case gameRoleId::EsperDuck:
+                return(u8"超能力者(鸭子)");
+                break;
+            case gameRoleId::Stalker:
+                return(u8"追踪者");
+                break;
             default:
                 return(u8"无");
                 break;
@@ -515,6 +521,12 @@ public:
                 break;
             case gameRoleId::Tracker:
                 return(u8"Tracker");
+                break;
+            case gameRoleId::EsperDuck:
+                return(u8"EsperDuck");
+                break;
+            case gameRoleId::Stalker:
+                return(u8"Stalker");
                 break;
             default:
                 return(u8"None");

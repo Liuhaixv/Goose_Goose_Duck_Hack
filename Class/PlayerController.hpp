@@ -21,6 +21,29 @@ public:
 
     }
 
+    PlayerController& operator=(PlayerController& o) {
+        this->b_isSilenced = o.b_isSilenced;
+        this->b_isInfected = o.b_isInfected;
+        this->b_isPlayerRoleSet = o.b_isPlayerRoleSet;
+        this->b_inVent = o.b_inVent;
+        this->b_hasBomb = o.b_hasBomb;
+        this->b_isGhost = o.b_isGhost;
+        this->b_isLocal = o.b_isLocal;
+        this->b_isSpectator = o.b_isSpectator;
+        this->b_isRemoteSpectating = o.b_isRemoteSpectating;
+        //本轮是否杀过人
+        this->b_hasKilledThisRound = o.b_hasKilledThisRound;
+
+        this->i_playerRoleId = o.i_playerRoleId;
+        this->invisibilityDistance = o.invisibilityDistance;
+        this->i_timeOfDeath = o.i_timeOfDeath;
+
+        this->nickname = o.nickname;
+        this->roleName = o.roleName;
+
+        this->v3_position = o.v3_position;
+    }
+
     //最大记录范围
     const float f_maxRangeRecordingPlayersNearby = 5.0f;
 
@@ -91,6 +114,11 @@ public:
     /// <param name="suspectKiller">可能的凶手</param>
     void addPlayersNearby(IN PlayerController* suspectKiller) {
         //TODO
+        if (suspectKiller == NULL) {
+            return;
+        }
+
+
     }
 
     /// <summary>
