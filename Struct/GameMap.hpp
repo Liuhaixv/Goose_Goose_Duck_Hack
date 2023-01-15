@@ -22,15 +22,22 @@ struct GameMap {
     /// X→
     /// <returns></returns>
     /// </summary>
-    Vector2 relativePositionLeftBottom_to_PositionInGame(IN const Vector2 &relativePosition) {
+    Vector2 relativePositionLeftBottom_to_PositionInGame(IN const Vector2 &relativePosition, IN bool ignoreScaleToDisplay = false) {
         //因为游戏内坐标很小，所以这里坐标换算中先处理缩放
+
+        float scaleToDisplay = this->scaleToDisplay;
+
+        //忽略minimap的显示缩放
+        if (ignoreScaleToDisplay) {
+            scaleToDisplay = 1.0f;
+        }
 
         float x = relativePosition.x;
         float y = relativePosition.y;
 
         //先将图片的分辨率px缩放到接近游戏内坐标的比例                       
-        x = x * this->scaleToGamePosition / this->scaleToDisplay;
-        y = y * this->scaleToGamePosition / this->scaleToDisplay;
+        x = x * this->scaleToGamePosition / scaleToDisplay;
+        y = y * this->scaleToGamePosition / scaleToDisplay;
 
         //地图的最左下角并不是从(0, 0)坐标开始的
         //所以这里需要加上对应的偏移
@@ -41,13 +48,19 @@ struct GameMap {
     }
 
 
-    Vector2 positionInGame_to_relativePositionLeftBottom(IN const Vector2 &positionIngame) {
+    Vector2 positionInGame_to_relativePositionLeftBottom(IN const Vector2 &positionIngame, IN bool ignoreScaleToDisplay = false) {
         float x = positionIngame.x;
         float y = positionIngame.y;
 
         //首先减去游戏内最左下角的偏移, 使得左下角与(0, 0)对齐
         x -= this->offset.x;
         y -= this->offset.y;
+               
+        float scaleToDisplay = this->scaleToDisplay;
+        //忽略minimap缩放
+        if (ignoreScaleToDisplay) {
+            scaleToDisplay = 1.0f;
+        }
 
         x = x * this->scaleToDisplay / this->scaleToGamePosition;
         y = y * this->scaleToDisplay / this->scaleToGamePosition;
