@@ -109,7 +109,7 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     static float f_circleRadiusDead = 10;
     static float f_circleRadiusSuspect = 5;
-    static ImColor color_deadPlayer(0.0f, 1.0f, 0.0f);//死亡玩家是绿色
+    static ImColor color_deadPlayer(1.0f, 1.0f, 1.0f);//死亡玩家是黑色
     static ImColor color_suspectPlayer(1.0f, 0.0f, 0.0f);//嫌疑人是红色
 
     //绘制死亡玩家位置
@@ -118,24 +118,26 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
             return false;
         }
 
+        PlayerController* deadPlayerRecord = &deadPlayer->playersNearbyOnDeath[0];
+
         //死亡玩家昵称（忽略）
         const char* nickname = "";
 
-        Vector3* position = &deadPlayer->v3_position;
+        Vector3* position = &deadPlayerRecord->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y }, true);
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, f_circleRadiusDead, color_deadPlayer);
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead }, ImColor{1.0f, 1.0f, 1.0f}, nickname);
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead }, ImColor{ 1.0f, 1.0f, 1.0f }, nickname);
     }
 
     PlayerController* ptr_playerController;
-    for (int i = 0; i < deadPlayer->playersNearbyOnDeath.size(); i++) {
+    for (int i = 1; i < deadPlayer->playersNearbyOnDeath.size(); i++) {
 
         ptr_playerController = &deadPlayer->playersNearbyOnDeath[i];
 
-        if (ptr_playerController && ptr_playerController->address == NULL) {
+        if (!ptr_playerController) {
             continue;
         }
 
@@ -178,6 +180,11 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
 
         //单独处理本地玩家的绘制
         if (ptr_playerController->b_isLocal) {
+            continue;
+        }
+
+        //跳过死亡玩家
+        if (ptr_playerController->i_timeOfDeath > 0) {
             continue;
         }
 

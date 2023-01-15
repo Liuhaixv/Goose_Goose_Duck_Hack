@@ -5,7 +5,9 @@
 #include"../Struct/Common.hpp"
 #include"PlayerController.h"
 #include"../Memory.hpp"
+#include "../Data/offsets.hpp"
 
+class Client;
 class PlayerController {
 public:
     PlayerController();
@@ -17,7 +19,7 @@ public:
     PlayerController& operator=(PlayerController& o);
 
     //最大记录范围
-    const float f_maxRangeRecordingPlayersNearby = 5.0f;
+    const float f_maxRangeRecordingPlayersNearby = 2000000.0f;
 
     //记录死亡时附近的玩家信息
     bool b_hasRecordedPlayersNearby = false;

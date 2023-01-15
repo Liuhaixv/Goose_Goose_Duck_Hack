@@ -62,8 +62,8 @@ struct GameMap {
             scaleToDisplay = 1.0f;
         }
 
-        x = x * this->scaleToDisplay / this->scaleToGamePosition;
-        y = y * this->scaleToDisplay / this->scaleToGamePosition;
+        x = x * scaleToDisplay / this->scaleToGamePosition;
+        y = y * scaleToDisplay / this->scaleToGamePosition;
 
         return { x, y };
     }

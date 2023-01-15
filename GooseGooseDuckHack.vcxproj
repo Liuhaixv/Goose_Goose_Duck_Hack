@@ -162,7 +162,7 @@
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
     <ClInclude Include="Class\PlayerController.h" />
     <ClInclude Include="Data\offsets.hpp" />
-    <ClCompile Include="Class\PlayerController.hpp" />
+    <ClCompile Include="Class\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />

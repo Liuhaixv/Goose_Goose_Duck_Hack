@@ -2,14 +2,16 @@
 #pragma warning(disable : 4996)
 
 #include "PlayerController.h"
-#include "../Data/offsets.hpp"
 
+#include "../client.hpp"
+
+extern Client* g_client;
 PlayerController::PlayerController()
 {
     this->memory = nullptr;
 }
 
-PlayerController::PlayerController(IN Memory *memory)
+PlayerController::PlayerController(IN Memory* memory)
 {
     this->memory = memory;
 }
@@ -18,7 +20,7 @@ PlayerController::~PlayerController()
 {
 }
 
-PlayerController &PlayerController::operator=(PlayerController &o)
+PlayerController& PlayerController::operator=(PlayerController& o)
 {
     this->b_isSilenced = o.b_isSilenced;
     this->b_isInfected = o.b_isInfected;
@@ -44,39 +46,7 @@ PlayerController &PlayerController::operator=(PlayerController &o)
     return *this;
 }
 
-// 最大记录范围
-const float f_maxRangeRecordingPlayersNearby = 5.0f;
-
-// 记录死亡时附近的玩家信息
-bool b_hasRecordedPlayersNearby = false;
-std::vector<PlayerController> playersNearbyOnDeath;
-
-int64_t address = NULL;
-
-bool b_isSilenced = false;
-bool b_isInfected = false;
-bool b_isPlayerRoleSet = false;
-bool b_inVent = false;
-bool b_hasBomb = false;
-bool b_isGhost = false;
-bool b_isLocal = false;
-bool b_isSpectator = false;
-bool b_isRemoteSpectating = false;
-// 本轮是否杀过人
-bool b_hasKilledThisRound = false;
-
-int i_playerRoleId = 0;
-int invisibilityDistance = 0;
-int i_timeOfDeath = 0;
-
-std::string nickname = "";
-std::string roleName = "";
-
-Vector3 v3_position{0.0f, 0.0f, 0.0f};
-
-Memory *memory = nullptr;
-
-void PlayerController::setMemory(IN Memory *memory)
+void PlayerController::setMemory(IN Memory* memory)
 {
     this->memory = memory;
 }
@@ -110,14 +80,14 @@ void PlayerController::resetMemberFields()
 
     nickname = "";
     roleName = "";
-    v3_position = {0.0f, 0.0f, 0.0f};
+    v3_position = { 0.0f, 0.0f, 0.0f };
 }
 
 /// <summary>
 /// 添加其他玩家的数据到playersNearbyOnDeath向量保存起来
 /// </summary>
 /// <param name="suspectKiller">可能的凶手</param>
-void PlayerController::addPlayersNearby(IN PlayerController *suspectKiller)
+void PlayerController::addPlayersNearby(IN PlayerController* suspectKiller)
 {
     // TODO
     if (suspectKiller == NULL)
@@ -135,7 +105,7 @@ void PlayerController::addPlayersNearby(IN PlayerController *suspectKiller)
 /// 传送玩家到指定的点
 /// </summary>
 /// <param name="position"></param>
-bool PlayerController::teleportTo(const Vector2 &to)
+bool PlayerController::teleportTo(const Vector2& to)
 {
     // 无效指针
     // invalid pointer address
@@ -154,7 +124,7 @@ bool PlayerController::teleportTo(const Vector2 &to)
         Offsets::PlayerController::ptr_Rigidbody2D,
         Offsets::Rigidbody2D::ptr_UnknownClass0,
         Offsets::Rigidbody2D::UnknownClass0::ptr_UnknownFields,
-        Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position};
+        Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position };
 
     int64_t position = memory->FindPointer(this->address, offsets);
 
@@ -192,7 +162,7 @@ bool PlayerController::updatePosition()
     }
     try
     {
-        this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position, {0.0f, 0.0f, 0.0f});
+        this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position, { 0.0f, 0.0f, 0.0f });
     }
     catch (...)
     {
@@ -264,7 +234,7 @@ bool PlayerController::update(IN int64_t address)
     return update();
 }
 
-std::vector<PlayerController *> PlayerController::getPlayersNearby()
+std::vector<PlayerController*> PlayerController::getPlayersNearby()
 {
 }
 
@@ -347,42 +317,42 @@ bool PlayerController::update()
 /// </summary>
 void PlayerController::onDeath()
 {
-    /*
-    for (PlayerController* suspectKiller : playerControllers) {
+    for (PlayerController* suspectKiller : g_client->playerControllers) {
         if (!suspectKiller || suspectKiller->address == NULL) {
             continue;
         }
 
-        //遍历需要记录数据的死亡玩家
-        for (PlayerController* deadPlayer : deadPlayersThatHasNotRecordedPlayersNearBy) {
-            //凶手不太可能是自己
-            //You may not be the killer yourself
-            if (suspectKiller->address == deadPlayer->address) {
+        //凶手不太可能是自己
+        //You may not be the killer yourself
+        if (suspectKiller->address == this->address) {
+            continue;
+        }
+
+        //是否需要记录死亡玩家？暂时选择记录
+        //TODO: Should we record players who died near another dead player?
+        static bool shouldWeRecordDeadSuspect = true;
+
+        if (suspectKiller->i_timeOfDeath > 0) {
+            //嫌疑人已死亡
+            //Suspect who is near dead player is dead too
+            if (!shouldWeRecordDeadSuspect) {
                 continue;
             }
-
-            //是否需要记录死亡玩家？暂时选择记录
-            //TODO: Should we record players who died near another dead player?
-            static bool shouldWeRecordDeadSuspect = true;
-
-            if (suspectKiller->i_timeOfDeath > 0) {
-                //嫌疑人已死亡
-                //Suspect who is near dead player is dead too
-                if (!shouldWeRecordDeadSuspect) {
-                    continue;
+        }
+        else {
+            //嫌疑人是活人
+            //判断距离
+            if (suspectKiller->v3_position.distanceTo(this->v3_position, true) <= this->f_maxRangeRecordingPlayersNearby) {
+                //在第一个位置放入死亡玩家的信息拷贝，防止死亡玩家乱跑导致位置错误
+                if (this->playersNearbyOnDeath.size() == 0) {
+                    this->addPlayersNearby(this);
                 }
+                this->addPlayersNearby(suspectKiller);
             }
             else {
-                //嫌疑人是活人
-                //判断距离
-                if (suspectKiller->v3_position.distanceTo(deadPlayer->v3_position, true) <= deadPlayer->f_maxRangeRecordingPlayersNearby) {
-                    deadPlayer->addPlayersNearby(suspectKiller);
-                }
-                else {
-                    //嫌疑人距离过远，不太可能是凶手
-                    //Suspect too far from dead player
-                }
+                //嫌疑人距离过远，不太可能是凶手
+                //Suspect too far from dead player
             }
         }
-    }*/
+    }
 }
