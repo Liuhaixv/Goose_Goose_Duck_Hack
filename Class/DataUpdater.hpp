@@ -130,6 +130,8 @@ private:
         //读取内存并更新
         //Update from memory
         bool successUpdated = dst->update(address);
+
+        return successUpdated;
     }
 
     /// <summary>
@@ -252,6 +254,7 @@ private:
                     }
                     else {
                         //嫌疑人距离过远，不太可能是凶手
+                        //Suspect too far from dead player
                     }
                 }
             }

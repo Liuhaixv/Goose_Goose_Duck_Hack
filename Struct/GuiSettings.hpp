@@ -5,7 +5,7 @@ struct GuiSettings {
 
     //打开地图
     bool b_enableMinimap = true;
-
+    int i_selectedMinimap = -1;
 
     //打开设置菜单
     bool b_enableMenu = true;

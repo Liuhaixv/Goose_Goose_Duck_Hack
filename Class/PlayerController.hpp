@@ -42,6 +42,8 @@ public:
         this->roleName = o.roleName;
 
         this->v3_position = o.v3_position;
+
+        return *this;
     }
 
     //最大记录范围
@@ -118,7 +120,10 @@ public:
             return;
         }
 
+        PlayerController suspect;
+        suspect = *(suspectKiller);
 
+        this->playersNearbyOnDeath.push_back(suspect);
     }
 
     /// <summary>
@@ -303,6 +308,13 @@ private:
             //玩家刚死亡
             if (i_timeOfDeath == 0 && timeOfDeath > 0) {
                 this->onDeath();
+            }
+
+            //玩家未死亡
+            if (timeOfDeath == 0) {
+                if (this->playersNearbyOnDeath.size() > 0) {
+                    this->playersNearbyOnDeath.clear();
+                }
             }
 
             //更新死亡时间

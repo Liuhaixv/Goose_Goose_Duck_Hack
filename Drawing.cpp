@@ -78,7 +78,6 @@ static void HelpMarker(const char* desc)
 }
 
 
-
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     static float circleRadius = 5;
@@ -103,6 +102,62 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
     drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 1.0f, 1.0f));
     drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), str("You", "你"));
 
+    return true;
+}
+
+bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, const ImVec2& mapLeftBottomPointOnScreen) {
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+    static float f_circleRadiusDead = 10;
+    static float f_circleRadiusSuspect = 5;
+    static ImColor color_deadPlayer(0.0f, 1.0f, 0.0f);//死亡玩家是绿色
+    static ImColor color_suspectPlayer(1.0f, 0.0f, 0.0f);//嫌疑人是红色
+
+    //绘制死亡玩家位置
+    {
+        if (deadPlayer->address == NULL) {
+            return false;
+        }
+
+        //死亡玩家昵称（忽略）
+        const char* nickname = "";
+
+        Vector3* position = &deadPlayer->v3_position;
+
+        Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y }, true);
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
+
+        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, f_circleRadiusDead, color_deadPlayer);
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead }, ImColor{1.0f, 1.0f, 1.0f}, nickname);
+    }
+
+    PlayerController* ptr_playerController;
+    for (int i = 0; i < deadPlayer->playersNearbyOnDeath.size(); i++) {
+
+        ptr_playerController = &deadPlayer->playersNearbyOnDeath[i];
+
+        if (ptr_playerController && ptr_playerController->address == NULL) {
+            continue;
+        }
+
+        //嫌疑人昵称
+        const char* nickname = nullptr;
+
+        //单独处理本地玩家的绘制
+        if (ptr_playerController->b_isLocal) {
+            nickname = ptr_playerController->nickname.c_str();
+        }
+        else {
+            nickname = ptr_playerController->nickname.c_str();
+        }
+
+        Vector3* position = &ptr_playerController->v3_position;
+
+        Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y }, true);
+        Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
+
+        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, f_circleRadiusSuspect, color_suspectPlayer);
+        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusSuspect }, color_suspectPlayer, nickname);
+    }
     return true;
 }
 
@@ -137,12 +192,38 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
     return true;
 }
 
+/// <summary>
+/// 绘制玩家死亡快照
+/// </summary>
+/// <returns></returns>
+bool drawPlayerDeathSnapshot(PlayerController* deadPlayer, const char* str_id) {
+    //当前已选择的地图
+    int i_selectedMinimap = hackSettings.guiSettings.i_selectedMinimap;
+
+    if (i_selectedMinimap < 0) {
+        return false;
+    }
+
+    GameMap* gameMap = &UI::miniMaps.at(i_selectedMinimap);
+
+    if (ImGui::BeginPopup(str_id, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Image((void*)gameMap->texture, ImVec2(gameMap->width, gameMap->height));
+
+        //图片左下角
+        auto mousePositionLeftBottomOfGamemap = ImGui::GetCursorScreenPos();
+        drawPlayersNearbyDeadPlayer(*gameMap, deadPlayer, mousePositionLeftBottomOfGamemap);
+        ImGui::EndPopup();
+    }
+    return true;
+}
+
 void drawMinimap() {
     ImGuiIO& io = ImGui::GetIO();
 
     //设置小地图初始化大小
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
-    ImGui::Begin("Minimap",NULL, ImGuiWindowFlags_NoScrollbar);
+    ImGui::Begin("Minimap", NULL, ImGuiWindowFlags_NoScrollbar);
 
     GameMap* gameMap = nullptr;
 
@@ -158,12 +239,10 @@ void drawMinimap() {
         str("SS MotherGoose","老妈鹅星球飞船")
     };
 
-    static int selected_map = -1;
-
     if (ImGui::Button(str("Select map", "选择地图")))
         ImGui::OpenPopup("select_map");
     ImGui::SameLine();
-    ImGui::TextUnformatted(selected_map == -1 ? str("<None>", "无") : mapNames[selected_map]);
+    ImGui::TextUnformatted(hackSettings.guiSettings.i_selectedMinimap == -1 ? str("<None>", "无") : mapNames[hackSettings.guiSettings.i_selectedMinimap]);
 
     if (hackSettings.guiSettings.b_debug) {
         ImGui::SameLine();
@@ -175,24 +254,24 @@ void drawMinimap() {
     //选择地图图片
     if (ImGui::BeginPopup("select_map"))
     {
-        ImGui::Text("Aquarium");
+        ImGui::Text(str("Select map", "选择地图"));
         ImGui::Separator();
         for (int i = 0; i < IM_ARRAYSIZE(mapNames); i++)
             if (ImGui::Selectable(mapNames[i])) {
                 //修改当前地图图片
-                selected_map = i;
+                hackSettings.guiSettings.i_selectedMinimap = i;
             }
         ImGui::EndPopup();
     }
 
-    if (selected_map < 0) {
+    if (hackSettings.guiSettings.i_selectedMinimap < 0) {
         //尚未选择地图
         //Have not selected map
         ImGui::Text(str("You have not selected map", "你还没有选择地图"));
     }
     else {
         //读取地图
-        gameMap = &UI::miniMaps.at(selected_map);
+        gameMap = &UI::miniMaps.at(hackSettings.guiSettings.i_selectedMinimap);
 
         //弹出调试界面
         if (ImGui::BeginPopup("debug_map_offsets"))
@@ -347,13 +426,14 @@ void drawMinimap() {
 void drawMenu() {
     bool b_open = true;
     bool* ptr_bOpen = &b_open;
+
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
 
-    ImGui::Begin(str("Main", "主菜单"),NULL, ImGuiWindowFlags_MenuBar);
-    
+    ImGui::Begin(str("Main", "主菜单"), NULL, ImGuiWindowFlags_MenuBar);
+
     if (ImGui::BeginMenuBar())
     {
-        ImGui::Text(str("Game status: ","游戏状态: "));
+        ImGui::Text(str("Game status: ", "游戏状态: "));
         ImGui::SameLine();
         if (hackSettings.gameStateSettings.b_gameProcessRunning) {
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Game Running", "运行中"));
@@ -362,7 +442,7 @@ void drawMenu() {
         else {
             ImGui::TextDisabled(str("Not Running", "未运行"));
         }
-        
+
         ImGui::EndMenuBar();
     }
 
@@ -382,7 +462,7 @@ void drawMenu() {
 
 
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
-            ImGui::Checkbox(str("Enable","启用"), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
@@ -408,28 +488,44 @@ void drawMenu() {
                 ImGui::TableSetupColumn(str("Role", "角色"));
                 ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
                 ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
-                ImGui::TableSetupColumn(str("Pos", "坐标"));
-                //ImGui::TableSetupColumn("Three");
+                ImGui::TableSetupColumn(str("Snapshot onDeath", "死亡快照"));
+
+                //ImGui::TableSetupColumn(str("Pos", "坐标"));
+
                 ImGui::TableHeadersRow();
 
+                //要显示附近玩家信息的死亡玩家下标
+                static int deadplayerIndex = -1;
+                bool hasOpenedPopup = false;
+                const char* playerDeathSnapshotPopup = "playerDeathSnapshot_Popup";
+
                 //PlayerController* player = g_client->playerControllers;
-                auto playerControllers =  g_client->playerControllers;
-                for (auto ptr_playerController : playerControllers)
+                auto playerControllers = g_client->playerControllers;
+                for (int i = 0; i < g_client->playerControllers.size(); i++)
                 {
+                    PlayerController* ptr_playerController = g_client->playerControllers[i];
+
                     //跳过无效玩家和本地玩家
-                    if (ptr_playerController->address == NULL || ptr_playerController->b_isLocal || ptr_playerController->nickname=="") {
+                    if (ptr_playerController->address == NULL || /*ptr_playerController->b_isLocal ||*/ ptr_playerController->nickname == "") {
                         continue;
                     }
                     ImGui::TableNextRow();
 
+                    //昵称
                     ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->nickname.c_str());
+
+                    //角色
                     ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->roleName.c_str());
+
+                    //本轮杀过人
                     if (ptr_playerController->b_hasKilledThisRound) {
                         ImGui::TableNextColumn(); ImGui::Text(str("Yes", "是"));
                     }
                     else {
                         ImGui::TableNextColumn(); ImGui::Text(str("", ""));
                     }
+
+                    //死亡时间
                     if (ptr_playerController->i_timeOfDeath != 0) {
                         ImGui::TableNextColumn(); ImGui::Text("%d", ptr_playerController->i_timeOfDeath);
                     }
@@ -437,7 +533,20 @@ void drawMenu() {
                         ImGui::TableNextColumn(); ImGui::Text("");
                     }
 
-                    ImGui::TableNextColumn(); ImGui::Text("(%.1f, %.1f)", ptr_playerController->v3_position.x, ptr_playerController->v3_position.y);
+                    //死亡快照
+                    //TODO: 添加一个按钮，首先判断玩家是否死亡，死亡的话就显示按钮。按钮点击即可显示地图，显示当时玩家的位置
+
+                    ImGui::TableNextColumn();
+                    if (ImGui::Button((std::string(str("Show", "显示")) + "##" + std::to_string(i)).c_str())) {
+                        ImGui::OpenPopup(playerDeathSnapshotPopup);
+                        deadplayerIndex = i;
+                    }
+                    if (deadplayerIndex >= 0) {
+                        if (!hasOpenedPopup) {
+                            hasOpenedPopup = true;
+                            drawPlayerDeathSnapshot(g_client->playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
+                        }
+                    }
                 }
                 ImGui::EndTable();
             }
