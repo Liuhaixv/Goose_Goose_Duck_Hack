@@ -94,9 +94,10 @@ namespace Offsets {
 }
 
 namespace GameAssembly {
+    //RVA offsets
     namespace Method {
         namespace UICooldownButton {
-            constexpr int64_t Update = 0xC1C440;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0xEAD7E0;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
     }
     namespace BytesPatch {
@@ -108,8 +109,8 @@ namespace GameAssembly {
     }
 
     namespace Class {
-        constexpr int64_t ptr_PlayerControllerClass = 0x3D97140;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x3D69DF0;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_PlayerControllerClass = 0x3BD48B0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t ptr_LocalPlayerClass = 0x3BA7B38;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
     }
     /// <summary>
     /// 通过下标返回PlayerController的偏移数组<para/>
