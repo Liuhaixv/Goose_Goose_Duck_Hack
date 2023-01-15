@@ -2,6 +2,7 @@
 
 #include"../Client.hpp"
 #include"../Class/PlayerController.h"
+#include"../Data/offsets.hpp"
 
 class Hack {
 public:

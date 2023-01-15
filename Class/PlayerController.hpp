@@ -1,6 +1,8 @@
-﻿#pragma warning(disable:4996)
+﻿#pragma once
+#pragma warning(disable:4996)
 
 #include"PlayerController.h"
+#include"../Data/offsets.hpp"
 
 PlayerController::PlayerController() {
     this->memory = nullptr;
@@ -125,7 +127,7 @@ void PlayerController::addPlayersNearby(IN PlayerController* suspectKiller) {
 /// 传送玩家到指定的点
 /// </summary>
 /// <param name="position"></param>
-bool PlayerController::teleportTo(IN const Vector2& to) {
+bool PlayerController::teleportTo(const Vector2& to) {
     //无效指针
     //invalid pointer address
     if (this->address == NULL) {

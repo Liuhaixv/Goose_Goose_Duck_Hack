@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include"../Data/offsets.hpp"
-#include"../Struct/Common.hpp"
-#include"../Memory.hpp"
-
 #include<Windows.h>
+
+#include"../Struct/Common.hpp"
+#include"PlayerController.h"
+#include"../Memory.hpp"
 
 class PlayerController {
 public:
