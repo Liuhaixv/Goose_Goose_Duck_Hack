@@ -184,6 +184,7 @@
     <ClInclude Include="Struct\Common.hpp" />
     <ClInclude Include="Struct\HackSettings.hpp" />
     <ClInclude Include="Enum\OpenProcessState.hpp" />
+    <ClInclude Include="Struct\UserSettings.hpp" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
