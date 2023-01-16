@@ -3,7 +3,7 @@
 
 #include "PlayerController.h"
 
-#include "../client.hpp"
+#include "../Client.h"
 
 extern Client* g_client;
 PlayerController::PlayerController()

@@ -2,7 +2,7 @@
 
 #include<list>
 
-#include"../Client.hpp"
+#include"../Client.h"
 #include"../Class/Hack.hpp"
 #include"LocalPlayer.hpp"
 #include"../utils.hpp"
