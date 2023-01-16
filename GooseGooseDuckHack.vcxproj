@@ -161,6 +161,7 @@
     <ClInclude Include="Class\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
     <ClInclude Include="Class\PlayerController.h" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
@@ -185,7 +186,7 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
-    <ClInclude Include="Client.hpp" />
+    <ClCompile Include="Client.cpp" />
     <ClInclude Include="Memory.hpp" />
   </ItemGroup>
   <ItemGroup>
