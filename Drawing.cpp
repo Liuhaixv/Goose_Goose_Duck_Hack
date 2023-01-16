@@ -569,7 +569,7 @@ void drawMenu() {
         //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
-            ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.b_disableFogOfWar);
+            ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
             HelpMarker(
                 str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
             );

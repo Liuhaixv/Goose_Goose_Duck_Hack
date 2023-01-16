@@ -4,6 +4,9 @@
 #include "Struct/HackSettings.hpp"
 #include "Class/PlayerController.h"
 #include"Class/LocalPlayer.hpp"
+#include"Class/Hack.hpp"
+
+extern Hack hack;
 
 class Client
 {
@@ -47,7 +50,7 @@ public:
         //reset player's target speed
         guiSettings->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
         guiSettings->b_alwaysEnableNoclip = false;
-        hackSettings->b_disableFogOfWar = false;
+        guiSettings->b_disableFogOfWar = false;
     }
 
     /// <summary>
@@ -64,6 +67,8 @@ public:
     void onGameStarted() {
         //更新游戏内初始数据
         updateGameOriginalData();
+        //重置hack中的激活状态
+        hack.resetActivationStates();
         //重置Gui设置
         resetGuiSettings();
         //TODO: 重置玩家数据，例如死亡时附近的玩家
