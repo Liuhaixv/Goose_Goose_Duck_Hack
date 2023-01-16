@@ -163,7 +163,7 @@ private:
         //Update valid players' num
         this->validPlayersNum = validPlayers;
 
-
+        //注意!!!：以下代码已废弃，替换为在玩家死亡事件中处理
         //之所以开两个循环，并在第二个循环才遍历玩家保存死亡数据，是为了防止数据没有被更新
 
         //判断玩家是否死亡并存储附近玩家数据
