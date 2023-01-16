@@ -8,6 +8,8 @@
 #include"Client.h"
 #include"utils.hpp"
 
+//Struct
+#include"Struct/UserSettings.hpp"
 #include"Struct/HackSettings.hpp"
 
 //Updaters
@@ -29,6 +31,7 @@
 //UI
 #include "UI.h"
 
+
 Utils utils;
 Hack hack;
 
@@ -36,6 +39,9 @@ Hack hack;
 //settings
 HackSettings hackSettings;
 Client* g_client;
+
+//全局变量保存用户配置
+UserSettings userSettings;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {

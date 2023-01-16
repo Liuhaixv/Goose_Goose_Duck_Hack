@@ -2,6 +2,8 @@
 
 #include "Drawing.h"
 #include "Client.h"
+#include "Struct/UserSettings.hpp"
+//#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -13,6 +15,8 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 extern Utils utils;
 extern HackSettings hackSettings;
 extern Client* g_client;
+
+extern UserSettings userSettings;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
@@ -246,6 +250,21 @@ void drawMinimap() {
         str("Black Swan","黑天鹅"),
         str("SS MotherGoose","老妈鹅星球飞船")
     };
+
+    //设置颜色
+    if (ImGui::Button(str("Settings", "设置"))) {
+        ImGui::OpenPopup("minimap_settings_colors");
+    }
+
+    if (ImGui::BeginPopup("minimap_settings_colors")) {
+        //TODO: 添加修改颜色功能
+        //玩家颜色
+        ImColor& minimap_color_alive = userSettings.getColor(UserSettingsName::minimap_color_alive, ImColor(1.0f, 0.0f, 0.0f));
+        //TODO: 测试颜色
+        //ImGui::TextColored(test_color, str("Test color", "测试颜色"));
+        ImGui::ColorEdit3(str("Dead player color","死亡玩家颜色"), &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
+        ImGui::EndPopup();
+    }
 
     if (ImGui::Button(str("Select map", "选择地图")))
         ImGui::OpenPopup("select_map");
@@ -586,7 +605,7 @@ void drawMenu() {
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             //显示版本信息
-            ImGui::Text(str("Version: ", "版本: "));ImGui::SameLine();ImGui::Text(hackSettings.guiSettings.version);
+            ImGui::Text(str("Version: ", "版本: ")); ImGui::SameLine(); ImGui::Text(hackSettings.guiSettings.version);
             ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
             ImGui::SameLine();
             if (ImGui::Button(str("Link to project", "查看项目"))) {
@@ -613,8 +632,14 @@ void drawMenu() {
         {
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
 
+            //秘密菜单
             if (hackSettings.guiSettings.b_debug) {
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
+
+                ImColor& test_color = userSettings.getColor("test_color", ImColor(1.0f, 0.0f, 0.0f));
+                //TODO: 测试颜色
+                ImGui::TextColored(test_color, str("Test color", "测试颜色"));
+                ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
             }
             ImGui::EndTabItem();
         }

@@ -1,25 +1,65 @@
-﻿#include<imgui.h>
+﻿#define CustomName(customConstString)  constexpr const char* customConstString = #customConstString
+
+#include<imgui.h>
+#include<imgui_internal.h>
+
+namespace UserSettingsName {
+    //定义字符串常量
+    CustomName(minimap_color_dead);
+    CustomName(minimap_color_alive);
+    CustomName(minimap_color_local);
+
+    CustomName(minimap_fontSize_dead);
+    CustomName(minimap_fontSize_alive);
+    CustomName(minimap_color_local);
+
+    CustomName(minimap_circleSize_dead);
+    CustomName(minimap_circleSize_alive);
+    CustomName(minimap_circleSize_local);
+}
 
 /// <summary>
 /// 保存string对应的属性值
 /// </summary>
 struct UserSettings {
+
     //自定义颜色
     std::map<std::string, ImColor> customColors = {
-        {"testColor", ImColor(1.0f, 0.5f, 0.0f)}
+        //{"testColor", ImColor(1.0f, 0.5f, 0.0f)}
     };
     //自定义数字
     std::map<std::string, int> customInts = {
-        {"testNum1", 1}
+        //{"testNum1", 1}
     };
     //自定义浮点数
     std::map<std::string, float> customFloats = {
-        {"testFloat1", 1.223f}
+        //{"testFloat1", 1.223f}
     };
+
+    ImColor& getColor(const std::string& name, const ImColor& deafultColorIfNotFound) {
+        auto it = customColors.find(name);
+        if (it == customColors.end()) {
+            customColors[name] = deafultColorIfNotFound;
+        }
+        return customColors[name];
+    }
+
+    template <typename V>
+    V& GetWithDef(std::map <std::string, V>& m, std::string& key, const V& defval) {
+        auto it = m.find(key);
+        if (it == m.end()) {
+            m[key] = defval;
+            return m[key];
+        }
+        else {
+            return m[key];
+        }
+    }
 };
 
-//全局变量保存用户配置
-UserSettings userSettings;
+
+
+extern UserSettings userSettings;
 
 static void UserSettingsHandler_ClearAll(ImGuiContext* ctx, ImGuiSettingsHandler*)
 {
@@ -52,12 +92,12 @@ static void UserSettingsHandler_ReadLine(ImGuiContext* a, ImGuiSettingsHandler* 
 {
     if (strncmp(line, "ImColor", 7) == 0) {
         line = ImStrSkipBlank(line + strlen("ImColor"));
-        std::string name;
+        char name[60];
         float x, y, z, w;
-        if (sscanf(line, "%[^=]=%f,%f,%f,%f", &name, &x, &y, &z, &w) == 5) {
+        if (sscanf(line, "%[^=]=%f,%f,%f,%f", name, &x, &y, &z, &w) == 5) {
             ImColor color(x, y, z, w);
             //读取成功
-            userSettings.customColors.insert_or_assign(name, color);
+            userSettings.customColors[name] = color;
         }
         else {
             //读取失败
@@ -65,11 +105,11 @@ static void UserSettingsHandler_ReadLine(ImGuiContext* a, ImGuiSettingsHandler* 
     }
     else if (strncmp(line, "int", 3) == 0) {
         line = ImStrSkipBlank(line + strlen("int"));
-        std::string name;
+        char name[60];
         int number;
-        if (sscanf(line, "%[^=]=%d", &name, &number) == 2) {
+        if (sscanf(line, "%[^=]=%d", name, &number) == 2) {
             //读取成功
-            userSettings.customInts.insert_or_assign(name, number);
+            userSettings.customInts[name] = number;
         }
         else {
             //读取失败
@@ -77,11 +117,11 @@ static void UserSettingsHandler_ReadLine(ImGuiContext* a, ImGuiSettingsHandler* 
     }
     else if (strncmp(line, "float", 5) == 0) {
         line = ImStrSkipBlank(line + strlen("float"));
-        std::string name;
+        char name[60];
         float floatNumber;
-        if (sscanf(line, "%[^=]=%f", &name, &floatNumber) == 2) {
+        if (sscanf(line, "%[^=]=%f", name, &floatNumber) == 2) {
             //读取成功
-            userSettings.customFloats.insert_or_assign(name, floatNumber);
+            userSettings.customFloats[name] = floatNumber;
         }
         else {
             //读取失败
