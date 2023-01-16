@@ -100,6 +100,7 @@ public:
         hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
     }
 
+    [[deprecated("Replaced with GUI, won't do anything now")]]
     void printAllPlayersInfo(Utils* utils = nullptr) {
 
         const char separator = '-';
