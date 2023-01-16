@@ -11,6 +11,7 @@
 # 计划
 1. 添加多语言支持，支持用户选择不同字库并重新加载
 2. 添加持久化配置文件支持，方便用户个性化设置颜色、设置等信息
+3. 添加自动识别地图功能
 
 # 功能
 ### 显示类
@@ -42,7 +43,7 @@
 2. `Delete`小地图
 
 # 已知Bug
-1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/19#issuecomment-1376168944)
+1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -92,7 +93,7 @@ Fixing bugs
 
 # Known bugs
 1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
-[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/issues/3#issuecomment-1376171693)
+[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
 
 # Notice
 I am not responsible for any problems caused by abusing this project
