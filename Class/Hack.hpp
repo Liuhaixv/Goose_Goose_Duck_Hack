@@ -22,7 +22,7 @@ public:
     //只需要激活一次
     void removeFogOfWar(PlayerController* localPlayerController) {
 
-        ActivationState state = utils.shouldActivateOnce(hackSettings.disableFogOfWar, &this->hasDisabledFOW);
+        ActivationState state = utils.shouldActivateOnce(hackSettings.b_disableFogOfWar, &this->hasDisabledFOW);
         if (state == IDLE_DO_NOTHING) {
             return;
         }
@@ -32,7 +32,7 @@ public:
             //修改fog of war
             if (localPlayerController->b_isLocal) {
                 if (this->client && this->client->hackSettings) {
-                    if (this->client->hackSettings->disableFogOfWar) {
+                    if (this->client->hackSettings->b_disableFogOfWar) {
 
                         //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
                         Memory* memory = this->client->getMemory();

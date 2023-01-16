@@ -7,7 +7,7 @@ struct HackSettings {
     //退出程序标志
     bool b_quitProgram = false;
 
-    bool disableFogOfWar = false;
+    bool b_disableFogOfWar = false;
     bool tempEnableNoclip = false;
 
     bool b_removeSkillCoolDown = false;

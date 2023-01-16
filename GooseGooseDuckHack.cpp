@@ -41,7 +41,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置
         //Edit hacksettings
-        hackSettings.disableFogOfWar = false;
+        hackSettings.b_disableFogOfWar = false;
     }
 
     //初始化RPM工具类

@@ -40,12 +40,14 @@ public:
     /// 重置GUI设置
     /// </summary>
     void resetGuiSettings() {
-        GuiSettings* guiSettings = &this->hackSettings->guiSettings;
+        HackSettings* hackSettings = this->hackSettings;
+        GuiSettings* guiSettings = &hackSettings->guiSettings;
 
 
         //reset player's target speed
         guiSettings->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
         guiSettings->b_alwaysEnableNoclip = false;
+        hackSettings->b_disableFogOfWar = false;
     }
 
     /// <summary>
