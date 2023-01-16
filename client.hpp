@@ -4,7 +4,6 @@
 #include "Struct/HackSettings.hpp"
 #include "Class/PlayerController.h"
 #include"Class/LocalPlayer.hpp"
-#include<format>
 
 class Client
 {
@@ -41,27 +40,38 @@ public:
     /// 重置GUI设置
     /// </summary>
     void resetGuiSettings() {
-        GuiSettings* a = &this->hackSettings->guiSettings;
-        a->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+        GuiSettings* guiSettings = &this->hackSettings->guiSettings;
+
+
+        //reset player's target speed
+        guiSettings->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+        guiSettings->b_alwaysEnableNoclip = false;
     }
 
+    /// <summary>
+    /// 重置所有玩家的数据
+    /// </summary>
+    void resetPlayersData() {
+        for (auto playerController : this->playerControllers) {
+            playerController->resetMemberFields();
+        }
+    }
     /// <summary>
     /// 游戏开始
     /// </summary>
     void onGameStarted() {
         //更新游戏内初始数据
         updateGameOriginalData();
+        //重置Gui设置
         resetGuiSettings();
+        //TODO: 重置玩家数据，例如死亡时附近的玩家
+        resetPlayersData();
     }
 
     /// <summary>
     /// 游戏结束
     /// </summary>
     void onGameEnded() {
-        //TODO: reset player's speed when game finished
-        //TODO: add switch to speedHack
-        updateGameOriginalData();
-        resetGuiSettings();
     }
 
     /// <summary>
