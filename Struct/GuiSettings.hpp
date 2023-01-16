@@ -21,6 +21,9 @@ struct GuiSettings {
     bool b_enableSpeedHack = false;
     float f_movementSpeed = -1;
 
+    //战争迷雾
+    bool b_disableFogOfWar = false;
+
     //debugmode
     bool b_debug = false;
 };

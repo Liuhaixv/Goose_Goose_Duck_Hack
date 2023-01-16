@@ -99,7 +99,7 @@ void UI::loadMapsTexture() {
     map5.scaleToGamePosition = 0.0948;
     map5.offset = { -68.08,-44.96 };
 
-    //TODO
+    //TODO: 黑天鹅地图图片暂时缺失
     map6.scaleToGamePosition = 0.0585;
     map6.offset = { -28.12, -42.44 };
 

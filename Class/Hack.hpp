@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include"../Client.hpp"
+#include"../Client.h"
 #include"../Class/PlayerController.h"
 #include"../Data/offsets.hpp"
 #include"../Enum/ActivationState.hpp"
@@ -19,10 +19,18 @@ public:
         this->client = client;
     }
 
+    /// <summary>
+    /// 重置当前激活状态
+    /// </summary>
+    void resetActivationStates() {
+        this->b_hasDisabledFOW = false;
+        this->b_hasEnabledNoclip = false;
+    }
+
     //只需要激活一次
     void removeFogOfWar(PlayerController* localPlayerController) {
 
-        ActivationState state = utils.shouldActivateOnce(hackSettings.b_disableFogOfWar, &this->hasDisabledFOW);
+        ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_disableFogOfWar, &this->b_hasDisabledFOW);
         if (state == IDLE_DO_NOTHING) {
             return;
         }
@@ -32,7 +40,7 @@ public:
             //修改fog of war
             if (localPlayerController->b_isLocal) {
                 if (this->client && this->client->hackSettings) {
-                    if (this->client->hackSettings->b_disableFogOfWar) {
+                    if (this->client->hackSettings->guiSettings.b_disableFogOfWar) {
 
                         //memory->write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
                         Memory* memory = this->client->getMemory();
@@ -68,7 +76,7 @@ public:
     /// <param name="localPlayer"></param>
     /// <param name="enable"></param>
     bool enableNoclip(PlayerController* localPlayer, bool shouldEnable) {
-        ActivationState state = utils.shouldActivateOnce(shouldEnable, &this->hasEnabledNoclip);
+        ActivationState state = utils.shouldActivateOnce(shouldEnable, &this->b_hasEnabledNoclip);
         if (state == IDLE_DO_NOTHING) {
             return false;
         }
@@ -148,6 +156,6 @@ public:
 private:
     Client* client = nullptr;
 
-    bool hasDisabledFOW = false;
-    bool hasEnabledNoclip = false;
+    bool b_hasDisabledFOW = false;
+    bool b_hasEnabledNoclip = false;
 };

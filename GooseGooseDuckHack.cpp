@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <tchar.h>
 
-#include"Client.hpp"
+#include"Client.h"
 #include"utils.hpp"
 
 #include"Struct/HackSettings.hpp"
@@ -41,9 +41,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置
         //Edit hacksettings
-        hackSettings.b_disableFogOfWar = false;
+        hackSettings.guiSettings.b_disableFogOfWar = false;
     }
-
+  
     //初始化RPM工具类
     //Init RPM classes
     Memory memory;
