@@ -259,10 +259,10 @@ void drawMinimap() {
     if (ImGui::BeginPopup("minimap_settings_colors")) {
         //TODO: 添加修改颜色功能
         //玩家颜色
-        ImColor& minimap_color_alive = userSettings.getColor(UserSettingsName::minimap_color_alive, ImColor(1.0f, 0.0f, 0.0f));
+        ImColor& minimap_color_dead = userSettings.getColor(UserSettingsName::minimap_color_dead, ImColor(1.0f, 0.0f, 0.0f));
         //TODO: 测试颜色
         //ImGui::TextColored(test_color, str("Test color", "测试颜色"));
-        ImGui::ColorEdit3(str("Dead player color","死亡玩家颜色"), &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
+        ImGui::ColorEdit3(str("Dead player color","死亡玩家颜色"), &minimap_color_dead.Value.x, ImGuiColorEditFlags_NoInputs);
         ImGui::EndPopup();
     }
 

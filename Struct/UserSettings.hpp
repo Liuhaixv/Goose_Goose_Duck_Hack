@@ -11,7 +11,6 @@ namespace UserSettingsName {
 
     CustomName(minimap_fontSize_dead);
     CustomName(minimap_fontSize_alive);
-    CustomName(minimap_color_local);
 
     CustomName(minimap_circleSize_dead);
     CustomName(minimap_circleSize_alive);
