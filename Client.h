@@ -33,6 +33,11 @@ public:
     void resetPlayersData();
 
     /// <summary>
+    /// 本地玩家退出游戏
+    /// </summary>
+    void onLocalPlayerQuitGame();
+
+    /// <summary>
     /// 游戏开始
     /// </summary>
     void onGameStarted();

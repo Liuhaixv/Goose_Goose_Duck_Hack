@@ -36,11 +36,10 @@ public:
 
         while (true) {
 
-            bool localPlayerUpdated = false;
-            updateLocalPlayer(localPlayer, &localPlayerUpdated);
+            updateLocalPlayer(localPlayer, &b_localPlayerUpdated);
 
-            if (localPlayerUpdated) {
-                updatePlayerController(playerControllers, players);
+            if (b_localPlayerUpdated) {
+                updatePlayerControllers(playerControllers);
             }
             else {
                 //TODO: LocalPlayer更新失败，重置所有玩家
@@ -58,7 +57,10 @@ private:
     Client* client = nullptr;
     Memory* memory = nullptr;
 
-    bool b_isPlayerRoleSet = false;
+    int64_t playerRole = NULL;
+
+    bool b_localPlayerUpdated = false;
+    bool b_localPlayerControllerUpdated = false;
 
     /// <summary>
     /// 更新本地玩家
@@ -84,36 +86,44 @@ private:
         int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController, NULL);
 
         //Update playerController
-        updatePlayerController(&localPlayer->playerController, localPlayerController);
+        if (updatePlayerController(&localPlayer->playerController, localPlayerController)) {
+            b_localPlayerControllerUpdated = true;
 
-        if (localPlayer->playerController.address == NULL) {
-            localPlayer->playerController.reset();
-        }
-
-        if (localPlayer->playerController.b_isPlayerRoleSet) {
-            //游戏刚开始
-            if (!b_isPlayerRoleSet) {
-                client->onGameStarted();
-                b_isPlayerRoleSet = true;
+            if (localPlayer->playerController.address == NULL) {
+                localPlayer->playerController.reset();
             }
+
+            if (localPlayer->playerController.playerRole) {
+                //游戏刚开始
+                if (playerRole == NULL) {
+                    client->onGameStarted();
+                }
+            }
+            else {
+                //游戏刚结束
+                if (playerRole) {
+                    client->onGameEnded();
+                }
+            }
+            playerRole = localPlayer->playerController.playerRole;
+
+            if (localPlayer->playerController.address == NULL) {
+                return;
+            }
+
+            //TODO: 穿墙没有正常工作, 另外需要在每次游戏开始的时候重置修改值
+            hack.removeFogOfWar(&localPlayer->playerController);
+            hack.noclip(&localPlayer->playerController);//TODO: Bugged 会导致游戏崩溃
+            hack.speedHack(localPlayer);
         }
         else {
-            //游戏刚结束
-            if (b_isPlayerRoleSet) {
-                client->onGameEnded();
-                b_isPlayerRoleSet = false;
-                b_isPlayerRoleSet = false;
+            if (b_localPlayerControllerUpdated == true) {
+                //本地玩家指针无效
+                //退出游戏？
+                client->onLocalPlayerQuitGame();
             }
+            b_localPlayerControllerUpdated = false;
         }
-
-        if (localPlayer->playerController.address == NULL) {
-            return;
-        }
-
-        //TODO: 穿墙没有正常工作, 另外需要在每次游戏开始的时候重置修改值
-        hack.removeFogOfWar(&localPlayer->playerController);
-        hack.noclip(&localPlayer->playerController);//TODO: Bugged 会导致游戏崩溃
-        hack.speedHack(localPlayer);
     }
 
     bool updatePlayerController(PlayerController* dst, int64_t address) {
@@ -141,11 +151,11 @@ private:
     /// </summary>
     /// <param name="playerControllers"></param>
     /// <param name="playersNum"></param>
-    void updatePlayerController(std::vector<PlayerController*> playerControllers, int playersNum) {
+    void updatePlayerControllers(std::vector<PlayerController*> playerControllers) {
         int validPlayers = 0;
 
         //遍历所有PlayerController, 更新数据
-        for (int i = 0; i < playersNum; ++i) {
+        for (int i = 0; i < playerControllers.size(); ++i) {
             //获取当前遍历的玩家槽位中的PlayerController
             //Current pointer of iterated PlayerController in array
             PlayerController* ptr_playerController = playerControllers[i];

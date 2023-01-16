@@ -27,6 +27,8 @@ public:
 
     int64_t address = NULL;
 
+    int64_t playerRole = NULL;
+
     bool b_isSilenced = false;
     bool b_isInfected = false;
     bool b_isPlayerRoleSet = false;

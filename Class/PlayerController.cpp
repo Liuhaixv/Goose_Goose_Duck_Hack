@@ -63,6 +63,8 @@ void PlayerController::resetMemberFields()
     b_hasRecordedPlayersNearby = false;
     this->playersNearbyOnDeath.clear();
 
+    playerRole = NULL;
+
     b_isSilenced = false;
     b_isInfected = false;
     b_isPlayerRoleSet = false;
@@ -276,7 +278,7 @@ bool PlayerController::update()
         updateNickname();
     }
 
-    // 局内角色已确定(游戏开始)
+    // TODO: ??? 游戏没开始这个值也是1 局内角色已确定(游戏开始)
     b_isPlayerRoleSet = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet, false);
     // 是否为本地玩家
     b_isLocal = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
@@ -293,7 +295,8 @@ bool PlayerController::update()
         invisibilityDistance = memory->read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
         b_isRemoteSpectating = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
         b_hasKilledThisRound = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
-        i_playerRoleId = memory->read_mem<int>(memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, 0) + 0x10, 0);
+        playerRole = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, NULL);
+        i_playerRoleId = memory->read_mem<int>(playerRole + 0x10, 0) ;
 
         float timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);
 

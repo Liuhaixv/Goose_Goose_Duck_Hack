@@ -46,24 +46,29 @@ void Client::resetPlayersData() {
         playerController->resetMemberFields();
     }
 }
+
+void Client::onLocalPlayerQuitGame() {
+    Client::onGameEnded();
+}
+
 /// <summary>
 /// 游戏开始
 /// </summary>
 void Client::onGameStarted() {
     //更新游戏内初始数据
     updateGameOriginalData();
-    //TODO: 重置hack中的激活状态
-    hack.resetActivationStates();
-    //重置Gui设置
-    resetGuiSettings();
-    //TODO: 重置玩家数据，例如死亡时附近的玩家
-    resetPlayersData();
 }
 
 /// <summary>
 /// 游戏结束
 /// </summary>
 void Client::onGameEnded() {
+    //TODO: 重置玩家数据，例如死亡时附近的玩家
+    resetPlayersData();
+    //TODO: 重置hack中的激活状态
+    hack.resetActivationStates();
+    //重置Gui设置
+    resetGuiSettings();
 }
 
 /// <summary>
