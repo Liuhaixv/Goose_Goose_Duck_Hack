@@ -1,4 +1,6 @@
-﻿// Add .ini handle for UserData type
+﻿ImGui::Initialize()
+
+// Add .ini handle for UserData type
 ImGuiSettingsHandler ini_handler;
 ini_handler.TypeName = "UserData";
 ini_handler.TypeHash = ImHashStr("UserData");

@@ -1,5 +1,8 @@
 ﻿#include "UI.h"
 
+#include<imgui_internal.h>
+#include"Struct/UserSettings.hpp"
+
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
 IDXGISwapChain* UI::pSwapChain = nullptr;
@@ -381,6 +384,19 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
     //保存GUI窗口信息
     ImGui::GetIO().IniFilename = "imgui.ini";
+
+    //添加UserSettings持久化配置文件handler
+    {
+        ImGuiSettingsHandler ini_handler;
+        ini_handler.TypeName = "UserSettings";
+        ini_handler.TypeHash = ImHashStr("UserSettings");
+        ini_handler.ClearAllFn = UserSettingsHandler_ClearAll;
+        ini_handler.ReadOpenFn = UserSettingsHandler_ReadOpen;
+        ini_handler.ReadLineFn = UserSettingsHandler_ReadLine;
+        ini_handler.ApplyAllFn = UserSettingsHandler_ApplyAll;
+        ini_handler.WriteAllFn = UserSettingsHandler_WriteAll;
+        ImGui::AddSettingsHandler(&ini_handler);
+    }
 
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(pd3dDevice, pd3dDeviceContext);
