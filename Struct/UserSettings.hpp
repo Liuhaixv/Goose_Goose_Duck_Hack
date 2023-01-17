@@ -5,16 +5,20 @@
 
 namespace UserSettingsName {
     //定义字符串常量
-    CustomName(minimap_color_dead);
-    CustomName(minimap_color_alive);
-    CustomName(minimap_color_local);
+    CustomName(minimap_color_circle_dead);
+    CustomName(minimap_color_circle_alive);
+    CustomName(minimap_color_circle_local);
+
+    CustomName(minimap_color_name_dead);
+    CustomName(minimap_color_name_alive);
+    CustomName(minimap_color_name_local);
 
     CustomName(minimap_fontSize_dead);
     CustomName(minimap_fontSize_alive);
 
-    CustomName(minimap_circleSize_dead);
-    CustomName(minimap_circleSize_alive);
-    CustomName(minimap_circleSize_local);
+    CustomName(minimap_size_circle_dead);
+    CustomName(minimap_size_circle_alive);
+    CustomName(minimap_size_circle_local);
 }
 
 /// <summary>
