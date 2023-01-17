@@ -5,6 +5,7 @@
 #include "Struct/UserSettings.hpp"
 //#include "Struct/UserSettings.hpp"
 
+
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
@@ -18,9 +19,12 @@ extern Client* g_client;
 
 extern UserSettings userSettings;
 
+
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
 #define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:eng
+//拼接组件和常量名
+#define labelName(componentName,constStr) std::string(componentName).append(constStr).c_str()
 
 void drawMinimap();
 void drawMenu();
@@ -256,58 +260,102 @@ void drawMinimap() {
         ImGui::OpenPopup("minimap_settings_colors");
     }
 
+    //弹出minimap设置
     if (ImGui::BeginPopup("minimap_settings_colors")) {
-        
+
         //TODO:改成表格
         if (ImGui::BeginTable("minimap_color_settings_table", 4,
             ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
         ))
         {
             //设置表头
-            ImGui::TableSetupColumn(str("assfa", "asfsaf"));
+            ImGui::TableSetupColumn(str("", ""));
             ImGui::TableSetupColumn(str("Nickname Colors", "昵称颜色"));
             ImGui::TableSetupColumn(str("Position circle filled color", "坐标点填充颜色"));
-            ImGui::TableSetupColumn(str("Position circle size", "坐标点大小"));       
+            ImGui::TableSetupColumn(str("Position circle size", "坐标点大小"));
             ImGui::TableHeadersRow();
 
-            //死亡
-            ImGui::TableNextRow();
-            ImGui::TableSetColumnIndex(0);
-            ImGui::Text("te123st");
-            ImGui::TableSetColumnIndex(1);
-            ImGui::Text("te4521st");
-            ImGui::TableSetColumnIndex(2);
-            ImGui::Text("te532st");
-            ImGui::TableSetColumnIndex(3);
-            ImGui::Text("te67437st");
-           //存活
-            ImGui::TableNextRow();
-            ImGui::TableSetColumnIndex(0);
-            ImGui::Text("te123st");
-            ImGui::TableSetColumnIndex(1);
-            ImGui::Text("te4521st");
-            ImGui::TableSetColumnIndex(2);
-            ImGui::Text("te532st");
-            ImGui::TableSetColumnIndex(3);
-            ImGui::Text("te67437st");
-           //你
-            ImGui::TableNextRow();
-            ImGui::TableSetColumnIndex(0);
-            ImGui::Text("te123st");
-            ImGui::TableSetColumnIndex(1);
-            ImGui::Text("te4521st");
-            ImGui::TableSetColumnIndex(2);
-            ImGui::Text("te532st");
-            ImGui::TableSetColumnIndex(3);
-            ImGui::Text("te67437st");
+            //取消显示拖拽和名称
+            ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoInputs;
 
-            
+            //死亡
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text(str("Dead", "死亡"));
+
+                //昵称颜色
+                ImGui::TableNextColumn();
+                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_dead);
+                ImGui::ColorEdit3(labelName0,
+                    &userSettings.getColor(UserSettingsName::minimap_color_name_dead, ImColor(IM_COL32_WHITE)).Value.x,
+                    colorEditFlags);
+
+                //坐标点填充颜色
+                ImGui::TableNextColumn();
+                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_dead);
+                ImGui::ColorEdit3(labelName1,
+                    &userSettings.getColor(UserSettingsName::minimap_color_circle_dead, ImColor(IM_COL32_WHITE)).Value.x,
+                    colorEditFlags);
+
+                //坐标点大小
+                ImGui::TableNextColumn();
+                ImGui::Text("te67437st");
+            }
+
+            //存活
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text(str("Alive", "存活"));
+
+                //昵称颜色
+                ImGui::TableNextColumn();
+                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_alive);
+                ImGui::ColorEdit3(labelName0,
+                    &userSettings.getColor(UserSettingsName::minimap_color_name_alive, ImColor(IM_COL32_WHITE)).Value.x,
+                    colorEditFlags);
+
+                //坐标点填充颜色
+                ImGui::TableNextColumn();
+                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_alive);
+                ImGui::ColorEdit3(labelName1,
+                    &userSettings.getColor(UserSettingsName::minimap_color_circle_alive, ImColor(255, 0, 0)).Value.x,
+                    colorEditFlags);
+
+                //坐标点大小
+                ImGui::TableNextColumn();
+                ImGui::Text("te67437st");
+            }
+
+            //你
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text(str("LocalPlayer", "本地玩家"));
+
+                //昵称颜色
+                ImGui::TableNextColumn();
+                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_local);
+                ImGui::ColorEdit3(labelName0,
+                    &userSettings.getColor(UserSettingsName::minimap_color_name_local, ImColor(IM_COL32_WHITE)).Value.x,
+                    colorEditFlags);
+
+                //坐标点填充颜色
+                ImGui::TableNextColumn();
+                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_local);
+                ImGui::ColorEdit3(labelName1,
+                    &userSettings.getColor(UserSettingsName::minimap_color_circle_local, ImColor(IM_COL32_WHITE)).Value.x,
+                    colorEditFlags);
+
+                //坐标点大小
+                ImGui::TableNextColumn();
+                ImGui::Text("te67437st");
+            }
+
             ImGui::EndTable();
         }
-        
-
         /*
-        //TODO: 添加修改颜色功能
         //玩家颜色
         ImGui::Text(str("Nickname Colors", "昵称颜色"));
         ImGui::ColorEdit3(str("Dead", "死亡"),

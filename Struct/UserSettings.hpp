@@ -202,6 +202,7 @@ static void UserSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettingsHandler
 */
 
 //保存UserSettings
+//TODO: 文件错误保存为GBK
 static void UserSettingsHandler_WriteAll(ImGuiContext*, ImGuiSettingsHandler* handler, ImGuiTextBuffer* buf)
 {
     buf->appendf("[%s][%s]\n", handler->TypeName, "customColors");
