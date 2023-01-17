@@ -3,7 +3,7 @@
 #include<imgui.h>
 #include<imgui_internal.h>
 
-namespace UserSettingsName {
+namespace UserSettingsNames {
     CustomName(test_color_0);
 
     //定义字符串常量

@@ -109,8 +109,21 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
     Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
     Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x, mapLeftBottomPointOnScreen.y - relativePosition.y };
 
-    drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 1.0f, 1.0f));
-    drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), str("You", "你"));
+    static ImColor localColor(IM_COL32_WHITE);//白色
+    static ImColor localCircleColor(IM_COL32_WHITE);//白色
+
+    //绘制filled圆
+    drawList->AddCircleFilled    (
+        { positionOnScreen.x,positionOnScreen.y },
+        circleRadius,
+        userSettings.getColor(UserSettingsNames::minimap_color_circle_local, localCircleColor)
+    );
+    //绘制昵称
+    drawList->AddText(
+        { positionOnScreen.x, positionOnScreen.y + circleRadius },
+        userSettings.getColor(UserSettingsNames::minimap_color_name_local, localColor),
+        str("You", "你")
+    );
 
     return true;
 }
@@ -138,8 +151,18 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y }, true);
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
-        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, f_circleRadiusDead, color_deadPlayer);
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead }, ImColor{ 1.0f, 1.0f, 1.0f }, nickname);
+        //绘制坐标filled圆
+        drawList->AddCircleFilled(
+            { positionOnScreen.x,positionOnScreen.y },
+            f_circleRadiusDead,
+            userSettings.getColor(UserSettingsNames::minimap_color_circle_dead, color_deadPlayer)
+        );
+        //绘制玩家姓名
+        drawList->AddText(
+            { positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead },
+            ImColor{ 1.0f, 1.0f, 1.0f },
+            nickname
+        );
     }
 
     PlayerController* ptr_playerController;
@@ -167,8 +190,15 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y }, true);
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
-        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, f_circleRadiusSuspect, color_suspectPlayer);
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + f_circleRadiusSuspect }, color_suspectPlayer, nickname);
+        //绘制filled圆
+        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y },
+            f_circleRadiusSuspect,
+            userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, color_suspectPlayer));
+        //绘制昵称
+        drawList->AddText(
+            { positionOnScreen.x, positionOnScreen.y + f_circleRadiusSuspect },
+            userSettings.getColor(UserSettingsNames::minimap_color_name_dead, color_suspectPlayer),
+            nickname);
     }
     return true;
 }
@@ -198,13 +228,26 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
             continue;
         }
 
+        static ImColor nicknameColor(IM_COL32_WHITE);//白色
+        static ImColor circleColor(255, 0, 0);//红色
+
         Vector3* position = &ptr_playerController->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
         Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x , mapLeftBottomPointOnScreen.y - relativePosition.y };
 
-        drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y }, circleRadius, ImColor(1.0f, 0.0f, 0.0f));
-        drawList->AddText({ positionOnScreen.x, positionOnScreen.y + circleRadius }, ImColor(1.0f, 1.0f, 1.0f), ptr_playerController->nickname.c_str());
+        //绘制filled圆
+        drawList->AddCircleFilled(
+            { positionOnScreen.x,positionOnScreen.y },
+            circleRadius,
+            userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, circleColor)
+        );
+        //绘制昵称
+        drawList->AddText(
+            { positionOnScreen.x, positionOnScreen.y + circleRadius },
+            userSettings.getColor(UserSettingsNames::minimap_color_name_alive, nicknameColor),
+            ptr_playerController->nickname.c_str()
+        );
     }
     return true;
 }
@@ -289,19 +332,17 @@ void drawMinimap() {
 
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_dead);
-                ImGui::ColorEdit3(labelName0,
-                    &userSettings.getColor(UserSettingsName::minimap_color_name_dead, ImColor(IM_COL32_WHITE)).Value.x,
+                ImGui::ColorEdit3(str("Dead player's nickname##ColorEdit", "死亡玩家昵称##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_name_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_dead);
-                ImGui::ColorEdit3(labelName1,
-                    &userSettings.getColor(UserSettingsName::minimap_color_circle_dead, ImColor(IM_COL32_WHITE)).Value.x,
+                ImGui::ColorEdit3(str("Dead player's position##ColorEdit", "死亡玩家位置##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
-                //坐标点大小
+                //TODO: 坐标点大小
                 ImGui::TableNextColumn();
                 ImGui::Text("te67437st");
             }
@@ -314,16 +355,15 @@ void drawMinimap() {
 
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_alive);
-                ImGui::ColorEdit3(labelName0,
-                    &userSettings.getColor(UserSettingsName::minimap_color_name_alive, ImColor(IM_COL32_WHITE)).Value.x,
+                //ImGui::ColorEdit3(labelName2,
+                ImGui::ColorEdit3(str("Alive player's nickname##ColorEdit", "存活玩家昵称##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_name_alive, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_alive);
-                ImGui::ColorEdit3(labelName1,
-                    &userSettings.getColor(UserSettingsName::minimap_color_circle_alive, ImColor(255, 0, 0)).Value.x,
+                ImGui::ColorEdit3(str("Alive player's position##ColorEdit", "存活玩家位置##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, ImColor(255, 0, 0)).Value.x,
                     colorEditFlags);
 
                 //坐标点大小
@@ -339,16 +379,14 @@ void drawMinimap() {
 
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_local);
-                ImGui::ColorEdit3(labelName0,
-                    &userSettings.getColor(UserSettingsName::minimap_color_name_local, ImColor(IM_COL32_WHITE)).Value.x,
+                ImGui::ColorEdit3(str("Your nickname##ColorEdit", "你的昵称##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_name_local, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_local);
-                ImGui::ColorEdit3(labelName1,
-                    &userSettings.getColor(UserSettingsName::minimap_color_circle_local, ImColor(IM_COL32_WHITE)).Value.x,
+                ImGui::ColorEdit3(str("Your position##ColorEdit", "你的位置##ColorEdit"),
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_local, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点大小
@@ -765,7 +803,7 @@ void drawMenu() {
             if (hackSettings.guiSettings.b_debug) {
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
 
-                ImColor& test_color = userSettings.getColor(UserSettingsName::test_color_0, ImColor(1.0f, 0.0f, 0.0f));
+                ImColor& test_color = userSettings.getColor(UserSettingsNames::test_color_0, ImColor(1.0f, 0.0f, 0.0f));
                 //TODO: 测试颜色
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
