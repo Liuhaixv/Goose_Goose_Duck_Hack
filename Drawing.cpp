@@ -24,7 +24,9 @@ extern UserSettings userSettings;
 //#define str(eng,cn) (const char*)u8##cnshij
 #define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:eng
 //拼接组件和常量名
-#define labelName(componentName,constStr) std::string(componentName).append(constStr).c_str()
+//#define labelName(componentName,constStr) std::u8string(componentName).append(constStr).c_str()
+
+//#define labelName(componentName,constStr) getLabelName
 
 void drawMinimap();
 void drawMenu();
@@ -284,16 +286,17 @@ void drawMinimap() {
                 ImGui::TableNextColumn();
                 ImGui::Text(str("Dead", "死亡"));
 
+
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_dead);
+                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_dead);
                 ImGui::ColorEdit3(labelName0,
                     &userSettings.getColor(UserSettingsName::minimap_color_name_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_dead);
+                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_dead);
                 ImGui::ColorEdit3(labelName1,
                     &userSettings.getColor(UserSettingsName::minimap_color_circle_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
@@ -311,14 +314,14 @@ void drawMinimap() {
 
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_alive);
+                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_alive);
                 ImGui::ColorEdit3(labelName0,
                     &userSettings.getColor(UserSettingsName::minimap_color_name_alive, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_alive);
+                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_alive);
                 ImGui::ColorEdit3(labelName1,
                     &userSettings.getColor(UserSettingsName::minimap_color_circle_alive, ImColor(255, 0, 0)).Value.x,
                     colorEditFlags);
@@ -336,14 +339,14 @@ void drawMinimap() {
 
                 //昵称颜色
                 ImGui::TableNextColumn();
-                static const char* labelName0 = labelName("ColorEdit", UserSettingsName::minimap_color_name_local);
+                static const char* labelName0 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_name_local);
                 ImGui::ColorEdit3(labelName0,
                     &userSettings.getColor(UserSettingsName::minimap_color_name_local, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
-                static const char* labelName1 = labelName("ColorEdit", UserSettingsName::minimap_color_circle_local);
+                static const char* labelName1 = userSettings.getLabelName(u8"ColorEdit", UserSettingsName::minimap_color_circle_local);
                 ImGui::ColorEdit3(labelName1,
                     &userSettings.getColor(UserSettingsName::minimap_color_circle_local, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
@@ -762,7 +765,7 @@ void drawMenu() {
             if (hackSettings.guiSettings.b_debug) {
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
 
-                ImColor& test_color = userSettings.getColor("test_color", ImColor(1.0f, 0.0f, 0.0f));
+                ImColor& test_color = userSettings.getColor(UserSettingsName::test_color_0, ImColor(1.0f, 0.0f, 0.0f));
                 //TODO: 测试颜色
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
