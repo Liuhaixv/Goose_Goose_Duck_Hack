@@ -1,9 +1,11 @@
-﻿#define CustomName(customConstString)  constexpr const char* customConstString = #customConstString
+﻿#define CustomName(customConstString)  constexpr const char8_t* customConstString = u8#customConstString
 
 #include<imgui.h>
 #include<imgui_internal.h>
 
-namespace UserSettingsName {
+namespace UserSettingsNames {
+    CustomName(test_color_0);
+
     //定义字符串常量
     CustomName(minimap_color_circle_dead);
     CustomName(minimap_color_circle_alive);
@@ -39,13 +41,23 @@ struct UserSettings {
         //{"testFloat1", 1.223f}
     };
 
-    ImColor& getColor(const std::string& name, const ImColor& deafultColorIfNotFound) {
-        auto it = customColors.find(name);
+    ImColor& getColor(const char8_t* name, const ImColor& deafultColorIfNotFound) {
+        std::u8string nameStru8 = name;
+        std::string nameStr = std::string(nameStru8.begin(), nameStru8.end());
+
+        auto it = customColors.find(nameStr);
         if (it == customColors.end()) {
-            customColors[name] = deafultColorIfNotFound;
+            customColors[nameStr] = deafultColorIfNotFound;
         }
-        return customColors[name];
+        return customColors[nameStr];
     }
+
+    const char* getLabelName(const char8_t* componentName, const char8_t* constUserSettingsName) {
+        std::u8string connectedStrU8 = std::u8string(componentName).append(constUserSettingsName);
+
+        return std::string(connectedStrU8.begin(), connectedStrU8.end()).c_str();
+    }
+
 
     template <typename V>
     V& GetWithDef(std::map <std::string, V>& m, std::string& key, const V& defval) {
@@ -209,7 +221,7 @@ static void UserSettingsHandler_WriteAll(ImGuiContext*, ImGuiSettingsHandler* ha
     for (auto color : userSettings.customColors) {
         const std::string* name = &color.first;
         const ImColor* colorV = &color.second;
-        buf->appendf("ImColor %s=%f,%f,%f,%f\n", name,
+        buf->appendf("ImColor %s=%f,%f,%f,%f\n", name->c_str(),
             colorV->Value.x, colorV->Value.y, colorV->Value.z, colorV->Value.w);
     }
 
@@ -217,14 +229,14 @@ static void UserSettingsHandler_WriteAll(ImGuiContext*, ImGuiSettingsHandler* ha
     for (auto num : userSettings.customInts) {
         const std::string* name = &num.first;
         const int* v = &num.second;
-        buf->appendf("int %s=%d\n", name, *v);
+        buf->appendf("int %s=%d\n", name->c_str(), *v);
     }
 
     buf->appendf("[%s][%s]\n", handler->TypeName, "customFloats");
     for (auto float_ : userSettings.customFloats) {
         const std::string* name = &float_.first;
         const float* v = &float_.second;
-        buf->appendf("float %s=%f\n", name, *v);
+        buf->appendf("float %s=%f\n", name->c_str(), *v);
     }
 
     buf->append("\n");
