@@ -31,10 +31,8 @@ public:
                         continue;
                     }
 
-                    const std::string& patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
-                    for (int i = 0; i < patchBytes.size(); i++) {
-                        memory->write_mem<byte>(address + i, (byte)patchBytes[i]);
-                    }
+                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
+                    memory->write_bytes(address , patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
                 }
                 else if (state == SHOULD_DEACTIVATE_NOW) {
                     //恢复冷却
@@ -43,10 +41,8 @@ public:
                         continue;
                     }
 
-                    const std::string& recoverBytes = GameAssembly::BytesPatch::CooldownTime::raw;
-                    for (int i = 0; i < recoverBytes.size(); i++) {
-                        memory->write_mem<byte>(address + i, (byte)recoverBytes[i]);
-                    }
+                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::raw;
+                    memory->write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
                 }
             }
         }

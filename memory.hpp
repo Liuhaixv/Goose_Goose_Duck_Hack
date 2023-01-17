@@ -60,6 +60,13 @@ public:
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 
+    bool write_bytes(IN int64_t address, IN const byte* bytes, IN const int bytesNum) {
+        if (hackSettings.b_debug_disableWriteMemory) {
+            return true;
+        }
+        return WriteProcessMemory(processHandle, (LPVOID)address, bytes, bytesNum, NULL);
+    }
+
     template <typename var>
     bool write_mem(IN int64_t address, IN var value) {
         if (hackSettings.b_debug_disableWriteMemory) {

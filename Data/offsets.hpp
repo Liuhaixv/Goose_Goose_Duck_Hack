@@ -97,7 +97,7 @@ namespace GameAssembly {
     //RVA offsets
     namespace Method {
         namespace UICooldownButton {
-            constexpr int64_t Update = 0xf2d770;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0xF2D770;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
     }
 
@@ -108,9 +108,10 @@ namespace GameAssembly {
 
     namespace BytesPatch {
         namespace CooldownTime {
-            constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0xA8;
-            constexpr std::string raw = "\x73";//xmm6
-            constexpr std::string removeCooldownTime = "\x53";//xmm2
+            constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0xB7;
+            constexpr byte raw[] = "\x0F\x82";
+            constexpr byte removeCooldownTime[] = "\xEB\x0E";//jmp
+            constexpr int bytesNum = 2;
         }
     }
 
