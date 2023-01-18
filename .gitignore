@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # ImGui ini
 imgui.ini
+*.id1
+*.id0
+*.nam
