@@ -1,0 +1,2 @@
+﻿//获取尸体
+BodyHandler Managers_GameManagers_GameManager__BodyFromUserId

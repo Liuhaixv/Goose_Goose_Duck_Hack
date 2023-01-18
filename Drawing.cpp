@@ -3,6 +3,7 @@
 #include "Drawing.h"
 #include "Client.h"
 #include "Struct/UserSettings.hpp"
+#include <sstream>
 //#include "Struct/UserSettings.hpp"
 
 
@@ -812,6 +813,30 @@ void drawMenu() {
                 //TODO: 测试颜色
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
+
+                //测试VirtualAllocEx
+                {
+
+                    static int64_t allocatedAddress = 0x0;
+                    static std::stringstream s;
+                    static std::string hexStringAddress;
+
+                    s.clear();
+                    if (ImGui::Button(str("Allocate memory", "申请内存空间"))) {
+                        allocatedAddress = (int64_t)VirtualAllocEx(g_client->getMemory()->processHandle,
+                            NULL,
+                            0x1000,
+                            MEM_COMMIT | MEM_RESERVE,
+                            PAGE_EXECUTE_READWRITE);
+                        s << std::hex << allocatedAddress;
+                        hexStringAddress.clear();
+                        s >> hexStringAddress;
+                    }
+                    auto a = NULL;
+                    ImGui::Text("Allocated memory's base address: "); ImGui::SameLine();
+                    ImGui::Text(hexStringAddress.c_str());
+
+                }
             }
             ImGui::EndTabItem();
         }
