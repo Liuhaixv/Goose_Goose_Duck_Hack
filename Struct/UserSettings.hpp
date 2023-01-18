@@ -7,9 +7,9 @@ namespace UserSettingsNames {
     CustomName(test_color_0);
 
     //定义字符串常量
-    CustomName(minimap_color_circle_dead);
-    CustomName(minimap_color_circle_alive);
-    CustomName(minimap_color_circle_local);
+    CustomName(minimap_color_circleFilled_dead);
+    CustomName(minimap_color_circleFilled_alive);
+    CustomName(minimap_color_circleFilled_local);
 
     CustomName(minimap_color_name_dead);
     CustomName(minimap_color_name_alive);
@@ -18,9 +18,39 @@ namespace UserSettingsNames {
     CustomName(minimap_fontSize_dead);
     CustomName(minimap_fontSize_alive);
 
-    CustomName(minimap_size_circle_dead);
-    CustomName(minimap_size_circle_alive);
-    CustomName(minimap_size_circle_local);
+    CustomName(minimap_radius_circleFilled_dead);
+    CustomName(minimap_radius_circleFilled_alive);
+    CustomName(minimap_radius_circleFilled_local);
+}
+
+namespace DefaultSettings {
+    namespace SliderFloat {
+        //static float speed = 1.0f;
+        //设置调整玩家坐标点的范围
+        static Vector2 size_of_circleFilled = { 2.0f, 25.0f };
+    }
+
+    namespace Color {
+        static ImColor color_circleFilled_dead(1.0f, 1.0f, 1.0f);//死亡玩家是黑色
+        static ImColor color_circleFilled_suspect(1.0f, 0.0f, 0.0f);//嫌疑人是红色
+        static ImColor color_circleFilled_alive(255, 0, 0);//红色
+        static ImColor color_circleFilled_local(255, 0, 0);//红色
+
+        static ImColor color_nickname_alive(IM_COL32_WHITE);//白色
+        static ImColor color_nickname_local(IM_COL32_WHITE);//白色
+        static ImColor color_nickname_dead(IM_COL32_WHITE);//白色
+    }
+
+    namespace Size {
+        static float f_radius_circleFilled_dead = 10;
+        static float f_radius_circleFilled_alive = 5;
+        static float f_radius_circleFilled_local = 5;
+    }
+
+    namespace Offset {
+        //玩家昵称相对绘制的坐标点的偏移位置
+        static Vector2 nickname_to_circleFilled{ 0.0f, 5.0f };
+    }
 }
 
 /// <summary>
@@ -41,24 +71,48 @@ struct UserSettings {
         //{"testFloat1", 1.223f}
     };
 
-    ImColor& getColor(const char8_t* name, const ImColor& deafultColorIfNotFound) {
+    ImColor& getColor(const char8_t* name, const ImColor deafultColorIfNotFound) {
         std::u8string nameStru8 = name;
         std::string nameStr = std::string(nameStru8.begin(), nameStru8.end());
 
         auto it = customColors.find(nameStr);
         if (it == customColors.end()) {
-            customColors[nameStr] = deafultColorIfNotFound;
+            customColors[nameStr] = ImColor(deafultColorIfNotFound);
         }
         return customColors[nameStr];
     }
 
+    int& getInt(const char8_t* name, const int deafultIntIfNotFound) {
+        std::u8string nameStru8 = name;
+        std::string nameStr = std::string(nameStru8.begin(), nameStru8.end());
+
+        auto it = customInts.find(nameStr);
+        if (it == customInts.end()) {
+            customInts[nameStr] = deafultIntIfNotFound;
+        }
+        return customInts[nameStr];
+    }
+
+    float& getFloat(const char8_t* name, const float deafultFloatIfNotFound) {
+        std::u8string nameStru8 = name;
+        std::string nameStr = std::string(nameStru8.begin(), nameStru8.end());
+
+        auto it = customFloats.find(nameStr);
+        if (it == customFloats.end()) {
+            customFloats[nameStr] = deafultFloatIfNotFound;
+        }
+        return customFloats[nameStr];
+    }
+
+    /*
     const char* getLabelName(const char8_t* componentName, const char8_t* constUserSettingsName) {
         std::u8string connectedStrU8 = std::u8string(componentName).append(constUserSettingsName);
 
         return std::string(connectedStrU8.begin(), connectedStrU8.end()).c_str();
     }
+    */
 
-
+    /*
     template <typename V>
     V& GetWithDef(std::map <std::string, V>& m, std::string& key, const V& defval) {
         auto it = m.find(key);
@@ -70,6 +124,7 @@ struct UserSettings {
             return m[key];
         }
     }
+    */
 };
 
 

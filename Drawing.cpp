@@ -87,10 +87,8 @@ static void HelpMarker(const char* desc)
     }
 }
 
-
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
-    static float circleRadius = 5;
 
     LocalPlayer* localPlayer = &g_client->localPlayer;
 
@@ -109,19 +107,18 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
     Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
     Vector2 positionOnScreen{ mapLeftBottomPointOnScreen.x + relativePosition.x, mapLeftBottomPointOnScreen.y - relativePosition.y };
 
-    static ImColor localColor(IM_COL32_WHITE);//白色
-    static ImColor localCircleColor(IM_COL32_WHITE);//白色
-
     //绘制filled圆
-    drawList->AddCircleFilled    (
+    drawList->AddCircleFilled(
         { positionOnScreen.x,positionOnScreen.y },
-        circleRadius,
-        userSettings.getColor(UserSettingsNames::minimap_color_circle_local, localCircleColor)
+        userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_local, DefaultSettings::Size::f_radius_circleFilled_local),
+        userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_local, DefaultSettings::Color::color_circleFilled_local)
     );
     //绘制昵称
     drawList->AddText(
-        { positionOnScreen.x, positionOnScreen.y + circleRadius },
-        userSettings.getColor(UserSettingsNames::minimap_color_name_local, localColor),
+        { positionOnScreen.x + DefaultSettings::Offset::nickname_to_circleFilled.x,
+        positionOnScreen.y + DefaultSettings::Offset::nickname_to_circleFilled.y },
+        userSettings.getColor(UserSettingsNames::minimap_color_name_local,
+            DefaultSettings::Color::color_nickname_local),
         str("You", "你")
     );
 
@@ -130,10 +127,6 @@ bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen
 
 bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
-    static float f_circleRadiusDead = 10;
-    static float f_circleRadiusSuspect = 5;
-    static ImColor color_deadPlayer(1.0f, 1.0f, 1.0f);//死亡玩家是黑色
-    static ImColor color_suspectPlayer(1.0f, 0.0f, 0.0f);//嫌疑人是红色
 
     //绘制死亡玩家位置
     {
@@ -154,12 +147,14 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
         //绘制坐标filled圆
         drawList->AddCircleFilled(
             { positionOnScreen.x,positionOnScreen.y },
-            f_circleRadiusDead,
-            userSettings.getColor(UserSettingsNames::minimap_color_circle_dead, color_deadPlayer)
+            userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_dead, DefaultSettings::Size::f_radius_circleFilled_dead),
+            userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_dead, DefaultSettings::Color::color_circleFilled_dead)
         );
+
         //绘制玩家姓名
         drawList->AddText(
-            { positionOnScreen.x, positionOnScreen.y + f_circleRadiusDead },
+            { positionOnScreen.x + DefaultSettings::Offset::nickname_to_circleFilled.x,
+            positionOnScreen.y + DefaultSettings::Offset::nickname_to_circleFilled.y },
             ImColor{ 1.0f, 1.0f, 1.0f },
             nickname
         );
@@ -192,12 +187,13 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
 
         //绘制filled圆
         drawList->AddCircleFilled({ positionOnScreen.x,positionOnScreen.y },
-            f_circleRadiusSuspect,
-            userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, color_suspectPlayer));
+            userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_alive, DefaultSettings::Size::f_radius_circleFilled_alive),
+            userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_alive, DefaultSettings::Color::color_circleFilled_alive));
         //绘制昵称
         drawList->AddText(
-            { positionOnScreen.x, positionOnScreen.y + f_circleRadiusSuspect },
-            userSettings.getColor(UserSettingsNames::minimap_color_name_dead, color_suspectPlayer),
+            { positionOnScreen.x + DefaultSettings::Offset::nickname_to_circleFilled.x,
+            positionOnScreen.y + DefaultSettings::Offset::nickname_to_circleFilled.y },
+            userSettings.getColor(UserSettingsNames::minimap_color_name_dead, DefaultSettings::Color::color_circleFilled_suspect),
             nickname);
     }
     return true;
@@ -208,7 +204,6 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
 /// </summary>
 bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
-    static float circleRadius = 10;
 
     auto playerControllers = g_client->playerControllers;
     //PlayerController* playerControllers = g_client->playerControllers;
@@ -228,9 +223,6 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
             continue;
         }
 
-        static ImColor nicknameColor(IM_COL32_WHITE);//白色
-        static ImColor circleColor(255, 0, 0);//红色
-
         Vector3* position = &ptr_playerController->v3_position;
 
         Vector2 relativePosition = map.positionInGame_to_relativePositionLeftBottom({ position->x, position->y });
@@ -239,13 +231,14 @@ bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScree
         //绘制filled圆
         drawList->AddCircleFilled(
             { positionOnScreen.x,positionOnScreen.y },
-            circleRadius,
-            userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, circleColor)
+            userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_alive, DefaultSettings::Size::f_radius_circleFilled_alive),
+            userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_alive, DefaultSettings::Color::color_circleFilled_alive)
         );
         //绘制昵称
         drawList->AddText(
-            { positionOnScreen.x, positionOnScreen.y + circleRadius },
-            userSettings.getColor(UserSettingsNames::minimap_color_name_alive, nicknameColor),
+            { positionOnScreen.x + DefaultSettings::Offset::nickname_to_circleFilled.x,
+            positionOnScreen.y + DefaultSettings::Offset::nickname_to_circleFilled.y },
+            userSettings.getColor(UserSettingsNames::minimap_color_name_alive, DefaultSettings::Color::color_nickname_alive),
             ptr_playerController->nickname.c_str()
         );
     }
@@ -339,12 +332,16 @@ void drawMinimap() {
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
                 ImGui::ColorEdit3(str("Dead player's position##ColorEdit", "死亡玩家位置##ColorEdit"),
-                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_dead, ImColor(IM_COL32_WHITE)).Value.x,
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
                 //TODO: 坐标点大小
                 ImGui::TableNextColumn();
-                ImGui::Text("te67437st");
+                ImGui::SliderFloat(str("##Dead player's position circle size", "##死亡玩家坐标点大小"),
+                    &userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_dead,
+                        DefaultSettings::Size::f_radius_circleFilled_dead),
+                    DefaultSettings::SliderFloat::size_of_circleFilled.x,
+                    DefaultSettings::SliderFloat::size_of_circleFilled.y);
             }
 
             //存活
@@ -357,18 +354,22 @@ void drawMinimap() {
                 ImGui::TableNextColumn();
                 //ImGui::ColorEdit3(labelName2,
                 ImGui::ColorEdit3(str("Alive player's nickname##ColorEdit", "存活玩家昵称##ColorEdit"),
-                    &userSettings.getColor(UserSettingsNames::minimap_color_name_alive, ImColor(IM_COL32_WHITE)).Value.x,
+                    &userSettings.getColor(UserSettingsNames::minimap_color_name_alive, DefaultSettings::Color::color_nickname_alive).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
                 ImGui::ColorEdit3(str("Alive player's position##ColorEdit", "存活玩家位置##ColorEdit"),
-                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_alive, ImColor(255, 0, 0)).Value.x,
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_alive, DefaultSettings::Color::color_circleFilled_alive).Value.x,
                     colorEditFlags);
 
                 //坐标点大小
                 ImGui::TableNextColumn();
-                ImGui::Text("te67437st");
+                ImGui::SliderFloat(str("##Alive player's position circle size", "##存活玩家坐标点大小"),
+                    &userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_alive,
+                        DefaultSettings::Size::f_radius_circleFilled_alive),
+                    DefaultSettings::SliderFloat::size_of_circleFilled.x,
+                    DefaultSettings::SliderFloat::size_of_circleFilled.y);
             }
 
             //你
@@ -380,18 +381,22 @@ void drawMinimap() {
                 //昵称颜色
                 ImGui::TableNextColumn();
                 ImGui::ColorEdit3(str("Your nickname##ColorEdit", "你的昵称##ColorEdit"),
-                    &userSettings.getColor(UserSettingsNames::minimap_color_name_local, ImColor(IM_COL32_WHITE)).Value.x,
+                    &userSettings.getColor(UserSettingsNames::minimap_color_name_local, DefaultSettings::Color::color_nickname_local).Value.x,
                     colorEditFlags);
 
                 //坐标点填充颜色
                 ImGui::TableNextColumn();
                 ImGui::ColorEdit3(str("Your position##ColorEdit", "你的位置##ColorEdit"),
-                    &userSettings.getColor(UserSettingsNames::minimap_color_circle_local, ImColor(IM_COL32_WHITE)).Value.x,
+                    &userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_local, DefaultSettings::Color::color_circleFilled_local).Value.x,
                     colorEditFlags);
 
                 //坐标点大小
                 ImGui::TableNextColumn();
-                ImGui::Text("te67437st");
+                ImGui::SliderFloat(str("##Local player's position circle size", "##本地玩家坐标点大小"),
+                    &userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_local,
+                        DefaultSettings::Size::f_radius_circleFilled_local),
+                    DefaultSettings::SliderFloat::size_of_circleFilled.x,
+                    DefaultSettings::SliderFloat::size_of_circleFilled.y);
             }
 
             ImGui::EndTable();
