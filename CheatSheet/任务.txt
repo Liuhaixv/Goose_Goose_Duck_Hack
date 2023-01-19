@@ -9,5 +9,12 @@ public class TasksHandler : MonoBehaviour // TypeDefIndex: 1951
 	public Dictionary<string, GameTask> assignedTasks; // 0x38
 	private AudioSource EAPGEFFHCBE; // 0x40
 	public int timesReplenished; // 0x48
+
+
+    //第一个参数是System.String类型的taskId
+    public void CompleteTask(string HABGAEDHOPJ, bool EKCMJENABIN, bool LFDLGECGHEP = False, bool HHHAIHHKFFD = False, bool PCMEKEKLGOF = True) { }
+
 }
+
+
 

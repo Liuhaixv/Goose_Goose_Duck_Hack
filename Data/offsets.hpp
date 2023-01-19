@@ -3,6 +3,10 @@
 #include<vector>
 
 namespace Offsets {
+
+    namespace GameTask {
+
+    }
     namespace TasksHandler {
         // Fields
         constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18

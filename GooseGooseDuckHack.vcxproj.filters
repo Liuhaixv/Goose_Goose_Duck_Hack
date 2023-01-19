@@ -57,7 +57,7 @@
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TasksHandler.cpp">
+    <ClCompile Include="Class\Game\TasksHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,7 +161,7 @@
     <ClInclude Include="Class\Game\LobbySceneHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TasksHandler.h">
+    <ClInclude Include="Class\Game\TasksHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

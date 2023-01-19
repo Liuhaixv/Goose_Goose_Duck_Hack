@@ -3,6 +3,7 @@
 #include"../utils.hpp"
 #include "../memory.hpp"
 #include "../Data/offsets.hpp"
+#include"TasksHandler.h"
 
 extern Memory memory;
 class LobbySceneHandler
@@ -10,7 +11,7 @@ class LobbySceneHandler
 public:
     int64_t address = NULL;
 
-    int64_t ptr_tasksHandler = NULL;
+    TasksHandler tasksHandler;
     bool  b_InGameScene = false;
     bool  b_ExploreMode = false;
     int   i_CurrentMap = -1;//当前的地图
@@ -27,7 +28,7 @@ public:
     }
 
     void resetMemberFields() {
-        ptr_tasksHandler = NULL;
+        tasksHandler.reset();
         b_InGameScene = false;
         b_ExploreMode = false;
         i_CurrentMap = -1;
