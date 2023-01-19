@@ -6,7 +6,6 @@
 #include <sstream>
 //#include "Struct/UserSettings.hpp"
 
-
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
@@ -19,7 +18,6 @@ extern HackSettings hackSettings;
 extern Client* g_client;
 
 extern UserSettings userSettings;
-
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
@@ -772,6 +770,18 @@ void drawMenu() {
             );
 
             ImGui::EndTabItem();
+        }
+
+        //菜单
+        if (ImGui::BeginTabItem(str("Tasks", "任务")))
+        {
+            //显示所有任务
+            //TODO:
+            /*
+            g_client->lobbySceneHandler.
+
+            ImGui::EndTabItem();
+            */
         }
 
         //菜单4

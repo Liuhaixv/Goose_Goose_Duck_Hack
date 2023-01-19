@@ -27,6 +27,21 @@ public:
     /// </summary>
     void lobbySceneHandlerUpdater() {
         //TODO: 20230119
+
+        LobbySceneHandler* lobbySceneHandler = &this->client->lobbySceneHandler;
+
+        bool updated = false;
+
+        while (true) {
+             updateLobbySceneHandler(lobbySceneHandler, &updated);
+
+             if (updated) {
+                 Sleep(1000);
+             }
+             else {
+                 Sleep(30);
+             }
+        }
     }
 
     /// <summary>
@@ -68,6 +83,22 @@ private:
 
     bool b_localPlayerUpdated = false;
     bool b_localPlayerControllerUpdated = false;
+    bool b_lobbySceneHandlerUpdated = false;
+
+    void updateLobbySceneHandler(IN LobbySceneHandler* lobbySceneHandler, OUT bool* lobbySceneHandlerUpdated) {
+        std::vector<int64_t> offsets = GameAssembly::lobbySceneHandler();
+
+        int64_t lobbySceneHandlerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
+
+        if (lobbySceneHandler == NULL) {
+            *lobbySceneHandlerUpdated = false;
+            lobbySceneHandler->reset();
+            return;
+        }
+
+        //Update localplayer
+        *lobbySceneHandlerUpdated = lobbySceneHandler->update(lobbySceneHandlerAddr);
+    }
 
     /// <summary>
     /// 更新本地玩家

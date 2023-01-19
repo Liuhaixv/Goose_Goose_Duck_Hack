@@ -57,6 +57,9 @@
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TasksHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.hpp">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Class\Game\LobbySceneHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TasksHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

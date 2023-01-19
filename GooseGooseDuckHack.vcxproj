@@ -153,6 +153,7 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp" />
+    <ClCompile Include="TasksHandler.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="Struct\HackSettings.hpp" />
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="Struct\UserSettings.hpp" />
+    <ClInclude Include="TasksHandler.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />

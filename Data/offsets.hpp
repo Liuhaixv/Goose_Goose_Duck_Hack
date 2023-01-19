@@ -3,6 +3,17 @@
 #include<vector>
 
 namespace Offsets {
+    namespace TasksHandler {
+        // Fields
+        constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18
+        constexpr int64_t tasksDictionary = 0x20;//readonly Dictionary<string, GameTask> tasksDictionary; // 0x20
+        constexpr int64_t taskUIPrefab = 0x28;//GameObject taskUIPrefab; // 0x28
+        constexpr int64_t taskList = 0x30; //Transform taskList; // 0x30
+        constexpr int64_t assignedTasks = 0x38;//Dictionary<string, GameTask> assignedTasks; // 0x38
+        constexpr int64_t audioSource = 0x40;//AudioSource EAPGEFFHCBE; // 0x40
+        constexpr int64_t timesReplenished = 0x48;// timesReplenished; // 0x48
+    }
+
     namespace LobbySceneHandler {
         namespace Class {
             namespace StaticField {
@@ -16,7 +27,7 @@ namespace Offsets {
             constexpr int64_t ptr_staticFields = 0xB8;//TODO
         }
 
-        constexpr int64_t tasksHandler = 0x40;//TasksHandler
+        constexpr int64_t ptr_tasksHandler = 0x40;//TasksHandler*
     }
 
     namespace Rigidbody2D {
@@ -161,6 +172,28 @@ namespace GameAssembly {
        0x0
         };
 
+        return offsets;
+    }
+
+    static std::vector<int64_t> lobbySceneHandler() {
+
+        std::vector<int64_t> offsets = {
+       GameAssembly::Class::ptr_LobbySceneHandlerClass,
+       Offsets::LobbySceneHandler::Class::ptr_staticFields,
+       Offsets::LobbySceneHandler::Class::StaticField::Instance,
+       0x0
+        };
+
+        return offsets;
+    }
+
+    static std::vector<int64_t> lobbySceneHandler_staticFiled() {
+
+        std::vector<int64_t> offsets = {
+       GameAssembly::Class::ptr_LobbySceneHandlerClass,
+       Offsets::LobbySceneHandler::Class::ptr_staticFields,
+       0x0
+        };
 
         return offsets;
     }
