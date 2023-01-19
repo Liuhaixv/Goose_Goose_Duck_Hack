@@ -18,7 +18,7 @@
 #include"./Class/GameProcessUpdater.hpp"
 #include"./Class/BytesPatchUpdater.hpp"
 
-#include"./Class/PlayerController.h"
+#include"./Class/Game/PlayerController.h"
 
 //Windows
 #include<Windows.h>
@@ -71,6 +71,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //启动游戏内存数据更新线程
     //Game data updater
     std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
+    std::thread lobbySceneHandlerUpdater(&DataUpdater::lobbySceneHandlerUpdater, &dataUpdater);
     //启动字节补丁线程
     //Game process finder
     std::thread bytesPatchUpdater(&BytesPatchUpdater::bytesPatchUpdater, &bytesUpdater);

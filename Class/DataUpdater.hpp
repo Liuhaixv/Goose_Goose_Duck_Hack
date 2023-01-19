@@ -4,7 +4,7 @@
 
 #include"../Client.h"
 #include"../Class/Hack.hpp"
-#include"LocalPlayer.hpp"
+#include"./Game/LocalPlayer.hpp"
 #include"../utils.hpp"
 
 extern Hack hack;
@@ -21,6 +21,13 @@ public:
     }
 
     int validPlayersNum = 0;
+
+    /// <summary>
+    /// 更新LobbySceneHandlerUpdater的线程函数
+    /// </summary>
+    void lobbySceneHandlerUpdater() {
+        //TODO
+    }
 
     /// <summary>
     /// 更新玩家信息的线程函数<para/>

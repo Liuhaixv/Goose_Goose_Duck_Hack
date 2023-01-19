@@ -107,7 +107,7 @@ public:
     }
 
     void resetMemberFields() {
-
+        this->playerController.reset();
     }
 
     /// <summary>

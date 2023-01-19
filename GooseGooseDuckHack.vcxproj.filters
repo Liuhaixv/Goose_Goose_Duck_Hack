@@ -48,11 +48,14 @@
     <ClCompile Include="Class\Hack.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Class\PlayerController.cpp">
+    <ClCompile Include="Class\Game\PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\Game\LobbySceneHandler.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,7 +80,7 @@
     <ClInclude Include="Struct\HackSettings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Class\LocalPlayer.hpp">
+    <ClInclude Include="Class\Game\LocalPlayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Class\HotkeyUpdater.hpp">
@@ -140,7 +143,7 @@
     <ClInclude Include="Class\BytesPatchUpdater.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Class\PlayerController.h">
+    <ClInclude Include="Class\Game\PlayerController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enum\ActivationState.hpp">
@@ -152,13 +155,17 @@
     <ClInclude Include="Struct\UserSettings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Class\Game\LobbySceneHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CheatSheet\GUI\保存ini.txt" />
     <Text Include="CheatSheet\尸体.txt" />
+    <Text Include="CheatSheet\LocalPlayer击杀其他玩家.txt" />
+    <Text Include="CheatSheet\任务.txt" />
   </ItemGroup>
 </Project>

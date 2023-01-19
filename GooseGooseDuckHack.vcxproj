@@ -152,18 +152,19 @@
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Class\Game\LobbySceneHandler.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
-    <ClInclude Include="Class\LocalPlayer.hpp" />
+    <ClInclude Include="Class\Game\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
-    <ClInclude Include="Class\PlayerController.h" />
+    <ClInclude Include="Class\Game\PlayerController.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Data\offsets.hpp" />
-    <ClCompile Include="Class\PlayerController.cpp" />
+    <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="ImGui\stb_image.h" />
+    <ClInclude Include="Class\Game\LobbySceneHandler.h" />
     <ClInclude Include="Struct\GameMap.hpp" />
     <ClInclude Include="Struct\GameOriginalData.hpp" />
     <ClInclude Include="Struct\GameStateSettings.hpp" />
@@ -192,10 +194,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CheatSheet\GUI\保存ini.txt" />
+    <Text Include="CheatSheet\LocalPlayer击杀其他玩家.txt" />
+    <Text Include="CheatSheet\任务.txt" />
     <Text Include="CheatSheet\尸体.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

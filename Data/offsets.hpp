@@ -3,6 +3,22 @@
 #include<vector>
 
 namespace Offsets {
+    namespace LobbySceneHandler {
+        namespace Class {
+            namespace StaticField {
+                constexpr int64_t Instance = 0x0;//LobbySceneHandler
+                constexpr int64_t  b_InGameScene = 0x8;
+                constexpr int64_t  b_ExploreMode = 0x9;
+                constexpr int64_t  i_CurrentMap = 0xC;//当前的地图
+                constexpr int64_t  b_IsPublicGame = 0x10;
+                constexpr int64_t  b_IsMicEnabled = 0x11;
+            }
+            constexpr int64_t ptr_staticFields = 0xB8;//TODO
+        }
+
+        constexpr int64_t tasksHandler = 0x40;//TasksHandler
+    }
+
     namespace Rigidbody2D {
         namespace UnknownClass0 {
             namespace UnknownFields {
@@ -102,6 +118,7 @@ namespace GameAssembly {
     }
 
     namespace Class {
+        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C78BC8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
         constexpr int64_t ptr_PlayerControllerClass = 0x3CA6AC0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x3C79808;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
     }

@@ -2,8 +2,8 @@
 
 #include "Memory.hpp"
 #include "Struct/HackSettings.hpp"
-#include "Class/PlayerController.h"
-#include"Class/LocalPlayer.hpp"
+#include "Class/Game/PlayerController.h"
+#include"Class/Game/LocalPlayer.hpp"
 
 class Client
 {
