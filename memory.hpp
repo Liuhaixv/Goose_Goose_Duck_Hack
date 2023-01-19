@@ -152,7 +152,6 @@ public:
 
 private:
 
-    std::map<int64_t, int64_t> map;
     /// <summary>
     /// 获取64位进程的模块的基址<para/>
     /// Get baseAddress of x64 process's module

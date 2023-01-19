@@ -1,0 +1,7 @@
+﻿public class LocalPlayer{
+	public bool Kill(PlayerController CNCFPDIOOAB, PlayerController EMJHHJIKMLK) { }
+}
+
+//击杀其他玩家
+//第一个PlayerController必须传入有效的PlayerController，不能为空，第二个PlayerController可以为空
+public bool kill(PlayerController CNCFPDIOOAB, PlayerController EMJHHJIKMLK)

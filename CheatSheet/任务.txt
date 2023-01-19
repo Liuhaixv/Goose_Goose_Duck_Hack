@@ -1,0 +1,11 @@
+﻿// Namespace: Handlers.GameHandlers.TaskHandlers
+public class TasksHandler : MonoBehaviour // TypeDefIndex: 1951
+{
+	// Fields
+	public GameTask[] tasks; // 0x18
+	public readonly Dictionary<string, GameTask> tasksDictionary; // 0x20
+	public GameObject taskUIPrefab; // 0x28
+	public Transform taskList; // 0x30
+	public Dictionary<string, GameTask> assignedTasks; // 0x38
+	private AudioSource EAPGEFFHCBE; // 0x40
+	public int timesReplenished; // 0x48
