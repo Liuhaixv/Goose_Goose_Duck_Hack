@@ -1,18 +1,14 @@
 ﻿#pragma once
 
 #include<Windows.h>
-
+#include<vector>
+#include<string>
 #include"../Struct/Common.hpp"
-#include"PlayerController.h"
-#include"../Memory.hpp"
-#include "../Data/offsets.hpp"
 
 class Client;
 class PlayerController {
 public:
     PlayerController();
-
-    PlayerController(IN Memory* memory);
 
     ~PlayerController();
 
@@ -50,8 +46,6 @@ public:
 
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
-    void setMemory(IN Memory* memory);
-
     void reset();
 
     void resetMemberFields();
@@ -87,8 +81,6 @@ public:
     bool update(IN int64_t address);
 
 private:
-    Memory* memory = nullptr;
-
     std::vector<PlayerController*> getPlayersNearby();
 
     //检查该地址是PlayerController实例

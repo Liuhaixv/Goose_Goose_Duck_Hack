@@ -833,7 +833,7 @@ void drawMenu() {
 
                     s.clear();
                     if (ImGui::Button(str("Allocate memory", "申请内存空间"))) {
-                        allocatedAddress = (int64_t)VirtualAllocEx(g_client->getMemory()->processHandle,
+                        allocatedAddress = (int64_t)VirtualAllocEx(memory.processHandle,
                             NULL,
                             0x1000,
                             MEM_COMMIT | MEM_RESERVE,

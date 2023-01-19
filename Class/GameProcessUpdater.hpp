@@ -4,6 +4,7 @@
 #include "../Memory.hpp"
 #include "../Struct/HackSettings.hpp"
 
+
 /// <summary>
 /// Thread functions that update data.
 /// </summary>
@@ -12,8 +13,7 @@ public:
     //查找游戏进程的间隔时间(秒)
     //Min time before searching the game process again
     double interval = 2.0;
-    MemoryUpdater(Memory* memory, Client* client, HackSettings* hackSettings) {
-        this->memory = memory;
+    MemoryUpdater(Client* client, HackSettings* hackSettings) {
         this->hackSettings = hackSettings;
     }
 
@@ -28,7 +28,7 @@ public:
         {
             Sleep(2);
 
-            if (memory->processHandle && memory->gameAssemblyBaseAddress) {
+            if (memory.processHandle && memory.gameAssemblyBaseAddress) {
                 if (hackSettings->gameStateSettings.b_gameProcessRunning == false) {
                     std::cout << "Game found" << std::endl;
 
@@ -50,13 +50,12 @@ public:
                     connect_count = 0;
 
                     //搜索游戏进程
-                    hackSettings->gameStateSettings.openProcessState = memory->searchGameProcess();
+                    hackSettings->gameStateSettings.openProcessState = memory.searchGameProcess();
                 }
             }
         }
     }
 private:
     Client* client = nullptr;
-    Memory* memory = nullptr;
     HackSettings* hackSettings = nullptr;
 };

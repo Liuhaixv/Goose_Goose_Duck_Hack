@@ -3,17 +3,13 @@
 
 #include "PlayerController.h"
 
+#include "../Data/offsets.hpp"
 #include "../Client.h"
 
 extern Client* g_client;
+extern Memory memory;
 PlayerController::PlayerController()
 {
-    this->memory = nullptr;
-}
-
-PlayerController::PlayerController(IN Memory* memory)
-{
-    this->memory = memory;
 }
 
 PlayerController::~PlayerController()
@@ -44,11 +40,6 @@ PlayerController& PlayerController::operator=(PlayerController& o)
     this->v3_position = o.v3_position;
 
     return *this;
-}
-
-void PlayerController::setMemory(IN Memory* memory)
-{
-    this->memory = memory;
 }
 
 void PlayerController::reset()
@@ -107,7 +98,7 @@ void PlayerController::addPlayersNearby(IN PlayerController* suspectKiller)
 /// 传送玩家到指定的点
 /// </summary>
 /// <param name="position"></param>
-bool PlayerController::teleportTo(const Vector2& to)
+bool PlayerController::teleportTo(IN const Vector2& to)
 {
     // 无效指针
     // invalid pointer address
@@ -128,7 +119,7 @@ bool PlayerController::teleportTo(const Vector2& to)
         Offsets::Rigidbody2D::UnknownClass0::ptr_UnknownFields,
         Offsets::Rigidbody2D::UnknownClass0::UnknownFields::v2_position };
 
-    int64_t position = memory->FindPointer(this->address, offsets);
+    int64_t position = memory.FindPointer(this->address, offsets);
 
     // 读取要写入的位置的地址无效
     if (position == NULL)
@@ -138,7 +129,7 @@ bool PlayerController::teleportTo(const Vector2& to)
 
     try
     {
-        memory->write_mem<Vector2>(position, to);
+        memory.write_mem<Vector2>(position, to);
     }
     catch (...)
     {
@@ -164,7 +155,7 @@ bool PlayerController::updatePosition()
     }
     try
     {
-        this->v3_position = memory->read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position, { 0.0f, 0.0f, 0.0f });
+        this->v3_position = memory.read_mem<Vector3>(this->address + Offsets::PlayerController::v3_position, { 0.0f, 0.0f, 0.0f });
     }
     catch (...)
     {
@@ -182,11 +173,11 @@ void PlayerController::updateNickname()
         return;
     }
 
-    int64_t nickname = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
+    int64_t nickname = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
     int64_t firstChar = nickname + 0x14;
 
     // 字符个数
-    int length = memory->read_mem<int>(nickname + 0x10, 0);
+    int length = memory.read_mem<int>(nickname + 0x10, 0);
 
     char16_t buffer[40];
 
@@ -198,7 +189,7 @@ void PlayerController::updateNickname()
 
     for (int i = 0; i < length; i++)
     {
-        char16_t c = memory->read_mem<char16_t>(firstChar + sizeof(char16_t) * i, NULL);
+        char16_t c = memory.read_mem<char16_t>(firstChar + sizeof(char16_t) * i, NULL);
         // byte byte_= *(p_str + i);
         buffer[i] = c;
     }
@@ -244,7 +235,7 @@ std::vector<PlayerController*> PlayerController::getPlayersNearby()
 bool PlayerController::validateAddress(IN int64_t address)
 {
 
-    int64_t playerControllerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass, NULL);
+    int64_t playerControllerClass = memory.read_mem<int64_t>(memory.gameAssemblyBaseAddress + GameAssembly::Class::ptr_PlayerControllerClass, NULL);
 
     if (playerControllerClass == NULL)
     {
@@ -252,7 +243,7 @@ bool PlayerController::validateAddress(IN int64_t address)
         return false;
     }
 
-    int64_t playerControllerClass_ = memory->read_mem<int64_t>(address, NULL);
+    int64_t playerControllerClass_ = memory.read_mem<int64_t>(address, NULL);
 
     return playerControllerClass == playerControllerClass_;
 }
@@ -267,7 +258,7 @@ bool PlayerController::update()
 {
     // 无效指针
     // invalid pointer address
-    if (this->memory == NULL || this->address == NULL)
+    if (this->address == NULL)
     {
         return false;
     }
@@ -279,26 +270,26 @@ bool PlayerController::update()
     }
 
     // TODO: ??? 游戏没开始这个值也是1 局内角色已确定(游戏开始)
-    b_isPlayerRoleSet = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet, false);
+    b_isPlayerRoleSet = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isPlayerRoleSet, false);
     // 是否为本地玩家
-    b_isLocal = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
+    b_isLocal = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
 
     if (b_isPlayerRoleSet)
     {
         // 更新玩家坐标
         updatePosition();
 
-        b_inVent = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_inVent, false);
-        b_hasBomb = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb, false);
-        b_isGhost = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost, false);
-        b_isSpectator = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isSpectator, false);
-        invisibilityDistance = memory->read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
-        b_isRemoteSpectating = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
-        b_hasKilledThisRound = memory->read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
-        playerRole = memory->read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, NULL);
-        i_playerRoleId = memory->read_mem<int>(playerRole + 0x10, 0) ;
+        b_inVent = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_inVent, false);
+        b_hasBomb = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb, false);
+        b_isGhost = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost, false);
+        b_isSpectator = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isSpectator, false);
+        invisibilityDistance = memory.read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
+        b_isRemoteSpectating = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
+        b_hasKilledThisRound = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
+        playerRole = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, NULL);
+        i_playerRoleId = memory.read_mem<int>(playerRole + 0x10, 0) ;
 
-        float timeOfDeath = memory->read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);
+        float timeOfDeath = memory.read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);
 
         // 玩家刚死亡
         if (i_timeOfDeath == 0 && timeOfDeath > 0)

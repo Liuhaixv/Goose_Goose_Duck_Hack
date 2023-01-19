@@ -9,6 +9,7 @@
 
 extern Hack hack;
 extern Utils utils;
+extern Memory memory;
 
 /// <summary>
 /// Thread functions that update data.
@@ -17,7 +18,6 @@ class DataUpdater {
 public:
     DataUpdater(Client* client) {
         this->client = client;
-        this->memory = client->getMemory();
     }
 
     int validPlayersNum = 0;
@@ -77,7 +77,6 @@ public:
     }
 private:
     Client* client = nullptr;
-    Memory* memory = nullptr;
 
     int64_t playerRole = NULL;
 
@@ -88,7 +87,7 @@ private:
     void updateLobbySceneHandler(IN LobbySceneHandler* lobbySceneHandler, OUT bool* lobbySceneHandlerUpdated) {
         std::vector<int64_t> offsets = GameAssembly::lobbySceneHandler();
 
-        int64_t lobbySceneHandlerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
+        int64_t lobbySceneHandlerAddr = memory.FindPointer(memory.gameAssemblyBaseAddress, offsets);
 
         if (lobbySceneHandler == NULL) {
             *lobbySceneHandlerUpdated = false;
@@ -111,7 +110,7 @@ private:
         //offsets.push_back(Offsets::LocalPlayer::ptr_playerController);
         //offsets.push_back(0x0);
 
-        int64_t localPlayerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
+        int64_t localPlayerAddr = memory.FindPointer(memory.gameAssemblyBaseAddress, offsets);
 
         if (localPlayerAddr == NULL) {
             *localPlayerUpdated = false;
@@ -121,7 +120,7 @@ private:
         //Update localplayer
         *localPlayerUpdated = localPlayer->update(localPlayerAddr);
 
-        int64_t localPlayerController = memory->read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController, NULL);
+        int64_t localPlayerController = memory.read_mem<int64_t>(localPlayerAddr + Offsets::LocalPlayer::ptr_playerController, NULL);
 
         //Update playerController
         if (updatePlayerController(&localPlayer->playerController, localPlayerController)) {
@@ -200,7 +199,7 @@ private:
 
             //获取内存中对应玩家槽位的实例地址
             std::vector<int64_t> offsets = GameAssembly::playerControllerByIndex(i);
-            int64_t playerControllerAddr = memory->FindPointer(memory->gameAssemblyBaseAddress, offsets);
+            int64_t playerControllerAddr = memory.FindPointer(memory.gameAssemblyBaseAddress, offsets);
 
             if (updatePlayerController(ptr_playerController, playerControllerAddr)) {
                 validPlayers++;

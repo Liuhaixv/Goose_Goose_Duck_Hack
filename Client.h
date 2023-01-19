@@ -16,13 +16,9 @@ public:
     LocalPlayer localPlayer;
     std::vector<PlayerController*> playerControllers;
 
-    Client(Memory* memory, HackSettings* hackSettings);
+    Client(HackSettings* hackSettings);
 
     ~Client();
-
-    Memory* getMemory() {
-        return this->memory;
-    }
 
     /// <summary>
     /// 重置GUI设置
@@ -63,5 +59,4 @@ public:
     void printAllPlayersInfo(Utils* utils = nullptr);
 
 private:
-    Memory* memory = 0;
 };

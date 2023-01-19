@@ -8,18 +8,9 @@
 
 #include<Windows.h>
 
+extern Memory memory;
 class LocalPlayer {
 public:
-    LocalPlayer() {
-        this->memory = nullptr;
-        playerController.setMemory(this->memory);
-    }
-
-    LocalPlayer(IN Memory* memory) {
-        this->memory = memory;
-        playerController.setMemory(this->memory);
-    }
-
     int64_t address = NULL;
 
     PlayerController playerController;
@@ -40,12 +31,12 @@ public:
                Offsets::LocalPlayer::Class::ptr_staticFields,
                Offsets::LocalPlayer::Class::StaticField::f_movementSpeed };
 
-            int64_t addr = memory->FindPointer(this->address, offsets);
+            int64_t addr = memory.FindPointer(this->address, offsets);
             if (addr == NULL) {
                 return -1;
             }
 
-            float result = memory->read_mem<float>(addr, -1.0f);
+            float result = memory.read_mem<float>(addr, -1.0f);
 
             if (result <= 0) {
                 return -1;
@@ -75,12 +66,12 @@ public:
                Offsets::LocalPlayer::Class::ptr_staticFields,
                Offsets::LocalPlayer::Class::StaticField::f_baseMovementSpeed };
 
-            int64_t addr = memory->FindPointer(this->address, offsets);
+            int64_t addr = memory.FindPointer(this->address, offsets);
             if (addr == NULL) {
                 return -1;
             }
 
-            float result = memory->read_mem<float>(addr, -1.0f);
+            float result = memory.read_mem<float>(addr, -1.0f);
 
             if (result <= 0) {
                 return -1;
@@ -93,11 +84,6 @@ public:
         }
 
         return true;
-    }
-
-    void setMemory(IN Memory* memory) {
-        this->memory = memory;
-        playerController.setMemory(this->memory);
     }
 
     void reset() {
@@ -133,16 +119,14 @@ public:
     }
 
 private:
-    Memory* memory = nullptr;
-
     bool update() {
         //无效指针
         //invalid pointer address
-        if (this->memory == NULL || this->address == NULL) {
+        if (this->address == NULL) {
             return false;
         }
 
-        int64_t playerController = memory->read_mem<int64_t>(this->address + Offsets::LocalPlayer::ptr_playerController, NULL);
+        int64_t playerController = memory.read_mem<int64_t>(this->address + Offsets::LocalPlayer::ptr_playerController, NULL);
         this->playerController.update(playerController);
 
         return true;
@@ -151,14 +135,14 @@ private:
     //检查该地址是LocalPlayer实例
     bool validateAddress(IN int64_t address) {
 
-        int64_t localPlayerClass = memory->read_mem<int64_t>(memory->gameAssemblyBaseAddress + GameAssembly::Class::ptr_LocalPlayerClass, NULL);
+        int64_t localPlayerClass = memory.read_mem<int64_t>(memory.gameAssemblyBaseAddress + GameAssembly::Class::ptr_LocalPlayerClass, NULL);
 
         if (localPlayerClass == NULL) {
             //Error finding class
             return false;
         }
 
-        int64_t localPlayerClass_ = memory->read_mem<int64_t>(address, NULL);
+        int64_t localPlayerClass_ = memory.read_mem<int64_t>(address, NULL);
 
         return localPlayerClass == localPlayerClass_;
     }
