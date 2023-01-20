@@ -99,9 +99,6 @@ Fixing bugs
 # Notice
 I am not responsible for any problems caused by abusing this project
 
-# Reference
-[roy6307's Public Archive](https://github.com/roy6307/Goose-Goose-Goose)
-
 ---
 
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
