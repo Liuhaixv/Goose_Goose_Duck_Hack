@@ -26,7 +26,6 @@ public:
     /// 更新LobbySceneHandlerUpdater的线程函数
     /// </summary>
     void lobbySceneHandlerUpdater() {
-        //TODO: 20230119
 
         LobbySceneHandler* lobbySceneHandler = &this->client->lobbySceneHandler;
 

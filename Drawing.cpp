@@ -23,7 +23,7 @@ extern UserSettings userSettings;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
-#define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:eng
+#define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:(const char*)u8##eng
 //拼接组件和常量名
 //#define labelName(componentName,constStr) std::u8string(componentName).append(constStr).c_str()
 
