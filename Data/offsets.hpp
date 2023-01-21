@@ -4,9 +4,17 @@
 
 namespace Offsets {
 
-    namespace GameTask {
-
+    //C#的string类
+    namespace System_String {
+        constexpr int64_t i_length = 0x10;//字符串的字符个数
+        constexpr int64_t firstChar = 0x14;//字符串的第一个起始字节
     }
+
+    namespace GameTask {
+        constexpr int64_t taskId = 0x10;//string
+        constexpr int64_t taskDisplayName = 0x18;//string
+    }
+
     namespace TasksHandler {
         // Fields
         constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18

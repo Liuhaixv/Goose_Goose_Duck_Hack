@@ -4,6 +4,8 @@
 #include "Client.h"
 #include "Struct/UserSettings.hpp"
 #include <sstream>
+#include "Class/Game/string.hpp"
+#include<algorithm>
 //#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
@@ -300,7 +302,6 @@ void drawMinimap() {
     //弹出minimap设置
     if (ImGui::BeginPopup("minimap_settings_colors")) {
 
-        //TODO:改成表格
         if (ImGui::BeginTable("minimap_color_settings_table", 4,
             ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
         ))
@@ -334,7 +335,7 @@ void drawMinimap() {
                     &userSettings.getColor(UserSettingsNames::minimap_color_circleFilled_dead, ImColor(IM_COL32_WHITE)).Value.x,
                     colorEditFlags);
 
-                //TODO: 坐标点大小
+                //坐标点大小
                 ImGui::TableNextColumn();
                 ImGui::SliderFloat(str("##Dead player's position circle size", "##死亡玩家坐标点大小"),
                     &userSettings.getFloat(UserSettingsNames::minimap_radius_circleFilled_dead,
@@ -490,7 +491,6 @@ void drawMinimap() {
             static float min_scale = 0.01;
             static float max_scale = 1;
 
-            //TODO添加最大最小值输入框
             ImGui::SliderFloat("Scale", &gameMap->scaleToGamePosition, min_scale, max_scale, "%.4f");
             ImGui::InputFloat("min_scale", &min_scale);
             ImGui::InputFloat("max_scale", &max_scale);
@@ -569,7 +569,6 @@ void drawMinimap() {
 
                 //地图刚被点击
                 if (gameMapClicked) {
-                    //TODO 传送玩家
                     g_client->teleportTo(positionInGame);
                     hasTPedWhenHoveringOnGameMap = true;
                     lastTPedPosition = positionInGame;
@@ -680,13 +679,14 @@ void drawMenu() {
         {
             if (ImGui::BeginTable("players_info_table", 5,
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+                | ImGuiTableFlags_Sortable
             ))
             {
-                ImGui::TableSetupColumn(str("Nickname", "昵称"));
-                ImGui::TableSetupColumn(str("Role", "角色"));
-                ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"));
+                ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_NoSort);
+                ImGui::TableSetupColumn(str("Role", "角色"), ImGuiTableColumnFlags_NoSort);
+                ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"), ImGuiTableColumnFlags_NoSort);
                 ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
-                ImGui::TableSetupColumn(str("Snapshot onDeath", "死亡快照"));
+                ImGui::TableSetupColumn(str("Snapshot onDeath", "死亡快照"), ImGuiTableColumnFlags_NoSort);
 
                 //ImGui::TableSetupColumn(str("Pos", "坐标"));
 
@@ -696,6 +696,37 @@ void drawMenu() {
                 static int deadplayerIndex = -1;
                 bool hasOpenedPopup = false;
                 const char* playerDeathSnapshotPopup = "playerDeathSnapshot_Popup";
+
+                //TODO:待完善排序
+                ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs();                
+
+                if (sorts_specs->SpecsDirty)
+                {
+                    ImGuiSortDirection sortDirection;
+                    for (int n = 0; n < sorts_specs->SpecsCount; n++)
+                    {
+                        const ImGuiTableColumnSortSpecs* sort_spec = &sorts_specs->Specs[n];
+                        if (sort_spec->SortDirection != ImGuiSortDirection_None) {
+                            sortDirection = sort_spec->SortDirection;
+                            break;
+                        }
+                    }
+
+                    if (sortDirection == ImGuiSortDirection_Ascending) {
+                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                            return lhs->i_timeOfDeath < rhs->i_timeOfDeath;
+                            }
+                        );
+                    }
+                    else {
+                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                            return lhs->i_timeOfDeath >= rhs->i_timeOfDeath;
+                            }
+                        );
+                    }
+                    
+                    sorts_specs->SpecsDirty = false;
+                }
 
                 //PlayerController* player = g_client->playerControllers;
                 auto playerControllers = g_client->playerControllers;
@@ -732,7 +763,7 @@ void drawMenu() {
                     }
 
                     //死亡快照
-                    //TODO: 添加一个按钮，首先判断玩家是否死亡，死亡的话就显示按钮。按钮点击即可显示地图，显示当时玩家的位置
+                    //添加一个按钮，首先判断玩家是否死亡，死亡的话就显示按钮。按钮点击即可显示地图，显示当时玩家的位置
 
                     ImGui::TableNextColumn();
 
@@ -775,13 +806,46 @@ void drawMenu() {
         //菜单
         if (ImGui::BeginTabItem(str("Tasks", "任务")))
         {
-            //显示所有任务
-            //TODO:
-            /*
-            g_client->lobbySceneHandler.
+            ImGui::Text(str("Tasks num:", "任务数量：")); ImGui::SameLine();
 
-            ImGui::EndTabItem();
-            */
+            //显示任务的数量
+            ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
+
+            //显示所有任务
+            if (ImGui::BeginTable("tasks_table", 3,
+                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg            
+            ))
+            {
+                //设置表头
+                ImGui::TableSetupColumn(str("Index", "索引"));
+                ImGui::TableSetupColumn(str("Task Id", "任务Id"));
+                ImGui::TableSetupColumn(str("One tap complete task", "一键完成任务"));
+                ImGui::TableHeadersRow();
+
+                //取消显示拖拽和名称
+                ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoInputs;
+
+                int index = 0;
+                for (const auto& task : g_client->lobbySceneHandler.tasksHandler.assignedTasks) {
+                    ImGui::TableNextRow();
+
+                    //索引
+                    ImGui::TableNextColumn();
+                    ImGui::Text("%d", index++);
+
+                    //任务Id
+                    ImGui::TableNextColumn();
+                    ImGui::Text(string(task.taskId).get_std_string().c_str());
+
+                    //一键完成任务
+                    ImGui::TableNextColumn();
+                    if (ImGui::Button(str("Complete", "完成"))) {
+                        //TODO: 完成任务
+                    }
+                }
+
+                ImGui::EndTable();
+            }
         }
 
         //菜单4
@@ -820,7 +884,7 @@ void drawMenu() {
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
 
                 ImColor& test_color = userSettings.getColor(UserSettingsNames::test_color_0, ImColor(1.0f, 0.0f, 0.0f));
-                //TODO: 测试颜色
+                //测试颜色
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
 

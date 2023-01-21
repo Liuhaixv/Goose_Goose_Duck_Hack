@@ -74,7 +74,13 @@ private:
             return false;
         }
 
-        ptr_tasksHandler = memory.read_mem<int64_t>(this->address + Offsets::LobbySceneHandler::ptr_tasksHandler, NULL);
+        int64_t tasksHandler_Addr = memory.read_mem<int64_t>(this->address + Offsets::LobbySceneHandler::ptr_tasksHandler, NULL);
+
+        if (tasksHandler_Addr == NULL) {
+            return false;
+        }
+
+        this->tasksHandler.update(tasksHandler_Addr);
 
         b_InGameScene = memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_InGameScene, false);
         b_ExploreMode = memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_ExploreMode, false);

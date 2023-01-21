@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
+    <ClInclude Include="Class\Game\GameTask.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\Game\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="ImGui\stb_image.h" />
     <ClInclude Include="Class\Game\LobbySceneHandler.h" />
+    <ClInclude Include="Class\Game\string.hpp" />
     <ClInclude Include="Struct\GameMap.hpp" />
     <ClInclude Include="Struct\GameOriginalData.hpp" />
     <ClInclude Include="Struct\GameStateSettings.hpp" />

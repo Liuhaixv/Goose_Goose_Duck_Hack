@@ -5,6 +5,7 @@
 
 #include "../Data/offsets.hpp"
 #include "../Client.h"
+#include"string.hpp"
 
 extern Client* g_client;
 extern Memory memory;
@@ -173,32 +174,9 @@ void PlayerController::updateNickname()
         return;
     }
 
-    int64_t nickname = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
-    int64_t firstChar = nickname + 0x14;
+    int64_t nickname_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
 
-    // 字符个数
-    int length = memory.read_mem<int>(nickname + 0x10, 0);
-
-    char16_t buffer[40];
-
-    if (length == 0)
-    {
-        buffer[0] = 0;
-        return;
-    }
-
-    for (int i = 0; i < length; i++)
-    {
-        char16_t c = memory.read_mem<char16_t>(firstChar + sizeof(char16_t) * i, NULL);
-        // byte byte_= *(p_str + i);
-        buffer[i] = c;
-    }
-    buffer[length] = 0;
-
-    // std::wstring wstr(reinterpret_cast<wchar_t*>(buffer), length);
-    // this->nickname = utils.wstring2string(wstr);
-
-    this->nickname = utils.u8From16(buffer);
+    this->nickname = string(nickname_Addr).get_std_string();
 }
 
 /// <summary>
