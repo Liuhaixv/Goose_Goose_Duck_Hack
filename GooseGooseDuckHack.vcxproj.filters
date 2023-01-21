@@ -174,10 +174,4 @@
   <ItemGroup>
     <None Include=".editorconfig" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="CheatSheet\GUI\保存ini.txt" />
-    <Text Include="CheatSheet\尸体.txt" />
-    <Text Include="CheatSheet\LocalPlayer击杀其他玩家.txt" />
-    <Text Include="CheatSheet\任务.txt" />
-  </ItemGroup>
 </Project>
