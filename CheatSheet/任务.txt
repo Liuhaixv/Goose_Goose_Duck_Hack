@@ -12,7 +12,9 @@ public class TasksHandler : MonoBehaviour // TypeDefIndex: 1951
 
 
     //第一个参数是System.String类型的taskId
-    //bool 1 0 0 1
+    //Ignore CD: 0 0 0 1
+    //Normal   : 0 0 0 1
+    //rcx rdx r8b r9b 
     public void CompleteTask(string HABGAEDHOPJ, bool EKCMJENABIN, bool LFDLGECGHEP = False, bool HHHAIHHKFFD = False, bool PCMEKEKLGOF = True) { }
 
 }
