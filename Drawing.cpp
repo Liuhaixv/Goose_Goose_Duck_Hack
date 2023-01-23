@@ -799,7 +799,8 @@ void drawMenu() {
             HelpMarker(
                 str("Walk through anything\nYou can press Left ALT to temporarily enable noclip", "穿墙模式\n长按左ALT键来临时穿墙")
             );
-
+            ImGui::SameLine();
+            ImGui::TextDisabled(str("Not available now due to game update", "由于更新暂不可用"));
             ImGui::EndTabItem();
         }
 

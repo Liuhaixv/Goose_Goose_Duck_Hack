@@ -174,7 +174,7 @@ void PlayerController::updateNickname()
         return;
     }
 
-    int64_t nickname_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
+    int64_t nickname_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::ptr_nickname, NULL);
 
     this->nickname = string(nickname_Addr).get_std_string();
 }
@@ -264,7 +264,7 @@ bool PlayerController::update()
         invisibilityDistance = memory.read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
         b_isRemoteSpectating = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
         b_hasKilledThisRound = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
-        playerRole = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, NULL);
+        playerRole = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::ptr_playerRole, NULL);
         i_playerRoleId = memory.read_mem<int>(playerRole + 0x10, 0) ;
 
         float timeOfDeath = memory.read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);

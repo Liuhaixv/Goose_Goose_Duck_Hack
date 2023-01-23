@@ -158,7 +158,9 @@
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="CheatSheet\trash.txt" />
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
+    <ClInclude Include="Class\CodeCave.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
@@ -196,6 +198,7 @@
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
     <ClInclude Include="Memory.hpp" />
+    <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
