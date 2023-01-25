@@ -2,6 +2,7 @@
 
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" width="110" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" width="100" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
+[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" width="120" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group.jpg?raw=true)
 
 鹅鸭杀外部辅助程序，目前持续更新中，可以点亮Star收藏关注一波。有功能需求可以提Issue，我都会回复。
 
