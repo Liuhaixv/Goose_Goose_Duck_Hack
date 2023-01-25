@@ -148,7 +148,27 @@ public:
         return Address;
     }
 
+    /// <summary>
+    /// 申请可执行内存
+    /// </summary>
+    bool allocExecutableMemory(SIZE_T size, OUT int64_t* address) {
+        if (this->processHandle == NULL) {
+            return false;
+        }
 
+        VirtualAllocEx(
+            //游戏的进程句柄
+            this->processHandle,
+            //不指定内存地址
+            NULL,
+            //内存大小
+            size,
+            //提交
+            MEM_COMMIT | MEM_RESERVE,
+            //可执行可读写
+            PAGE_EXECUTE_READWRITE
+        );
+    }
 
 private:
 
