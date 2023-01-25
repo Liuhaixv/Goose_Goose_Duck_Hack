@@ -73,6 +73,7 @@ public:
         }
         const byte* bytesArr = &bytes[0];
 
+        return WriteProcessMemory(processHandle, (LPVOID)address, bytesArr, bytes.size(), NULL);
     }
 
     template <typename var>

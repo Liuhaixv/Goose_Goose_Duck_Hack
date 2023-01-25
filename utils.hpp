@@ -4,6 +4,7 @@
 
 #include<string>
 #include<list>
+#include<vector>
 #include<iomanip>
 #include<winnls.h>
 #include<iostream>
