@@ -12,6 +12,8 @@
 #include "Enum/OpenProcessState.hpp"
 #include <map>
 
+#include <initializer_list>
+
 extern Utils utils;
 extern HackSettings hackSettings;
 
@@ -67,10 +69,29 @@ public:
         return WriteProcessMemory(processHandle, (LPVOID)address, bytes, bytesNum, NULL);
     }
 
-    bool write_bytes(IN const int64_t address, IN const std::vector<byte> bytes) {
+    /*
+    bool write_bytes(IN const int64_t address, IN const std::vector<byte>& bytes) {
         if (hackSettings.b_debug_disableWriteMemory) {
             return true;
         }
+        const byte* bytesArr = &bytes[0];
+
+        return WriteProcessMemory(processHandle, (LPVOID)address, bytesArr, bytes.size(), NULL);
+    }
+    */
+
+    bool write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors) {
+
+        if (hackSettings.b_debug_disableWriteMemory) {
+            return true;
+        }
+
+        std::vector<byte> bytes;
+        //遍历拼接Vector
+        for (auto v : bytes_vectors) {
+            bytes.insert(bytes.end(), v.begin(), v.end());
+        }
+
         const byte* bytesArr = &bytes[0];
 
         return WriteProcessMemory(processHandle, (LPVOID)address, bytesArr, bytes.size(), NULL);
@@ -160,7 +181,7 @@ public:
     /// <summary>
     /// 申请可执行内存
     /// </summary>
-    bool allocExecutableMemory(SIZE_T size, OUT int64_t* address) {
+    bool allocExecutableMemory(SIZE_T size, int64_t* address) {
         if (this->processHandle == NULL) {
             return false;
         }
@@ -178,7 +199,7 @@ public:
             PAGE_EXECUTE_READWRITE
         );
 
-        if (*address = NULL) {
+        if (*address == NULL) {
             return false;
         }
 
