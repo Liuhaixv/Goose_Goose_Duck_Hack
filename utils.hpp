@@ -76,8 +76,24 @@ public:
         return result;
     }
 
+    /// <summary>
+    /// 转换8字节地址为小端字节数组
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
     std::vector<byte> addressToLittleEndianBytes(int64_t address) {
-        
+        std::vector<byte> bytes = {
+            (byte)((address & 0x00000000000000ff) << 0),
+            (byte)((address & 0x000000000000ff00) << 8),
+            (byte)((address & 0x0000000000ff0000) << 16),
+            (byte)((address & 0x00000000ff000000) << 24),
+            (byte)((address & 0x000000ff00000000) << 32),
+            (byte)((address & 0x0000ff0000000000) << 40),
+            (byte)((address & 0x00ff000000000000) << 48),
+            (byte)((address & 0xff00000000000000) << 56)
+        };
+
+        return bytes;
     }
 
     /// <summary>
