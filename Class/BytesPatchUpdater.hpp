@@ -45,10 +45,24 @@ public:
                     memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
                 }
             }
+
+            //自动完成任务
+            {
+                ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoCompleteTasks, &b_autoCompleteTasks);
+
+                if (state == SHOULD_ACTIVATE_NOW) {
+                    //开始注入代码
+                    //TODO: hook
+                }
+                else if (state == SHOULD_DEACTIVATE_NOW) {
+                    //取消注入代码
+                    //TODO: unhook
+                }
+            }
         }
     }
 private:
 
-    bool b_noSkillCooldown = hackSettings.b_removeSkillCoolDown;
-    
+    bool b_noSkillCooldown = false;
+    bool b_autoCompleteTasks = false;
 };

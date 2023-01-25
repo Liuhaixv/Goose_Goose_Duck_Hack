@@ -24,6 +24,9 @@ struct GuiSettings {
     //战争迷雾
     bool b_disableFogOfWar = false;
 
+    //自动完成任务
+    bool b_autoCompleteTasks = false;
+
     //debugmode
     bool b_debug = false;
 };
