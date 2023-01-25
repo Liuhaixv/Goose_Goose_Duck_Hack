@@ -170,9 +170,6 @@
     <ClInclude Include="Class\Game\string.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Class\CodeCave.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -181,5 +178,6 @@
     <Text Include="CheatSheet\trash.txt">
       <Filter>Header Files</Filter>
     </Text>
+    <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
 </Project>

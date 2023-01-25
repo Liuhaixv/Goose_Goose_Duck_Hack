@@ -812,6 +812,8 @@ void drawMenu() {
             //显示任务的数量
             ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
 
+            ImGui::Text(str("Auto Complete Tasks", "自动完成任务"));
+            /*无单独完成任务功能，暂时注释掉
             //显示所有任务
             if (ImGui::BeginTable("tasks_table", 3,
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg            
@@ -847,6 +849,7 @@ void drawMenu() {
 
                 ImGui::EndTable();
             }
+            */
         }
 
         //菜单4

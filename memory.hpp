@@ -12,11 +12,8 @@
 #include "Enum/OpenProcessState.hpp"
 #include <map>
 
-#include"Class/CodeCave.hpp"
-
 extern Utils utils;
 extern HackSettings hackSettings;
-extern CodeCave codeCave;
 
 class Memory {
 public:
@@ -37,17 +34,17 @@ public:
         pID = get_porcId_by_name(processName);
         //TODO: 转移到GUI
         if (pID == NULL) {
-            utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
-            std::cout << std::endl;
+            //utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
+            //std::cout << std::endl;
             return OpenProcessState::GameNotFound;
         }
-        utils.print("Detected game pid:", "检测到游戏进程pid:");
-        std::cout << pID << std::endl;
+        //utils.print("Detected game pid:", "检测到游戏进程pid:");
+        //std::cout << pID << std::endl;
 
         processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
         if (processHandle == INVALID_HANDLE_VALUE || processHandle == NULL) { // error handling
             //-1: Game found but failed to open
-            std::cout << "Failed to open process" << std::endl;
+            //std::cout << "Failed to open process" << std::endl;
             return OpenProcessState::GameFoundButFailedToOpen;
         }
 
@@ -60,8 +57,6 @@ public:
         }
 
         //Success
-        //初始化CodeCave
-        codeCave.init();
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 

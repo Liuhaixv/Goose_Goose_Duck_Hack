@@ -61,7 +61,7 @@ public:
         return convert.to_bytes(source);
     }
 
-    ///*https://blog.csdn.net/mercy_ps/article/details/81218608
+    //https://blog.csdn.net/mercy_ps/article/details/81218608
     static std::string wstring2string(std::wstring wstr) {
         std::string result;
 
@@ -75,13 +75,17 @@ public:
         delete[] buffer;
         return result;
     }
-    //*/
+
+    std::vector<byte> addressToLittleEndianBytes(int64_t address) {
+        
+    }
 
     /// <summary>
     /// 输出字符串到控制台,如果没有指定第二个参数则默认输出第一个字符串参数。
     /// </summary>
     /// <param name="eng">英文字符串</param>
     /// <param name="cn">中文字符串</param>
+    /*
     void print(std::string eng, std::string cn = "") {
         if (cn == "") {
             std::cout << eng;
@@ -95,6 +99,7 @@ public:
             }
         }
     }
+    */
 
     /// <summary>
     /// 返回中文或英文字符串

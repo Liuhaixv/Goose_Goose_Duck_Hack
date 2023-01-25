@@ -160,7 +160,6 @@
   <ItemGroup>
     <Text Include="CheatSheet\trash.txt" />
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
-    <ClInclude Include="Class\CodeCave.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
