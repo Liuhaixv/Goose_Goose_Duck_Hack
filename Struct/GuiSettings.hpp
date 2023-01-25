@@ -25,7 +25,9 @@ struct GuiSettings {
     bool b_disableFogOfWar = false;
 
     //自动完成任务
+    bool b_autoCompleteTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
+    bool b_autoReady = false;
 
     //debugmode
     bool b_debug = false;
