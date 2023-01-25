@@ -9,6 +9,10 @@ extern HackSettings hackSettings;
 extern Utils utils;
 extern Memory memory;
 
+/// <summary>
+/// 负责patch汇编区指令字节。
+/// 由于目前没有使用到hook框架，该类暂时也负责维护hook功能
+/// </summary>
 class BytesPatchUpdater {
 public:
 
