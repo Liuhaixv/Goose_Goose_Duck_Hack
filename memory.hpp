@@ -12,8 +12,11 @@
 #include "Enum/OpenProcessState.hpp"
 #include <map>
 
+#include"Class/CodeCave.hpp"
+
 extern Utils utils;
 extern HackSettings hackSettings;
+extern CodeCave codeCave;
 
 class Memory {
 public:
@@ -57,6 +60,8 @@ public:
         }
 
         //Success
+        //初始化CodeCave
+        codeCave.init();
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 

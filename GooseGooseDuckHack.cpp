@@ -31,6 +31,8 @@
 //UI
 #include "UI.h"
 
+#include"Class/CodeCave.hpp"
+
 
 Utils utils;
 Hack hack;
@@ -46,6 +48,8 @@ UserSettings userSettings;
 //初始化RPM工具类
 //Init RPM classes
 Memory memory;
+
+CodeCave codeCave;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {

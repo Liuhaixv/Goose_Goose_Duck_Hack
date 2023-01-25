@@ -13,7 +13,11 @@
 /// 2.注入区：用于存放原函数被注入跳转后的逻辑
 /// </summary>
 class CodeCave {
-    
+public:
+
+    bool init() {
+        return true;
+    }
 
     static byte* hook_update_return(OUT int* bytesNum) {
         byte hookedBytes[] = { 0x48};
