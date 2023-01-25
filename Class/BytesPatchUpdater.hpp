@@ -78,13 +78,15 @@ public:
                     }
 
                     //TODO:篡改汇编指令跳转到注入代码地址
-                                //定位注入点LocalPlayer的Update函数
+                    //定位注入点LocalPlayer的Update函数
                     int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
 
-                    //篡改跳转用的汇编指令 字节
+                    //篡改跳转用的汇编指令字节
                     //mov rax 0x????????
                     //jmp rax
                     std::vector<byte> jmpBytes = {};
+                    byte ASM_mov_rax[] = { 0x48, 0xB8 };
+                    byte ASM_jmp_rax[] = { 0xFF, 0xE0};
                 }
                 //Unhook逻辑
                 else if (state == SHOULD_DEACTIVATE_NOW) {

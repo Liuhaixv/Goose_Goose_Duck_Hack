@@ -60,11 +60,19 @@ public:
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 
-    bool write_bytes(IN int64_t address, IN const byte* bytes, IN const int bytesNum) {
+    bool write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum) {
         if (hackSettings.b_debug_disableWriteMemory) {
             return true;
         }
         return WriteProcessMemory(processHandle, (LPVOID)address, bytes, bytesNum, NULL);
+    }
+
+    bool write_bytes(IN const int64_t address, IN const std::vector<byte> bytes) {
+        if (hackSettings.b_debug_disableWriteMemory) {
+            return true;
+        }
+        const byte* bytesArr = &bytes[0];
+
     }
 
     template <typename var>
