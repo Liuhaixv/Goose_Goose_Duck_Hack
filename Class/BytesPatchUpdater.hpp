@@ -32,7 +32,7 @@ public:
                     }
 
                     const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
-                    memory.write_bytes(address , patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
+                    memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
                 }
                 else if (state == SHOULD_DEACTIVATE_NOW) {
                     //恢复冷却
@@ -71,7 +71,7 @@ public:
 
                             memory.write_bytes(allocatedMemoryAddress, injectAsmCodes, sizeof(injectAsmCodes) / sizeof(byte));
 
-                        }                      
+                        }
                     }
                     else {
                         //已经申请过内存
@@ -90,6 +90,7 @@ public:
                 else if (state == SHOULD_DEACTIVATE_NOW) {
                     //取消注入代码
                     //TODO: unhook
+                    byte originalBytes[] = { 0x45,0x0F,0x28,0x7B,0x90,0x49,0x8B,0xE3,0x41,0x5F,0x41,0x5E,0x5F,0x5E,0x5B,0xC3 };
                 }
             }
         }
