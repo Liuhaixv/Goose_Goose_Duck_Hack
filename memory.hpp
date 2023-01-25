@@ -156,7 +156,7 @@ public:
             return false;
         }
 
-        VirtualAllocEx(
+        *address = (int64_t)VirtualAllocEx(
             //游戏的进程句柄
             this->processHandle,
             //不指定内存地址
@@ -168,6 +168,12 @@ public:
             //可执行可读写
             PAGE_EXECUTE_READWRITE
         );
+
+        if (*address = NULL) {
+            return false;
+        }
+
+        return true;
     }
 
 private:
