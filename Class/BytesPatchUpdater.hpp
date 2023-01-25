@@ -53,6 +53,11 @@ public:
                 if (state == SHOULD_ACTIVATE_NOW) {
                     //开始注入代码
                     //TODO: hook
+
+                    //标记当前是否已经申请内存
+                    static bool b_allocatedMemory = false;
+                    //申请的内存基址
+                    static int64_t allocatedMemoryAddress = NULL;
                 }
                 else if (state == SHOULD_DEACTIVATE_NOW) {
                     //取消注入代码
