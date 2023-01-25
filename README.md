@@ -7,7 +7,7 @@
 
 # 进程
 
-1. 添加自动完成所有任务的功能。
+睡觉
 
 # 计划
 1. 添加多语言支持，支持用户选择不同字库并重新加载
@@ -29,6 +29,8 @@
 1. 按住`左ALT键`穿墙
 2. 调节移动速度
 3. 技能无冷却
+4. **[新]**  自动完成任务
+5. **[新]**  自动准备
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -75,10 +77,12 @@ Fixing bugs
 6. **[New]** Inspect all players' positions near dead player
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
 
-### Rage
+### Special
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
 2. Movement speed hack
 3. Remove skill's cooldown
+4. **[New]**  Auto complete all tasks
+5. **[New]**  Auto ready
     
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
