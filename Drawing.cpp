@@ -812,7 +812,9 @@ void drawMenu() {
             //显示任务的数量
             ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
 
-            ImGui::Checkbox(str("Auto Complete Tasks", "自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
+            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "自动完成任务+自动准备"), &hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady);
+            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
+            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "仅自动准备"), &hackSettings.guiSettings.b_autoReady);
             /*无单独完成任务功能，暂时注释掉
             //显示所有任务
             if (ImGui::BeginTable("tasks_table", 3,
