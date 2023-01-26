@@ -92,6 +92,11 @@ bool Client::gameHasStarted()
     return this->time_gameStart != NULL;
 }
 
+bool Client::localPlayerReadied()
+{
+    return this->localPlayer.playerController.hasReadied();
+}
+
 bool Client::teleportTo(IN const Vector2& to) {
     if (this->localPlayer.address == NULL) {
         return false;

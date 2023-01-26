@@ -26,6 +26,12 @@ public:
         b_chineseOS = isChineseLanguageOS();
     }
 
+    /// <summary>
+    /// 判断两个bool的值来确定状态是否改变。只适用于确定功能一次即可激活开关的类型，不适用于需要循环判断或具有定时开关功能的场景。
+    /// </summary>
+    /// <param name="settingEnabled"></param>
+    /// <param name="OUT"></param>
+    /// <returns></returns>
     ActivationState shouldActivateOnce(IN const bool& settingEnabled, IN OUT bool* b_activatedAlready) {
         //当前启用
         if (settingEnabled)

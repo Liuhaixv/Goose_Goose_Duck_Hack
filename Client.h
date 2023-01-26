@@ -74,6 +74,12 @@ public:
     /// <returns></returns>
     bool gameHasStarted();
 
+    /// <summary>
+    /// 返回本地玩家是否已经准备
+    /// </summary>
+    /// <returns></returns>
+    bool localPlayerReadied();
+
     bool teleportTo(IN const Vector2& to);
 
     void updateGameOriginalData();

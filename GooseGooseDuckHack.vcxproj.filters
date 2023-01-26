@@ -170,6 +170,15 @@
     <ClInclude Include="Class\Game\string.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Enum\ReadyState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -179,5 +188,16 @@
       <Filter>Header Files</Filter>
     </Text>
     <Text Include="CheatSheet\准备.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Liuhaixv\Desktop\49237108.jfif" />
+    <Image Include="icon\icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GooseGooseDuckHack.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

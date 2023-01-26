@@ -75,6 +75,8 @@ void PlayerController::resetMemberFields()
     nickname = "";
     roleName = "";
     v3_position = { 0.0f, 0.0f, 0.0f };
+
+    i_readyState = ReadyState::ReadyState_NotReady;
 }
 
 /// <summary>
@@ -138,6 +140,11 @@ bool PlayerController::teleportTo(IN const Vector2& to)
     }
 
     return true;
+}
+
+bool PlayerController::hasReadied()
+{
+    return this->i_readyState == ReadyState::ReadyState_Ready;
 }
 
 /// <summary>
@@ -252,6 +259,8 @@ bool PlayerController::update()
     // 是否为本地玩家
     b_isLocal = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
 
+    i_readyState = memory.read_mem<int>(this->address + Offsets::PlayerController::i_readyState, ReadyState::ReadyState_NotReady);
+
     if (b_isPlayerRoleSet)
     {
         // 更新玩家坐标
@@ -280,7 +289,9 @@ bool PlayerController::update()
 
         std::u8string rolename = utils.getRoleName(i_playerRoleId);
         roleName = std::string(rolename.begin(), rolename.end());
+
     }
+
     return true;
 }
 

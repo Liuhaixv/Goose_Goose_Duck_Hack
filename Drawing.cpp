@@ -827,6 +827,20 @@ void drawMenu() {
                 ImGui::Text(str("N/A", "未开始"));
             }
 
+            //显示准备状态
+            //TODO:
+            ImGui::Text(str("Ready status: ", "准备状态: "));
+            ImGui::SameLine();
+            if (g_client->localPlayerReadied()) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Readied", "已准备"));
+                //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+            }
+            else {
+                ImGui::TextDisabled(str("Not ready", "未准备"));
+            }
+
+            ImGui::NewLine();
+
             ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
             ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
             ImGui::SameLine(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
