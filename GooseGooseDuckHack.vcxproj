@@ -75,7 +75,7 @@
     <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>H:\Documents\GitHub\GooseGooseDuckHack\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -173,6 +173,7 @@
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />
+    <ClInclude Include="Enum\ReadyState.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -184,6 +185,8 @@
     <ClInclude Include="ImGui\stb_image.h" />
     <ClInclude Include="Class\Game\LobbySceneHandler.h" />
     <ClInclude Include="Class\Game\string.hpp" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="Struct\GameMap.hpp" />
     <ClInclude Include="Struct\GameOriginalData.hpp" />
     <ClInclude Include="Struct\GameStateSettings.hpp" />
@@ -201,6 +204,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Liuhaixv\Desktop\49237108.jfif" />
+    <Image Include="icon\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GooseGooseDuckHack.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

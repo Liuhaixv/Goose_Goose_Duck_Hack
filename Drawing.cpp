@@ -626,7 +626,7 @@ void drawMenu() {
 
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
 
-    ImGui::Begin(str("Main", "主菜单"), NULL, ImGuiWindowFlags_MenuBar);
+    ImGui::Begin(str("Main", "主菜单"), NULL, ImGuiWindowFlags_MenuBar /* | ImGuiWindowFlags_AlwaysAutoResize*/);
 
     if (ImGui::BeginMenuBar())
     {
@@ -698,7 +698,7 @@ void drawMenu() {
                 const char* playerDeathSnapshotPopup = "playerDeathSnapshot_Popup";
 
                 //TODO:待完善排序
-                ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs();                
+                ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs();
 
                 if (sorts_specs->SpecsDirty)
                 {
@@ -724,7 +724,7 @@ void drawMenu() {
                             }
                         );
                     }
-                    
+
                     sorts_specs->SpecsDirty = false;
                 }
 
@@ -790,6 +790,10 @@ void drawMenu() {
         //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
+            ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
+            HelpMarker(
+                str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
+            );
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
             HelpMarker(
                 str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
@@ -807,10 +811,51 @@ void drawMenu() {
         //菜单
         if (ImGui::BeginTabItem(str("Tasks", "任务")))
         {
+
             ImGui::Text(str("Tasks num:", "任务数量：")); ImGui::SameLine();
 
             //显示任务的数量
             ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
+
+            ImGui::Text(str("Game start time:", "游戏开始时间：")); ImGui::SameLine();
+
+            if (g_client->gameHasStarted()) {
+                ImGui::Text("%d", g_client->timeSinceGameStarted());
+            }
+            else {
+                //游戏未开始
+                ImGui::TextDisabled(str("N/A", "未开始"));
+            }
+
+            //显示是否在房间中
+            ImGui::Text(str("In room: ", "在房间中: "));
+            ImGui::SameLine();
+            if (g_client->inGameScene()) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Yes", "是"));
+                //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+            }
+            else {
+                ImGui::TextDisabled(str("No", "否"));
+            }
+
+            //显示准备状态
+            //TODO:
+            ImGui::Text(str("Ready status: ", "准备状态: "));
+            ImGui::SameLine();
+            if (g_client->localPlayerReadied()) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Readied", "已准备"));
+                //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+            }
+            else {
+                ImGui::TextDisabled(str("Not ready", "未准备"));
+            }
+
+            ImGui::NewLine();
+
+            ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
+            ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+            ImGui::SameLine(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
+            ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
 
             ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "自动完成任务+自动准备"), &hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady);
             ImGui::Checkbox(str("Auto Complete Tasks", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
@@ -818,7 +863,7 @@ void drawMenu() {
             /*无单独完成任务功能，暂时注释掉
             //显示所有任务
             if (ImGui::BeginTable("tasks_table", 3,
-                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg            
+                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
             ))
             {
                 //设置表头

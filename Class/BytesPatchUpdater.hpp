@@ -4,10 +4,12 @@
 #include "../memory.hpp"
 #include "../Struct/HackSettings.hpp"
 #include"../utils.hpp"
+#include "../Client.h"
 
 extern HackSettings hackSettings;
 extern Utils utils;
 extern Memory memory;
+extern Client* g_client;
 
 /// <summary>
 /// 负责patch汇编区指令字节。
@@ -59,9 +61,30 @@ public:
 
                 }
                 */
-                ActivationState state_autoCompleteTasks_and_autoReady = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady, &b_autoCompleteTasks_and_autoReady);
-                ActivationState state_autoReady = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoReady, &b_autoReady);
-                ActivationState state_autoCompleteTasks = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoCompleteTasks, &b_autoCompleteTasks);
+                bool enabled_autoCompleteTasks_and_autoReady = hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady;
+                bool enabled_autoReady = hackSettings.guiSettings.b_autoReady;
+                bool enabled_autoCompleteTasks = hackSettings.guiSettings.b_autoCompleteTasks;
+
+                if (enabled_autoCompleteTasks_and_autoReady) {
+                    autoCompleteTasks_and_autoReady();
+                }
+                else if (enabled_autoReady) {
+                    autoReady();
+                }
+                else if (enabled_autoCompleteTasks) {
+                    autoCompleteTasks();
+                }
+                else {
+                    //unhook
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                        unhook_LocalPlayer_Update();
+                    }
+                }
+
+                /*
+                ActivationState state_autoCompleteTasks_and_autoReady = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady, &b_has_hooked_autoCompleteTasks_and_autoReady);
+                ActivationState state_autoReady = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoReady, &b_has_hooked_autoReady);
+                ActivationState state_autoCompleteTasks = utils.shouldActivateOnce(hackSettings.guiSettings.b_autoCompleteTasks, &b_has_hooked_autoCompleteTasks);
 
                 //优先判断是否需要unhook
                 if (state_autoCompleteTasks_and_autoReady == SHOULD_DEACTIVATE_NOW
@@ -75,38 +98,40 @@ public:
                     //hook不能共存，将其他选项改为false
                     hackSettings.guiSettings.b_autoCompleteTasks = false;
                     hackSettings.guiSettings.b_autoReady = false;
-                    this->b_autoCompleteTasks = false;
-                    this->b_autoReady = false;
+                    this->b_has_hooked_autoCompleteTasks = false;
+                    this->b_has_hooked_autoReady = false;
 
-                    this->activate_autoCompleteTasks_and_autoReady();
+                    this->hook_autoCompleteTasks_and_autoReady();
                 }
                 else if (state_autoReady == SHOULD_ACTIVATE_NOW) {
 
                     hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady = false;
                     hackSettings.guiSettings.b_autoCompleteTasks = false;
-                    this->b_autoCompleteTasks_and_autoReady = false;
-                    this->b_autoCompleteTasks = false;
+                    this->b_has_hooked_autoCompleteTasks_and_autoReady = false;
+                    this->b_has_hooked_autoCompleteTasks = false;
 
-                    this->activate_autoReady();
+                    this->hook_autoReady();
                 }
                 else if (state_autoCompleteTasks == SHOULD_ACTIVATE_NOW) {
 
                     hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady = false;
                     hackSettings.guiSettings.b_autoReady = false;
-                    this->b_autoCompleteTasks_and_autoReady = false;
-                    this->b_autoReady = false;
+                    this->b_has_hooked_autoCompleteTasks_and_autoReady = false;
+                    this->b_has_hooked_autoReady = false;
 
-                    this->activate_autoCompleteTasks();
+                    this->hook_autoCompleteTasks();
                 }
+                */
             }
         }
     }
 private:
 
     bool b_noSkillCooldown = false;
-    bool b_autoCompleteTasks_and_autoReady = false;
-    bool b_autoCompleteTasks = false;
-    bool b_autoReady = false;
+
+    bool b_has_hooked_autoCompleteTasks_and_autoReady = false;
+    bool b_has_hooked_autoCompleteTasks = false;
+    bool b_has_hooked_autoReady = false;
 
     void unhook_LocalPlayer_Update() {
         //unhook
@@ -116,9 +141,85 @@ private:
         //定位LocalPlayer的Update函数的注入点
         int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
         memory.write_bytes(injectEntry_Addr, { originalBytes });
+
+        b_has_hooked_autoCompleteTasks_and_autoReady = false;
+        b_has_hooked_autoCompleteTasks = false;
+        b_has_hooked_autoReady = false;
     }
 
-    void activate_autoCompleteTasks() {
+    void autoCompleteTasks() {
+        //游戏已经开始
+        if (g_client->gameHasStarted()) {
+            //已经超过延迟时间，允许hook
+            if (g_client->timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
+                if (!this->b_has_hooked_autoCompleteTasks) {
+                    hook_autoCompleteTasks();
+                }
+            }
+            else {
+                //尚未超过延迟时间，如果hook则需要unhook
+                if (this->b_has_hooked_autoCompleteTasks) {
+                    unhook_LocalPlayer_Update();
+                }
+            }
+        }
+        else {
+            //游戏未开始不需要做任务，这里尝试unhook
+            if (this->b_has_hooked_autoCompleteTasks) {
+                unhook_LocalPlayer_Update();
+            }
+        }
+    }
+
+    void autoReady() {
+        //游戏未开始
+        if (!g_client->gameHasStarted()) {
+
+            //判断玩家是否已经准备，防止hook影响性能
+            //游戏未开始才需要准备
+            //在房间中
+            if (g_client->inGameScene() && !g_client->localPlayerReadied()) {
+                if (!this->b_has_hooked_autoReady) {
+                    hook_autoReady();
+                }
+            }
+        }
+        else {
+            //游戏已经开始，不必准备，尝试unhook
+            if (this->b_has_hooked_autoReady) {
+                unhook_LocalPlayer_Update();
+            }
+        }
+    }
+
+    void autoCompleteTasks_and_autoReady() {
+        //游戏未开始
+        if (!g_client->gameHasStarted()) {
+            //判断玩家是否已经准备，防止hook影响性能
+            //游戏未开始才需要准备
+            //在房间中
+            if (g_client->inGameScene() && !this->b_has_hooked_autoReady) {
+                hook_autoReady();
+            }
+        }
+        else {
+            //游戏已经开始，判断完成任务的函数
+            //已经超过延迟时间，允许hook
+            if (g_client->timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
+                if (!this->b_has_hooked_autoCompleteTasks) {
+                    hook_autoCompleteTasks();
+                }
+            }
+            else {
+                //尚未超过延迟时间，如果hook则需要unhook
+                if (this->b_has_hooked_autoCompleteTasks_and_autoReady) {
+                    unhook_LocalPlayer_Update();
+                }
+            }
+        }
+    }
+
+    void hook_autoCompleteTasks() {
         //Hook逻辑
         //开始注入代码                   
 
@@ -173,9 +274,11 @@ private:
                         injectCodesBaseAddress_LittleEndianBytes,
                         ASM_jmp_rax
             });
+
+        this->b_has_hooked_autoCompleteTasks = true;
     }
 
-    void activate_autoReady() {
+    void hook_autoReady() {
         //TODO
         //Hook逻辑
         //开始注入代码                   
@@ -229,11 +332,17 @@ private:
                         injectCodesBaseAddress_LittleEndianBytes,
                         ASM_jmp_rax
             });
+
+        this->b_has_hooked_autoReady = true;
     }
 
-    void activate_autoCompleteTasks_and_autoReady() {
+    /// <summary>
+    /// 由于游戏中准备会导致掉线等bug问题，已弃用
+    /// </summary>
+    /*
+    void hook_autoCompleteTasks_and_autoReady() {
         //Hook逻辑
-        //开始注入代码                   
+        //开始注入代码
 
         //标记当前是否已经申请内存
         static bool b_allocatedMemory = false;
@@ -286,5 +395,8 @@ private:
                         injectCodesBaseAddress_LittleEndianBytes,
                         ASM_jmp_rax
             });
+
+        this->b_has_hooked_autoCompleteTasks_and_autoReady = true;
     }
+    */
 };

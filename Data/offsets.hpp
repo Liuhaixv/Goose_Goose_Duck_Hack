@@ -40,6 +40,10 @@ namespace Offsets {
         }
 
         constexpr int64_t ptr_tasksHandler = 0x40;//TasksHandler*
+        constexpr int64_t b_gameStarted = 0x220;//游戏是否已经开始(该值在退出游戏后也很可能为1)
+        constexpr int64_t f_inactiveTimeThreshold = 0x408;//最大公开房间挂机时长
+        constexpr int64_t f_privateInactiveTimeThreshold = 0x40C;//最大私有房间挂机时长
+        constexpr int64_t f_timeInRoom = 0x458;
     }
 
     namespace Rigidbody2D {
@@ -84,6 +88,8 @@ namespace Offsets {
         constexpr int64_t v3_position = 0x2D8; // Value name is randomized. x, y. Float, Float
         constexpr int64_t f_idleTime = 0x2F4; // float 当前挂机时长（秒）(未移动过)，移动后会自动重置为0
         constexpr int64_t b_hasKilledThisRound = 0x2FC;//Boolean
+        constexpr int64_t i_readyState = 0x328;//ReadyState LobbySceneHandler.DHPEEBDONPM
+
         constexpr int64_t fl_invisibilityDistance = 0x33C; // int64_t, need this?
         constexpr int64_t b_fogOfWarEnabled = 0x389;
         constexpr int64_t b_isSpectator = 0x38A; // Boolean
