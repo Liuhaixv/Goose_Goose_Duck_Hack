@@ -800,7 +800,7 @@ void drawMenu() {
                 str("Walk through anything\nYou can press Left ALT to temporarily enable noclip", "穿墙模式\n长按左ALT键来临时穿墙")
             );
             ImGui::SameLine();
-            ImGui::TextDisabled(str("Not available now due to game update", "由于更新暂不可用"));
+            //ImGui::TextDisabled(str("Not available now due to game update", "由于更新暂不可用"));
             ImGui::EndTabItem();
         }
 
@@ -813,8 +813,8 @@ void drawMenu() {
             ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
 
             ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "自动完成任务+自动准备"), &hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady);
-            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
-            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "仅自动准备"), &hackSettings.guiSettings.b_autoReady);
+            ImGui::Checkbox(str("Auto Complete Tasks", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
+            ImGui::Checkbox(str("Auto Ready", "仅自动准备"), &hackSettings.guiSettings.b_autoReady);
             /*无单独完成任务功能，暂时注释掉
             //显示所有任务
             if (ImGui::BeginTable("tasks_table", 3,
