@@ -88,6 +88,15 @@ private:
         b_IsPublicGame = memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_IsPublicGame, false);
         b_IsMicEnabled = memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_IsMicEnabled, false);
 
+        //在房间或游戏中
+        if (b_InGameScene) {
+            //修改挂机最大时长
+            if (hackSettings.guiSettings.b_antiIdleKick) {
+                memory.write_mem<float>(this->address + Offsets::LobbySceneHandler::f_inactiveTimeThreshold, 1000000000.0f);
+                memory.write_mem<float>(this->address + Offsets::LobbySceneHandler::f_privateInactiveTimeThreshold, 1000000000.0f);
+            }
+        }
+
         return true;
     }
 

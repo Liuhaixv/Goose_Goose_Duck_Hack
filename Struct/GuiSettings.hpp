@@ -28,6 +28,10 @@ struct GuiSettings {
     bool b_autoCompleteTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
+    float f_delayedEnableTime = 0.0f;//延时自动做任务
+
+    //反挂机踢出房间
+    bool b_antiIdleKick = true;
 
     //debugmode
     bool b_debug = false;

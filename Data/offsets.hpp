@@ -40,6 +40,8 @@ namespace Offsets {
         }
 
         constexpr int64_t ptr_tasksHandler = 0x40;//TasksHandler*
+        constexpr int64_t f_inactiveTimeThreshold = 0x408;//最大公开房间挂机时长
+        constexpr int64_t f_privateInactiveTimeThreshold = 0x40C;//最大私有房间挂机时长
     }
 
     namespace Rigidbody2D {
