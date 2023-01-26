@@ -1,7 +1,7 @@
 ﻿#include "UI.h"
 
 #include<imgui_internal.h>
-#include"Struct/UserSettings.hpp"
+#include"../Struct/UserSettings.hpp"
 
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;

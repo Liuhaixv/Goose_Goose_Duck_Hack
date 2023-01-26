@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include"Struct/HackSettings.hpp"
+#include"../Struct/HackSettings.hpp"
 
 #include <Windows.h>
 #include <d3d11.h>
@@ -13,8 +13,8 @@
 
 #include<dwmapi.h>
 
-#include"utils.hpp"
-#include"Struct/GameMap.hpp"
+#include"../utils.hpp"
+#include"../Struct/GameMap.hpp"
 
 #include "stb_image.h"
 #include <map>

@@ -1,10 +1,10 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
-#include "Client.h"
-#include "Struct/UserSettings.hpp"
+#include "../Client.h"
+#include "../Struct/UserSettings.hpp"
 #include <sstream>
-#include "Class/Game/string.hpp"
+#include "../Class/Game/string.hpp"
 #include<algorithm>
 //#include "Struct/UserSettings.hpp"
 

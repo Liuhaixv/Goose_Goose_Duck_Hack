@@ -144,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
-    <ClCompile Include="Drawing.cpp" />
+    <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -155,7 +155,7 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp" />
     <ClCompile Include="Class\Game\TasksHandler.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CheatSheet\trash.txt" />
@@ -170,7 +170,7 @@
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
-    <ClInclude Include="Drawing.h" />
+    <ClInclude Include="UI\Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />
     <ClInclude Include="Enum\ReadyState.hpp" />
@@ -196,7 +196,7 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="Struct\UserSettings.hpp" />
     <ClInclude Include="Class\Game\TasksHandler.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI\UI.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
     <ClInclude Include="Memory.hpp" />
@@ -206,7 +206,6 @@
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="C:\Users\Liuhaixv\Desktop\49237108.jfif" />
     <Image Include="icon\icon.ico" />
   </ItemGroup>
   <ItemGroup>
