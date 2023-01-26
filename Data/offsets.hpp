@@ -30,7 +30,7 @@ namespace Offsets {
         namespace Class {
             namespace StaticField {
                 constexpr int64_t Instance = 0x0;//LobbySceneHandler
-                constexpr int64_t  b_InGameScene = 0x8;
+                constexpr int64_t  b_InGameScene = 0x8;//表示当前是否在游戏中或游戏房间中
                 constexpr int64_t  b_ExploreMode = 0x9;
                 constexpr int64_t  i_CurrentMap = 0xC;//当前的地图
                 constexpr int64_t  b_IsPublicGame = 0x10;
@@ -82,7 +82,7 @@ namespace Offsets {
         constexpr int64_t ptr_nickname = 0x1E0; // System_String
 
         constexpr int64_t v3_position = 0x2D8; // Value name is randomized. x, y. Float, Float
-        constexpr int64_t f_idleTime = 0x2F4; // float
+        constexpr int64_t f_idleTime = 0x2F4; // float 当前挂机时长（秒）(未移动过)，移动后会自动重置为0
         constexpr int64_t b_hasKilledThisRound = 0x2FC;//Boolean
         constexpr int64_t fl_invisibilityDistance = 0x33C; // int64_t, need this?
         constexpr int64_t b_fogOfWarEnabled = 0x389;
