@@ -40,8 +40,10 @@ namespace Offsets {
         }
 
         constexpr int64_t ptr_tasksHandler = 0x40;//TasksHandler*
+        constexpr int64_t b_gameStarted = 0x220;//游戏是否已经开始(该值在退出游戏后也很可能为1)
         constexpr int64_t f_inactiveTimeThreshold = 0x408;//最大公开房间挂机时长
         constexpr int64_t f_privateInactiveTimeThreshold = 0x40C;//最大私有房间挂机时长
+        constexpr int64_t f_timeInRoom = 0x458;
     }
 
     namespace Rigidbody2D {

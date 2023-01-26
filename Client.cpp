@@ -49,12 +49,20 @@ void Client::onLocalPlayerQuitGame() {
     Client::onGameEnded();
 }
 
+void Client::onEnteringRoom()
+{
+    //TODO: 不知道干啥
+}
+
 /// <summary>
 /// 游戏开始
 /// </summary>
 void Client::onGameStarted() {
     //更新游戏内初始数据
     updateGameOriginalData();
+
+    //更新游戏开始时间
+    time(&this->time_gameStart);
 }
 
 /// <summary>
@@ -67,6 +75,8 @@ void Client::onGameEnded() {
     hack.resetActivationStates();
     //重置Gui设置
     resetGuiSettings();
+
+    this->time_gameStart = NULL;
 }
 
 /// <summary>

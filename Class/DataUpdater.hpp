@@ -129,6 +129,8 @@ private:
                 localPlayer->playerController.reset();
             }
 
+            /*
+            //触发事件已被LobbySceneHandler的Update替代
             if (localPlayer->playerController.playerRole) {
                 //游戏刚开始
                 if (playerRole == NULL) {
@@ -141,6 +143,8 @@ private:
                     client->onGameEnded();
                 }
             }
+            */
+
             playerRole = localPlayer->playerController.playerRole;
 
             if (localPlayer->playerController.address == NULL) {
@@ -156,7 +160,7 @@ private:
             if (b_localPlayerControllerUpdated == true) {
                 //本地玩家指针无效
                 //退出游戏？
-                client->onLocalPlayerQuitGame();
+                //client->onLocalPlayerQuitGame();
             }
             b_localPlayerControllerUpdated = false;
         }

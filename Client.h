@@ -36,6 +36,11 @@ public:
     void onLocalPlayerQuitGame();
 
     /// <summary>
+    /// 本地玩家进入游戏房间，或直接进入游戏（比如休息室）
+    /// </summary>
+    void onEnteringRoom();
+
+    /// <summary>
     /// 游戏开始
     /// </summary>
     void onGameStarted();
@@ -51,6 +56,8 @@ public:
     /// <param name="playerController"></param>
     void onPlayerDeath(IN PlayerController* playerController);
 
+
+
     bool teleportTo(IN const Vector2& to);
 
     void updateGameOriginalData();
@@ -59,4 +66,6 @@ public:
     void printAllPlayersInfo(Utils* utils = nullptr);
 
 private:
+    //上一次游戏开始的时间
+    time_t time_lastTimeGameBegin = NULL;
 };
