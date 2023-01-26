@@ -175,10 +175,13 @@ private:
         //游戏未开始
         if (!g_client->gameHasStarted()) {
 
-            //TODO: 判断玩家是否已经准备，防止hook影响性能
-            //游戏未开始才需要准备，这里尝试hook
-            if (!this->b_has_hooked_autoReady) {
-                hook_autoReady();
+            //判断玩家是否已经准备，防止hook影响性能
+            //游戏未开始才需要准备
+            //在房间中
+            if (g_client->inGameScene() && !g_client->localPlayerReadied()) {
+                if (!this->b_has_hooked_autoReady) {
+                    hook_autoReady();
+                }
             }
         }
         else {
@@ -192,9 +195,10 @@ private:
     void autoCompleteTasks_and_autoReady() {
         //游戏未开始
         if (!g_client->gameHasStarted()) {
-            //TODO: 判断玩家是否已经准备，防止hook影响性能
-            //游戏未开始不需要做任务，这里只需要判断hook准备
-            if (!this->b_has_hooked_autoReady) {
+            //判断玩家是否已经准备，防止hook影响性能
+            //游戏未开始才需要准备
+            //在房间中
+            if (g_client->inGameScene() && !this->b_has_hooked_autoReady) {
                 hook_autoReady();
             }
         }

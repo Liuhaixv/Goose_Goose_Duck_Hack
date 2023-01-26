@@ -75,6 +75,12 @@ public:
     bool gameHasStarted();
 
     /// <summary>
+    /// 玩家是否在房间/游戏中
+    /// </summary>
+    /// <returns></returns>
+    bool inGameScene();
+
+    /// <summary>
     /// 返回本地玩家是否已经准备
     /// </summary>
     /// <returns></returns>

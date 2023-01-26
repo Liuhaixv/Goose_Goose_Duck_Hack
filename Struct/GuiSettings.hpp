@@ -1,7 +1,7 @@
 ﻿#pragma once
 struct GuiSettings {
     //游戏版本
-    const char* version = "v0.6.5.3";
+    const char* version = "v0.7";
 
     //全局开关
     bool b_draw = true;

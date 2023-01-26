@@ -824,7 +824,18 @@ void drawMenu() {
             }
             else {
                 //游戏未开始
-                ImGui::Text(str("N/A", "未开始"));
+                ImGui::TextDisabled(str("N/A", "未开始"));
+            }
+
+            //显示是否在房间中
+            ImGui::Text(str("In room: ", "在房间中: "));
+            ImGui::SameLine();
+            if (g_client->inGameScene()) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Yes", "是"));
+                //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+            }
+            else {
+                ImGui::TextDisabled(str("No", "否"));
             }
 
             //显示准备状态

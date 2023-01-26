@@ -92,6 +92,11 @@ bool Client::gameHasStarted()
     return this->time_gameStart != NULL;
 }
 
+bool Client::inGameScene()
+{
+    return lobbySceneHandler.b_InGameScene;
+}
+
 bool Client::localPlayerReadied()
 {
     return this->localPlayer.playerController.hasReadied();
