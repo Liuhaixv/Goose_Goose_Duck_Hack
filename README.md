@@ -1,10 +1,14 @@
 # 鹅鸭杀辅助
 
-[<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" width="110" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
-[<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" width="100" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
-[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" width="120" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group.jpg?raw=true)
+[<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
+[<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
+[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group.jpg?raw=true)
 
-鹅鸭杀外部辅助程序，目前持续更新中，可以点亮Star收藏关注一波。有功能需求可以提Issue，我都会回复。
+鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
+
+欢迎Fork并PR，有功能需求可以提Issue，我都会回复。
+
+如果你有什么特殊需求或技术交流，可添加在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group.jpg?raw=true)中私聊我。
 
 # 进程
 
@@ -32,6 +36,8 @@
 3. 技能无冷却
 4. **[新]**  自动完成任务
 5. **[新]**  自动准备
+6. **[新]** 支持游戏开局后延迟完成任务
+6. **[新]**  反挂机检测
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -84,6 +90,8 @@ Fixing bugs
 3. Remove skill's cooldown
 4. **[New]**  Auto complete all tasks
 5. **[New]**  Auto ready
+6. **[New]**  Allow delay for completing all tasks
+6. **[New]**  Anti idle kick
     
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
