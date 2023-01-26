@@ -113,6 +113,8 @@ namespace Offsets {
         constexpr int64_t staticField = 0x10;
         constexpr int64_t ptr_playerController = 0x18;//PlayerController of localplayer
         constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
+
+        constexpr int64_t b_disableMovement = 0x60;
     }
 
     namespace FogOfWarHandler {
