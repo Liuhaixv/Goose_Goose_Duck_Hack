@@ -66,6 +66,7 @@ namespace Offsets {
         constexpr int64_t ptr_Rigidbody2D = 0x58;//Rigidbody2D
 
         constexpr int64_t ptr_playerCollider = 0xA0;// CapsuleCollider2D
+        constexpr int64_t ptr_bodyCollider = 0xB0;// CapsuleCollider2D
         constexpr int64_t b_isSilenced = 0xD1; // Boolean
         constexpr int64_t b_isHelium = 0xD2; // Boolean
         constexpr int64_t b_isInfected = 0xD3; // Boolean
