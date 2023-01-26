@@ -402,3 +402,5 @@ imgui.ini
 *.id1
 *.id0
 *.nam
+
+cpp.hint
