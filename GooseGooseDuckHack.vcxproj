@@ -185,8 +185,6 @@
     <ClInclude Include="ImGui\stb_image.h" />
     <ClInclude Include="Class\Game\LobbySceneHandler.h" />
     <ClInclude Include="Class\Game\string.hpp" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Struct\GameMap.hpp" />
     <ClInclude Include="Struct\GameOriginalData.hpp" />
     <ClInclude Include="Struct\GameStateSettings.hpp" />
@@ -209,7 +207,7 @@
     <Image Include="icon\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GooseGooseDuckHack.rc" />
+    <ResourceCompile Include="UI\GooseGooseDuckHack.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
