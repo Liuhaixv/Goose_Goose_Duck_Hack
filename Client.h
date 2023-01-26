@@ -56,7 +56,23 @@ public:
     /// <param name="playerController"></param>
     void onPlayerDeath(IN PlayerController* playerController);
 
+    /// <summary>
+    /// 获取游戏已进行时间
+    /// </summary>
+    /// <returns></returns>
+    int timeSinceGameStarted() {
+        if (this->time_gameStart == NULL) {
+            return -1;
+        }
 
+        return time(NULL) - this->time_gameStart;
+    }
+
+    /// <summary>
+    /// 游戏是否已经开始
+    /// </summary>
+    /// <returns></returns>
+    bool gameHasStarted();
 
     bool teleportTo(IN const Vector2& to);
 
@@ -67,5 +83,5 @@ public:
 
 private:
     //上一次游戏开始的时间
-    time_t time_lastTimeGameBegin = NULL;
+    time_t time_gameStart = NULL;
 };

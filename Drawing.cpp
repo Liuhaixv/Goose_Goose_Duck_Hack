@@ -816,7 +816,17 @@ void drawMenu() {
 
             //显示任务的数量
             ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
-                       
+
+            ImGui::Text(str("Game start time:", "游戏开始时间：")); ImGui::SameLine();
+
+            if (g_client->gameHasStarted()) {
+                ImGui::Text("%d", g_client->timeSinceGameStarted());
+            }
+            else {
+                //游戏未开始
+                ImGui::Text(str("N/A", "未开始"));
+            }
+
             ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
             ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
             ImGui::SameLine(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");

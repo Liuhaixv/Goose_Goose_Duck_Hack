@@ -104,6 +104,7 @@ public:
 private:
 
     bool b_noSkillCooldown = false;
+
     bool b_autoCompleteTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
