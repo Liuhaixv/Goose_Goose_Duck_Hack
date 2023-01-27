@@ -128,6 +128,7 @@ namespace Offsets {
     }
 
     namespace FogOfWarHandler {
+        constexpr int64_t obscuredInt_layerMask = 0x18;//ObscuredInt
         constexpr int64_t i_layerMask = 0x2C;//Bit
         constexpr int64_t i_playerLayerMask = 0x30;
         constexpr int64_t f_baseViewDistance = 0x40;//已加密ObscuredFloat
@@ -165,6 +166,10 @@ namespace GameAssembly {
 
         namespace LocalPlayer {
             constexpr int64_t Update = 0xF1C760;
+        }
+
+        namespace Application {
+            constexpr int64_t Quit = 0x31D1850;//退出游戏
         }
     }
 

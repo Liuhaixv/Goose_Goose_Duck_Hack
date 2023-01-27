@@ -191,6 +191,7 @@
       <Filter>Header Files</Filter>
     </Text>
     <Text Include="CheatSheet\准备.txt" />
+    <Text Include="CheatSheet\关于反作弊.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon\icon.ico">

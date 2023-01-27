@@ -128,7 +128,11 @@ bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN cons
     if (hackSettings.b_debug_disableWriteMemory) {
         return false;
     }
-    return WriteProcessMemory(processHandle, (LPVOID)address, bytes, bytesNum, NULL);
+    return WriteProcessMemory(processHandle,
+        (LPVOID)address,
+        bytes,
+        bytesNum,
+        NULL);
 }
 
 bool Memory::write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors) {

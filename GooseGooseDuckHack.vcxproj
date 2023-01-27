@@ -160,6 +160,7 @@
     <ClCompile Include="Class\Updater.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="CheatSheet\关于反作弊.txt" />
     <Text Include="CheatSheet\trash.txt" />
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
