@@ -979,8 +979,24 @@ void drawMenu() {
 
             ImGui::Text("%d", memory.pID); ImGui::SameLine();
             //选择进程
+
+            static int selected_process = -1;
+            const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
+            
+            //TODO: 枚举所有游戏进程
             if (ImGui::Button(str("Select Process", "选择进程"))) {
-                //TODO: 枚举所有游戏进程
+                memory.searchGameProcess();
+                ImGui::OpenPopup("select_process_popup");
+            }
+            if (ImGui::BeginPopup("select_process_popup"))
+            {
+                ImGui::Separator();
+                for (int i = 0; i < memory.pIDs.size(); i++)
+                    if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
+                        //附加到进程
+                        memory.attachToGameProcess(memory.pIDs[i]);
+                    }
+                ImGui::EndPopup();
             }
 
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);

@@ -30,6 +30,16 @@ public:
     }
 
     /// <summary>
+    /// 重置Memory类，将辅助恢复到刚启动的状态
+    /// </summary>
+    void reset() {
+        //TODO: 需要检查其他类的重置初始化操作
+        this->pID = NULL;
+        this->processHandle = NULL;
+        this->gameAssemblyBaseAddress = NULL;
+    }
+
+    /// <summary>
     /// 搜索游戏并尝试附加到最后一个找到的游戏进程
     /// </summary>
     void searchGameProcessAndAttach() {
@@ -61,20 +71,25 @@ public:
     /// </summary>
     /// <returns></returns>
     OpenProcessState attachToGameProcess(DWORD pid) {
+        //本次附加进程非第一次，需要重新初始化整个程序
+        if (this->pID != NULL) {
+            this->reset();
+        }
+
         if (pid == NULL) {
             //utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
             //std::cout << std::endl;
+            hackSettings.gameStateSettings.openProcessState = OpenProcessState::GameNotFound;
             return OpenProcessState::GameNotFound;
         }
         //utils.print("Detected game pid:", "检测到游戏进程pid:");
         //std::cout << pID << std::endl;
 
-        //TODO:处理关于
-
         processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
         if (processHandle == INVALID_HANDLE_VALUE || processHandle == NULL) { // error handling
             //-1: Game found but failed to open
             //std::cout << "Failed to open process" << std::endl;
+            hackSettings.gameStateSettings.openProcessState = OpenProcessState::GameFoundButFailedToOpen;
             return OpenProcessState::GameFoundButFailedToOpen;
         }
 
@@ -83,10 +98,13 @@ public:
 
         //Game found but failed to load dll module
         if (gameAssemblyBaseAddress == NULL) {
+            hackSettings.gameStateSettings.openProcessState = OpenProcessState::FailedToLoadDLL;
             return OpenProcessState::FailedToLoadDLL;
         }
 
         //Success
+        this->pID = pid;
+        hackSettings.gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
         return OpenProcessState::GameFoundAndLoadedDLL;
     }
 

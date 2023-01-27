@@ -30,10 +30,10 @@ public:
 
             if (memory.processHandle && memory.gameAssemblyBaseAddress) {
                 if (hackSettings->gameStateSettings.b_gameProcessRunning == false) {
-                    std::cout << "Game found" << std::endl;
+                    //std::cout << "Game found" << std::endl;
 
                     hackSettings->gameStateSettings.b_gameProcessRunning = true;
-                    hackSettings->gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
+                    //hackSettings->gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
                     //暂时没有添加检测游戏退出，所以这里直接返回结束线程
                     //TODO: 添加检测游戏退出
                     return;
