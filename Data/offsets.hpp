@@ -135,13 +135,10 @@ namespace Offsets {
     namespace CapsuleCollider2D {
         namespace UnknownClass0 {
             constexpr int64_t b_enableCollider = 0x38;
-            //constexpr int64_t b_enableCollider = 0x39;
         }
         constexpr int64_t ptr_unknownClass0 = 0x10;
         constexpr int64_t ptr_unknownClass1 = 0x30;
     }
-
-
 
     namespace UICooldownButton {
         constexpr int64_t f_cooldownTime = 0x70;
