@@ -173,7 +173,7 @@ public:
             targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
         }
 
-        //开启穿墙
+        //修改移速
         if (localPlayer) {
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,

@@ -134,12 +134,17 @@ private:
     bool b_has_hooked_autoReady = false;
 
     void unhook_LocalPlayer_Update() {
+        //当前没有hook过
+        //if (!this->b_has_hooked_autoCompleteTasks && !this->b_has_hooked_autoCompleteTasks_and_autoReady && !this->b_has_hooked_autoReady) {
+        //    return;
+        //}
+
         //unhook
         //取消注入代码
         std::vector<byte> originalBytes = { 0x45,0x0F,0x28,0x7B,0x90,0x49,0x8B,0xE3,0x41,0x5F,0x41,0x5E,0x5F,0x5E,0x5B,0xC3 };
 
         //定位LocalPlayer的Update函数的注入点
-        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
+        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xF45;
         memory.write_bytes(injectEntry_Addr, { originalBytes });
 
         b_has_hooked_autoCompleteTasks_and_autoReady = false;
@@ -178,9 +183,16 @@ private:
             //判断玩家是否已经准备，防止hook影响性能
             //游戏未开始才需要准备
             //在房间中
-            if (g_client->inGameScene() && !g_client->localPlayerReadied()) {
-                if (!this->b_has_hooked_autoReady) {
-                    hook_autoReady();
+            if (g_client->inGameScene()) {
+                if (g_client->localPlayerReadied()) {
+                    if (!this->b_has_hooked_autoReady) {
+                        hook_autoReady();
+                    }
+                }
+                else {
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                        unhook_LocalPlayer_Update();
+                    }
                 }
             }
         }
@@ -198,8 +210,17 @@ private:
             //判断玩家是否已经准备，防止hook影响性能
             //游戏未开始才需要准备
             //在房间中
-            if (g_client->inGameScene() && !this->b_has_hooked_autoReady) {
-                hook_autoReady();
+            if (g_client->inGameScene()) {
+                if (g_client->localPlayerReadied()) {
+                    if (!this->b_has_hooked_autoReady) {
+                        hook_autoReady();
+                    }
+                }
+                else {
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                        unhook_LocalPlayer_Update();
+                    }
+                }
             }
         }
         else {
@@ -262,7 +283,7 @@ private:
 
         //篡改汇编指令跳转到注入代码地址
         //定位LocalPlayer的Update函数的注入点
-        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
+        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xF45;
 
         //篡改跳转用的汇编指令字节
         //mov rax 0x????????
@@ -320,7 +341,7 @@ private:
 
         //篡改汇编指令跳转到注入代码地址
         //定位LocalPlayer的Update函数的注入点
-        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
+        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xF45;
 
         //篡改跳转用的汇编指令字节
         //mov rax 0x????????
@@ -383,7 +404,7 @@ private:
 
         //篡改汇编指令跳转到注入代码地址
         //定位LocalPlayer的Update函数的注入点
-        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xFDD;
+        int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xF45;
 
         //篡改跳转用的汇编指令字节
         //mov rax 0x????????

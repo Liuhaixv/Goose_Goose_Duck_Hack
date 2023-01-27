@@ -657,8 +657,10 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
-
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
+
+            //TODO: 移速被加密
+            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
@@ -667,6 +669,7 @@ void drawMenu() {
                 minSpeed,
                 minSpeed * 2
             );
+            ImGui::EndDisabled();
 
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
