@@ -713,7 +713,7 @@ void drawMenu() {
             ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableZoomHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
-                str("Movement speed", "縮放大小"),
+                str("Zoom Size", "縮放大小"),
                 &hackSettings.guiSettings.f_zoomSize,
                 0.5,
                 40
