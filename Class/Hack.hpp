@@ -102,7 +102,7 @@ public:
         }
 
         std::vector<int64_t> offsets{
-                Offsets::PlayerController::ptr_wallCheckCollider,
+                Offsets::PlayerController::ptr_playerCollider,
                 Offsets::CapsuleCollider2D::ptr_unknownClass0,
                 Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
 
