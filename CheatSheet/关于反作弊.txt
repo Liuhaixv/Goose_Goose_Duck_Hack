@@ -1,6 +1,6 @@
-﻿游戏添加了数值指纹校验，搭配Obscured类型的加密数据
+﻿游戏添加了Obscured类型的加密数据
 
-类似FogOfWarHandler中的LayerMask数值被加了指纹保护，如果强行修改会触发游戏闪退
+类似FogOfWarHandler中的LayerMask数值被加了保护，如果强行修改会触发游戏闪退
 
 int32_t __stdcall UnityEngine_Touch__get_fingerId(UnityEngine_Touch_o *this, const MethodInfo *method)
 {
@@ -9,4 +9,6 @@ int32_t __stdcall UnityEngine_Touch__get_fingerId(UnityEngine_Touch_o *this, con
 
 反作弊相关代码
 CodeStage.AntiCheat.Detectors
+
+游戏使用的反作弊库
 http://codestage.net/uas_files/actk/api/class_code_stage_1_1_anti_cheat_1_1_detectors_1_1_obscured_cheating_detector.html
