@@ -167,6 +167,9 @@ private:
                     unhook_LocalPlayer_Update();
                 }
             }
+
+
+            //TODO: 判断任务是否已经完成，需要unhook
         }
         else {
             //游戏未开始不需要做任务，这里尝试unhook
@@ -211,7 +214,7 @@ private:
             //游戏未开始才需要准备
             //在房间中
             if (g_client->inGameScene()) {
-                if (g_client->localPlayerReadied()) {
+                if (!g_client->localPlayerReadied()) {
                     if (!this->b_has_hooked_autoReady) {
                         hook_autoReady();
                     }
@@ -230,6 +233,7 @@ private:
                 if (!this->b_has_hooked_autoCompleteTasks) {
                     hook_autoCompleteTasks();
                 }
+                //TODO: 判断任务是否已经完成，需要unhook
             }
             else {
                 //尚未超过延迟时间，如果hook则需要unhook
