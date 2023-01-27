@@ -69,6 +69,7 @@ namespace Offsets {
 
         constexpr int64_t ptr_Rigidbody2D = 0x58;//Rigidbody2D
 
+        constexpr int64_t ptr_playerCollider = 0xA0;// CapsuleCollider2D
         constexpr int64_t ptr_wallCheckCollider = 0xA8;// CapsuleCollider2D
         constexpr int64_t ptr_bodyCollider = 0xB0;// CapsuleCollider2D
         constexpr int64_t b_isSilenced = 0xD1; // Boolean
@@ -136,7 +137,8 @@ namespace Offsets {
             constexpr int64_t b_enableCollider = 0x38;
             //constexpr int64_t b_enableCollider = 0x39;
         }
-        constexpr int64_t ptr_unknownClass0 = 0x30;
+        constexpr int64_t ptr_unknownClass0 = 0x10;
+        constexpr int64_t ptr_unknownClass1 = 0x30;
     }
 
 
@@ -162,14 +164,14 @@ namespace GameAssembly {
         }
 
         namespace LocalPlayer {
-            constexpr int64_t Update = 0xFA04C0;
+            constexpr int64_t Update = 0xF1C760;
         }
     }
 
     namespace Class {
-        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C6A8D0;//Handlers_LobbyHandlers_LobbySceneHandler_c *
-        constexpr int64_t ptr_PlayerControllerClass = 0x3C98478;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x3C6B510;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C541E8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
+        constexpr int64_t ptr_PlayerControllerClass = 0x3C81770;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t ptr_LocalPlayerClass = 0x3C54E28;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
     }
 
     namespace BytesPatch {
