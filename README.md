@@ -9,7 +9,7 @@
 
 欢迎Fork并PR，有功能需求可以提Issue，我都会回复。
 
-如果你有什么特殊需求或技术交流，可添加在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group.jpg?raw=true)中私聊我。
+如果你有什么特殊需求或技术交流，可添加在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group2.jpg?raw=true)中私聊我。
 
 # 进程
 
