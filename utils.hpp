@@ -58,6 +58,26 @@ public:
     }
 
     /// <summary>
+    /// 判断float值是否变化，只返回SHOULD_ACTIVATE_NOW或IDLE_DO_NOTHING
+    /// </summary>
+    /// <param name="settingEnabled"></param>
+    /// <param name="OUT"></param>
+    /// <returns></returns>
+    ActivationState shouldActivateOnce(IN const float& f_currentTimeValue, IN OUT float* f_lastTimeValue) {
+        //数值未变化
+        if (f_currentTimeValue == *f_lastTimeValue)
+        {
+            *f_lastTimeValue = f_currentTimeValue;
+            return ActivationState::IDLE_DO_NOTHING;
+        }
+        //数值变化
+        else {
+            *f_lastTimeValue = f_currentTimeValue;
+            return ActivationState::SHOULD_ACTIVATE_NOW;
+        }
+    }
+
+    /// <summary>
     /// 转换utf16到utf8
     /// </summary>
     /// <param name="source"></param>

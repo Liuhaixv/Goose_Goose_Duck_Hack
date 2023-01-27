@@ -1,7 +1,7 @@
 ﻿#pragma once
 struct GuiSettings {
     //游戏版本
-    const char* version = "v0.7.1.1";
+    const char* version = "v0.7.1.2";
 
     //全局开关
     bool b_draw = true;
@@ -20,6 +20,10 @@ struct GuiSettings {
     //速度修改
     bool b_enableSpeedHack = false;
     float f_movementSpeed = -1;
+
+    //縮放修改
+    bool b_enableZoomHack = false;
+    float f_zoomSize = 4;
 
     //战争迷雾
     bool b_disableFogOfWar = false;

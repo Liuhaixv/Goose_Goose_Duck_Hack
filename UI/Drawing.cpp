@@ -648,7 +648,7 @@ void drawMenu() {
                 }
                 else {
                     ImGui::TextDisabled(str("Not Running", "未运行"));
-                }                
+                }
 
                 //昵称颜色
                 ImGui::TableNextColumn();
@@ -700,7 +700,7 @@ void drawMenu() {
 
             //TODO: 移速被加密
             ImGui::BeginDisabled();
-            ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
@@ -709,6 +709,15 @@ void drawMenu() {
                 minSpeed * 2
             );
             ImGui::EndDisabled();
+
+            ImGui::Checkbox(str("Enable##zoomHack", "启用##zoomHack"), &hackSettings.guiSettings.b_enableZoomHack);
+            ImGui::SameLine();
+            ImGui::SliderFloat(
+                str("Zoom Size", "相机缩放"),
+                &hackSettings.guiSettings.f_zoomSize,
+                0.5,
+                40
+            );
 
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
@@ -904,6 +913,7 @@ void drawMenu() {
             ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "自动完成任务+自动准备"), &hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady);
             ImGui::Checkbox(str("Auto Complete Tasks", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
             ImGui::Checkbox(str("Auto Ready", "仅自动准备"), &hackSettings.guiSettings.b_autoReady);
+
             /*无单独完成任务功能，暂时注释掉
             //显示所有任务
             if (ImGui::BeginTable("tasks_table", 3,
@@ -934,13 +944,14 @@ void drawMenu() {
                     //一键完成任务
                     ImGui::TableNextColumn();
                     if (ImGui::Button(str("Complete", "完成"))) {
-                        //TODO: 完成任务
+                        // 完成任务
                     }
                 }
 
                 ImGui::EndTable();
             }
             */
+
             ImGui::EndTabItem();
         }
 
@@ -982,8 +993,8 @@ void drawMenu() {
 
             static int selected_process = -1;
             const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
-            
-            //TODO: 枚举所有游戏进程
+
+            //枚举所有游戏进程
             if (ImGui::Button(str("Select Process", "选择进程"))) {
                 memory.searchGameProcess();
                 ImGui::OpenPopup("select_process_popup");
@@ -1041,6 +1052,9 @@ void drawMenu() {
     ImGui::End();
 }
 
+/// <summary>
+/// 全屏绘制
+/// </summary>
 void drawESP() {
     //TODO
     ///*
