@@ -128,10 +128,11 @@ namespace Offsets {
     }
 
     namespace FogOfWarHandler {
-        constexpr int64_t i_layerMask = 0x18;//Bit
-        constexpr int64_t f_baseViewDistance = 0x2c;
-        constexpr int64_t f_viewDistanceMultiplier = 0x38;
-        constexpr int64_t b_targetPlayerSet = 0x50;
+        constexpr int64_t i_layerMask = 0x2C;//Bit
+        constexpr int64_t i_playerLayerMask = 0x30;
+        constexpr int64_t f_baseViewDistance = 0x40;//已加密ObscuredFloat
+        constexpr int64_t f_viewDistanceMultiplier = 0x68;//已加密ObscuredFloat
+        constexpr int64_t b_targetPlayerSet = 0x88;
     }
 
     namespace CapsuleCollider2D {

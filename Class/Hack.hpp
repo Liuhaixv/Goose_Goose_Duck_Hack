@@ -56,10 +56,11 @@ public:
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
+                        /*TODO: 数值已加密，暂时无法读写
                         float f_viewDistanceMultiplier = memory.read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
                         if (f_viewDistanceMultiplier != 0) {
                             memory.write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
-                        }
+                        }*/
                     }
 
                 }
