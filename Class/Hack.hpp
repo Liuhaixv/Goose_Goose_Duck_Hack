@@ -194,6 +194,17 @@ public:
         }
     }
 
+    /// <summary>
+    /// 设置相机的远近距离
+    /// </summary>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    bool overrideOrthographicSize(float size)
+    {
+        //TODO
+        return false;
+    }
+
 private:
     Client* client = nullptr;
 

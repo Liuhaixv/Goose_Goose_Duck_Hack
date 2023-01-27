@@ -95,15 +95,10 @@ namespace Offsets {
         constexpr int64_t b_fogOfWarEnabled = 0x389;
         constexpr int64_t b_isSpectator = 0x38A; // Boolean
         constexpr int64_t b_isRemoteSpectating = 0x38B; // Boolean
+    }
 
-        /*
-        [Notable offsets]
-        2B0, Player location, Float Float,   x, y
-        2BC, using left bool. camera accel?
-        Using UnityEngine-Vector3.Slerp for camera movement?
-        */
-
-
+    namespace CinemachineStateDrivenCamera {
+        constexpr int64_t ptr_m_AnimatedTarget = 0xB0;//Animator
     }
 
     namespace LocalPlayer {
@@ -123,6 +118,8 @@ namespace Offsets {
         constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
 
         constexpr int64_t b_disableMovement = 0x60;
+
+        constexpr int64_t ptr_cinemachineStateDrivenCamera = 0x68;// CinemachineStateDrivenCamera
     }
 
     namespace FogOfWarHandler {

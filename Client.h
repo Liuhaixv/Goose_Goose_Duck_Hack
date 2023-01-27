@@ -85,12 +85,19 @@ public:
     /// <returns></returns>
     bool localPlayerReadied();
 
-    bool teleportTo(IN const Vector2& to);
-
     void updateGameOriginalData();
 
     [[deprecated("Replaced with GUI, won't do anything now")]]
     void printAllPlayersInfo(Utils* utils = nullptr);
+
+    bool teleportTo(IN const Vector2& to);
+
+    /// <summary>
+    /// 修改相机远近距离
+    /// </summary>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    bool overrideOrthographicSize(float size);
 
 private:
     //上一次游戏开始的时间
