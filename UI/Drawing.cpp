@@ -626,10 +626,41 @@ void drawMenu() {
 
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
 
-    ImGui::Begin(str("Main", "主菜单"), NULL, ImGuiWindowFlags_MenuBar /* | ImGuiWindowFlags_AlwaysAutoResize*/);
+    ImGui::Begin(str("Open source project from github.com/Liuhaixv", "免费项目:github.com/Liuhaixv"), NULL, ImGuiWindowFlags_MenuBar /* | ImGuiWindowFlags_AlwaysAutoResize*/);
 
     if (ImGui::BeginMenuBar())
     {
+        if (ImGui::BeginTable("minimap_color_settings_table", 2,
+            ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+        ))
+        {
+
+            //死亡
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text(str("Game status: ", "游戏状态: "));
+                ImGui::SameLine();
+                if (hackSettings.gameStateSettings.b_gameProcessRunning) {
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Game Running", "运行中"));
+                    //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+                }
+                else {
+                    ImGui::TextDisabled(str("Not Running", "未运行"));
+                }
+
+                //昵称颜色
+                ImGui::TableNextColumn();
+                //版本
+                ImGui::Text(str("Version:", "版本："));
+                ImGui::SameLine();
+                ImGui::Text(hackSettings.guiSettings.version);
+                ImGui::SameLine();                
+            }
+            ImGui::EndTable();
+        }
+
+        /*
         ImGui::Text(str("Game status: ", "游戏状态: "));
         ImGui::SameLine();
         if (hackSettings.gameStateSettings.b_gameProcessRunning) {
@@ -639,6 +670,13 @@ void drawMenu() {
         else {
             ImGui::TextDisabled(str("Not Running", "未运行"));
         }
+
+        //版本
+        ImGui::Text(str("      Version:", "      版本："));
+        ImGui::SameLine();
+        ImGui::Text(hackSettings.guiSettings.version);
+        ImGui::SameLine();
+        */
 
         ImGui::EndMenuBar();
     }

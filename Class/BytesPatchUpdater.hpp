@@ -184,7 +184,7 @@ private:
             //游戏未开始才需要准备
             //在房间中
             if (g_client->inGameScene()) {
-                if (g_client->localPlayerReadied()) {
+                if (!g_client->localPlayerReadied()) {
                     if (!this->b_has_hooked_autoReady) {
                         hook_autoReady();
                     }
