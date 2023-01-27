@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp" />
     <ClCompile Include="Class\Game\TasksHandler.cpp" />
     <ClCompile Include="UI\UI.cpp" />
+    <ClCompile Include="Class\Updater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CheatSheet\trash.txt" />
@@ -195,9 +197,10 @@
     <ClInclude Include="Struct\UserSettings.hpp" />
     <ClInclude Include="Class\Game\TasksHandler.h" />
     <ClInclude Include="UI\UI.h" />
+    <ClInclude Include="Class\Updater.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
-    <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="Memory.h" />
     <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>

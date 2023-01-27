@@ -1,11 +1,11 @@
 ﻿#include "LobbySceneHandler.h"
 
-#include "../memory.hpp"
+#include "../memory.h"
 #include"../utils.hpp"
 #include "../Data/offsets.hpp"
 #include "../../Client.h"
 
-extern Client* g_client;
+extern Client g_client;
 extern Memory memory;
 void LobbySceneHandler::resetMemberFields()
     {
@@ -46,14 +46,14 @@ bool LobbySceneHandler::update()
     if (memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_InGameScene, false)) {
         //刚进入房间/游戏
         if (b_InGameScene == false) {
-            g_client->onEnteringRoom();
+            g_client.onEnteringRoom();
         }
         b_InGameScene = true;
     }
     else {
         //刚退出游戏/房间
         if (b_InGameScene == true) {
-            g_client->onLocalPlayerQuitGame();
+            g_client.onLocalPlayerQuitGame();
         }
         b_InGameScene = false;
     }
@@ -65,14 +65,14 @@ bool LobbySceneHandler::update()
     if (memory.read_mem<bool>(this->address + Offsets::LobbySceneHandler::b_gameStarted, false)) {
         //非教程模式下
         if (!b_ExploreMode && b_gameStarted == false) {
-            g_client->onGameStarted();
+            g_client.onGameStarted();
         }
         b_gameStarted = true;
     }
     else {
         //非教程模式下
         if (!b_ExploreMode && b_gameStarted == true) {
-            g_client->onGameEnded();
+            g_client.onGameEnded();
         }
         b_gameStarted = false;
     }

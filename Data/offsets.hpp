@@ -152,15 +152,15 @@ namespace GameAssembly {
     //RVA offsets
     namespace Method {
         namespace PlayerPropertiesManager {
-            constexpr int64_t ChangeReadyState = 0x84B1A0;
+            constexpr int64_t ChangeReadyState = 0x866710;
         }
 
         namespace TasksHandler {
-            constexpr int64_t CompleteTask = 0xE655D0;
+            constexpr int64_t CompleteTask = 0xE46110;
         }
 
         namespace UICooldownButton {
-            constexpr int64_t Update = 0x1163A20;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0x1130590;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
 
         namespace LocalPlayer {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Memory.hpp"
+#include "Memory.h"
 #include "Struct/HackSettings.hpp"
 #include "Class/Game/PlayerController.h"
 #include"Class/Game/LocalPlayer.hpp"
@@ -9,14 +9,14 @@
 class Client
 {
 public:
-    HackSettings* hackSettings = nullptr;
+    HackSettings hackSettings;
 
     static const int n_players = 16;
     LobbySceneHandler lobbySceneHandler;
     LocalPlayer localPlayer;
     std::vector<PlayerController*> playerControllers;
 
-    Client(HackSettings* hackSettings);
+    Client();
 
     ~Client();
 

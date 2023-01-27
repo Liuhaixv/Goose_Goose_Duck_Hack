@@ -1,6 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
+#include "../memory.h"
 #include "../Client.h"
 #include "../Struct/UserSettings.hpp"
 #include <sstream>
@@ -17,7 +18,8 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 
 extern Utils utils;
 extern HackSettings hackSettings;
-extern Client* g_client;
+extern Client g_client;
+extern Memory memory;
 
 extern UserSettings userSettings;
 
@@ -91,7 +93,7 @@ static void HelpMarker(const char* desc)
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-    LocalPlayer* localPlayer = &g_client->localPlayer;
+    LocalPlayer* localPlayer = &g_client.localPlayer;
 
     if (localPlayer->address == NULL) {
         return false;
@@ -206,8 +208,8 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
 bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-    auto playerControllers = g_client->playerControllers;
-    //PlayerController* playerControllers = g_client->playerControllers;
+    auto playerControllers = g_client.playerControllers;
+    //PlayerController* playerControllers = g_client.playerControllers;
 
     for (auto ptr_playerController : playerControllers) {
         if (ptr_playerController->address == NULL) {
@@ -477,7 +479,7 @@ void drawMinimap() {
         {
             static Vector2 tpPosition = { 0.0f,0.0f };
             if (ImGui::Button(str("TP to: ", "传送到: "))) {
-                g_client->teleportTo(tpPosition);
+                g_client.teleportTo(tpPosition);
             }
             ImGui::InputFloat("debug_map_tp_X", &tpPosition.x);
             ImGui::InputFloat("debug_map_tp_Y", &tpPosition.y);
@@ -569,7 +571,7 @@ void drawMinimap() {
 
                 //地图刚被点击
                 if (gameMapClicked) {
-                    g_client->teleportTo(positionInGame);
+                    g_client.teleportTo(positionInGame);
                     hasTPedWhenHoveringOnGameMap = true;
                     lastTPedPosition = positionInGame;
                 }
@@ -626,10 +628,40 @@ void drawMenu() {
 
     ImGui::SetNextWindowSize({ 500.0f, 400.0f }, ImGuiCond_Once);
 
-    ImGui::Begin(str("Main", "主菜单"), NULL, ImGuiWindowFlags_MenuBar /* | ImGuiWindowFlags_AlwaysAutoResize*/);
+    ImGui::Begin(str("Open source project from github.com/Liuhaixv", "免费项目:github.com/Liuhaixv"), NULL, ImGuiWindowFlags_MenuBar /* | ImGuiWindowFlags_AlwaysAutoResize*/);
 
     if (ImGui::BeginMenuBar())
     {
+        if (ImGui::BeginTable("minimap_color_settings_table", 2,
+            ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+        ))
+        {
+            {
+                //游戏运行状态
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::Text(str("Game status: ", "游戏状态: "));
+                ImGui::SameLine();
+                if (hackSettings.gameStateSettings.b_gameProcessRunning) {
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Game Running", "运行中"));
+                    //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
+                }
+                else {
+                    ImGui::TextDisabled(str("Not Running", "未运行"));
+                }                
+
+                //昵称颜色
+                ImGui::TableNextColumn();
+                //版本
+                ImGui::Text(str("Version:", "版本："));
+                ImGui::SameLine();
+                ImGui::Text(hackSettings.guiSettings.version);
+                ImGui::SameLine();
+            }
+            ImGui::EndTable();
+        }
+
+        /*
         ImGui::Text(str("Game status: ", "游戏状态: "));
         ImGui::SameLine();
         if (hackSettings.gameStateSettings.b_gameProcessRunning) {
@@ -640,13 +672,20 @@ void drawMenu() {
             ImGui::TextDisabled(str("Not Running", "未运行"));
         }
 
+        //版本
+        ImGui::Text(str("      Version:", "      版本："));
+        ImGui::SameLine();
+        ImGui::Text(hackSettings.guiSettings.version);
+        ImGui::SameLine();
+        */
+
         ImGui::EndMenuBar();
     }
 
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
-        PlayerController* playerController = &g_client->localPlayer.playerController;
+        PlayerController* playerController = &g_client.localPlayer.playerController;
         //菜单1
         if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
@@ -657,8 +696,10 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
-
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
+
+            //TODO: 移速被加密
+            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
@@ -667,6 +708,7 @@ void drawMenu() {
                 minSpeed,
                 minSpeed * 2
             );
+            ImGui::EndDisabled();
 
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
@@ -713,13 +755,13 @@ void drawMenu() {
                     }
 
                     if (sortDirection == ImGuiSortDirection_Ascending) {
-                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                        sort(g_client.playerControllers.begin(), g_client.playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
                             return lhs->i_timeOfDeath < rhs->i_timeOfDeath;
                             }
                         );
                     }
                     else {
-                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                        sort(g_client.playerControllers.begin(), g_client.playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
                             return lhs->i_timeOfDeath >= rhs->i_timeOfDeath;
                             }
                         );
@@ -728,11 +770,11 @@ void drawMenu() {
                     sorts_specs->SpecsDirty = false;
                 }
 
-                //PlayerController* player = g_client->playerControllers;
-                auto playerControllers = g_client->playerControllers;
-                for (int i = 0; i < g_client->playerControllers.size(); i++)
+                //PlayerController* player = g_client.playerControllers;
+                auto playerControllers = g_client.playerControllers;
+                for (int i = 0; i < g_client.playerControllers.size(); i++)
                 {
-                    PlayerController* ptr_playerController = g_client->playerControllers[i];
+                    PlayerController* ptr_playerController = g_client.playerControllers[i];
 
                     //跳过无效玩家和本地玩家
                     if (ptr_playerController->address == NULL || /*ptr_playerController->b_isLocal ||*/ ptr_playerController->nickname == "") {
@@ -777,7 +819,7 @@ void drawMenu() {
                         if (deadplayerIndex >= 0) {
                             if (!hasOpenedPopup) {
                                 hasOpenedPopup = true;
-                                drawPlayerDeathSnapshot(g_client->playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
+                                drawPlayerDeathSnapshot(g_client.playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
                             }
                         }
                     }
@@ -794,10 +836,13 @@ void drawMenu() {
             HelpMarker(
                 str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
             );
+            //TODO:失效
+            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
             HelpMarker(
                 str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
             );
+            ImGui::EndDisabled();
 
             ImGui::Checkbox(str("Noclip", "穿墙"), &hackSettings.guiSettings.b_alwaysEnableNoclip);
             HelpMarker(
@@ -815,12 +860,12 @@ void drawMenu() {
             ImGui::Text(str("Tasks num:", "任务数量：")); ImGui::SameLine();
 
             //显示任务的数量
-            ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
+            ImGui::Text("%d", g_client.lobbySceneHandler.tasksHandler.tasksNum);
 
             ImGui::Text(str("Game start time:", "游戏开始时间：")); ImGui::SameLine();
 
-            if (g_client->gameHasStarted()) {
-                ImGui::Text("%d", g_client->timeSinceGameStarted());
+            if (g_client.gameHasStarted()) {
+                ImGui::Text("%d", g_client.timeSinceGameStarted());
             }
             else {
                 //游戏未开始
@@ -830,7 +875,7 @@ void drawMenu() {
             //显示是否在房间中
             ImGui::Text(str("In room: ", "在房间中: "));
             ImGui::SameLine();
-            if (g_client->inGameScene()) {
+            if (g_client.inGameScene()) {
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Yes", "是"));
                 //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
             }
@@ -839,10 +884,9 @@ void drawMenu() {
             }
 
             //显示准备状态
-            //TODO:
             ImGui::Text(str("Ready status: ", "准备状态: "));
             ImGui::SameLine();
-            if (g_client->localPlayerReadied()) {
+            if (g_client.localPlayerReadied()) {
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Readied", "已准备"));
                 //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
             }
@@ -876,7 +920,7 @@ void drawMenu() {
                 ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoInputs;
 
                 int index = 0;
-                for (const auto& task : g_client->lobbySceneHandler.tasksHandler.assignedTasks) {
+                for (const auto& task : g_client.lobbySceneHandler.tasksHandler.assignedTasks) {
                     ImGui::TableNextRow();
 
                     //索引
@@ -929,6 +973,32 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
+            //游戏进程ID
+            ImGui::Text(str("PID:", "PID: "));
+            ImGui::SameLine();
+
+            ImGui::Text("%d", memory.pID); ImGui::SameLine();
+            //选择进程
+
+            static int selected_process = -1;
+            const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
+            
+            //TODO: 枚举所有游戏进程
+            if (ImGui::Button(str("Select Process", "选择进程"))) {
+                memory.searchGameProcess();
+                ImGui::OpenPopup("select_process_popup");
+            }
+            if (ImGui::BeginPopup("select_process_popup"))
+            {
+                ImGui::Separator();
+                for (int i = 0; i < memory.pIDs.size(); i++)
+                    if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
+                        //附加到进程
+                        memory.attachToGameProcess(memory.pIDs[i]);
+                    }
+                ImGui::EndPopup();
+            }
+
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
 
             //秘密菜单

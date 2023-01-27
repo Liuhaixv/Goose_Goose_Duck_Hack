@@ -6,6 +6,8 @@
 #include"../Enum/ActivationState.hpp"
 
 extern Memory memory;
+extern Utils utils;
+extern HackSettings hackSettings;
 
 class Hack {
 public:
@@ -41,7 +43,7 @@ public:
         if (state == SHOULD_ACTIVATE_NOW) {
             //修改fog of war
             if (localPlayerController->b_isLocal) {
-                if (this->client && this->client->hackSettings) {
+                if (this->client) {
                     //memory.write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
                     int64_t fogOfWarHandler_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
@@ -66,7 +68,7 @@ public:
         else if (state == SHOULD_DEACTIVATE_NOW) {
             //TODO: 反激活，启用战争迷雾
             if (localPlayerController->b_isLocal) {
-                if (this->client && this->client->hackSettings) {
+                if (this->client) {
                     //memory.write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
                     int64_t fogOfWarHandler_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
@@ -124,9 +126,9 @@ public:
     void noclip(PlayerController* localPlayerController) {
         //开启穿墙
         if (localPlayerController && localPlayerController->b_isLocal) {
-            if (this->client && this->client->hackSettings) {
+            if (this->client ) {
                 enableNoclip(localPlayerController,
-                    this->client->hackSettings->guiSettings.b_alwaysEnableNoclip || this->client->hackSettings->tempEnableNoclip);
+                    this->client->hackSettings.guiSettings.b_alwaysEnableNoclip || this->client->hackSettings.tempEnableNoclip);
             }
         }
     }
@@ -136,18 +138,19 @@ public:
         float targetSpeed = -1.0f;
 
         //检查是否启用移速hack
-        ActivationState state = utils.shouldActivateOnce(this->client->hackSettings->guiSettings.b_enableSpeedHack, &this->b_enabledSpeedHackLastTime);
+        ActivationState state = utils.shouldActivateOnce(this->client->hackSettings.guiSettings.b_enableSpeedHack, &this->b_enabledSpeedHackLastTime);
 
         switch (state) {
             case SHOULD_DEACTIVATE_NOW:
                 //TODO: 用户关闭了speedhack，恢复正常移速
-                targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
+                
+                targetSpeed = this->client->hackSettings.gameOriginalData.f_baseMovementSpeed;
                 break;
 
                 //speedhack没有被切换开关
             case IDLE_DO_NOTHING:
                 //没有开启
-                if (!this->client->hackSettings->guiSettings.b_enableSpeedHack) {
+                if (!this->client->hackSettings.guiSettings.b_enableSpeedHack) {
                     return false;
                 }
                 else {
@@ -158,10 +161,10 @@ public:
                 //用户刚刚开启speedhack
             case SHOULD_ACTIVATE_NOW:
                 //TODO: 检查启用状态下当前目标速度是否更新
-                targetSpeed = this->client->hackSettings->guiSettings.f_movementSpeed;
+                targetSpeed = this->client->hackSettings.guiSettings.f_movementSpeed;
 
                 //和上一次设置的速度一样，无变化，直接返回
-                if (this->lastTimeSetMovementSpeed == this->client->hackSettings->guiSettings.f_movementSpeed) {
+                if (this->lastTimeSetMovementSpeed == this->client->hackSettings.guiSettings.f_movementSpeed) {
                     return false;
                 }
                 break;
@@ -170,10 +173,10 @@ public:
         //修改移速逻辑从这里开始       
 
         if (targetSpeed < 0) {
-            targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
+            targetSpeed = this->client->hackSettings.gameOriginalData.f_baseMovementSpeed;
         }
 
-        //开启穿墙
+        //修改移速
         if (localPlayer) {
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,
@@ -185,7 +188,7 @@ public:
             memory.write_mem<float>(movementSpeed_addr, targetSpeed);
 
             //更新GUI显示的设置速度
-            this->client->hackSettings->guiSettings.f_movementSpeed = targetSpeed;
+            this->client->hackSettings.guiSettings.f_movementSpeed = targetSpeed;
             //更新上一次设置的速度
             this->lastTimeSetMovementSpeed = targetSpeed;
         }
