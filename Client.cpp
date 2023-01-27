@@ -6,10 +6,8 @@
 
 extern Hack hack;
 
-Client::Client(HackSettings* hackSettings)
+Client::Client()
 {
-    this->hackSettings = hackSettings;
-
     for (int i = 0; i < n_players; i++) {
         playerControllers.push_back(new PlayerController());
     }
@@ -26,12 +24,10 @@ Client::~Client() {
 /// 重置GUI设置
 /// </summary>
 void Client::resetGuiSettings() {
-    HackSettings* hackSettings = this->hackSettings;
-    GuiSettings* guiSettings = &hackSettings->guiSettings;
-
+    GuiSettings* guiSettings = &hackSettings.guiSettings;
 
     //reset player's target speed
-    guiSettings->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+    guiSettings->f_movementSpeed = this->hackSettings.gameOriginalData.f_baseMovementSpeed;
     guiSettings->b_alwaysEnableNoclip = false;
     guiSettings->b_disableFogOfWar = false;
 }
@@ -117,7 +113,7 @@ bool Client::teleportTo(IN const Vector2& to) {
 }
 
 void Client::updateGameOriginalData() {
-    hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
+    hackSettings.gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
 }
 
 [[deprecated("Replaced with GUI, won't do anything now")]]

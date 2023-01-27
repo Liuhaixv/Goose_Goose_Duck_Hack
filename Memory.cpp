@@ -4,17 +4,37 @@
 #include <iostream>
 #include <tchar.h> // _tcscmp
 
-
 #include"utils.hpp"
 
 #include <initializer_list>
+#include "Class/Hack.hpp"
+#include "Struct/UserSettings.hpp"
+#include "Class/HotkeyUpdater.hpp"
+#include "Class/BytesPatchUpdater.hpp"
+#include "Class/GameProcessUpdater.hpp"
+#include "Class/DataUpdater.hpp"
+#include "Client.h"
 
 extern Utils utils;
+extern Hack hack;
+extern Client g_client;
+extern UserSettings userSettings;
+
+extern HotkeyUpdater hotkeyUpdater;
+extern DataUpdater dataUpdater;
+extern BytesPatchUpdater bytesUpdater;
+extern MemoryUpdater memoryUpdater;
 
 //Public
 
 void Memory::reset() {
-    //TODO: 需要检查其他类的重置初始化操作
+
+    //首先检查是否需要unhook
+    bytesUpdater.unhookAll();
+
+    //暂停写入
+    hackSettings.b_debug_disableWriteMemory = true;
+
     this->pID = NULL;
     this->processHandle = NULL;
     this->gameAssemblyBaseAddress = NULL;
@@ -41,8 +61,11 @@ void Memory::searchGameProcess() {
 }
 
 OpenProcessState Memory::attachToGameProcess(DWORD pid) {
+    bool firstTimeAttach = true;
+
     //本次附加进程非第一次，需要重新初始化整个程序
     if (this->pID != NULL) {
+        firstTimeAttach = false;
         this->reset();
     }
 
@@ -75,12 +98,31 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
     //Success
     this->pID = pid;
     hackSettings.gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
+
+    if (!firstTimeAttach) {
+        //重置所有extern
+
+        new(&utils) Utils();
+        new(&hack) Hack();
+        new(&hackSettings) HackSettings();
+        new(&g_client) Client();
+        new(&userSettings) UserSettings();
+
+        new(&hotkeyUpdater) HotkeyUpdater(&hackSettings);
+        new(&dataUpdater) DataUpdater(&g_client);
+        new(&bytesUpdater) BytesPatchUpdater();
+        new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
+
+        //恢复写入 
+        hackSettings.b_debug_disableWriteMemory = false;
+    }
+
     return OpenProcessState::GameFoundAndLoadedDLL;
 }
 
 bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum) {
     if (hackSettings.b_debug_disableWriteMemory) {
-        return true;
+        return false;
     }
     return WriteProcessMemory(processHandle, (LPVOID)address, bytes, bytesNum, NULL);
 }
@@ -88,7 +130,7 @@ bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN cons
 bool Memory::write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors) {
 
     if (hackSettings.b_debug_disableWriteMemory) {
-        return true;
+        return false;
     }
 
     std::vector<byte> bytes;

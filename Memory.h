@@ -61,7 +61,7 @@ public:
     template <typename var>
     bool write_mem(IN int64_t address, IN var value) {
         if (hackSettings.b_debug_disableWriteMemory) {
-            return true;
+            return false;
         }
         return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
     }

@@ -9,18 +9,30 @@
 extern HackSettings hackSettings;
 extern Utils utils;
 extern Memory memory;
-extern Client* g_client;
+extern Client g_client;
 
 /// <summary>
 /// 负责patch汇编区指令字节。
 /// 由于目前没有使用到hook框架，该类暂时也负责维护hook功能
 /// </summary>
-class BytesPatchUpdater {
+class BytesPatchUpdater : Updater {
 public:
+
+    void unhookAll() {
+        //LocalPlayer.Update
+        if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+            this->unhook_LocalPlayer_Update();
+        }
+    }
 
     void bytesPatchUpdater() {
         while (true) {
             Sleep(100);
+
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
 
             //移除技能冷却
             {
@@ -154,9 +166,9 @@ private:
 
     void autoCompleteTasks() {
         //游戏已经开始
-        if (g_client->gameHasStarted()) {
+        if (g_client.gameHasStarted()) {
             //已经超过延迟时间，允许hook
-            if (g_client->timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
+            if (g_client.timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
                 if (!this->b_has_hooked_autoCompleteTasks) {
                     hook_autoCompleteTasks();
                 }
@@ -181,13 +193,13 @@ private:
 
     void autoReady() {
         //游戏未开始
-        if (!g_client->gameHasStarted()) {
+        if (!g_client.gameHasStarted()) {
 
             //判断玩家是否已经准备，防止hook影响性能
             //游戏未开始才需要准备
             //在房间中
-            if (g_client->inGameScene()) {
-                if (!g_client->localPlayerReadied()) {
+            if (g_client.inGameScene()) {
+                if (!g_client.localPlayerReadied()) {
                     if (!this->b_has_hooked_autoReady) {
                         hook_autoReady();
                     }
@@ -209,12 +221,12 @@ private:
 
     void autoCompleteTasks_and_autoReady() {
         //游戏未开始
-        if (!g_client->gameHasStarted()) {
+        if (!g_client.gameHasStarted()) {
             //判断玩家是否已经准备，防止hook影响性能
             //游戏未开始才需要准备
             //在房间中
-            if (g_client->inGameScene()) {
-                if (!g_client->localPlayerReadied()) {
+            if (g_client.inGameScene()) {
+                if (!g_client.localPlayerReadied()) {
                     if (!this->b_has_hooked_autoReady) {
                         hook_autoReady();
                     }
@@ -229,7 +241,7 @@ private:
         else {
             //游戏已经开始，判断完成任务的函数
             //已经超过延迟时间，允许hook
-            if (g_client->timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
+            if (g_client.timeSinceGameStarted() > hackSettings.guiSettings.f_delayedEnableTime) {
                 if (!this->b_has_hooked_autoCompleteTasks) {
                     hook_autoCompleteTasks();
                 }

@@ -7,7 +7,7 @@
 #include "../Client.h"
 #include"string.hpp"
 
-extern Client* g_client;
+extern Client g_client;
 extern Memory memory;
 PlayerController::PlayerController()
 {
@@ -300,7 +300,7 @@ bool PlayerController::update()
 /// </summary>
 void PlayerController::onDeath()
 {
-    for (PlayerController* suspectKiller : g_client->playerControllers) {
+    for (PlayerController* suspectKiller : g_client.playerControllers) {
         if (!suspectKiller || suspectKiller->address == NULL) {
             continue;
         }

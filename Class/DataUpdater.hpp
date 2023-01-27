@@ -7,6 +7,8 @@
 #include"./Game/LocalPlayer.hpp"
 #include"../utils.hpp"
 
+#include"Updater.h"
+
 extern Hack hack;
 extern Utils utils;
 extern Memory memory;
@@ -14,7 +16,7 @@ extern Memory memory;
 /// <summary>
 /// Thread functions that update data.
 /// </summary>
-class DataUpdater {
+class DataUpdater : public Updater{
 public:
     DataUpdater(Client* client) {
         this->client = client;
@@ -32,6 +34,12 @@ public:
         bool updated = false;
 
         while (true) {
+
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
+
              updateLobbySceneHandler(lobbySceneHandler, &updated);
 
              if (updated) {
@@ -51,20 +59,22 @@ public:
     /// <param name="num">Number of players</param>
     void playerControllerUpdater() {
         //PlayerController* playerControllers = client->playerControllers;
-        auto playerControllers = client->playerControllers;
-        LocalPlayer* localPlayer = &client->localPlayer;
-        int players = client->n_players;
 
         while (true) {
+            Sleep(10);
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
 
-            updateLocalPlayer(localPlayer, &b_localPlayerUpdated);
+            updateLocalPlayer(&client->localPlayer, &b_localPlayerUpdated);
 
             if (b_localPlayerUpdated) {
-                updatePlayerControllers(playerControllers);
+                updatePlayerControllers(client->playerControllers);
             }
             else {
                 //TODO: LocalPlayer更新失败，重置所有玩家
-                for (auto ptr_playerController : playerControllers) {
+                for (auto ptr_playerController : client->playerControllers) {
                     if (ptr_playerController->address) {
                         ptr_playerController->reset();
                     }
@@ -224,7 +234,7 @@ private:
         //由于死亡玩家数据只会被记录一次，所以 O(n) ≤时间复杂度≤ O(n²/2)
 
         /*判断玩家是否死亡并存储附近玩家数据
-        for (PlayerController* playerController : g_client->playerControllers) {
+        for (PlayerController* playerController : g_client.playerControllers) {
 
             //更新死亡时候附近的玩家
             //当前已死亡
@@ -233,7 +243,7 @@ private:
                 if (!playerController->b_hasRecordedPlayersNearby) {
                     playerController->b_hasRecordedPlayersNearby = true;
 
-                    for (PlayerController* playerController : g_client->playerControllers) {
+                    for (PlayerController* playerController : g_client.playerControllers) {
                         //如果当前遍历的玩家的地址为空或等于当前玩家则continue
                         if (playerController->address == NULL || playerController->address == playerController->address) {
                             continue;

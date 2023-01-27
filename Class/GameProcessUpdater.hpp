@@ -8,7 +8,7 @@
 /// <summary>
 /// Thread functions that update data.
 /// </summary>
-class MemoryUpdater {
+class MemoryUpdater :public Updater {
 public:
     //查找游戏进程的间隔时间(秒)
     //Min time before searching the game process again
@@ -27,6 +27,11 @@ public:
         while (true)
         {
             Sleep(2);
+
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
 
             if (memory.processHandle && memory.gameAssemblyBaseAddress) {
                 if (hackSettings->gameStateSettings.b_gameProcessRunning == false) {

@@ -18,7 +18,7 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 
 extern Utils utils;
 extern HackSettings hackSettings;
-extern Client* g_client;
+extern Client g_client;
 extern Memory memory;
 
 extern UserSettings userSettings;
@@ -93,7 +93,7 @@ static void HelpMarker(const char* desc)
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-    LocalPlayer* localPlayer = &g_client->localPlayer;
+    LocalPlayer* localPlayer = &g_client.localPlayer;
 
     if (localPlayer->address == NULL) {
         return false;
@@ -208,8 +208,8 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
 bool drawOtherPlayersOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
-    auto playerControllers = g_client->playerControllers;
-    //PlayerController* playerControllers = g_client->playerControllers;
+    auto playerControllers = g_client.playerControllers;
+    //PlayerController* playerControllers = g_client.playerControllers;
 
     for (auto ptr_playerController : playerControllers) {
         if (ptr_playerController->address == NULL) {
@@ -479,7 +479,7 @@ void drawMinimap() {
         {
             static Vector2 tpPosition = { 0.0f,0.0f };
             if (ImGui::Button(str("TP to: ", "传送到: "))) {
-                g_client->teleportTo(tpPosition);
+                g_client.teleportTo(tpPosition);
             }
             ImGui::InputFloat("debug_map_tp_X", &tpPosition.x);
             ImGui::InputFloat("debug_map_tp_Y", &tpPosition.y);
@@ -571,7 +571,7 @@ void drawMinimap() {
 
                 //地图刚被点击
                 if (gameMapClicked) {
-                    g_client->teleportTo(positionInGame);
+                    g_client.teleportTo(positionInGame);
                     hasTPedWhenHoveringOnGameMap = true;
                     lastTPedPosition = positionInGame;
                 }
@@ -685,7 +685,7 @@ void drawMenu() {
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
     if (ImGui::BeginTabBar("Main menu", tab_bar_flags))
     {
-        PlayerController* playerController = &g_client->localPlayer.playerController;
+        PlayerController* playerController = &g_client.localPlayer.playerController;
         //菜单1
         if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
@@ -755,13 +755,13 @@ void drawMenu() {
                     }
 
                     if (sortDirection == ImGuiSortDirection_Ascending) {
-                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                        sort(g_client.playerControllers.begin(), g_client.playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
                             return lhs->i_timeOfDeath < rhs->i_timeOfDeath;
                             }
                         );
                     }
                     else {
-                        sort(g_client->playerControllers.begin(), g_client->playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
+                        sort(g_client.playerControllers.begin(), g_client.playerControllers.end(), [](const PlayerController* lhs, const PlayerController* rhs) {
                             return lhs->i_timeOfDeath >= rhs->i_timeOfDeath;
                             }
                         );
@@ -770,11 +770,11 @@ void drawMenu() {
                     sorts_specs->SpecsDirty = false;
                 }
 
-                //PlayerController* player = g_client->playerControllers;
-                auto playerControllers = g_client->playerControllers;
-                for (int i = 0; i < g_client->playerControllers.size(); i++)
+                //PlayerController* player = g_client.playerControllers;
+                auto playerControllers = g_client.playerControllers;
+                for (int i = 0; i < g_client.playerControllers.size(); i++)
                 {
-                    PlayerController* ptr_playerController = g_client->playerControllers[i];
+                    PlayerController* ptr_playerController = g_client.playerControllers[i];
 
                     //跳过无效玩家和本地玩家
                     if (ptr_playerController->address == NULL || /*ptr_playerController->b_isLocal ||*/ ptr_playerController->nickname == "") {
@@ -819,7 +819,7 @@ void drawMenu() {
                         if (deadplayerIndex >= 0) {
                             if (!hasOpenedPopup) {
                                 hasOpenedPopup = true;
-                                drawPlayerDeathSnapshot(g_client->playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
+                                drawPlayerDeathSnapshot(g_client.playerControllers[deadplayerIndex], playerDeathSnapshotPopup);
                             }
                         }
                     }
@@ -860,12 +860,12 @@ void drawMenu() {
             ImGui::Text(str("Tasks num:", "任务数量：")); ImGui::SameLine();
 
             //显示任务的数量
-            ImGui::Text("%d", g_client->lobbySceneHandler.tasksHandler.tasksNum);
+            ImGui::Text("%d", g_client.lobbySceneHandler.tasksHandler.tasksNum);
 
             ImGui::Text(str("Game start time:", "游戏开始时间：")); ImGui::SameLine();
 
-            if (g_client->gameHasStarted()) {
-                ImGui::Text("%d", g_client->timeSinceGameStarted());
+            if (g_client.gameHasStarted()) {
+                ImGui::Text("%d", g_client.timeSinceGameStarted());
             }
             else {
                 //游戏未开始
@@ -875,7 +875,7 @@ void drawMenu() {
             //显示是否在房间中
             ImGui::Text(str("In room: ", "在房间中: "));
             ImGui::SameLine();
-            if (g_client->inGameScene()) {
+            if (g_client.inGameScene()) {
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Yes", "是"));
                 //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
             }
@@ -886,7 +886,7 @@ void drawMenu() {
             //显示准备状态
             ImGui::Text(str("Ready status: ", "准备状态: "));
             ImGui::SameLine();
-            if (g_client->localPlayerReadied()) {
+            if (g_client.localPlayerReadied()) {
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), str("Readied", "已准备"));
                 //ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Yellow");
             }
@@ -920,7 +920,7 @@ void drawMenu() {
                 ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoInputs;
 
                 int index = 0;
-                for (const auto& task : g_client->lobbySceneHandler.tasksHandler.assignedTasks) {
+                for (const auto& task : g_client.lobbySceneHandler.tasksHandler.assignedTasks) {
                     ImGui::TableNextRow();
 
                     //索引
