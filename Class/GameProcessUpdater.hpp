@@ -18,7 +18,7 @@ public:
     }
 
     /// <summary>
-    /// 查找游戏进程并更新Memory<para/>
+    /// 查找游戏进程并更新Memory。只适用于第一次自动连接到游戏<para/>
     /// Thread that search for game process and update Memory instance
     /// </summary>
     void gameProcessUpdater() {
@@ -35,6 +35,7 @@ public:
                     hackSettings->gameStateSettings.b_gameProcessRunning = true;
                     hackSettings->gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
                     //暂时没有添加检测游戏退出，所以这里直接返回结束线程
+                    //TODO: 添加检测游戏退出
                     return;
                 }
             }
@@ -49,8 +50,8 @@ public:
                 if (connect_count >= 2) {
                     connect_count = 0;
 
-                    //搜索游戏进程
-                    hackSettings->gameStateSettings.openProcessState = memory.searchGameProcess();
+                    //搜索游戏进程并尝试附加
+                    memory.searchGameProcessAndAttach();
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
+#include "../memory.hpp"
 #include "../Client.h"
 #include "../Struct/UserSettings.hpp"
 #include <sstream>
@@ -18,6 +19,7 @@ ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ I
 extern Utils utils;
 extern HackSettings hackSettings;
 extern Client* g_client;
+extern Memory memory;
 
 extern UserSettings userSettings;
 
@@ -630,13 +632,12 @@ void drawMenu() {
 
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginTable("minimap_color_settings_table", 2,
+        if (ImGui::BeginTable("minimap_color_settings_table", 3,
             ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
         ))
         {
-
-            //死亡
             {
+                //游戏运行状态
                 ImGui::TableNextRow();
                 ImGui::TableNextColumn();
                 ImGui::Text(str("Game status: ", "游戏状态: "));
@@ -647,7 +648,7 @@ void drawMenu() {
                 }
                 else {
                     ImGui::TextDisabled(str("Not Running", "未运行"));
-                }
+                }                
 
                 //昵称颜色
                 ImGui::TableNextColumn();
@@ -655,7 +656,7 @@ void drawMenu() {
                 ImGui::Text(str("Version:", "版本："));
                 ImGui::SameLine();
                 ImGui::Text(hackSettings.guiSettings.version);
-                ImGui::SameLine();                
+                ImGui::SameLine();
             }
             ImGui::EndTable();
         }
@@ -883,7 +884,6 @@ void drawMenu() {
             }
 
             //显示准备状态
-            //TODO:
             ImGui::Text(str("Ready status: ", "准备状态: "));
             ImGui::SameLine();
             if (g_client->localPlayerReadied()) {
@@ -973,6 +973,16 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
+            //游戏进程ID
+            ImGui::Text(str("PID:", "PID: "));
+            ImGui::SameLine();
+
+            ImGui::Text("%d", memory.pID); ImGui::SameLine();
+            //选择进程
+            if (ImGui::Button(str("Select Process", "选择进程"))) {
+                //TODO: 枚举所有游戏进程
+            }
+
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
 
             //秘密菜单

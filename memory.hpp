@@ -20,22 +20,48 @@ extern HackSettings hackSettings;
 class Memory {
 public:
     std::string processName = "Goose Goose Duck.exe";
+    std::vector<DWORD> pIDs;
     DWORD pID = NULL;
     HANDLE processHandle = NULL;
     int64_t gameAssemblyBaseAddress = NULL;
 
     Memory() {
-        searchGameProcess();
+        searchGameProcessAndAttach();
     }
 
     /// <summary>
-    /// 搜索游戏进程
+    /// 搜索游戏并尝试附加到最后一个找到的游戏进程
+    /// </summary>
+    void searchGameProcessAndAttach() {
+        searchGameProcess();
+
+        //默认附加到最后一个搜索到的游戏进程
+        if (pIDs.size() > 0) {
+            hackSettings.gameStateSettings.openProcessState = attachToGameProcess(pIDs[pIDs.size() - 1]);
+        }
+    }
+
+    /// <summary>
+    /// 搜索游戏进程并更新pid列表
     /// </summary>
     /// <returns></returns>
-    OpenProcessState searchGameProcess() {
-        pID = get_porcId_by_name(processName);
-        //TODO: 转移到GUI
-        if (pID == NULL) {
+    void searchGameProcess() {
+        get_procId_by_name(processName, &pIDs);
+        DWORD pid = NULL;
+        if (this->pIDs.size() == 0) {
+            pid = NULL;
+        }
+        else {
+            pid = this->pIDs[0];
+        }
+    }
+
+    /// <summary>
+    /// 附加读写到游戏进程
+    /// </summary>
+    /// <returns></returns>
+    OpenProcessState attachToGameProcess(DWORD pid) {
+        if (pid == NULL) {
             //utils.print("Please Launch the game before running this debug tool!", "请在打开辅助前运行游戏！");
             //std::cout << std::endl;
             return OpenProcessState::GameNotFound;
@@ -43,7 +69,9 @@ public:
         //utils.print("Detected game pid:", "检测到游戏进程pid:");
         //std::cout << pID << std::endl;
 
-        processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pID);
+        //TODO:处理关于
+
+        processHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
         if (processHandle == INVALID_HANDLE_VALUE || processHandle == NULL) { // error handling
             //-1: Game found but failed to open
             //std::cout << "Failed to open process" << std::endl;
@@ -51,7 +79,7 @@ public:
         }
 
         char gameAssemblyModuleName[] = "GameAssembly.dll";
-        gameAssemblyBaseAddress = GetModuleBaseAddress(_T(gameAssemblyModuleName), pID);
+        gameAssemblyBaseAddress = GetModuleBaseAddress(_T(gameAssemblyModuleName), pid);
 
         //Game found but failed to load dll module
         if (gameAssemblyBaseAddress == NULL) {
@@ -279,7 +307,7 @@ private:
     /// </summary>
     /// <param name="targetProcess"></param>
     /// <returns></returns>
-    static DWORD get_porcId_by_name(const std::string_view targetProcess) {
+    static DWORD get_procId_by_name(IN const std::string_view targetProcess) {
         DWORD procId = 0;
         HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
         if (hSnap != INVALID_HANDLE_VALUE)
@@ -302,5 +330,36 @@ private:
         CloseHandle(hSnap);
 
         return procId;
+    }
+
+    /// <summary>
+    /// 通过名称获取进程pid<para/>
+    /// Get process' pid by name
+    /// </summary>
+    /// <param name="targetProcess"></param>
+    /// <returns></returns>
+    static void get_procId_by_name(IN const std::string_view targetProcess, OUT std::vector<DWORD>* pIDs) {
+        pIDs->clear();
+        DWORD procId = 0;
+        HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (hSnap != INVALID_HANDLE_VALUE)
+        {
+            PROCESSENTRY32 procEntry;
+            procEntry.dwSize = sizeof(procEntry);
+            if (Process32First(hSnap, &procEntry))
+            {
+                do
+                {
+                    if (!targetProcess.compare(procEntry.szExeFile))
+                    {
+                        procId = procEntry.th32ProcessID;
+                        pIDs->push_back(procId);
+                        //std::cout << "found pID:" << procId << std::endl;
+                        //break;
+                    }
+                } while (Process32Next(hSnap, &procEntry));
+            }
+        }
+        CloseHandle(hSnap);
     }
 };
