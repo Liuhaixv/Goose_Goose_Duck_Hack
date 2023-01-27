@@ -797,10 +797,13 @@ void drawMenu() {
             HelpMarker(
                 str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
             );
+            //TODO:失效
+            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
             HelpMarker(
                 str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
             );
+            ImGui::EndDisabled();
 
             ImGui::Checkbox(str("Noclip", "穿墙"), &hackSettings.guiSettings.b_alwaysEnableNoclip);
             HelpMarker(
