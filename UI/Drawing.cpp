@@ -632,7 +632,7 @@ void drawMenu() {
 
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginTable("minimap_color_settings_table", 3,
+        if (ImGui::BeginTable("minimap_color_settings_table", 2,
             ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
         ))
         {
