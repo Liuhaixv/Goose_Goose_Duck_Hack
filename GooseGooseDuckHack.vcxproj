@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -197,7 +198,7 @@
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
-    <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="Memory.h" />
     <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>

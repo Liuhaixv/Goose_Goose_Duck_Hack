@@ -1,7 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
-#include "../memory.hpp"
+#include "../memory.h"
 #include "../Client.h"
 #include "../Struct/UserSettings.hpp"
 #include <sstream>

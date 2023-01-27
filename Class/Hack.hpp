@@ -6,6 +6,8 @@
 #include"../Enum/ActivationState.hpp"
 
 extern Memory memory;
+extern Utils utils;
+extern HackSettings hackSettings;
 
 class Hack {
 public:

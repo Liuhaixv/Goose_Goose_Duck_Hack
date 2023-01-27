@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include<../memory.hpp>
+#include<../memory.h>
 #include "../../Data/offsets.hpp"
 
 extern Memory memory;
