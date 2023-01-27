@@ -38,7 +38,8 @@
 4. **[新]**  自动完成任务
 5. **[新]**  自动准备
 6. **[新]** 支持游戏开局后延迟完成任务
-6. **[新]**  反挂机检测
+7. **[新]**  反挂机检测
+8. **[新]**  地图视野缩放
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -92,7 +93,8 @@ Fixing bugs
 4. **[New]**  Auto complete all tasks
 5. **[New]**  Auto ready
 6. **[New]**  Allow delay for completing all tasks
-6. **[New]**  Anti idle kick
+7. **[New]**  Anti idle kick
+8. **[New]**  Zoom hack
     
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
