@@ -5,7 +5,7 @@
 #include"Class/Hack.hpp"
 
 extern Hack hack;
-
+extern HackSettings hackSettings;
 Client::Client()
 {
     for (int i = 0; i < n_players; i++) {
@@ -27,7 +27,7 @@ void Client::resetGuiSettings() {
     GuiSettings* guiSettings = &hackSettings.guiSettings;
 
     //reset player's target speed
-    guiSettings->f_movementSpeed = this->hackSettings.gameOriginalData.f_baseMovementSpeed;
+    guiSettings->f_movementSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
     guiSettings->b_alwaysEnableNoclip = false;
     guiSettings->b_disableFogOfWar = false;
 }

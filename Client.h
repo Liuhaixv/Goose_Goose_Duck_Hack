@@ -9,7 +9,6 @@
 class Client
 {
 public:
-    HackSettings hackSettings;
 
     static const int n_players = 16;
     LobbySceneHandler lobbySceneHandler;
