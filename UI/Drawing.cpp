@@ -709,6 +709,15 @@ void drawMenu() {
                 minSpeed * 2
             );
             ImGui::EndDisabled();
+            //TODO: 沒辦法勾選
+            ImGui::Checkbox(str("Enable", "启用"), &hackSettings.guiSettings.b_enableZoomHack);
+            ImGui::SameLine();
+            ImGui::SliderFloat(
+                str("Movement speed", "縮放大小"),
+                &hackSettings.guiSettings.f_zoomSize,
+                0.5,
+                40
+            );
 
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);

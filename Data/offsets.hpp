@@ -101,6 +101,10 @@ namespace Offsets {
         constexpr int64_t ptr_m_AnimatedTarget = 0xB0;//Animator
     }
 
+    namespace CinemachineVirtualCamera {
+        constexpr int64_t ptr_m_zoomSize = 0xB4;//Float
+    }
+
     namespace LocalPlayer {
         namespace Class {
             namespace StaticField {
@@ -120,6 +124,7 @@ namespace Offsets {
         constexpr int64_t b_disableMovement = 0x60;
 
         constexpr int64_t ptr_cinemachineStateDrivenCamera = 0x68;// CinemachineStateDrivenCamera
+        constexpr int64_t ptr_cinemachineVirtualCamera = 0x70;// CinemachineVirtualCamera
     }
 
     namespace FogOfWarHandler {
