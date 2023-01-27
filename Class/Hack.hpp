@@ -126,7 +126,7 @@ public:
     void noclip(PlayerController* localPlayerController) {
         //开启穿墙
         if (localPlayerController && localPlayerController->b_isLocal) {
-            if (this->client ) {
+            if (this->client) {
                 enableNoclip(localPlayerController,
                     hackSettings.guiSettings.b_alwaysEnableNoclip || hackSettings.tempEnableNoclip);
             }
@@ -143,7 +143,7 @@ public:
         switch (state) {
             case SHOULD_DEACTIVATE_NOW:
                 //TODO: 用户关闭了speedhack，恢复正常移速
-                
+
                 targetSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
                 break;
 
@@ -164,7 +164,7 @@ public:
                 targetSpeed = hackSettings.guiSettings.f_movementSpeed;
 
                 //和上一次设置的速度一样，无变化，直接返回
-                if (this->lastTimeSetMovementSpeed == hackSettings.guiSettings.f_movementSpeed) {
+                if (this->f_lastTimeSetMovementSpeed == hackSettings.guiSettings.f_movementSpeed) {
                     return false;
                 }
                 break;
@@ -190,30 +190,25 @@ public:
             //更新GUI显示的设置速度
             hackSettings.guiSettings.f_movementSpeed = targetSpeed;
             //更新上一次设置的速度
-            this->lastTimeSetMovementSpeed = targetSpeed;
+            this->f_lastTimeSetMovementSpeed = targetSpeed;
         }
     }
 
     void zoomHack(LocalPlayer* localPlayer)
     {
-        float targetSize = hackSettings.guiSettings.f_zoomSize;
-        
-        if (localPlayer) {
-            std::vector<int64_t> offsets1 = {
-                Offsets::LocalPlayer::ptr_cinemachineStateDrivenCamera,
-                Offsets::CinemachineStateDrivenCamera::ptr_m_AnimatedTarget
-            };
-            int64_t changeValue_addr = memory.FindPointer(localPlayer->address, offsets1);
+        float targetZoomSize = hackSettings.guiSettings.f_zoomSize;
 
-            memory.write_mem<int64_t>(changeValue_addr, 0);
+        //未启用zoomHack
+        if (!hackSettings.guiSettings.b_enableZoomHack) {
+            return;
+        }
 
-            std::vector<int64_t> offsets2 = {
-                Offsets::LocalPlayer::ptr_cinemachineVirtualCamera,
-                Offsets::CinemachineVirtualCamera::ptr_m_zoomSize
-            };
-            int64_t zoomSize_addr = memory.FindPointer(localPlayer->address, offsets2);
+        //检查是否启用移速hack
+        ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.f_zoomSize, &this->f_lastTimeZoomSize);
 
-            memory.write_mem<float>(zoomSize_addr, targetSize);
+        if (state == ActivationState::SHOULD_ACTIVATE_NOW) {
+            //Override覆写相机距离
+            overrideOrthographicSize(localPlayer, targetZoomSize);
         }
     }
 
@@ -222,9 +217,29 @@ public:
     /// </summary>
     /// <param name="size"></param>
     /// <returns></returns>
-    bool overrideOrthographicSize(float size)
+    bool overrideOrthographicSize(LocalPlayer* localPlayer, float targetZoomSize)
     {
-        //TODO
+        if (localPlayer) {
+            //启用Override
+            std::vector<int64_t> offsets1 = {
+                Offsets::LocalPlayer::ptr_cinemachineStateDrivenCamera,
+                Offsets::CinemachineStateDrivenCamera::ptr_m_AnimatedTarget
+            };
+            int64_t changeValue_addr = memory.FindPointer(localPlayer->address, offsets1);
+
+            memory.write_mem<int64_t>(changeValue_addr, 0);
+
+            //修改zoomSize
+            std::vector<int64_t> offsets2 = {
+                Offsets::LocalPlayer::ptr_cinemachineVirtualCamera,
+                Offsets::CinemachineVirtualCamera::f_m_zoomSize
+            };
+            int64_t zoomSize_addr = memory.FindPointer(localPlayer->address, offsets2);
+
+            memory.write_mem<float>(zoomSize_addr, targetZoomSize);
+
+            return true;
+        }
         return false;
     }
 
@@ -237,5 +252,6 @@ private:
     //上一次设置移速hack是否开启
     bool b_enabledSpeedHackLastTime = false;
     //上一次设置的玩家移速
-    float lastTimeSetMovementSpeed = -1;
+    float f_lastTimeSetMovementSpeed = -1;
+    float f_lastTimeZoomSize = -1;
 };

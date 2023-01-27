@@ -102,7 +102,7 @@ namespace Offsets {
     }
 
     namespace CinemachineVirtualCamera {
-        constexpr int64_t ptr_m_zoomSize = 0xB4;//Float
+        constexpr int64_t f_m_zoomSize = 0xB4;//Float
     }
 
     namespace LocalPlayer {
