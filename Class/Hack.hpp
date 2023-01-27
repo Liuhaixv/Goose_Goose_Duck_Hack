@@ -194,6 +194,29 @@ public:
         }
     }
 
+    void zoomHack(LocalPlayer* localPlayer)
+    {
+        float targetSize = hackSettings.guiSettings.f_zoomSize;
+        
+        if (localPlayer) {
+            std::vector<int64_t> offsets1 = {
+                Offsets::LocalPlayer::ptr_cinemachineStateDrivenCamera,
+                Offsets::CinemachineStateDrivenCamera::ptr_m_AnimatedTarget
+            };
+            int64_t changeValue_addr = memory.FindPointer(localPlayer->address, offsets1);
+
+            memory.write_mem<int64_t>(changeValue_addr, 0);
+
+            std::vector<int64_t> offsets2 = {
+                Offsets::LocalPlayer::ptr_cinemachineVirtualCamera,
+                Offsets::CinemachineVirtualCamera::ptr_m_zoomSize
+            };
+            int64_t zoomSize_addr = memory.FindPointer(localPlayer->address, offsets2);
+
+            memory.write_mem<float>(zoomSize_addr, targetSize);
+        }
+    }
+
     /// <summary>
     /// 设置相机的远近距离
     /// </summary>

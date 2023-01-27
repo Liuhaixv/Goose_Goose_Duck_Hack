@@ -165,6 +165,7 @@ private:
             hack.removeFogOfWar(&localPlayer->playerController);
             hack.noclip(&localPlayer->playerController);//TODO: Bugged 会导致游戏崩溃
             hack.speedHack(localPlayer);
+            hack.zoomHack(localPlayer);
         }
         else {
             if (b_localPlayerControllerUpdated == true) {
