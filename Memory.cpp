@@ -106,11 +106,15 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
         new(&hack) Hack();
         new(&hackSettings) HackSettings();
         new(&g_client) Client();
+        hack.setClient(&g_client);
         new(&userSettings) UserSettings();
 
         new(&hotkeyUpdater) HotkeyUpdater(&hackSettings);
         new(&dataUpdater) DataUpdater(&g_client);
+
+        bytesUpdater.~BytesPatchUpdater();
         new(&bytesUpdater) BytesPatchUpdater();
+
         new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
 
         //恢复写入 
