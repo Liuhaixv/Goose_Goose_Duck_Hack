@@ -9,7 +9,11 @@ public:
 
     int i_SilverBalance = -1;
     int i_GoldBalance = -1;
-    int i_Xp = -1;
+    int i_TotalXp = -1;
+    int i_CurrentXp = -1;
+    int i_CurrentMaxXp = -1;
+    int i_Level = -1;
+    
 
     PlayerCustomizationPanelHandler() {
     }

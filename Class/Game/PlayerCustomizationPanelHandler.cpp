@@ -11,7 +11,11 @@ void PlayerCustomizationPanelHandler::resetMemberFields()
 {
     i_SilverBalance = -1;
     i_GoldBalance = -1;
-    i_Xp = -1;
+    i_TotalXp = -1;
+    i_CurrentXp = -1;
+    i_CurrentMaxXp = -1;
+    i_Level = -1;
+    
 }
 
 bool PlayerCustomizationPanelHandler::update()
@@ -32,7 +36,39 @@ bool PlayerCustomizationPanelHandler::update()
 
     i_SilverBalance = memory.read_mem<int>(instance_Addr + Offsets::PlayerCustomizationPanelHandler::Class::StaticField::i_SilverBalance, false);
     i_GoldBalance = memory.read_mem<int>(instance_Addr + Offsets::PlayerCustomizationPanelHandler::Class::StaticField::i_GoldBalance, false);
-    i_Xp = memory.read_mem<int>(instance_Addr + Offsets::PlayerCustomizationPanelHandler::Class::StaticField::i_Xp, false);
+    i_TotalXp = memory.read_mem<int>(instance_Addr + Offsets::PlayerCustomizationPanelHandler::Class::StaticField::i_Xp, false);
+
+    static std::vector<int64_t> xpoffsets = GameAssembly::LGHFFHFMADD_xpArray();
+
+    int64_t xpArray_Addr = memory.FindPointer(memory.gameAssemblyBaseAddress, xpoffsets);
+
+    i_Level = 0;
+    int index = 0;
+    int cmpValue = 0;
+    int LastLevel_Max_Xp = 0;
+
+    while (index < 999)
+    {
+        cmpValue = memory.read_mem<int>(xpArray_Addr + index * 0x4, false);
+        if (i_TotalXp < cmpValue)
+            break;
+
+        ++i_Level;
+        index = i_Level;
+    }
+
+    if (i_TotalXp > 0)
+    {
+        LastLevel_Max_Xp = memory.read_mem<int>(xpArray_Addr + (index - 1) * 0x4, false);
+        i_CurrentXp = i_TotalXp - LastLevel_Max_Xp;
+        i_CurrentMaxXp = memory.read_mem<int>(xpArray_Addr + index * 0x4, false) - LastLevel_Max_Xp;
+    }
+    else
+    {
+        i_CurrentMaxXp = memory.read_mem<int>(xpArray_Addr, false);
+        i_CurrentXp = 0;
+    }
+    
 
     return true;
 }
