@@ -70,6 +70,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     //启动游戏内存数据更新线程
     //Game data updater
     std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
+    std::thread playerCustomizationPanelHandlerUpdater(&DataUpdater::playerCustomizationPanelHandlerUpdater, &dataUpdater);
     std::thread lobbySceneHandlerUpdater(&DataUpdater::lobbySceneHandlerUpdater, &dataUpdater);
     //启动字节补丁线程
     //Game process finder

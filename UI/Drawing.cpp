@@ -719,6 +719,16 @@ void drawMenu() {
                 40
             );
 
+            ImGui::Text(str("silver num:", "銀幣数量：")); ImGui::SameLine();
+            //显示銀幣数量
+            ImGui::Text("%d", g_client.playerCustomizationPanelHandler.i_SilverBalance);
+            ImGui::Text(str("gold num:", "金幣数量：")); ImGui::SameLine();
+            //显示銀幣数量
+            ImGui::Text("%d", g_client.playerCustomizationPanelHandler.i_GoldBalance);
+            ImGui::Text(str("total xp:", "總經驗：")); ImGui::SameLine();
+            //显示銀幣数量
+            ImGui::Text("%d", g_client.playerCustomizationPanelHandler.i_Xp);
+
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
 
