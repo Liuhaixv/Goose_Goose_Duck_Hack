@@ -126,7 +126,7 @@ private:
             return;
         }
 
-        //Update localplayer
+        //Update PlayerCustomizationPanelHandler
         *playerCustomizationPanelHandlerUpdated = playerCustomizationPanelHandler->update(playerCustomizationPanelHandlerAddr);
     }
 

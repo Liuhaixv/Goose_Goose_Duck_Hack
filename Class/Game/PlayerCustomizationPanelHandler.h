@@ -47,6 +47,6 @@ public:
 private:
     bool update();
 
-    //检查该地址是LobbySceneHandler实例
+    //检查该地址是PlayerCustomizationPanelHandler实例
     bool validateAddress(IN int64_t address);
 };
