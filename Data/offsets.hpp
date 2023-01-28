@@ -15,6 +15,18 @@ namespace Offsets {
         constexpr int64_t taskDisplayName = 0x18;//string
     }
 
+    namespace PlayerCustomizationPanelHandler {
+        namespace Class {
+            namespace StaticField {
+                constexpr int64_t Instance = 0x0;//PlayerCustomizationPanelHandler
+                constexpr int64_t i_SilverBalance = 0x1C0;//銀幣
+                constexpr int64_t i_GoldBalance = 0x1C4;//金幣
+                constexpr int64_t i_Xp = 0x1C8;//經驗
+            }
+            constexpr int64_t ptr_staticFields = 0xB8;//TODO
+        }
+    }
+
     namespace TasksHandler {
         // Fields
         constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18
@@ -25,6 +37,7 @@ namespace Offsets {
         constexpr int64_t audioSource = 0x40;//AudioSource EAPGEFFHCBE; // 0x40
         constexpr int64_t timesReplenished = 0x48;// timesReplenished; // 0x48
     }
+
 
     namespace LobbySceneHandler {
         namespace Class {
@@ -174,6 +187,8 @@ namespace GameAssembly {
     }
 
     namespace Class {
+        //Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
+        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x3C81858;
         constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C541E8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
         constexpr int64_t ptr_PlayerControllerClass = 0x3C81770;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x3C54E28;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
@@ -247,6 +262,29 @@ namespace GameAssembly {
         std::vector<int64_t> offsets = {
        GameAssembly::Class::ptr_LobbySceneHandlerClass,
        Offsets::LobbySceneHandler::Class::ptr_staticFields,
+       0x0
+        };
+
+        return offsets;
+    }
+
+    static std::vector<int64_t> playerCustomizationPanelHandler() {
+
+        std::vector<int64_t> offsets = {
+       GameAssembly::Class::ptr_PlayerCustomizationPanelHandlerClass,
+       Offsets::PlayerCustomizationPanelHandler::Class::ptr_staticFields,
+       Offsets::PlayerCustomizationPanelHandler::Class::StaticField::Instance,
+       0x0
+        };
+
+        return offsets;
+    }
+
+    static std::vector<int64_t> playerCustomizationPanelHandler_staticFiled() {
+
+        std::vector<int64_t> offsets = {
+       GameAssembly::Class::ptr_PlayerCustomizationPanelHandlerClass,
+       Offsets::PlayerCustomizationPanelHandler::Class::ptr_staticFields,
        0x0
         };
 

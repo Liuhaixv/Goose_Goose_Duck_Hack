@@ -24,6 +24,30 @@ public:
 
     int validPlayersNum = 0;
 
+    void playerCustomizationPanelHandlerUpdater() {
+
+        PlayerCustomizationPanelHandler* playerCustomizationPanelHandler = &this->client->playerCustomizationPanelHandler;
+
+        bool updated = false;
+
+        while (true) {
+
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
+
+            updatePlayerCustomizationPanelHandler(playerCustomizationPanelHandler, &updated);
+
+            if (updated) {
+                Sleep(1000);
+            }
+            else {
+                Sleep(30);
+            }
+        }
+    }
+
     /// <summary>
     /// 更新LobbySceneHandlerUpdater的线程函数
     /// </summary>
@@ -88,6 +112,23 @@ private:
     Client* client = nullptr;
 
     int64_t playerRole = NULL;
+
+    bool b_playerCustomizationPanelHandlerUpdated = false;
+
+    void updatePlayerCustomizationPanelHandler(IN PlayerCustomizationPanelHandler* playerCustomizationPanelHandler, OUT bool* playerCustomizationPanelHandlerUpdated) {
+        std::vector<int64_t> offsets = GameAssembly::playerCustomizationPanelHandler();
+
+        int64_t playerCustomizationPanelHandlerAddr = memory.FindPointer(memory.gameAssemblyBaseAddress, offsets);
+
+        if (playerCustomizationPanelHandler == NULL) {
+            *playerCustomizationPanelHandlerUpdated = false;
+            playerCustomizationPanelHandler->reset();
+            return;
+        }
+
+        //Update localplayer
+        *playerCustomizationPanelHandlerUpdated = playerCustomizationPanelHandler->update(playerCustomizationPanelHandlerAddr);
+    }
 
     bool b_localPlayerUpdated = false;
     bool b_localPlayerControllerUpdated = false;

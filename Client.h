@@ -4,6 +4,7 @@
 #include "Struct/HackSettings.hpp"
 #include "Class/Game/PlayerController.h"
 #include"Class/Game/LocalPlayer.hpp"
+#include "Class/Game/PlayerCustomizationPanelHandler.h"
 #include "Class/Game/LobbySceneHandler.h"
 
 class Client
@@ -11,6 +12,7 @@ class Client
 public:
 
     static const int n_players = 16;
+    PlayerCustomizationPanelHandler playerCustomizationPanelHandler;
     LobbySceneHandler lobbySceneHandler;
     LocalPlayer localPlayer;
     std::vector<PlayerController*> playerControllers;
