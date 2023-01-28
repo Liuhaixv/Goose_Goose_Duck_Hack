@@ -143,6 +143,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\Game\PlayerCustomizationPanelHandler.cpp" />
     <ClCompile Include="Class\Hack.hpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
+    <ClInclude Include="Class\Game\PlayerCustomizationPanelHandler.h" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
     <ClInclude Include="Class\Game\LocalPlayer.hpp" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />

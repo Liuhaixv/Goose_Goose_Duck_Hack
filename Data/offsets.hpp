@@ -27,6 +27,18 @@ namespace Offsets {
         }
     }
 
+    namespace LGHFFHFMADD {
+        namespace Class {
+            namespace StaticField {
+                constexpr int64_t xpArray = 0x0;//NDODCLIJACJ xpArray
+                constexpr int64_t xpArraySize = 0x18;//NDODCLIJACJ xpArraySize
+                constexpr int64_t xpArrayStart = 0x20;//NDODCLIJACJ xpArrayStart
+                
+            }
+            constexpr int64_t ptr_staticFields = 0xB8;//TODO
+        }
+    }
+
     namespace TasksHandler {
         // Fields
         constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18
@@ -189,6 +201,7 @@ namespace GameAssembly {
     namespace Class {
         //Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
         constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x3C81858;
+        constexpr int64_t ptr_LGHFFHFMADDClass = 0x3C4D9C8;//LGHFFHFMADD_c *
         constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C541E8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
         constexpr int64_t ptr_PlayerControllerClass = 0x3C81770;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x3C54E28;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
@@ -286,6 +299,18 @@ namespace GameAssembly {
        GameAssembly::Class::ptr_PlayerCustomizationPanelHandlerClass,
        Offsets::PlayerCustomizationPanelHandler::Class::ptr_staticFields,
        0x0
+        };
+
+        return offsets;
+    }
+
+    static std::vector<int64_t> LGHFFHFMADD_xpArray() {
+
+        std::vector<int64_t> offsets = {
+       GameAssembly::Class::ptr_LGHFFHFMADDClass,
+       Offsets::LGHFFHFMADD::Class::ptr_staticFields,
+       Offsets::LGHFFHFMADD::Class::StaticField::xpArray,
+       Offsets::LGHFFHFMADD::Class::StaticField::xpArrayStart
         };
 
         return offsets;
