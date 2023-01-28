@@ -35,6 +35,9 @@ void drawMinimap();
 void drawMenu();
 void drawESP();
 
+const char* languages[] = { "Cheinese", "English" };
+static int languageIndex = 0;
+
 void Drawing::Active()
 {
     hackSettings.guiSettings.b_draw = true;
@@ -1048,6 +1051,13 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
+
+        ImGui::SetCursorPos(ImVec2(10, 370));
+        ImGui::Combo("Language / 語言", &languageIndex, languages, IM_ARRAYSIZE(languages));
+        if (languageIndex == 0)
+            utils.b_chineseOS = true;
+        else if (languageIndex == 1)
+            utils.b_chineseOS = false;
     }
     ImGui::End();
 }
