@@ -35,7 +35,7 @@ void drawMinimap();
 void drawMenu();
 void drawESP();
 
-const char* languages[] = { "Cheinese", "English" };
+const char* languages[] = { "中文", "English" };
 static int languageIndex = 0;
 
 void Drawing::Active()
