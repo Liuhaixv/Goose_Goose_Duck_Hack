@@ -75,7 +75,7 @@
     <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>H:\Documents\GitHub\GooseGooseDuckHack\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

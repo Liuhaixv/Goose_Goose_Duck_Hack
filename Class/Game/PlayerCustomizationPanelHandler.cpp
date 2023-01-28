@@ -61,7 +61,7 @@ bool PlayerCustomizationPanelHandler::update()
     {
         LastLevel_Max_Xp = memory.read_mem<int>(xpArray_Addr + (index - 1) * 0x4, false);
         i_CurrentXp = i_TotalXp - LastLevel_Max_Xp;
-        i_CurrentMaxXp = memory.read_mem<int>(xpArray_Addr + index * 0x4, false);
+        i_CurrentMaxXp = memory.read_mem<int>(xpArray_Addr + index * 0x4, false) - LastLevel_Max_Xp;
     }
     else
     {
