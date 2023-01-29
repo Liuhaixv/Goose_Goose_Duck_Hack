@@ -999,11 +999,19 @@ void drawMenu() {
             if (ImGui::BeginPopup("select_process_popup"))
             {
                 ImGui::Separator();
-                for (int i = 0; i < memory.pIDs.size(); i++)
-                    if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
-                        //附加到进程
-                        memory.attachToGameProcess(memory.pIDs[i]);
-                    }
+                if (memory.pIDs.size() == 0) {
+                    //没有可用进程
+                    ImGui::Text(str("None", "无"));
+                }
+                else {
+                    for (int i = 0; i < memory.pIDs.size(); i++) {
+                        if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
+                            //附加到进程
+                            memory.attachToGameProcess(memory.pIDs[i]);
+                        }
+                    }                        
+                }
+                
                 ImGui::EndPopup();
             }
 
