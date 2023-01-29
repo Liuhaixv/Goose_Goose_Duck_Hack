@@ -63,7 +63,7 @@ public:
         if (hackSettings.b_debug_disableWriteMemory) {
             return false;
         }
-        int bytesWrote = 0;
+        SIZE_T bytesWrote = 0;
         WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), &bytesWrote);
         return bytesWrote != 0;
     }
@@ -87,12 +87,13 @@ public:
 
     //TODO: 用这个函数替换所有使用deprecated的read_mem方法的代码
     template <typename var>
-    bool read_mem_EX(IN const int64_t address, OUT var* value) {
+    bool read_mem_EX(IN const int64_t address, OUT var& value) {
         if (!this->isAddressInMemoryRegions(address)) {
             return false;
         }
-        int bytesRead = 0;
-        ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
+        SIZE_T bytesRead = 0;
+
+        bool success = ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
 
         return bytesRead != 0;
     }
