@@ -65,13 +65,13 @@ public:
 
                         ObscuredInt obscured_layerMask;
                         memory.read_mem_EX<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
-                        obscured_layerMask.Encrypt( targetValueOfLayerMask);
+
+                        obscured_layerMask.Encrypt(targetValueOfLayerMask);
 
                         //写入加密数值
                         memory.write_mem<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
                         //写入非加密数值
                         memory.write_mem<int>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::i_layerMask, targetValueOfLayerMask);
-                                                
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
@@ -183,9 +183,8 @@ public:
 
         switch (state) {
             case SHOULD_DEACTIVATE_NOW:
-                //TODO: 用户关闭了speedhack，恢复正常移速
-
-                targetSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
+                //用户关闭了speedhack，恢复正常移速
+                targetSpeed = this->client->localPlayer.getBaseMovementSpeed();
                 break;
 
                 //speedhack没有被切换开关
@@ -201,7 +200,7 @@ public:
 
                 //用户刚刚开启speedhack
             case SHOULD_ACTIVATE_NOW:
-                //TODO: 检查启用状态下当前目标速度是否更新
+                //检查启用状态下当前目标速度是否更新
                 targetSpeed = hackSettings.guiSettings.f_movementSpeed;
 
                 //和上一次设置的速度一样，无变化，直接返回
@@ -222,11 +221,23 @@ public:
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,
                 Offsets::LocalPlayer::Class::ptr_staticFields,
-                Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
+                Offsets::LocalPlayer::Class::StaticField::struct_movementSpeed
             };
+
+            //当前移速的struct地址
             int64_t movementSpeed_addr = memory.FindPointer(localPlayer->address, offsets);
 
-            memory.write_mem<float>(movementSpeed_addr, targetSpeed);
+            if (movementSpeed_addr == NULL) {
+                return false;
+            }
+
+            ObscuredFloat movementSpeed;
+            memory.read_mem_EX<ObscuredFloat>(movementSpeed_addr, movementSpeed);
+
+            //将数值加密保存进结构
+            movementSpeed.Encrypt(targetSpeed);
+
+            memory.write_mem<ObscuredFloat>(movementSpeed_addr, movementSpeed);
 
             //更新GUI显示的设置速度
             hackSettings.guiSettings.f_movementSpeed = targetSpeed;

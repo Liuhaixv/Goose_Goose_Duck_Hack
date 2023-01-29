@@ -111,8 +111,8 @@ namespace Offsets {
 
                 constexpr int64_t ptr_localPlayer = 0x0;
 
-                constexpr int64_t f_movementSpeed = 0x10;//已加密ObscuredFloat
                 constexpr int64_t f_baseMovementSpeed = 0xC;//只读
+                constexpr int64_t struct_movementSpeed = 0x10;//已加密ObscuredFloat
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
