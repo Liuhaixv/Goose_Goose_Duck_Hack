@@ -35,6 +35,9 @@ public:
 
     //只需要激活一次
     void removeFogOfWar(PlayerController* localPlayerController) {
+        if (localPlayerController == nullptr) {
+            return;
+        }
 
         ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_disableFogOfWar, &this->b_hasDisabledFOW);
         if (state == IDLE_DO_NOTHING) {

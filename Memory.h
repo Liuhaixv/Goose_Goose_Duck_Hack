@@ -87,12 +87,13 @@ public:
 
     //TODO: 用这个函数替换所有使用deprecated的read_mem方法的代码
     template <typename var>
-    bool read_mem_EX(IN const int64_t address, OUT var* value) {
+    bool read_mem_EX(IN const int64_t address, OUT var& value) {
         if (!this->isAddressInMemoryRegions(address)) {
             return false;
         }
         SIZE_T bytesRead = 0;
-        ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
+
+        bool success = ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
 
         return bytesRead != 0;
     }

@@ -20,7 +20,7 @@ class BytesPatchUpdater : public Updater {
 public:
     void unhookAll() {
         //LocalPlayer.Update
-        if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+        if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoReady) {
             this->unhook_LocalPlayer_Update();
         }
     }
@@ -124,7 +124,7 @@ public:
                 }
                 else {
                     //unhook
-                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoReady) {
                         unhook_LocalPlayer_Update();
                     }
                 }
@@ -177,7 +177,7 @@ private:
 
     bool b_noSkillCooldown = false;
 
-    bool b_has_hooked_autoCompleteTasks_and_autoReady = false;
+    //bool b_has_hooked_autoCompleteTasks_and_autoReady = false;
     bool b_has_hooked_autoCompleteTasks = false;
     bool b_has_hooked_autoReady = false;
 
@@ -203,7 +203,7 @@ private:
         int64_t injectEntry_Addr = memory.gameAssemblyBaseAddress + GameAssembly::Method::LocalPlayer::Update + 0xF45;
         memory.write_bytes(injectEntry_Addr, { originalBytes });
 
-        b_has_hooked_autoCompleteTasks_and_autoReady = false;
+        //b_has_hooked_autoCompleteTasks_and_autoReady = false;
         b_has_hooked_autoCompleteTasks = false;
         b_has_hooked_autoReady = false;
     }
@@ -249,7 +249,7 @@ private:
                     }
                 }
                 else {
-                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoReady) {
                         unhook_LocalPlayer_Update();
                     }
                 }
@@ -276,7 +276,7 @@ private:
                     }
                 }
                 else {
-                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoCompleteTasks_and_autoReady || this->b_has_hooked_autoReady) {
+                    if (this->b_has_hooked_autoCompleteTasks || this->b_has_hooked_autoReady) {
                         unhook_LocalPlayer_Update();
                     }
                 }
@@ -293,7 +293,7 @@ private:
             }
             else {
                 //尚未超过延迟时间，如果hook则需要unhook
-                if (this->b_has_hooked_autoCompleteTasks_and_autoReady) {
+                if (this->b_has_hooked_autoCompleteTasks) {
                     unhook_LocalPlayer_Update();
                 }
             }
