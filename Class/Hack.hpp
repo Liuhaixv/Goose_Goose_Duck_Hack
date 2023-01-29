@@ -196,9 +196,11 @@ public:
                 Offsets::LocalPlayer::Class::ptr_staticFields,
                 Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
             };
-            int64_t movementSpeed_addr = memory.FindPointer(localPlayer->address, offsets);
+            ObscuredFloat *movementSpeed_addr = (ObscuredFloat*)memory.FindPointer(localPlayer->address, offsets);
 
-            memory.write_mem<float>(movementSpeed_addr, targetSpeed);
+            memory.write_mem<bool>((int64_t)&movementSpeed_addr->fakeValueActive, false);
+            memory.write_mem<float>((int64_t)movementSpeed_addr, targetSpeed);
+            memory.write_mem<int32_t>((int64_t)movementSpeed_addr + 4, 0);
 
             //更新GUI显示的设置速度
             hackSettings.guiSettings.f_movementSpeed = targetSpeed;

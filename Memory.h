@@ -63,7 +63,7 @@ public:
         if (hackSettings.b_debug_disableWriteMemory) {
             return false;
         }
-        int bytesWrote = 0;
+        SIZE_T bytesWrote = 0;
         WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), &bytesWrote);
         return bytesWrote != 0;
     }
@@ -91,7 +91,7 @@ public:
         if (!this->isAddressInMemoryRegions(address)) {
             return false;
         }
-        int bytesRead = 0;
+        SIZE_T bytesRead = 0;
         ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
 
         return bytesRead != 0;
