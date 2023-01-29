@@ -1,6 +1,6 @@
 ﻿#pragma once
 struct GuiSettings {
-    //游戏版本
+    //辅助程序版本
     const char* version = "v0.7.1.3.1";
 
     //全局开关
