@@ -5,6 +5,7 @@
 struct ACTkByte4 // TypeDefIndex: 15317
 {
     // Fields
+    //小端存储
     byte b1; // 0x0
     byte b2; // 0x1
     byte b3; // 0x2
@@ -19,17 +20,17 @@ struct ACTkByte4 // TypeDefIndex: 15317
 
     ACTkByte4(float value) {
         byte* pByte = (byte*)&value;
-        b4 = *pByte++;
-        b3 = *pByte++;
+        b1 = *pByte++;
         b2 = *pByte++;
-        b1 = *pByte;
+        b3 = *pByte++;
+        b4 = *pByte;
     }
 
     ACTkByte4(int value) {
         b1 = value & 0xFF;
-        b2 = (value >>= 8) & 0xFF00;
-        b3 = (value >>= 8) & 0xFF0000;
-        b4 = (value >>= 8) & 0xFF000000;
+        b2 = (value >>= 8) & 0xFF;
+        b3 = (value >>= 8) & 0xFF;
+        b4 = (value >>= 8) & 0xFF;
     }
 
     ACTkByte4 operator ^ (ACTkByte4 bytes4) {
@@ -48,10 +49,20 @@ struct ACTkByte4 // TypeDefIndex: 15317
 
     operator int() const {
         int value = 0;
-        value |= (b4 & 0xFF);
-        value |= (b3 & 0xFF00);
-        value |= (b2 & 0xFF0000);
-        value |= (b1 & 0xFF000000);
+        value |= b1;
+        value |= b2 << 8;
+        value |= b3 << 16;
+        value |= b4 << 24;
+        return value;
+    }
+
+    operator float() const {
+        float value = 0;
+        byte* p = (byte*)&value;
+        *p++ = b1;
+        *p++ = b2;
+        *p++ = b3;
+        *p = b4;
         return value;
     }
 
@@ -109,7 +120,8 @@ struct ObscuredFloat {
     float Decrypt() {
         ACTkByte4 temp = this->hiddenValue;
         temp.Unshuffle();
-        return temp ^ currentCryptoKey;
+        float result = temp ^ currentCryptoKey;
+        return result;
     }
 };
 
