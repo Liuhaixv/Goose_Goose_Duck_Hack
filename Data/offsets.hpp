@@ -111,8 +111,8 @@ namespace Offsets {
 
                 constexpr int64_t ptr_localPlayer = 0x0;
 
-                constexpr int64_t f_movementSpeed = 0x10;
-                constexpr int64_t f_baseMovementSpeed = 0xC;//Read only
+                constexpr int64_t f_movementSpeed = 0x10;//已加密ObscuredFloat
+                constexpr int64_t f_baseMovementSpeed = 0xC;//只读
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
@@ -171,6 +171,14 @@ namespace GameAssembly {
         namespace Application {
             constexpr int64_t Quit = 0x31D1850;//退出游戏
         }
+
+        namespace AntiCheat {
+            namespace Utils {
+                namespace ThreadSafeRandom {
+                    constexpr int64_t Next = 0x31D1850;//退出游戏
+                }
+            }
+        }
     }
 
     namespace Class {
@@ -187,6 +195,32 @@ namespace GameAssembly {
             constexpr int bytesNum = 2;
         }
 
+        /// <summary>
+        /// 禁用反作弊随机数种子，禁用后加密秘钥将为0，加密后的内容等于明文
+        /// </summary>
+        namespace RandomSeed {
+            constexpr int64_t address = GameAssembly::Method::AntiCheat::Utils::ThreadSafeRandom::Next;
+
+            const std::vector<byte> raw{ 0x48,0x89,0x5C,0x24 };
+            /// <summary>
+            /// 恒返回0
+            /// xor rax,rax
+            /// ret
+            /// </summary>
+            const std::vector<byte> disableRandomSeed{ 0x48,0x31,0xC,0xC3 };
+        }
+
+        namespace QuitGame {
+            constexpr int64_t address = GameAssembly::Method::AntiCheat::Utils::ThreadSafeRandom::Next;
+
+            const std::vector<byte> raw = { 0x48};
+            /// <summary>
+            /// 直接返回
+            /// ret
+            /// </summary>
+            const std::vector<byte>  disableQuitGame = { 0xC3 };
+            constexpr int bytesNum = 2;
+        }
         /*
         namespace AutoCompleteTasks {
             //GameAssembly.dll+FA149D

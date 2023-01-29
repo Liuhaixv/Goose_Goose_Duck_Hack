@@ -56,6 +56,8 @@ DataUpdater dataUpdater(&g_client);
 BytesPatchUpdater bytesUpdater;
 MemoryUpdater memoryUpdater(&g_client, &hackSettings);
 
+std::vector<Updater*> updaters;
+
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置
@@ -63,6 +65,12 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
         hackSettings.guiSettings.b_disableFogOfWar = false;
     }
     hack.setClient(&g_client);
+
+    //存放所有Updater
+    updaters.push_back(&hotkeyUpdater);
+    updaters.push_back(&dataUpdater);
+    updaters.push_back(&bytesUpdater);
+    updaters.push_back(&memoryUpdater);
 
     //监听热键
     //Listen to keyboard

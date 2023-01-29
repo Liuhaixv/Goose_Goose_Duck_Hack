@@ -34,6 +34,22 @@ public:
                 continue;
             }
 
+            //anti AC
+            {
+                if (!this->b_antiAC_enabled) {
+                    //禁止退出游戏
+                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::CooldownTime::address;
+                    if (address == NULL) {
+                        continue;
+                    }
+
+                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
+                    memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
+
+
+                }
+            }
+
             //移除技能冷却
             {
                 ActivationState state = utils.shouldActivateOnce(hackSettings.b_removeSkillCoolDown, &b_noSkillCooldown);
@@ -147,6 +163,11 @@ private:
 
     bool b_allocatedMemory_autoCompleteTasks = false;
     bool b_allocatedMemory_autoReady = false;
+
+    /// <summary>
+    /// 是否已经启用反反作弊
+    /// </summary>
+    bool b_antiAC_enabled = false;
 
     void unhook_LocalPlayer_Update() {
         //当前没有hook过

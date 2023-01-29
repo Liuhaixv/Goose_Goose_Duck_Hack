@@ -92,6 +92,16 @@ public:
 private:
 
     /// <summary>
+    /// 暂停程序写入内存
+    /// </summary>
+    void pauseWriteToMemory();
+
+    /// <summary>
+    /// 恢复程序写入内存
+    /// </summary>
+    void resumeWriteToMemory();
+
+    /// <summary>
     /// 获取64位进程的模块的基址<para/>
     /// Get baseAddress of x64 process's module
     /// </summary>

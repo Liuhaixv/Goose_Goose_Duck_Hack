@@ -25,6 +25,7 @@ extern DataUpdater dataUpdater;
 extern BytesPatchUpdater bytesUpdater;
 extern MemoryUpdater memoryUpdater;
 
+extern std::vector<Updater*> updaters;
 //Public
 
 void Memory::reset() {
@@ -33,7 +34,7 @@ void Memory::reset() {
     bytesUpdater.unhookAll();
 
     //暂停写入
-    hackSettings.b_debug_disableWriteMemory = true;
+    pauseWriteToMemory();
 
     this->pID = NULL;
     this->processHandle = NULL;
@@ -118,7 +119,7 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
         new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
 
         //恢复写入 
-        hackSettings.b_debug_disableWriteMemory = false;
+        this->resumeWriteToMemory();
     }
 
     return OpenProcessState::GameFoundAndLoadedDLL;
@@ -256,6 +257,29 @@ bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
 }
 
 //Private
+
+void Memory::pauseWriteToMemory() {
+    hackSettings.b_debug_disableWriteMemory = true;
+    //暂停所有Updater
+    for (Updater* updater : updaters) {
+        if (updater == nullptr || updater->paused) {
+            continue;
+        }
+        updater->pause();
+    }
+}
+
+void Memory::resumeWriteToMemory() {
+    hackSettings.b_debug_disableWriteMemory = false;
+    //恢复所有Updater
+    for (Updater* updater : updaters) {
+        if (updater == nullptr || !updater->paused) {
+            continue;
+        }
+        updater->unpause();
+    }
+}
+
 
 int64_t Memory::GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
     int64_t dwModuleBaseAddress = NULL;
