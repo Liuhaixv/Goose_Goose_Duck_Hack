@@ -65,13 +65,13 @@ public:
 
                         ObscuredInt obscured_layerMask;
                         memory.read_mem_EX<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
+
                         obscured_layerMask.Encrypt(targetValueOfLayerMask);
 
                         //写入加密数值
                         memory.write_mem<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
                         //写入非加密数值
                         memory.write_mem<int>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::i_layerMask, targetValueOfLayerMask);
-
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
