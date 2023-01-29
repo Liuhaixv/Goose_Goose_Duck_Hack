@@ -54,6 +54,7 @@ public:
 
 
                     //禁止随机种子
+                    /*
                     address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::RandomSeed::address;
                     if (address == NULL) {
                         continue;
@@ -63,7 +64,7 @@ public:
                         { GameAssembly::BytesPatch::RandomSeed::disableRandomSeed })
                         ) {
                         continue;
-                    }
+                    }*/
 
                     b_antiAC_enabled = true;
                 }

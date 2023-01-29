@@ -85,9 +85,9 @@ public:
         return value;
     }
 
-    //TODO: 用这个函数替换所有使用deprecated的方法的代码
+    //TODO: 用这个函数替换所有使用deprecated的read_mem方法的代码
     template <typename var>
-    bool read_mem(IN const int64_t address, OUT var* value, int deleteMeWhenTODOisDone) {
+    bool read_mem_EX(IN const int64_t address, OUT var* value) {
         if (!this->isAddressInMemoryRegions(address)) {
             return false;
         }

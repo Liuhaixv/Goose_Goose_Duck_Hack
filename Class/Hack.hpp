@@ -56,13 +56,15 @@ public:
                         //set layermask
                         //由于layerMask已被加密，需要同时修改加密的数值
 
+                        int targetValueOfLayerMask = 0;
+
                         //TODO
-                        //memory.read_mem<ObscuredInt>(fogOfWarHandler + Offsets::FogOfWarHandler::struct_obscured_layerMask, NULL);
+                        ObscuredInt obscured_layerMask;
+                        memory.read_mem_EX<ObscuredInt>(fogOfWarHandler + Offsets::FogOfWarHandler::struct_obscured_layerMask, &obscured_layerMask);
+                        obscured_layerMask.hiddenValue = obscured_layerMask.currentCryptoKey ^ targetValueOfLayerMask;
 
-                        memory.write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
-
-                        
-
+                        memory.write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, targetValueOfLayerMask);
+                                                
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
