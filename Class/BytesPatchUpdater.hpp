@@ -36,17 +36,36 @@ public:
 
             //anti AC
             {
+                //强制启用anti AC，目前不加入判断是否需要启用
                 if (!this->b_antiAC_enabled) {
+                    int64_t address = NULL;
+
                     //禁止退出游戏
-                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::CooldownTime::address;
+                    address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::QuitGame::address;
                     if (address == NULL) {
                         continue;
                     }
 
-                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
-                    memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
+                    if (!memory.write_bytes(address,
+                        { GameAssembly::BytesPatch::QuitGame::disableQuitGame })
+                        ) {
+                        continue;
+                    }
 
 
+                    //禁止随机种子
+                    address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::RandomSeed::address;
+                    if (address == NULL) {
+                        continue;
+                    }
+
+                    if (!memory.write_bytes(address,
+                        { GameAssembly::BytesPatch::RandomSeed::disableRandomSeed })
+                        ) {
+                        continue;
+                    }
+
+                    b_antiAC_enabled = true;
                 }
             }
 

@@ -59,21 +59,42 @@ public:
     bool write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors);
 
     template <typename var>
-    bool write_mem(IN int64_t address, IN var value) {
+    bool write_mem(IN const int64_t address, IN var value) {
         if (hackSettings.b_debug_disableWriteMemory) {
             return false;
         }
-        return WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), NULL);
+        int bytesWrote = 0;
+        WriteProcessMemory(processHandle, (LPVOID)address, &value, sizeof(var), &bytesWrote);
+        return bytesWrote != 0;
     }
 
+    /// <summary>
+    /// 由于无法返回是否读取成功，已废弃
+    /// </summary>
+    /// <typeparam name="var"></typeparam>
+    /// <param name="address"></param>
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
     template <typename var>
-    var read_mem(IN int64_t address, IN var defaultValue) {
+    [[DEPRECATED]] var read_mem(IN const int64_t address, IN var defaultValue) {
         var value;
         if (!this->isAddressInMemoryRegions(address)) {
             return defaultValue;
         }
         ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), NULL);
         return value;
+    }
+
+    //TODO: 用这个函数替换所有使用deprecated的方法的代码
+    template <typename var>
+    bool read_mem(IN const int64_t address, OUT var* value, int deleteMeWhenTODOisDone) {
+        if (!this->isAddressInMemoryRegions(address)) {
+            return false;
+        }
+        int bytesRead = 0;
+        ReadProcessMemory(processHandle, (LPCVOID)address, &value, sizeof(var), &bytesRead);
+
+        return bytesRead != 0;
     }
 
     //void copy_bytes(int64_t src_address, int64_t dst_address, int64_t numOfBytes) {

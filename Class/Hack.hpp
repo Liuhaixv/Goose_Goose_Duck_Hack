@@ -5,6 +5,8 @@
 #include"../Data/offsets.hpp"
 #include"../Enum/ActivationState.hpp"
 
+#include"../Struct/ObscuredTypes.hpp"
+
 extern Memory memory;
 extern Utils utils;
 extern HackSettings hackSettings;
@@ -50,17 +52,25 @@ public:
                     int64_t fogOfWarHandler = memory.read_mem<int64_t>(fogOfWarHandler_addr, NULL);
 
                     if (memory.read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
-                        //disable fow
+                        //disable FOW
                         //set layermask
+                        //由于layerMask已被加密，需要同时修改加密的数值
+
+                        //TODO
+                        //memory.read_mem<ObscuredInt>(fogOfWarHandler + Offsets::FogOfWarHandler::struct_obscured_layerMask, NULL);
+
                         memory.write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+
+                        
+
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                        /*TODO: 数值已加密，暂时无法读写
-                        float f_viewDistanceMultiplier = memory.read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
-                        if (f_viewDistanceMultiplier != 0) {
-                            memory.write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
-                        }*/
+                        //TODO:测试 数值已加密，暂时无法读写
+                        //float f_viewDistanceMultiplier = memory.read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
+                        //if (f_viewDistanceMultiplier != 0) {
+                        //    memory.write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                        //}
                     }
 
                 }

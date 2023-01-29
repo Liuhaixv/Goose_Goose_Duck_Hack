@@ -128,11 +128,11 @@ namespace Offsets {
     }
 
     namespace FogOfWarHandler {
-        constexpr int64_t obscuredInt_layerMask = 0x18;//ObscuredInt
+        constexpr int64_t struct_obscured_layerMask = 0x18;//已加密ObscuredInt
         constexpr int64_t i_layerMask = 0x2C;//Bit
         constexpr int64_t i_playerLayerMask = 0x30;
-        constexpr int64_t f_baseViewDistance = 0x40;//已加密ObscuredFloat
-        constexpr int64_t f_viewDistanceMultiplier = 0x68;//已加密ObscuredFloat
+        constexpr int64_t struct_baseViewDistance = 0x40;//已加密ObscuredFloat
+        constexpr int64_t struct_viewDistanceMultiplier = 0x68;//已加密ObscuredFloat
         constexpr int64_t b_targetPlayerSet = 0x88;
     }
 
@@ -175,7 +175,7 @@ namespace GameAssembly {
         namespace AntiCheat {
             namespace Utils {
                 namespace ThreadSafeRandom {
-                    constexpr int64_t Next = 0x31D1850;//退出游戏
+                    constexpr int64_t Next = 0x2AEBB0;
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace GameAssembly {
         }
 
         namespace QuitGame {
-            constexpr int64_t address = GameAssembly::Method::AntiCheat::Utils::ThreadSafeRandom::Next;
+            constexpr int64_t address = GameAssembly::Method::Application::Quit;
 
             const std::vector<byte> raw = { 0x48};
             /// <summary>
@@ -219,7 +219,6 @@ namespace GameAssembly {
             /// ret
             /// </summary>
             const std::vector<byte>  disableQuitGame = { 0xC3 };
-            constexpr int bytesNum = 2;
         }
         /*
         namespace AutoCompleteTasks {
