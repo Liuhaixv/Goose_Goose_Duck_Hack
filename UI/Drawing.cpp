@@ -698,8 +698,6 @@ void drawMenu() {
 
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
 
-            //TODO: 移速被加密
-            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::SliderFloat(
@@ -708,7 +706,6 @@ void drawMenu() {
                 minSpeed,
                 minSpeed * 2
             );
-            ImGui::EndDisabled();
 
             ImGui::Checkbox(str("Enable##zoomHack", "启用##zoomHack"), &hackSettings.guiSettings.b_enableZoomHack);
             ImGui::SameLine();
