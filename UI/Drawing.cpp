@@ -137,6 +137,10 @@ bool drawPlayersNearbyDeadPlayer(GameMap& map, PlayerController* deadPlayer, con
             return false;
         }
 
+        if (deadPlayer->playersNearbyOnDeath.size() == 0) {
+            //TODO: ??没有死亡玩家附近的人的数据，目前已知原因有：中途关闭了辅助重新打开，或中途加入游戏
+        }
+
         PlayerController* deadPlayerRecord = &deadPlayer->playersNearbyOnDeath[0];
 
         //死亡玩家昵称（忽略）
@@ -727,7 +731,7 @@ void drawMenu() {
         {
             if (ImGui::BeginTable("players_info_table", 5,
                 ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-                | ImGuiTableFlags_Sortable
+                /*TODO: 由于Bug暂时禁用排序 | ImGuiTableFlags_Sortable*/
             ))
             {
                 ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_NoSort);
@@ -746,6 +750,8 @@ void drawMenu() {
                 const char* playerDeathSnapshotPopup = "playerDeathSnapshot_Popup";
 
                 //TODO:待完善排序
+                //TODO: 以下代码排序会导致错误的重置玩家数据，从而引发死亡玩家附近的玩家数据丢失
+                /*
                 ImGuiTableSortSpecs* sorts_specs = ImGui::TableGetSortSpecs();
 
                 if (sorts_specs->SpecsDirty)
@@ -775,6 +781,7 @@ void drawMenu() {
 
                     sorts_specs->SpecsDirty = false;
                 }
+                */
 
                 //PlayerController* player = g_client.playerControllers;
                 auto playerControllers = g_client.playerControllers;
@@ -1009,9 +1016,9 @@ void drawMenu() {
                             //附加到进程
                             memory.attachToGameProcess(memory.pIDs[i]);
                         }
-                    }                        
+                    }
                 }
-                
+
                 ImGui::EndPopup();
             }
 

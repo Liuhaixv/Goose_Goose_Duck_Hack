@@ -17,7 +17,8 @@ Client::~Client() {
     for (auto ptr_playerController : playerControllers) {
         delete ptr_playerController;
     }
-    playerControllers.clear();
+    if (playerControllers.size() > 0)
+        playerControllers.clear();
 }
 
 /// <summary>

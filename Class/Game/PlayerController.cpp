@@ -53,7 +53,8 @@ void PlayerController::reset()
 void PlayerController::resetMemberFields()
 {
     b_hasRecordedPlayersNearby = false;
-    this->playersNearbyOnDeath.clear();
+    if (this->playersNearbyOnDeath.size() > 0)
+        this->playersNearbyOnDeath.clear();
 
     playerRole = NULL;
 
