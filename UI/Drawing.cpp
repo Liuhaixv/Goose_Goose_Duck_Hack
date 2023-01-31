@@ -700,7 +700,10 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
+            //TODO: 由于CD被加密，暂时禁用
+            ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
+            ImGui::EndDisabled();
 
             ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();

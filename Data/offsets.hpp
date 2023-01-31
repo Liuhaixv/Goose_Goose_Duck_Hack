@@ -175,7 +175,7 @@ namespace GameAssembly {
         namespace AntiCheat {
             namespace Utils {
                 namespace ThreadSafeRandom {
-                    constexpr int64_t Next = 0x2AEBB0;
+                    constexpr int64_t Next = 0x2AAB20;//public static int Next(int minInclusive, int maxExclusive) { }
                 }
             }
         }

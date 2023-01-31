@@ -63,17 +63,31 @@ bool LobbySceneHandler::update()
     b_IsMicEnabled = memory.read_mem<bool>(staticFiled_Addr + Offsets::LobbySceneHandler::Class::StaticField::b_IsMicEnabled, false);
 
     if (memory.read_mem<bool>(this->address + Offsets::LobbySceneHandler::b_gameStarted, false)) {
+        /*
         //非教程模式下
-        if (!b_ExploreMode && b_gameStarted == false) {
+        if (!b_ExploreMode && !b_gameStarted) {
             g_client.onGameStarted();
         }
+        */
+
+        if ((!b_gameStarted)) {
+            g_client.onGameStarted();
+        }
+
         b_gameStarted = true;
     }
     else {
+        /*
         //非教程模式下
         if (!b_ExploreMode && b_gameStarted == true) {
             g_client.onGameEnded();
         }
+        */
+
+        if ((b_gameStarted)) {
+            g_client.onGameEnded();
+        }
+
         b_gameStarted = false;
     }
 
