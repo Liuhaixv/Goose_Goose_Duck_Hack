@@ -1,2 +1,0 @@
-﻿LobbySceneHandler.ChangeReadyState()
-->PlayerManagers.PlayerPropertiesManager.ChangeReadyState(int readyState)
