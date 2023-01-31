@@ -1,7 +1,7 @@
 ﻿#pragma once
 struct GuiSettings {
     //辅助程序版本
-    const char* version = "v0.7.1.3.2";
+    const char* version = "v0.7.1.3.3";
 
     //全局开关
     bool b_draw = true;
