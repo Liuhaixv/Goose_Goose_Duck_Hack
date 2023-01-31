@@ -11,6 +11,8 @@
 
 如果你有什么特殊需求或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group5.jpg?raw=true)中私聊我。
 
+由于存在很多人二次打包出售的行为，我将不会解答`任何`关于源码以及源码编译的问题。
+
 # 进程
 
 睡觉
