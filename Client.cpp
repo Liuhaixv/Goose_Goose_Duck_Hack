@@ -17,7 +17,8 @@ Client::~Client() {
     for (auto ptr_playerController : playerControllers) {
         delete ptr_playerController;
     }
-    playerControllers.clear();
+    if (playerControllers.size() > 0)
+        playerControllers.clear();
 }
 
 /// <summary>
@@ -55,7 +56,7 @@ void Client::onEnteringRoom()
 /// </summary>
 void Client::onGameStarted() {
     //更新游戏内初始数据
-    updateGameOriginalData();
+    //updateGameOriginalData();
 
     //更新游戏开始时间
     time(&this->time_gameStart);
@@ -113,7 +114,7 @@ bool Client::teleportTo(IN const Vector2& to) {
 }
 
 void Client::updateGameOriginalData() {
-    hackSettings.gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
+    //hackSettings.gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
 }
 
 [[deprecated("Replaced with GUI, won't do anything now")]]

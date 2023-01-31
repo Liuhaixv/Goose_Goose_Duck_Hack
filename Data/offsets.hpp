@@ -111,8 +111,8 @@ namespace Offsets {
 
                 constexpr int64_t ptr_localPlayer = 0x0;
 
-                constexpr int64_t f_movementSpeed = 0x10;//已加密ObscuredFloat
                 constexpr int64_t f_baseMovementSpeed = 0xC;//只读
+                constexpr int64_t struct_movementSpeed = 0x10;//已加密ObscuredFloat
             }
             constexpr int64_t ptr_staticFields = 0xB8;
         }
@@ -153,23 +153,23 @@ namespace GameAssembly {
     //RVA offsets
     namespace Method {
         namespace PlayerPropertiesManager {
-            constexpr int64_t ChangeReadyState = 0x866710;
+            constexpr int64_t ChangeReadyState = 0x8F2460;//public void ChangeReadyState(int KBGNPKGDFGK) { }
         }
 
         namespace TasksHandler {
-            constexpr int64_t CompleteTask = 0xE46110;
+            constexpr int64_t CompleteTask = 0xED2630;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
         }
 
         namespace UICooldownButton {
-            constexpr int64_t Update = 0x1130590;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0x104E6A0;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
 
         namespace LocalPlayer {
-            constexpr int64_t Update = 0xF1C760;
+            constexpr int64_t Update = 0xFCC7E0;
         }
 
         namespace Application {
-            constexpr int64_t Quit = 0x31D1850;//退出游戏
+            constexpr int64_t Quit = 0x3257DE0;//退出游戏
         }
 
         namespace AntiCheat {
@@ -182,9 +182,9 @@ namespace GameAssembly {
     }
 
     namespace Class {
-        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3C541E8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
-        constexpr int64_t ptr_PlayerControllerClass = 0x3C81770;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x3C54E28;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3CDAAE0;//Handlers_LobbyHandlers_LobbySceneHandler_c *
+        constexpr int64_t ptr_PlayerControllerClass = 0x3D084C8;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t ptr_LocalPlayerClass = 0x3CDB720;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
     }
 
     namespace BytesPatch {
