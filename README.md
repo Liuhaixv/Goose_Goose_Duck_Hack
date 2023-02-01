@@ -7,11 +7,13 @@
 
 鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
 
-欢迎Fork并PR，有功能需求可以提Issue，我都会回复。
+有功能需求可以提Issue，我都会回复。
 
-如果你有什么特殊需求或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group5.jpg?raw=true)中私聊我。
+如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group5.jpg?raw=true)中私聊我。
 
-由于存在很多人二次打包出售的行为，我将不会解答`任何`关于源码以及源码编译的问题。
+<del>欢迎Fork并PR。</del>
+
+由于存在很多人二次打包出售的行为，源码的更新将暂停，目前只会发布二进制文件，我将不会解答`任何`关于源码以及源码编译的问题。
 
 # 进程
 
