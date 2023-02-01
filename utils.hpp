@@ -26,6 +26,10 @@ public:
         b_chineseOS = isChineseLanguageOS();
     }
 
+    //TODO: 连接远程服务器检查更新
+    void checkUpdate() {
+    }
+
     /// <summary>
     /// 判断两个bool的值来确定状态是否改变。只适用于确定功能一次即可激活开关的类型，不适用于需要循环判断或具有定时开关功能的场景。
     /// </summary>

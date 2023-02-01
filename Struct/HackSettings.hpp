@@ -3,6 +3,9 @@
 #include"./GuiSettings.hpp"
 #include"./GameStateSettings.hpp"
 #include"./GameOriginalData.hpp"
+
+#include"RemoteMasterServerSettings.hpp"
+
 struct HackSettings {
     //退出程序标志
     bool b_quitProgram = false;
@@ -13,6 +16,8 @@ struct HackSettings {
 
     bool b_debug_disableWriteMemory = false;
     //bool b_debug_disableReadMemory = false;
+
+    RemoteMasterServerSettings remoteServerSettings;
 
     GameOriginalData gameOriginalData;
     GameStateSettings gameStateSettings;

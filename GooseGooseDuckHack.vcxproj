@@ -174,6 +174,8 @@
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
+    <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />
+    <ClInclude Include="Struct\VersionState.hpp" />
     <ClInclude Include="UI\Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />

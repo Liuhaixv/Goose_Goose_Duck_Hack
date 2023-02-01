@@ -42,7 +42,7 @@ public:
 
                     //禁止退出游戏
                     address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::QuitGame::address;
-                    if (address == NULL) {
+                    if (memory.gameAssemblyBaseAddress == NULL) {
                         continue;
                     }
 
@@ -67,6 +67,48 @@ public:
                     }*/
 
                     b_antiAC_enabled = true;
+                }
+            }
+
+            //Bypass normal ban
+            {
+                ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_bypassNormalBan, &b_bypassNormalBan);
+
+                if (state == SHOULD_ACTIVATE_NOW) {
+
+                    if (memory.gameAssemblyBaseAddress == NULL) {
+                        continue;
+                    }
+
+                    //过检测:步骤1
+                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::BypassBan::Step1::address;
+
+                    auto patchBytes_step1 = GameAssembly::BytesPatch::BypassBan::Step1::bypassBan;
+                    memory.write_bytes(address, { patchBytes_step1 });
+
+                    //过检测:步骤2
+                    address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::BypassBan::Step2::address;
+
+                    auto patchBytes_step2 = GameAssembly::BytesPatch::BypassBan::Step2::bypassBan;
+                    memory.write_bytes(address, { patchBytes_step2 });
+                }
+                else if (state == SHOULD_DEACTIVATE_NOW) {
+                    //恢复检测
+                    if (memory.gameAssemblyBaseAddress == NULL) {
+                        continue;
+                    }
+
+                    //恢复检测:步骤1
+                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::BypassBan::Step1::address;
+
+                    auto patchBytes_step1 = GameAssembly::BytesPatch::BypassBan::Step1::raw;
+                    memory.write_bytes(address, { patchBytes_step1 });
+
+                    //恢复检测:步骤2
+                    address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::BypassBan::Step2::address;
+
+                    auto patchBytes_step2 = GameAssembly::BytesPatch::BypassBan::Step2::raw;
+                    memory.write_bytes(address, { patchBytes_step2 });
                 }
             }
 
@@ -188,6 +230,8 @@ private:
     /// 是否已经启用反反作弊
     /// </summary>
     bool b_antiAC_enabled = false;
+
+    bool b_bypassNormalBan = false;
 
     void unhook_LocalPlayer_Update() {
         //当前没有hook过

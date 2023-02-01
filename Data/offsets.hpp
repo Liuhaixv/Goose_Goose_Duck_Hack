@@ -4,6 +4,47 @@
 
 namespace Offsets {
 
+    //private sealed class RoomManager.LIPKINCBJEJ : IEnumerator<object>, IEnumerator, IDisposable // TypeDefIndex: 1322
+    namespace RoomManager_LIPKINCBJEJ {
+        /*
+            // Fields
+            private int <>1__state; // 0x10
+            private object <>2__current; // 0x18
+            public string nickname; // 0x20
+            public string region; // 0x28
+            public int map; // 0x30
+            public bool isVisible; // 0x34
+            public bool voiceChat; // 0x35
+            public string initGamemode; // 0x38
+            public int language; // 0x40
+            public int levelGate; // 0x44
+            public bool streamerMode; // 0x48
+            public HangingOutInfo hangingOutInfo; // 0x50
+            public RoomManager <>4__this; // 0x58
+            private RoomManager.JFIFOFKNKOJ <>8__1; // 0x60
+            public string maxPlayers; // 0x68
+            private Task<RequestResponse<BanStatusResponse>> <getBanTimeTask>5__2; // 0x70
+        */
+    }
+
+    //private sealed class RoomManager.NOGLKBCBCCN : IEnumerator<object>, IEnumerator, IDisposable // TypeDefIndex: 1327
+    namespace RoomManager_NOGLKBCBCCN {
+        /*
+            // Fields
+            public short returnCode; // 0x10
+            public string message; // 0x18
+            public RoomManager.CAFCPAIEEKA CS$ < >8__locals1; // 0x20
+
+            // Methods
+
+            // RVA: 0x28DE40 Offset: 0x28D240 VA: 0x18028DE40
+            public void.ctor() { }
+
+            // RVA: 0xA1E700 Offset: 0xA1DB00 VA: 0x180A1E700
+            internal void <JoinRoomCoroutine>b__5() { }
+        */
+    }
+
     //C#的string类
     namespace System_String {
         constexpr int64_t i_length = 0x10;//字符串的字符个数
@@ -152,6 +193,19 @@ namespace Offsets {
 namespace GameAssembly {
     //RVA offsets
     namespace Method {
+
+        namespace RoomManager_LIPKINCBJEJ {
+            // RVA: 0xA1EAA0 Offset: 0xA1DEA0 VA: 0x180A1EAA0 Slot: 6
+            //private bool MoveNext() { }
+            constexpr int64_t MoveNext = 0xA1EAA0;
+        }
+
+        namespace RoomManager_NOGLKBCBCCN {
+            // RVA: 0xA1F5E0 Offset: 0xA1E9E0 VA: 0x180A1F5E0 Slot: 6
+            //private bool MoveNext() { }
+            constexpr int64_t MoveNext = 0xA1F5E0;
+        }
+
         namespace PlayerPropertiesManager {
             constexpr int64_t ChangeReadyState = 0x8F2460;//public void ChangeReadyState(int KBGNPKGDFGK) { }
         }
@@ -213,13 +267,34 @@ namespace GameAssembly {
         namespace QuitGame {
             constexpr int64_t address = GameAssembly::Method::Application::Quit;
 
-            const std::vector<byte> raw = { 0x48};
+            const std::vector<byte> raw = { 0x48 };
             /// <summary>
             /// 直接返回
             /// ret
             /// </summary>
             const std::vector<byte>  disableQuitGame = { 0xC3 };
         }
+
+        namespace BypassBan {
+            //房主过检测
+            namespace Step1 {
+                constexpr int64_t address = GameAssembly::Method::RoomManager_LIPKINCBJEJ::MoveNext + 0x301;
+
+                const std::vector<byte> raw = { 0x80, 0x78, 0x10, 0x00,
+                                                0x0f, 0x85, 0xAA, 0x01, 0x00, 0x00 };
+                const std::vector<byte>  bypassBan = { 0xc7, 0x40, 0x10, 0x00, 0x00, 0x00, 0x00,
+                                                        0x90, 0x90, 0x90 };
+            }
+
+            //加入游戏过检测
+            namespace Step2 {
+                constexpr int64_t address = GameAssembly::Method::RoomManager_NOGLKBCBCCN::MoveNext + 0x377;
+
+                const std::vector<byte> raw = {0x48,0x89,0x70,0x20 };
+                const std::vector<byte>  bypassBan = {0xC6,0x40,0x20,0x00 };
+            }
+        }
+
         /*
         namespace AutoCompleteTasks {
             //GameAssembly.dll+FA149D

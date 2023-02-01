@@ -1,7 +1,11 @@
 ﻿#pragma once
+#include <string>
 struct GuiSettings {
     //辅助程序版本
-    const char* version = "v0.7.1.3.3";
+    const std::string hackVersion = "v0.7.1.3.3";
+    //TODO：通过signature获取
+    //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
+    const std::string gameVersion = "v2.16.02";
 
     //全局开关
     bool b_draw = true;
@@ -39,4 +43,7 @@ struct GuiSettings {
 
     //debugmode
     bool b_debug = false;
+
+    //bypass ban
+    bool b_bypassNormalBan = false;
 };

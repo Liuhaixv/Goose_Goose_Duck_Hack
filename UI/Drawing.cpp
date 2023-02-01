@@ -654,13 +654,65 @@ void drawMenu() {
                     ImGui::TextDisabled(str("Not Running", "未运行"));
                 }
 
-                //昵称颜色
-                ImGui::TableNextColumn();
                 //版本
-                ImGui::Text(str("Version:", "版本："));
-                ImGui::SameLine();
-                ImGui::Text(hackSettings.guiSettings.version);
-                ImGui::SameLine();
+                {
+                    ImGui::TableNextColumn();
+
+                    ImGui::Text(str("Version:", "版本："));
+                    ImGui::SameLine();
+
+                    //点击版本按钮
+                    if (ImGui::Button(hackSettings.guiSettings.hackVersion.c_str())) {
+                        //TODO: 检查更新
+                        ImGui::OpenPopup("check version");
+                    }
+                    //TODO: 检查更新
+                    if (ImGui::BeginPopup("check version")) {
+                        if (ImGui::BeginTable("check_version_table", 2,
+                            ImGuiTableFlags_SizingFixedFit /* | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg*/
+                        )) {
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //辅助版本
+                            ImGui::Text(str("Current hack version:", "当前辅助版本:"));
+                            ImGui::TableNextColumn();
+                            ImGui::TextDisabled(hackSettings.guiSettings.hackVersion.c_str());
+
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //适配游戏版本
+                            ImGui::Text(str("Works on game version:", "适配的游戏版本:"));
+                            ImGui::TableNextColumn();
+                            ImGui::TextDisabled(hackSettings.guiSettings.gameVersion.c_str());
+
+                            ImGui::EndTable();
+                        }
+                        ImGui::EndPopup();
+                    }
+
+                    ImGui::SameLine();
+
+                    //未连接远程服务器
+                    if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::DOWN) {
+                        //红色
+                        ImGui::TextColored(ImColor(255, 0, 0), str("Connection Failed", "连接失败"));
+                    }
+                    else if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::NORMAL) {
+                        ImGui::TextColored(ImColor(0, 255, 0), str("Connected", "已连接"));
+                    }
+                    else if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::UNKNOWN) {
+                        ImGui::TextDisabled(str("Unknown", "未知"));
+                    }
+                    else {
+                        ImGui::TextDisabled(str("Unknown", "未知"));
+                    }
+                    ImGui::SameLine();
+                    HelpMarker(str("Remote master server connection state\nClick version to check update", "远程主服务器连接状态"));
+
+                    //TODO:警告，当前版本不适配游戏
+                    //判断游戏版本是否匹配
+                    //TODO:
+                }
             }
             ImGui::EndTable();
         }
@@ -848,10 +900,6 @@ void drawMenu() {
         //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
-            ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
-            HelpMarker(
-                str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
-            );
             //TODO:失效
             //ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
@@ -966,8 +1014,8 @@ void drawMenu() {
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             //显示版本信息
-            ImGui::Text(str("Version: ", "版本: ")); ImGui::SameLine(); ImGui::Text(hackSettings.guiSettings.version);
-            ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
+            ImGui::Text(str("Version: ", "版本: ")); ImGui::SameLine(); ImGui::Text(hackSettings.guiSettings.hackVersion.c_str());
+            ImGui::Text(str("This an free software from Liuhaixv", "这是一个来自Liuhaixv的免费项目"));
             ImGui::SameLine();
             if (ImGui::Button(str("Link to project", "查看项目"))) {
                 ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
@@ -991,38 +1039,57 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
-            //游戏进程ID
-            ImGui::Text(str("PID:", "PID: "));
-            ImGui::SameLine();
-
-            ImGui::Text("%d", memory.pID); ImGui::SameLine();
             //选择进程
-
-            static int selected_process = -1;
-            const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
-
-            //枚举所有游戏进程
-            if (ImGui::Button(str("Select Process", "选择进程"))) {
-                memory.searchGameProcess();
-                ImGui::OpenPopup("select_process_popup");
-            }
-            if (ImGui::BeginPopup("select_process_popup"))
             {
-                ImGui::Separator();
-                if (memory.pIDs.size() == 0) {
-                    //没有可用进程
-                    ImGui::Text(str("None", "无"));
+                //游戏进程ID
+                ImGui::Text(str("PID:", "PID: "));
+                ImGui::SameLine();
+
+                ImGui::Text("%d", memory.pID); ImGui::SameLine();
+
+                static int selected_process = -1;
+                const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
+
+                //枚举所有游戏进程
+                if (ImGui::Button(str("Select Process", "选择进程"))) {
+                    memory.searchGameProcess();
+                    ImGui::OpenPopup("select_process_popup");
                 }
-                else {
-                    for (int i = 0; i < memory.pIDs.size(); i++) {
-                        if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
-                            //附加到进程
-                            memory.attachToGameProcess(memory.pIDs[i]);
+                if (ImGui::BeginPopup("select_process_popup"))
+                {
+                    ImGui::Separator();
+                    if (memory.pIDs.size() == 0) {
+                        //没有可用进程
+                        ImGui::Text(str("None", "无"));
+                    }
+                    else {
+                        for (int i = 0; i < memory.pIDs.size(); i++) {
+                            if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
+                                //附加到进程
+                                memory.attachToGameProcess(memory.pIDs[i]);
+                            }
                         }
                     }
-                }
 
-                ImGui::EndPopup();
+                    ImGui::EndPopup();
+                }
+            }
+
+            //反封禁
+            {
+                ImGui::Checkbox(str("Bypass Ban", "反封禁"), &hackSettings.guiSettings.b_bypassNormalBan);
+                HelpMarker(
+                    str("Allow you to play game with banned account", "获得可以使用被封禁的账号进行游戏的能力")
+                );
+            }
+
+            //反挂机
+            {
+                ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
+                HelpMarker(
+                    str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
+                );
+
             }
 
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
