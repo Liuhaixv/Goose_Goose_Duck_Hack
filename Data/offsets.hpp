@@ -77,7 +77,7 @@ namespace Offsets {
                 constexpr int64_t  b_IsPublicGame = 0x10;
                 constexpr int64_t  b_IsMicEnabled = 0x11;
             }
-            constexpr int64_t ptr_staticFields = 0xB8;//TODO
+            constexpr int64_t ptr_staticFields = 0xB8;
         }
 
         constexpr int64_t ptr_tasksHandler = 0x40;//TasksHandler*
@@ -104,7 +104,7 @@ namespace Offsets {
                 constexpr int64_t playersList = 0x10;// Dictionary<string, PlayerController> 
                 constexpr int64_t playersListWithAgoraIDs = 0x20;// Dictionary<int, PlayerController>
             }
-            constexpr int64_t ptr_staticFields = 0xB8;//TODO
+            constexpr int64_t ptr_staticFields = 0xB8;
         }
         constexpr int64_t ptr_Class = 0x0;
 
@@ -186,7 +186,7 @@ namespace Offsets {
     }
 
     namespace UICooldownButton {
-        constexpr int64_t f_cooldownTime = 0x70;
+        constexpr int64_t struct_cooldownTime = 0x84;//已加密ObscuredFloat
     }
 }
 

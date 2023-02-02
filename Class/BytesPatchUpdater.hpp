@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include"../Data/offsets.hpp"
-#include "../memory.h"
+#include "../Memory/memory.h"
 #include "../Struct/HackSettings.hpp"
 #include"../utils.hpp"
 #include "../Client.h"

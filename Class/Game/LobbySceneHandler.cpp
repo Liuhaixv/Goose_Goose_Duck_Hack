@@ -1,6 +1,6 @@
 ﻿#include "LobbySceneHandler.h"
 
-#include "../memory.h"
+#include "../../Memory/memory.h"
 #include"../utils.hpp"
 #include "../Data/offsets.hpp"
 #include "../../Client.h"

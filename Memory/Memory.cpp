@@ -4,16 +4,16 @@
 #include <iostream>
 #include <tchar.h> // _tcscmp
 
-#include"utils.hpp"
+#include"../utils.hpp"
 
 #include <initializer_list>
-#include "Class/Hack.hpp"
-#include "Struct/UserSettings.hpp"
-#include "Class/HotkeyUpdater.hpp"
-#include "Class/BytesPatchUpdater.hpp"
-#include "Class/GameProcessUpdater.hpp"
-#include "Class/DataUpdater.hpp"
-#include "Client.h"
+#include "../Class/Hack.hpp"
+#include "../Struct/UserSettings.hpp"
+#include "../Class/HotkeyUpdater.hpp"
+#include "../Class/BytesPatchUpdater.hpp"
+#include "../Class/GameProcessUpdater.hpp"
+#include "../Class/DataUpdater.hpp"
+#include "../Client.h"
 
 extern Utils utils;
 extern Hack hack;
@@ -231,6 +231,7 @@ int64_t Memory::FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offs
     return Address;
 }
 
+
 bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
     if (this->processHandle == NULL) {
         return false;
@@ -257,6 +258,30 @@ bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
 }
 
 //Private
+
+//TODO: test
+bool Memory::readModuleBytes(IN const char* moduleName, OUT std::unique_ptr<byte[]> data, OUT int64_t* size)
+{
+    if (this->pID == NULL || this->processHandle == NULL) {
+        return false;
+    }
+
+    data = std::make_unique< BYTE[] >(*size);
+
+    auto BytesRead{ SIZE_T() };
+
+    if (!ReadProcessMemory(this->processHandle,
+        (LPCVOID)GetModuleBaseAddress((TCHAR*)moduleName, this->pID),
+        data.get(),
+        *size,
+        &BytesRead)|| BytesRead != *size)
+    {
+        memset(&data, 0, *size);
+        return false;
+    }
+
+    return true;
+}
 
 void Memory::pauseWriteToMemory() {
     hackSettings.b_debug_disableWriteMemory = true;

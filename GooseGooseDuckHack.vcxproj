@@ -75,7 +75,7 @@
     <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>H:\Documents\GitHub\GooseGooseDuckHack\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,7 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
-    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Memory\Memory.cpp" />
+    <ClCompile Include="Memory\PatternScanner.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
+    <ClInclude Include="Memory\PatternScanner.h" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
     <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />
     <ClInclude Include="Struct\VersionState.hpp" />
@@ -204,7 +206,7 @@
     <ClInclude Include="Class\Updater.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
-    <ClInclude Include="Memory.h" />
+    <ClInclude Include="Memory\Memory.h" />
     <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>

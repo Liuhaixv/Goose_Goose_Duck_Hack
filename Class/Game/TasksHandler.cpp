@@ -1,5 +1,5 @@
 ﻿#include "TasksHandler.h"
-#include "../../memory.h"
+#include "../../Memory/Memory.h"
 #include"../../Data/offsets.hpp"
 
 extern Memory memory;
