@@ -243,10 +243,9 @@ namespace GameAssembly {
 
     namespace BytesPatch {
         namespace CooldownTime {
-            constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0xB7;
-            constexpr byte raw[] = "\x0F\x82";
-            constexpr byte removeCooldownTime[] = "\xEB\x0E";//jmp
-            constexpr int bytesNum = 2;
+            constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0x22F;
+            const std::vector<byte> raw{ 0xE8,0xEC,0x70,0x25,0x02 };//call Time.get_deltaTime
+            const std::vector<byte> removeCooldownTime{ 0x41,0x0F,0x28,0xC1,0x90 };//movaps xmm0, xmm9
         }
 
         /// <summary>

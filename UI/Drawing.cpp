@@ -752,10 +752,10 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
-            //TODO: 由于CD被加密，暂时禁用
-            ImGui::BeginDisabled();
+            //ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
-            ImGui::EndDisabled();
+            HelpMarker(str("Notice: server - sided CD can not be removed", "注意：服务器端CD无法修改，如鸭子刀人CD"));
+            //::EndDisabled();
 
             ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();

@@ -123,8 +123,11 @@ public:
                         continue;
                     }
 
-                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::removeCooldownTime;
-                    memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
+                    memory.write_bytes(address,
+                        {
+                            GameAssembly::BytesPatch::CooldownTime::removeCooldownTime
+                        }
+                        );
                 }
                 else if (state == SHOULD_DEACTIVATE_NOW) {
                     //恢复冷却
@@ -133,8 +136,11 @@ public:
                         continue;
                     }
 
-                    const byte* patchBytes = GameAssembly::BytesPatch::CooldownTime::raw;
-                    memory.write_bytes(address, patchBytes, GameAssembly::BytesPatch::CooldownTime::bytesNum);
+                    memory.write_bytes(address,
+                        {
+                            GameAssembly::BytesPatch::CooldownTime::raw
+                        }
+                        );
                 }
             }
 
