@@ -7,6 +7,8 @@
 #include <sstream>
 #include "../Class/Game/string.hpp"
 #include<algorithm>
+
+#include"../Class/HttpDataUpdater.h"
 //#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
@@ -22,6 +24,7 @@ extern Client g_client;
 extern Memory memory;
 
 extern UserSettings userSettings;
+extern HttpDataUpdater httpDataUpdater;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
@@ -73,6 +76,50 @@ void Drawing::Draw() {
     }
 }
 
+/// <summary>
+/// 旋转圆圈动画
+/// </summary>
+/// <param name="label"></param>
+/// <param name="radius"></param>
+/// <param name="thickness"></param>
+/// <param name="color"></param>
+/// <returns></returns>
+bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+    const ImGuiID id = window->GetID(label);
+
+    ImVec2 pos = window->DC.CursorPos;
+    ImVec2 size((radius) * 2, (radius + style.FramePadding.y) * 2);
+
+    const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+    ImGui::ItemSize(bb, style.FramePadding.y);
+    if (!ImGui::ItemAdd(bb, id))
+        return false;
+
+    // Render
+    window->DrawList->PathClear();
+
+    int num_segments = 30;
+    int start = abs(ImSin(g.Time * 1.8f) * (num_segments - 5));
+
+    const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
+    const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
+
+    const ImVec2 centre = ImVec2(pos.x + radius, pos.y + radius + style.FramePadding.y);
+
+    for (int i = 0; i < num_segments; i++) {
+        const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
+        window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a + g.Time * 8) * radius,
+            centre.y + ImSin(a + g.Time * 8) * radius));
+    }
+
+    window->DrawList->PathStroke(color, false, thickness);
+}
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
@@ -665,6 +712,8 @@ void drawMenu() {
                     if (ImGui::Button(hackSettings.guiSettings.hackVersion.c_str())) {
                         //TODO: 检查更新
                         ImGui::OpenPopup("check version");
+                        //手动更新一次
+                        httpDataUpdater.addHttpTask(std::bind(HttpTask::checkLatestVersions, 1));
                     }
                     //TODO: 检查更新
                     if (ImGui::BeginPopup("check version")) {
@@ -674,6 +723,7 @@ void drawMenu() {
                             ImGui::TableNextRow();
                             ImGui::TableNextColumn();
                             //辅助版本
+                            //TODO: 判断版本是否有更新，标红提示
                             ImGui::Text(str("Current hack version:", "当前辅助版本:"));
                             ImGui::TableNextColumn();
                             ImGui::TextDisabled(hackSettings.guiSettings.hackVersion.c_str());
@@ -687,6 +737,46 @@ void drawMenu() {
 
                             ImGui::EndTable();
                         }
+                        ImGui::NewLine();
+
+                        if (ImGui::BeginTable("check_server_versions_table", 2,
+                            ImGuiTableFlags_SizingFixedFit /* | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg*/
+                        )) {
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //最新辅助版本
+                            ImGui::Text(str("Latest hack version:", "最新辅助版本:"));
+                            ImGui::TableNextColumn();
+                            if (!hackSettings.latestVersions.hasUpdatedLatestVersions()) {
+                                //显示加载动画
+                                Spinner("latest_hack_version_spinner", 10.0f, 2.0f,ImColor(0,255,0));
+                            }
+                            else {
+                                ImGui::TextDisabled("%s%s",
+                                    "v",
+                                    hackSettings.latestVersions.latestHackVersion);
+                            }                            
+
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //最新游戏版本
+                            ImGui::Text(str("Latest game version:", "最新游戏版本:"));
+                            ImGui::TableNextColumn();
+                            if (!hackSettings.latestVersions.hasUpdatedLatestVersions()) {
+                                //显示加载动画
+                                Spinner("latest_game_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+                            }
+                            else {
+                                ImGui::TextDisabled("%s%s",
+                                    "v",
+                                    hackSettings.latestVersions.latestGameVersion);
+                            }
+
+                            ImGui::EndTable();
+                        }
+                        //服务器返回的版本信息
+
+
                         ImGui::EndPopup();
                     }
 

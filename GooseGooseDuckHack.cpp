@@ -30,6 +30,7 @@
 #include<imgui_impl_win32.h>
 //UI
 #include "./UI/UI.h"
+#include "Class/HttpDataUpdater.h"
 
 
 Utils utils;
@@ -55,6 +56,7 @@ HotkeyUpdater hotkeyUpdater(&hackSettings);
 DataUpdater dataUpdater(&g_client);
 BytesPatchUpdater bytesUpdater;
 MemoryUpdater memoryUpdater(&g_client, &hackSettings);
+HttpDataUpdater httpDataUpdater;
 
 std::vector<Updater*> updaters;
 
@@ -71,20 +73,23 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     updaters.push_back(&dataUpdater);
     updaters.push_back(&bytesUpdater);
     updaters.push_back(&memoryUpdater);
+    updaters.push_back(&httpDataUpdater);
 
     //监听热键
     //Listen to keyboard
-    std::thread hackSettingsUpdater(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
+    std::thread hackSettingsUpdaterThread(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
     //启动游戏内存数据更新线程
     //Game data updater
-    std::thread playerControllerUpdater(&DataUpdater::playerControllerUpdater, &dataUpdater);
-    std::thread lobbySceneHandlerUpdater(&DataUpdater::lobbySceneHandlerUpdater, &dataUpdater);
+    std::thread playerControllerUpdaterThread(&DataUpdater::playerControllerUpdater, &dataUpdater);
+    std::thread lobbySceneHandlerUpdaterThread(&DataUpdater::lobbySceneHandlerUpdater, &dataUpdater);
     //启动字节补丁线程
     //Game process finder
-    std::thread bytesPatchUpdater(&BytesPatchUpdater::bytesPatchUpdater, &bytesUpdater);
+    std::thread bytesPatchUpdaterThread(&BytesPatchUpdater::bytesPatchUpdater, &bytesUpdater);
     //启动游戏进程查找线程
     //Game process finder
-    std::thread gameProcessUpdater(&MemoryUpdater::gameProcessUpdater, &memoryUpdater);
+    std::thread gameProcessUpdaterThread(&MemoryUpdater::gameProcessUpdater, &memoryUpdater);
+    //启动http客户端更新线程
+    std::thread httpDataUpdaterThread(&HttpDataUpdater::httpDataUpdaterThread, &httpDataUpdater);
 
     //GUI循环
     //GUI loop

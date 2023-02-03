@@ -14,6 +14,7 @@
 #include "../Class/GameProcessUpdater.hpp"
 #include "../Class/DataUpdater.hpp"
 #include "../Client.h"
+#include "../Class/HttpDataUpdater.h"
 
 extern Utils utils;
 extern Hack hack;
@@ -24,6 +25,7 @@ extern HotkeyUpdater hotkeyUpdater;
 extern DataUpdater dataUpdater;
 extern BytesPatchUpdater bytesUpdater;
 extern MemoryUpdater memoryUpdater;
+extern HttpDataUpdater httpDataUpdater;
 
 extern std::vector<Updater*> updaters;
 //Public
@@ -117,6 +119,8 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
         new(&bytesUpdater) BytesPatchUpdater();
 
         new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
+
+        new(&httpDataUpdater) HttpDataUpdater();
 
         //恢复写入 
         this->resumeWriteToMemory();

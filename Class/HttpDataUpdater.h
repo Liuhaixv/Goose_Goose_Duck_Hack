@@ -21,8 +21,6 @@ private:
 };
 
 namespace HttpTask {
-
     void connectToServer();
-
-    void checkLatestVersions();
+    void checkLatestVersions(bool forceReconnect);
 }
