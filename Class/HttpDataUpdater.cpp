@@ -5,7 +5,7 @@
 #include"../httplib.h"
 #include"../http/http_api/GetVersionsApi.h"
 
-#include"../json.hpp"
+#include"../http/json_stuct/LatestVersionsJson.h"
 
 extern HackSettings hackSettings;
 
@@ -70,10 +70,9 @@ namespace HttpTask {
         auto res = cli.Get(getVersionsApi.getPath());
         if (res->status == 200) {
             try {
-
                 //TODO: fix json
-                //JsonStruct::LatestVersionsJson latestVersions = nlohmann::json::parse(res).get<JsonStruct::LatestVersionsJson>();
-                //hackSettings.latestVersions.update(latestVersions);
+                JsonStruct::LatestVersionsJson latestVersions = nlohmann::json::parse(res->body).get<JsonStruct::LatestVersionsJson>();
+                hackSettings.latestVersions.update(latestVersions);
             }
             catch (...) {
                 hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;

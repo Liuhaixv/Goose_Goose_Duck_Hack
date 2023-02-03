@@ -137,13 +137,15 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Class\Hack.hpp" />
+    <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="Class\Hack.hpp" />
     <ClCompile Include="Class\HttpDataUpdater.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Memory\PatternScanner.cpp" />

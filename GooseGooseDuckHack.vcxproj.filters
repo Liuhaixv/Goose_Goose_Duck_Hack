@@ -39,9 +39,6 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Class\Hack.hpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Class\Game\PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="http\json_stuct\LatestVersionsJson.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\Hack.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="Class\HttpDataUpdater.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Hack.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

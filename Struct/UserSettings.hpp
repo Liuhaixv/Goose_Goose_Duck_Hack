@@ -3,6 +3,7 @@
 #include<imgui.h>
 #include<imgui_internal.h>
 #include<map>
+#include"Common.hpp"
 
 namespace UserSettingsNames {
     CustomName(test_color_0);
