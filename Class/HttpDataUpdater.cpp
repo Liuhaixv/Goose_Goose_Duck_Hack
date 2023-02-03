@@ -75,13 +75,13 @@ namespace HttpTask {
         PingApi pingApi;
         httplib::Client cli(pingApi.domain, pingApi.port);
 
-        try {        
+        try {
             httplib::Result res = cli.Get(pingApi.getPath());
 
             if (res.error() != httplib::Error::Success) {
                 throw res;
             }
-            
+
             if (res->status == 200) {
                 //success
                 hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::NORMAL;
@@ -127,22 +127,31 @@ namespace HttpTask {
         static GetVersionsApi getVersionsApi;
 
         httplib::Client cli(getVersionsApi.domain, getVersionsApi.port);
-        auto res = cli.Get(getVersionsApi.getPath());
-        if (res->status == 200) {
-            try {
-                //TODO: fix json
+
+        try {
+            auto res = cli.Get(getVersionsApi.getPath());
+
+            if (res.error() != httplib::Error::Success) {
+                throw res;
+            }
+
+            if (res->status == 200) {
+                //更新服务器状态
+                hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::NORMAL;
+
                 JsonStruct::LatestVersionsJson latestVersions = nlohmann::json::parse(res->body).get<JsonStruct::LatestVersionsJson>();
 
                 //睡眠1.5秒观看加载动画
                 Sleep(1500);
                 hackSettings.latestVersions.update(latestVersions);
+
             }
-            catch (...) {
-                hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;
+            else {
+                return;
             }
         }
-        else {
-            return;
+        catch (...) {
+            hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;
         }
     }
 }
