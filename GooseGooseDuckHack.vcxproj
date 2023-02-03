@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
+    <ClCompile Include="Class\HttpDataUpdater.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Memory\PatternScanner.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
@@ -174,6 +175,15 @@
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
+    <ClInclude Include="Class\HttpDataUpdater.h" />
+    <ClInclude Include="httplib.h" />
+    <ClInclude Include="http\http_api\GetVersionsApi.h" />
+    <ClInclude Include="http\http_api\Ping.h" />
+    <ClInclude Include="http\http_api\virtual\RemoteServerHttpApi.h" />
+    <ClInclude Include="http\json_stuct\LatestVersionsJson.h" />
+    <ClCompile Include="http\json_stuct\LatestVersionsJson.cpp" />
+    <ClInclude Include="http\json_stuct\virtual\BaseJsonStruct.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Memory\PatternScanner.h" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
     <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include"../Client.h"
-#include"../Class/Game/PlayerController.h"
 #include"../Data/offsets.hpp"
 #include"../Enum/ActivationState.hpp"
 
