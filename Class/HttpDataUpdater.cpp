@@ -142,7 +142,7 @@ namespace HttpTask {
                 JsonStruct::LatestVersionsJson latestVersions = nlohmann::json::parse(res->body).get<JsonStruct::LatestVersionsJson>();
 
                 //睡眠1.5秒观看加载动画
-                Sleep(1500);
+                Sleep(1200);
                 hackSettings.latestVersions.update(latestVersions);
 
             }

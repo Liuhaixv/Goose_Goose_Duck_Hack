@@ -63,6 +63,8 @@ public:
 
     bool write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum);
 
+    bool write_bytes(IN const int64_t address, IN std::vector<byte> bytes_vector);
+
     bool write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors);
 
     template <typename var>
@@ -118,7 +120,7 @@ public:
     /// <summary>
     /// 申请可执行内存
     /// </summary>
-    bool allocExecutableMemory(SIZE_T size, int64_t* address);
+    bool allocExecutableMemory(IN SIZE_T size,OUT int64_t* address);
 
 private:
     //保存GameAssembly的所有字节

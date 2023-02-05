@@ -123,6 +123,16 @@ public:
         return bytes;
     }
 
+    template<typename var>
+    std::vector<var> combineVectors(IN std::initializer_list<std::vector<var>> vectors) {
+        std::vector<var> result;
+        //遍历拼接Vector
+        for (auto v : vectors) {
+            result.insert(result.end(), v.begin(), v.end());
+        }
+        return result;
+    }
+
     /// <summary>
     /// 输出字符串到控制台,如果没有指定第二个参数则默认输出第一个字符串参数。
     /// </summary>

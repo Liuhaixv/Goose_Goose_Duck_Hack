@@ -140,6 +140,10 @@ bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN cons
         NULL);
 }
 
+bool Memory::write_bytes(IN const int64_t address, IN std::vector<byte> bytes_vector) {
+    return write_bytes(address, { bytes_vector });
+}
+
 bool Memory::write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors) {
 
     if (hackSettings.b_debug_disableWriteMemory) {
@@ -236,7 +240,7 @@ int64_t Memory::FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offs
 }
 
 
-bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
+bool Memory::allocExecutableMemory(IN SIZE_T size,OUT int64_t* address) {
     if (this->processHandle == NULL) {
         return false;
     }

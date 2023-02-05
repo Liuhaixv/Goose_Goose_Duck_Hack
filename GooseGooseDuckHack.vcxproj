@@ -161,6 +161,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <Optimization>Disabled</Optimization>
       <BrowseInformation>true</BrowseInformation>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -200,9 +201,16 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Memory\CodeCave\GetReday.cpp" />
+    <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
+    <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="Memory\CodeCave\GetReday.h" />
+    <ClInclude Include="Memory\CodeCave\CompleteOneTask.h" />
+    <ClInclude Include="Memory\CodeCave\CallableFunction.h" />
     <ClInclude Include="Class\Hack.hpp" />
     <ClCompile Include="Class\HttpDataUpdater.cpp" />
+    <ClCompile Include="Memory\CodeCave\CodeCave.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Memory\PatternScanner.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
@@ -230,6 +238,7 @@
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
     <ClInclude Include="Class\Game\PlayerController.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Memory\CodeCave\CodeCave.h" />
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
