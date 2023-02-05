@@ -201,10 +201,12 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Memory\RetHook.cpp" />
     <ClCompile Include="Memory\CodeCave\GetReady.cpp" />
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="Memory\RetHook.h" />
     <ClInclude Include="Memory\CodeCave\GetReady.h" />
     <ClInclude Include="Memory\CodeCave\CompleteOneTask.h" />
     <ClInclude Include="Memory\CodeCave\CallableFunction.h" />

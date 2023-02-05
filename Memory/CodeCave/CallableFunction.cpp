@@ -5,7 +5,7 @@ extern Memory memory;
 
 void CallableFunction::call()
 {
-    //TODO
+    //TODO: 申请临时空间并在创建线程调用后删除空间
 }
 
 void CallableFunction::allocateMemory()

@@ -87,6 +87,9 @@
     <ClCompile Include="Memory\CodeCave\GetReady.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Memory\RetHook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\Memory.h">
@@ -252,6 +255,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory\CodeCave\GetReady.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\RetHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
