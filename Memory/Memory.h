@@ -61,6 +61,12 @@ public:
     }
     */
 
+    /// <summary>
+    /// 创建一个不带参数的远程线程
+    /// </summary>
+    /// <param name="address"></param>
+    bool createRemoteThread(int64_t address);
+
     bool write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum);
 
     bool write_bytes(IN const int64_t address, IN std::vector<byte> bytes_vector);

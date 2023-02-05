@@ -1193,28 +1193,42 @@ void drawMenu() {
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
 
+
+                static std::stringstream ss;
                 //测试VirtualAllocEx
                 {
-
                     static int64_t allocatedAddress = 0x0;
-                    static std::stringstream s;
                     static std::string hexStringAddress;
 
-                    s.clear();
+                    ss.clear();
                     if (ImGui::Button(str("Allocate memory", "申请内存空间"))) {
                         allocatedAddress = (int64_t)VirtualAllocEx(memory.processHandle,
                             NULL,
                             0x1000,
                             MEM_COMMIT | MEM_RESERVE,
                             PAGE_EXECUTE_READWRITE);
-                        s << std::hex << allocatedAddress;
+                        ss << std::hex << allocatedAddress;
                         hexStringAddress.clear();
-                        s >> hexStringAddress;
+                        ss >> hexStringAddress;
                     }
                     auto a = NULL;
                     ImGui::Text("Allocated memory's base address: "); ImGui::SameLine();
                     ImGui::Text(hexStringAddress.c_str());
 
+                }
+
+                //测试createRemoteThread
+                {
+                    static char createRemoteThreadStartAddress[2+8*2];//0x????????????????
+                    static int64_t remoteThreadStartAddress = 0;
+                    ImGui::InputText("createRemoteThread", createRemoteThreadStartAddress, 2 + 8 * 2);
+                    if (ImGui::Button(str("Start thread", "启动线程"))) {
+                        //获取地址
+                        ss.clear();
+                        ss << std::hex<< createRemoteThreadStartAddress;
+                        ss >> remoteThreadStartAddress;
+                        memory.createRemoteThread(remoteThreadStartAddress);
+                    }
                 }
             }
             ImGui::EndTabItem();

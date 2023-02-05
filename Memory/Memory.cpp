@@ -129,6 +129,35 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
     return OpenProcessState::GameFoundAndLoadedDLL;
 }
 
+bool Memory::createRemoteThread(int64_t address)
+{
+    LPVOID lpParameter = NULL;
+
+    /*
+    * //在远程进程中申请空间并写入参数
+    lpParameter = (LPVOID)VirtualAllocEx(Proc, NULL, strlen(dll), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+    
+    WriteProcessMemory(Proc, (LPVOID)lpParameter, dll, strlen(dll), NULL);
+
+    */
+
+    //http://www.rohitab.com/discuss/topic/31453-cc-createremotethreadex
+    /*
+    * hThr = CreateRemoteThreadEx(hProcess, NULL, 0,
+                                (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("user32.dll"), "MessageBoxA"),
+                                0, NULL,
+                                "%x%s%8d%x",
+                                NULL, "Hello world", "Caption", MB_ICONEXCLAMATION | MB_YESNOCANCEL)
+      Easy as that. The fifth last parameter is format (like in printf/scanf) that specifies type of arguments. %x, %d, %u for DWORD, %s for string and %[num]d for data.
+      The format in previous example could've been "%x%s%s%x", but I wanted to demonstrate how to use the %d specifier.
+    */
+    auto thread = CreateRemoteThread(this->processHandle, NULL, 0, (LPTHREAD_START_ROUTINE)address,
+        lpParameter,
+        0, NULL);
+
+    return true;
+}
+
 bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum) {
     if (hackSettings.b_debug_disableWriteMemory) {
         return false;
@@ -240,7 +269,7 @@ int64_t Memory::FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offs
 }
 
 
-bool Memory::allocExecutableMemory(IN SIZE_T size,OUT int64_t* address) {
+bool Memory::allocExecutableMemory(IN SIZE_T size, OUT int64_t* address) {
     if (this->processHandle == NULL) {
         return false;
     }
@@ -282,7 +311,7 @@ bool Memory::readModuleBytes(IN const char* moduleName, OUT std::unique_ptr<byte
         (LPCVOID)GetModuleBaseAddress((TCHAR*)moduleName, this->pID),
         data.get(),
         *size,
-        &BytesRead)|| BytesRead != *size)
+        &BytesRead) || BytesRead != *size)
     {
         memset(&data, 0, *size);
         return false;

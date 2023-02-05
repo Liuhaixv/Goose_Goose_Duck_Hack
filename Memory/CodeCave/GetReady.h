@@ -1,12 +1,12 @@
 ﻿#pragma once
-#include "CallableFunction.h"
-class CompleteOneTask :    public CallableFunction
+#include"CallableFunction.h"
+class GetReady : public CallableFunction
 {
 public:
-    CompleteOneTask() {
+    GetReady() {
         this->allocateMemory();
     }
+
 private:
     std::vector<byte> getFunctionBytes();
 };
-

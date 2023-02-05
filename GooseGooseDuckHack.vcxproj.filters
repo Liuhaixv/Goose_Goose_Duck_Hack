@@ -84,7 +84,7 @@
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Memory\CodeCave\GetReday.cpp">
+    <ClCompile Include="Memory\CodeCave\GetReady.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,19 +251,12 @@
     <ClInclude Include="Memory\CodeCave\CompleteOneTask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory\CodeCave\GetReday.h">
+    <ClInclude Include="Memory\CodeCave\GetReady.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="CheatSheet\trash.txt">
-      <Filter>Header Files</Filter>
-    </Text>
-    <Text Include="CheatSheet\准备.txt" />
-    <Text Include="CheatSheet\关于反作弊.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon\icon.ico">

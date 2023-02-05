@@ -11,7 +11,7 @@ typedef unsigned char byte;
 /// 0x0 staticFieldEntry
 /// 0x0 static field begin:=========================
 /// 0x0  entry-0x50 bool bool0;                     | static filed size = 0x50 bytes
-/// 0x10 entry-0x40 int int0;                       | static filed size = 
+/// 0x10 entry-0x40 int int0;                       | 
 /// 0x20 entry-0x30 float float0;                   | entry
 /// 0x30 entry-0x20 double double0;                 |
 /// 0x40 entry-0x10 int int1;                       |
@@ -45,7 +45,7 @@ typedef unsigned char byte;
 /// 0x0FFF ...
 /// 0x1000 Allocated 0x1000 memory end;
 /// </summary>
-class CodeCave{
+class CodeCave {
 public:
     class StaticField {
     public:
@@ -56,7 +56,7 @@ public:
         void flushUpdatedIntoMemory();
 
         template <typename var>
-        void setBool(int index, var value) {
+        void setField(int index, var value) {
             byte* bytes = this->staticFieldBytes.get();
             *(var*)(bytes + (index * 0x10)) = value;
         }

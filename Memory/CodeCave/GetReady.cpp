@@ -1,11 +1,11 @@
-﻿#include "GetReday.h"
+﻿#include "GetReady.h"
 #include"../Memory.h"
 #include"../../utils.hpp"
 #include"../../Data/offsets.hpp"
 
 extern Utils utils;
 extern Memory memory;
-std::vector<byte> GetReday::getFunctionBytes()
+std::vector<byte> GetReady::getFunctionBytes()
 {
     static std::vector<byte> ASM_mov_rax = { 0x48, 0xB8 };
     static std::vector<byte> ASM_mov_rcx = { 0x48, 0xB9 };

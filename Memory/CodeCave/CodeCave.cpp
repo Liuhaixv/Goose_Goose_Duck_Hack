@@ -1,7 +1,23 @@
 ﻿#include "CodeCave.h"
 #include"../Memory/Memory.h"
+#include "CompleteOneTask.h"
+#include "GetReady.h"
+#include"../../utils.hpp"
 
 extern Memory memory;
+extern Utils utils;
+
+std::vector<byte> checkIfShouldCall(int staticFieldIndex) {
+    return utils.combineVectors({
+        //TODO
+        //mov rax, rbx
+        std::vector<byte>{0x48, 0x8B, 0xC3},
+        //add rax, staticFieldIndex * 0x10
+        {0x48, 0x05}, utils.addressToLittleEndianBytes(staticFieldIndex * 0x10),
+
+        });
+}
+
 void CodeCave::StaticField::flushUpdatedIntoMemory()
 {
     memory.write_bytes(this->codeCave->staticFieldEntry, this->staticFieldBytes.get(), this->staticFieldSize);
@@ -10,6 +26,9 @@ void CodeCave::StaticField::flushUpdatedIntoMemory()
 std::vector<byte> CodeCave::buildCodeCave()
 {
     std::vector<byte> result;
+
+    CompleteOneTask completeOneTask;
+    GetReady getReady;
 
     std::vector<byte> beginBytes = {
         //push rbx
@@ -22,7 +41,7 @@ std::vector<byte> CodeCave::buildCodeCave()
 
     };
 
-        //TODO: 添加各个要执行的函数，以及执行前的判断
+     //TODO: 添加各个要执行的函数，以及执行前的判断
 
 
         //

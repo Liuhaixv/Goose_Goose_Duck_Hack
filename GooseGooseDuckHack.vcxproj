@@ -201,11 +201,11 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Memory\CodeCave\GetReday.cpp" />
+    <ClCompile Include="Memory\CodeCave\GetReady.cpp" />
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
-    <ClInclude Include="Memory\CodeCave\GetReday.h" />
+    <ClInclude Include="Memory\CodeCave\GetReady.h" />
     <ClInclude Include="Memory\CodeCave\CompleteOneTask.h" />
     <ClInclude Include="Memory\CodeCave\CallableFunction.h" />
     <ClInclude Include="Class\Hack.hpp" />
@@ -228,8 +228,6 @@
     <ClCompile Include="Class\Updater.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CheatSheet\关于反作弊.txt" />
-    <Text Include="CheatSheet\trash.txt" />
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
@@ -284,7 +282,6 @@
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
     <ClInclude Include="Memory\Memory.h" />
-    <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

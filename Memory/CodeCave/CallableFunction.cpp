@@ -2,9 +2,10 @@
 #include"../Memory.h"
 
 extern Memory memory;
-CallableFunction::CallableFunction ()
+
+void CallableFunction::call()
 {
-    
+    //TODO
 }
 
 void CallableFunction::allocateMemory()
