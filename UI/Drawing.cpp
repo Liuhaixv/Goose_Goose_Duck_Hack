@@ -14,7 +14,7 @@
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
-ImVec2 Drawing::vWindowSize = { 500, 500 };
+ImVec2 Drawing::vWindowSize = { 900,500 };
 ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize;
 //bool Drawing::bDraw = true;
 
@@ -708,8 +708,14 @@ void drawMenu() {
                     ImGui::Text(str("Version:", "版本："));
                     ImGui::SameLine();
 
+
+                    static time_t lastTimeClickCheckVersions = -1;
+
                     //点击版本按钮
                     if (ImGui::Button(hackSettings.guiSettings.hackVersion.c_str())) {
+
+                        time(&lastTimeClickCheckVersions);
+
                         //TODO: 检查更新
                         ImGui::OpenPopup("check version");
                         //手动更新一次
@@ -720,6 +726,8 @@ void drawMenu() {
                         if (ImGui::BeginTable("check_version_table", 2,
                             ImGuiTableFlags_SizingFixedFit /* | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg*/
                         )) {
+
+
                             ImGui::TableNextRow();
                             ImGui::TableNextColumn();
                             //辅助版本
@@ -736,8 +744,6 @@ void drawMenu() {
                             ImGui::TextDisabled(hackSettings.guiSettings.gameVersion.c_str());
 
                             ImGui::TableNextRow();
-
-                            ImGui::TableNextRow();
                             ImGui::TableNextColumn();
                             //最新辅助版本
                             ImGui::Text(str("Latest hack version:", "最新辅助版本:"));
@@ -747,9 +753,36 @@ void drawMenu() {
                                 Spinner("latest_hack_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
                             }
                             else {
-                                ImGui::TextDisabled("%s%s",
-                                    "v",
-                                    hackSettings.latestVersions.latestHackVersion);
+                                //显示数据
+                                if (time(NULL) - lastTimeClickCheckVersions < 2) {
+                                    //如果动画没有播放到指定时长仍显示加载动画
+                                    //显示加载动画
+                                    Spinner("latest_hack_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+                                }
+                                else {
+                                    ImGui::TextDisabled("%s%s",
+                                        "",
+                                        hackSettings.latestVersions.latestHackVersion);
+                                }                                                
+                            }
+
+                            //提示是否是最新版本,下载最新版本
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+
+                            //有服务器版本信息
+                            if (hackSettings.latestVersions.hasUpdatedLatestVersions()) {
+                                //
+                                if (utils.isLatestHackVersion(hackSettings.guiSettings.hackVersion, hackSettings.latestVersions.latestHackVersion)) {
+                                    ImGui::TextColored(ImColor(0, 255, 0), str("Up to date Version", "已是最新版本!"));
+                                }
+                                else {
+                                    ImGui::TextColored(ImColor(255, 255, 0),str("Update available","新版本已可用"));
+                                    ImGui::TableNextColumn();
+                                    if (ImGui::Button(str("Download##latest_hack", "下载##最新版本"))) {
+                                        ShellExecute(0, 0, hackSettings.latestVersions.url.c_str(), 0, 0, SW_SHOW);
+                                    }
+                                }
                             }
 
                             ImGui::EndTable();
@@ -1039,7 +1072,7 @@ void drawMenu() {
                 ImGui::TableNextRow();
                 ImGui::TableNextColumn();
 
-                ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
+                ImGui::Text(str("Delayed time for completing tasks", "开局延迟自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
                 ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
 
                 ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
