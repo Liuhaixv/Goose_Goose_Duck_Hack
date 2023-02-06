@@ -37,11 +37,12 @@
 1. 按住`左ALT键`穿墙
 2. 调节移动速度
 3. 技能无冷却
-4. **[新]**  自动完成任务
-5. **[新]**  自动准备
-6. **[新]** 支持游戏开局后延迟完成任务
-7. **[新]**  反挂机检测
-8. **[新]**  地图视野缩放
+4. 自动完成任务
+5. 自动准备
+6. 支持游戏开局后延迟完成任务
+7. **[新]** 支持自定义自动完成任务的时间间隔
+8. 反挂机检测
+9. 地图视野缩放
 
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
@@ -92,11 +93,12 @@ Fixing bugs
 1. Keep pressing `Left ALT key` to do noclip, which makes you able to walk through doors and walls.
 2. Movement speed hack
 3. Remove skill's cooldown
-4. **[New]**  Auto complete all tasks
-5. **[New]**  Auto ready
-6. **[New]**  Allow delay for completing all tasks
-7. **[New]**  Anti idle kick
-8. **[New]**  Zoom hack
+4. Auto complete all tasks
+5. Auto ready
+6. Allow delay for completing all tasks
+7. Allow min interval for completing tasks
+8. Anti idle kick
+9. Zoom hack
     
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/disable_noclip.gif" alt="drawing" width="400"/><span/>
 <span><img src="https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/enable_noclip.gif" alt="drawing" width="400"/><span/>
