@@ -4,7 +4,7 @@ class CompleteOneTask :    public CallableFunction
 {
 public:
     CompleteOneTask() {
-        this->allocateMemory();
+        allocateMemory();
     }
 private:
     std::vector<byte> getFunctionBytes();

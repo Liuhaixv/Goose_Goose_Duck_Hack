@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 
+#undef byte
 typedef unsigned char byte;
 
 class CallableFunction
@@ -13,11 +14,13 @@ public:
 
     }
 
+    bool init();
+
+    void call();
+
     int64_t getEntryAddress() {
         return this->entryAddress;
     }
-
-    void call();
 
 protected:
     //申请内存并写入字节数组

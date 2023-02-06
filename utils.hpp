@@ -123,6 +123,22 @@ public:
         return bytes;
     }
 
+    /// <summary>
+    /// 转换4字节地址为小端字节数组
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    std::vector<byte> addressToLittleEndianBytes(IN const int32_t& address) {
+        std::vector<byte> bytes = {
+            (byte)((address & 0x000000ff) >> 0),
+            (byte)((address & 0x0000ff00) >> 8),
+            (byte)((address & 0x00ff0000) >> 16),
+            (byte)((address & 0xff000000) >> 24)
+        };
+
+        return bytes;
+    }
+
     template<typename var>
     std::vector<var> combineVectors(IN std::initializer_list<std::vector<var>> vectors) {
         std::vector<var> result;

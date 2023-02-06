@@ -4,7 +4,7 @@ class GetReady : public CallableFunction
 {
 public:
     GetReady() {
-        this->allocateMemory();
+        allocateMemory();
     }
 
 private:
