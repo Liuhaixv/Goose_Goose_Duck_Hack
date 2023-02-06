@@ -128,6 +128,11 @@ public:
     /// </summary>
     bool allocExecutableMemory(IN SIZE_T size,OUT int64_t* address);
 
+    /// <summary>
+    /// 释放申请的内存
+    /// </summary>
+    void FreeMemory(int64_t address);
+
 private:
     //保存GameAssembly的所有字节
     std::unique_ptr<byte[]> gameAssemblyDLLData;

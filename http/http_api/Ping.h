@@ -9,5 +9,9 @@ public:
     }
 
 private:
+#if defined(DEVELOP)
     const std::string path = "/ping";
+#else
+    const std::string path = "/ggd/getVersions";
+#endif
 };

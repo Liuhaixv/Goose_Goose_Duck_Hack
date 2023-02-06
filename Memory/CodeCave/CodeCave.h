@@ -6,7 +6,15 @@
 #include "GetReady.h"
 #include "../CallHook.h"
 
+#undef byte
 typedef unsigned char byte;
+
+struct CodeCaveStaticFieldData {
+    int64_t i_AutoCompleteTasks = 0;
+    int64_t gap0 = 0;
+    int64_t i_GetReady = 0;
+    int64_t gap1;
+};
 
 /// <summary>
 /// CodeCave只维护要执行的逻辑，以及由于hook覆盖的源字节数组，不维护具体hook的位置，并且执行完后会直接ret
@@ -61,18 +69,18 @@ public:
             this->codeCave = codeCave;
         }
         //将更新过的静态区写入CodeCave
-        void flushUpdatedIntoMemory();
+        void writeField(int _FunctionOrder, int data);
 
+        /*
         template <typename var>
         void setField(int index, var value) {
             byte* bytes = this->staticFieldBytes.get();
             *(var*)(bytes + (index * 0x10)) = value;
         }
+        */
+
     private:
         CodeCave* codeCave;
-
-        //静态区
-        std::unique_ptr<byte[]> staticFieldBytes = std::make_unique<byte[]>(staticFieldSize);
     };
 
     CodeCave() : staticField(this) {
@@ -80,7 +88,7 @@ public:
     }
 
     //TODO:
-    //~CodeCave();
+    ~CodeCave();
 
     int64_t staticFieldEntry = NULL;
     int64_t codeEntry = NULL;
@@ -91,7 +99,7 @@ public:
     /// 构建代码洞穴
     /// </summary>
     /// <returns></returns>
-    std::vector<byte> buildCodeCave(CallHook* callHook);
+    bool buildCodeCave(CallHook* callHook);
 
 private:
 
@@ -101,4 +109,8 @@ private:
     std::vector<CallableFunction*> callableFunctions;
 };
 
+enum FunctionOrder {
+    Fn_CompleteOneTask,
+    Fn_GetReady
+};
 

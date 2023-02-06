@@ -28,6 +28,8 @@ extern MemoryUpdater memoryUpdater;
 extern HttpDataUpdater httpDataUpdater;
 
 extern std::vector<Updater*> updaters;
+
+extern CodeCave codeCave;
 //Public
 
 void Memory::reset() {
@@ -121,6 +123,9 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
         new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
 
         new(&httpDataUpdater) HttpDataUpdater();
+
+        codeCave.~CodeCave();
+        new(&codeCave) CodeCave();
 
         //恢复写入 
         this->resumeWriteToMemory();
@@ -292,6 +297,17 @@ bool Memory::allocExecutableMemory(IN SIZE_T size, OUT int64_t* address) {
     }
 
     return true;
+}
+
+void Memory::FreeMemory(int64_t address)
+{
+    if (this->processHandle == NULL) {
+        return;
+    }
+    VirtualFreeEx(this->processHandle,
+        (LPVOID)address,
+        0,
+        MEM_RELEASE);
 }
 
 //Private

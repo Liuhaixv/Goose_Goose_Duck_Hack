@@ -735,13 +735,8 @@ void drawMenu() {
                             ImGui::TableNextColumn();
                             ImGui::TextDisabled(hackSettings.guiSettings.gameVersion.c_str());
 
-                            ImGui::EndTable();
-                        }
-                        ImGui::NewLine();
+                            ImGui::TableNextRow();
 
-                        if (ImGui::BeginTable("check_server_versions_table", 2,
-                            ImGuiTableFlags_SizingFixedFit /* | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg*/
-                        )) {
                             ImGui::TableNextRow();
                             ImGui::TableNextColumn();
                             //最新辅助版本
@@ -749,33 +744,16 @@ void drawMenu() {
                             ImGui::TableNextColumn();
                             if (!hackSettings.latestVersions.hasUpdatedLatestVersions()) {
                                 //显示加载动画
-                                Spinner("latest_hack_version_spinner", 10.0f, 2.0f,ImColor(0,255,0));
+                                Spinner("latest_hack_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
                             }
                             else {
                                 ImGui::TextDisabled("%s%s",
                                     "v",
                                     hackSettings.latestVersions.latestHackVersion);
-                            }                            
-
-                            ImGui::TableNextRow();
-                            ImGui::TableNextColumn();
-                            //最新游戏版本
-                            ImGui::Text(str("Latest game version:", "最新游戏版本:"));
-                            ImGui::TableNextColumn();
-                            if (!hackSettings.latestVersions.hasUpdatedLatestVersions()) {
-                                //显示加载动画
-                                Spinner("latest_game_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
-                            }
-                            else {
-                                ImGui::TextDisabled("%s%s",
-                                    "v",
-                                    hackSettings.latestVersions.latestGameVersion);
                             }
 
                             ImGui::EndTable();
-                        }
-                        //服务器返回的版本信息
-
+                        }                
 
                         ImGui::EndPopup();
                     }

@@ -52,7 +52,40 @@ void HttpDataUpdater::httpDataUpdaterThread() {
 }
 
 //private
+bool getVersionsJson(IN std::string str, OUT JsonStruct::LatestVersionsJson* latestVersions) {
+    std::cout << str << std::endl;
 
+    json jsonStr;
+    json latestVersionJson;
+
+    try {
+        jsonStr = json::parse(str);
+        if (!jsonStr.contains("success") || !jsonStr.contains("data") || jsonStr["success"] != true) {
+            std::cout << "Parse json failed!!";
+            return false;
+        }
+
+        latestVersionJson = jsonStr["data"];
+    }
+    catch (...) {
+        std::cout << "Parse json failed!!";
+        return false;
+    }
+
+    try {
+        latestVersions->update(latestVersionJson.get<JsonStruct::LatestVersionsJson>());
+    }
+    catch (...) {
+        std::cout << "Parse json failed!!";
+        return false;
+    }
+
+    return true;
+    /*
+    std::cout << "HackVersion:" << latestVersions.latestHackVersion << std::endl;
+    std::cout << "Url:" << latestVersions.url << std::endl;
+    */
+}
 
 namespace HttpTask {
 
@@ -73,7 +106,7 @@ namespace HttpTask {
         }
 
         PingApi pingApi;
-        httplib::Client cli(pingApi.domain, pingApi.port);
+        httplib::Client cli(pingApi.domain);
 
         try {
             httplib::Result res = cli.Get(pingApi.getPath());
@@ -85,6 +118,8 @@ namespace HttpTask {
             if (res->status == 200) {
                 //success
                 hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::NORMAL;
+
+                getVersionsJson(res->body, &hackSettings.latestVersions);
                 //checkBan
                 //TODO
                 // 
@@ -126,9 +161,10 @@ namespace HttpTask {
 
         static GetVersionsApi getVersionsApi;
 
-        httplib::Client cli(getVersionsApi.domain, getVersionsApi.port);
+        httplib::Client cli(getVersionsApi.domain);
 
         try {
+            //
             auto res = cli.Get(getVersionsApi.getPath());
 
             if (res.error() != httplib::Error::Success) {
@@ -136,22 +172,26 @@ namespace HttpTask {
             }
 
             if (res->status == 200) {
-                //更新服务器状态
-                hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::NORMAL;
 
-                JsonStruct::LatestVersionsJson latestVersions = nlohmann::json::parse(res->body).get<JsonStruct::LatestVersionsJson>();
+                //success
+                if (!getVersionsJson(res->body, &hackSettings.latestVersions)) {
+                    hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::UNKNOWN;
+                }
+                else {
+                    //更新服务器状态
+                    hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::NORMAL;
+                }
 
-                //睡眠1.5秒观看加载动画
-                Sleep(1200);
-                hackSettings.latestVersions.update(latestVersions);
-
+                //睡眠1秒观看加载动画
+                //Sleep(1000);
             }
             else {
                 return;
-            }
+            }           
         }
         catch (...) {
             hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;
         }
     }
 }
+

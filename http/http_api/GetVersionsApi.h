@@ -8,5 +8,9 @@ public:
         return this->path;
     }
 private:
+#if defined(DEVELOP)
      const std::string path= "/getVersions";
+#else
+    const std::string path = "/ggd/getVersions";
+#endif
 };

@@ -30,6 +30,11 @@ bool CallHook::hook()
         0xFF, 0xD0
     };
 
+    for (int i = CallHook::coveredBytes; i < this->rawBytes.size(); i++) {
+        //补全nop
+        this->hookedBytes.push_back(0x90);//nop
+    }
+
     *(int64_t*)(&hookedBytes[0] + 2) = this->callAddress;
 
     memory.write_bytes(this->hookEntry, hookedBytes);

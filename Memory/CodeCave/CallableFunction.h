@@ -14,6 +14,8 @@ public:
 
     }
 
+    ~CallableFunction();
+
     bool init();
 
     void call();

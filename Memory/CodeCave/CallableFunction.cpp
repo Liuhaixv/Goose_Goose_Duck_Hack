@@ -3,6 +3,14 @@
 
 extern Memory memory;
 
+CallableFunction::~CallableFunction()
+{
+    if (this->entryAddress != NULL) {
+        memory.FreeMemory(this->entryAddress);
+        this->entryAddress = NULL;
+    }
+}
+
 bool CallableFunction::init()
 {
     if (memory.processHandle == NULL) {
