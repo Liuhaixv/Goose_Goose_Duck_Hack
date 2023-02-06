@@ -32,8 +32,8 @@ struct GuiSettings {
     //战争迷雾
     bool b_disableFogOfWar = false;
 
-    //自动完成任务
-    bool b_autoCompleteTasks_and_autoReady = false;
+    //自动完成任务 & 自动准备
+    bool b_enable_autoTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
     float f_delayedEnableTime = 0.0f;//延时自动做任务
