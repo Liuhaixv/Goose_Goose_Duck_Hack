@@ -177,6 +177,9 @@ public:
                 else {
                     if (this->localPlayer_update_hook.b_hasHooked) {
                         this->localPlayer_update_hook.unhook();
+
+                        this->b_has_hooked_autoCompleteTasks = false;
+                        this->b_has_hooked_autoReady = false;
                     }
                 }
                 /*
@@ -256,6 +259,7 @@ private:
         if (!enableHook) {
             if (this->b_has_hooked_autoCompleteTasks) {
                 this->localPlayer_update_hook.unhook();
+                this->b_has_hooked_autoCompleteTasks = false;
             }
             return;
         }
@@ -287,6 +291,7 @@ private:
         if (!enableHook) {
             if (this->b_has_hooked_autoReady) {
                 this->localPlayer_update_hook.unhook();
+                this->b_has_hooked_autoReady = false;
             }
             return;
         }
