@@ -261,16 +261,15 @@ private:
             if (g_client.inGameScene()) {
                 //尚未准备
                 if (!g_client.localPlayerReadied()) {
-                    if (!this->b_has_hooked_autoReady) {
-                        do_autoReady();
-                    }
+                    do_autoReady();                    
                 }
+                /*
                 //已经准备
                 else {
                     if (this->localPlayer_update_hook.b_hasHooked) {
                         unhook_LocalPlayer_Update();
                     }
-                }
+                }*/
             }
         }
         else {

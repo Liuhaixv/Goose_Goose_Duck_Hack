@@ -8,11 +8,11 @@ extern Memory memory;
 extern Utils utils;
 
 std::vector<byte> checkIfShouldCall(int staticFieldIndex, int64_t functionAddress) {
-    const int size = 27;
+    const int size = 31;
     byte bytesJE[size] = {
-        //cmp cmp [rbx+1000], 0
+        //cmp cmp [rbx+0], 0
         0x83, 0xBB, 0,0,0,0, 0x00,
-        //je +10
+        //je +12
         0x74, 0x12,
         //mov eax, [rbx]
         0x8B, 0x03,
@@ -23,10 +23,12 @@ std::vector<byte> checkIfShouldCall(int staticFieldIndex, int64_t functionAddres
         //mov rax, 0x0000000000000000
         0x48, 0xB8 ,0,0,0,0,0,0,0,0,
         //call rax
-        0xFF,0xD0
+        0xFF,0xD0,
+        //add rbx, 0x10
+        0x48, 0x83, 0xC3, 0x10,
     };
 
-    *(int32_t*)(bytesJE + 2) = staticFieldIndex * 10;
+    //*(int32_t*)(bytesJE + 2) = staticFieldIndex * 0x10;
     *(int64_t*)(bytesJE + 17) = functionAddress;
 
     return std::vector<byte>(bytesJE, bytesJE + size);
