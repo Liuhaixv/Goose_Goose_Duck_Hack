@@ -31,6 +31,7 @@
 //UI
 #include "./UI/UI.h"
 #include "Class/HttpDataUpdater.h"
+#include "Memory/CodeCave/CodeCave.h"
 
 
 Utils utils;
@@ -59,6 +60,8 @@ MemoryUpdater memoryUpdater(&g_client, &hackSettings);
 HttpDataUpdater httpDataUpdater;
 
 std::vector<Updater*> updaters;
+
+CodeCave codeCave;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {

@@ -73,6 +73,9 @@ public:
 
     }
 
+    //TODO:
+    ~CodeCave();
+
     int64_t staticFieldEntry = NULL;
     int64_t codeEntry = NULL;
 

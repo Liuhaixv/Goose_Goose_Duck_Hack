@@ -37,6 +37,7 @@ struct GuiSettings {
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
     float f_delayedEnableTime = 0.0f;//延时自动做任务
+    float f_minInterval = 1.0f;//TODO
 
     //反挂机踢出房间
     bool b_antiIdleKick = true;

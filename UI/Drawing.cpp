@@ -1054,14 +1054,33 @@ void drawMenu() {
 
             ImGui::BeginDisabled(!hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
 
-            ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
-            ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
-            ImGui::SameLine(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
-            ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+            if (ImGui::BeginTable("float_settings_for_autoTasks", 2,
+                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+            ))
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+
+                ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
+                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
+                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+
+                ImGui::Text(str("Interval between tasks", "最小间隔时间")); HelpMarker(str("Min interval between every completed task", "限制自动完成任务的间隔不小于?秒"));
+                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_minInterval", &hackSettings.guiSettings.f_minInterval, 10.0f, 15.0f, "%.0f");
+                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                ImGui::EndTable();
+            }
 
             //ImGui::NewLine();
-
-            
+                        
             ImGui::Checkbox(str("Auto Complete Tasks", "自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
             ImGui::Checkbox(str("Auto Ready", "自动准备"), &hackSettings.guiSettings.b_autoReady);
             ImGui::EndDisabled();
