@@ -1,11 +1,15 @@
 ﻿#pragma once
 
 #include <Windows.h>
+#include<memory>
 #include<string>
 #include <vector>
-#include "Enum/OpenProcessState.hpp"
 
-#include"Struct/HackSettings.hpp"
+#include "../Enum/OpenProcessState.hpp"
+
+#include"../Struct/HackSettings.hpp"
+
+#include"PatternScanner.h"
 
 extern HackSettings hackSettings;
 
@@ -16,6 +20,9 @@ public:
     DWORD pID = NULL;
     HANDLE processHandle = NULL;
     int64_t gameAssemblyBaseAddress = NULL;
+
+    //TODO
+    std::unique_ptr<PatternScanner> gameAssemblyPatternScanner;
 
     Memory() {
         searchGameProcessAndAttach();
@@ -54,7 +61,15 @@ public:
     }
     */
 
+    /// <summary>
+    /// 创建一个不带参数的远程线程
+    /// </summary>
+    /// <param name="address"></param>
+    bool createRemoteThread(int64_t address);
+
     bool write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum);
+
+    bool write_bytes(IN const int64_t address, IN std::vector<byte> bytes_vector);
 
     bool write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors);
 
@@ -106,12 +121,26 @@ public:
 
     int64_t FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offsets);
 
+    auto FindPattern(std::vector<byte> Pattern) const->int64_t;
+
     /// <summary>
     /// 申请可执行内存
     /// </summary>
-    bool allocExecutableMemory(SIZE_T size, int64_t* address);
+    bool allocExecutableMemory(IN SIZE_T size,OUT int64_t* address);
+
+    /// <summary>
+    /// 释放申请的内存
+    /// </summary>
+    void FreeMemory(int64_t address);
 
 private:
+    //保存GameAssembly的所有字节
+    std::unique_ptr<byte[]> gameAssemblyDLLData;
+    //GameAssembly的字节数
+    const int64_t* gameAssemblyDLLDataSize;
+
+    //读取GameAssembly的所有字节
+    bool readModuleBytes(IN const char* moduleName, OUT std::unique_ptr<byte[]> data, OUT int64_t* size);
 
     /// <summary>
     /// 暂停程序写入内存

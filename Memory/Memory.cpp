@@ -4,16 +4,17 @@
 #include <iostream>
 #include <tchar.h> // _tcscmp
 
-#include"utils.hpp"
+#include"../utils.hpp"
 
 #include <initializer_list>
-#include "Class/Hack.hpp"
-#include "Struct/UserSettings.hpp"
-#include "Class/HotkeyUpdater.hpp"
-#include "Class/BytesPatchUpdater.hpp"
-#include "Class/GameProcessUpdater.hpp"
-#include "Class/DataUpdater.hpp"
-#include "Client.h"
+#include "../Class/Hack.hpp"
+#include "../Struct/UserSettings.hpp"
+#include "../Class/HotkeyUpdater.hpp"
+#include "../Class/BytesPatchUpdater.hpp"
+#include "../Class/GameProcessUpdater.hpp"
+#include "../Class/DataUpdater.hpp"
+#include "../Client.h"
+#include "../Class/HttpDataUpdater.h"
 
 extern Utils utils;
 extern Hack hack;
@@ -24,8 +25,11 @@ extern HotkeyUpdater hotkeyUpdater;
 extern DataUpdater dataUpdater;
 extern BytesPatchUpdater bytesUpdater;
 extern MemoryUpdater memoryUpdater;
+extern HttpDataUpdater httpDataUpdater;
 
 extern std::vector<Updater*> updaters;
+
+extern CodeCave codeCave;
 //Public
 
 void Memory::reset() {
@@ -118,11 +122,45 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
 
         new(&memoryUpdater) MemoryUpdater(&g_client, &hackSettings);
 
+        new(&httpDataUpdater) HttpDataUpdater();
+
+        codeCave.~CodeCave();
+        new(&codeCave) CodeCave();
+
         //恢复写入 
         this->resumeWriteToMemory();
     }
 
     return OpenProcessState::GameFoundAndLoadedDLL;
+}
+
+bool Memory::createRemoteThread(int64_t address)
+{
+    LPVOID lpParameter = NULL;
+
+    /*
+    * //在远程进程中申请空间并写入参数
+    lpParameter = (LPVOID)VirtualAllocEx(Proc, NULL, strlen(dll), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+    
+    WriteProcessMemory(Proc, (LPVOID)lpParameter, dll, strlen(dll), NULL);
+
+    */
+
+    //http://www.rohitab.com/discuss/topic/31453-cc-createremotethreadex
+    /*
+    * hThr = CreateRemoteThreadEx(hProcess, NULL, 0,
+                                (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("user32.dll"), "MessageBoxA"),
+                                0, NULL,
+                                "%x%s%8d%x",
+                                NULL, "Hello world", "Caption", MB_ICONEXCLAMATION | MB_YESNOCANCEL)
+      Easy as that. The fifth last parameter is format (like in printf/scanf) that specifies type of arguments. %x, %d, %u for DWORD, %s for string and %[num]d for data.
+      The format in previous example could've been "%x%s%s%x", but I wanted to demonstrate how to use the %d specifier.
+    */
+    auto thread = CreateRemoteThread(this->processHandle, NULL, 0, (LPTHREAD_START_ROUTINE)address,
+        lpParameter,
+        0, NULL);
+
+    return true;
 }
 
 bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN const int bytesNum) {
@@ -134,6 +172,10 @@ bool Memory::write_bytes(IN const int64_t address, IN const byte* bytes, IN cons
         bytes,
         bytesNum,
         NULL);
+}
+
+bool Memory::write_bytes(IN const int64_t address, IN std::vector<byte> bytes_vector) {
+    return write_bytes(address, { bytes_vector });
 }
 
 bool Memory::write_bytes(IN const int64_t address, IN std::initializer_list<std::vector<byte>> bytes_vectors) {
@@ -231,7 +273,8 @@ int64_t Memory::FindPointer(IN int64_t baseAddress, IN std::vector<int64_t> offs
     return Address;
 }
 
-bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
+
+bool Memory::allocExecutableMemory(IN SIZE_T size, OUT int64_t* address) {
     if (this->processHandle == NULL) {
         return false;
     }
@@ -256,7 +299,42 @@ bool Memory::allocExecutableMemory(SIZE_T size, int64_t* address) {
     return true;
 }
 
+void Memory::FreeMemory(int64_t address)
+{
+    if (this->processHandle == NULL) {
+        return;
+    }
+    VirtualFreeEx(this->processHandle,
+        (LPVOID)address,
+        0,
+        MEM_RELEASE);
+}
+
 //Private
+
+//TODO: test
+bool Memory::readModuleBytes(IN const char* moduleName, OUT std::unique_ptr<byte[]> data, OUT int64_t* size)
+{
+    if (this->pID == NULL || this->processHandle == NULL) {
+        return false;
+    }
+
+    data = std::make_unique< BYTE[] >(*size);
+
+    auto BytesRead{ SIZE_T() };
+
+    if (!ReadProcessMemory(this->processHandle,
+        (LPCVOID)GetModuleBaseAddress((TCHAR*)moduleName, this->pID),
+        data.get(),
+        *size,
+        &BytesRead) || BytesRead != *size)
+    {
+        memset(&data, 0, *size);
+        return false;
+    }
+
+    return true;
+}
 
 void Memory::pauseWriteToMemory() {
     hackSettings.b_debug_disableWriteMemory = true;

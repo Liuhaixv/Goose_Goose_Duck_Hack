@@ -1,7 +1,11 @@
 ﻿#pragma once
+#include <string>
 struct GuiSettings {
     //辅助程序版本
-    const char* version = "v0.7.1.3.2";
+    const std::string hackVersion = "0.7.1.5.1";
+    //TODO：通过signature获取
+    //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
+    const std::string gameVersion = "2.16.02";
 
     //全局开关
     bool b_draw = true;
@@ -28,15 +32,19 @@ struct GuiSettings {
     //战争迷雾
     bool b_disableFogOfWar = false;
 
-    //自动完成任务
-    bool b_autoCompleteTasks_and_autoReady = false;
+    //自动完成任务 & 自动准备
+    bool b_enable_autoTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
     float f_delayedEnableTime = 0.0f;//延时自动做任务
+    float f_minInterval = 1.0f;//TODO
 
     //反挂机踢出房间
     bool b_antiIdleKick = true;
 
     //debugmode
     bool b_debug = false;
+
+    //bypass ban
+    bool b_bypassNormalBan = false;
 };

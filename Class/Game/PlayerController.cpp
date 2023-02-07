@@ -213,10 +213,6 @@ bool PlayerController::update(IN int64_t address)
     return update();
 }
 
-std::vector<PlayerController*> PlayerController::getPlayersNearby()
-{
-}
-
 // 检查该地址是PlayerController实例
 bool PlayerController::validateAddress(IN int64_t address)
 {

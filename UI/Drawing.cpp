@@ -1,18 +1,20 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
-#include "../memory.h"
+#include "../Memory/memory.h"
 #include "../Client.h"
 #include "../Struct/UserSettings.hpp"
 #include <sstream>
 #include "../Class/Game/string.hpp"
 #include<algorithm>
+
+#include"../Class/HttpDataUpdater.h"
 //#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
 LPCSTR Drawing::lpWindowName = "ImGui Standalone";
-ImVec2 Drawing::vWindowSize = { 500, 500 };
+ImVec2 Drawing::vWindowSize = { 900,500 };
 ImGuiWindowFlags Drawing::WindowFlags = /*ImGuiWindowFlags_NoSavedSettings |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize;
 //bool Drawing::bDraw = true;
 
@@ -22,6 +24,7 @@ extern Client g_client;
 extern Memory memory;
 
 extern UserSettings userSettings;
+extern HttpDataUpdater httpDataUpdater;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
@@ -73,6 +76,50 @@ void Drawing::Draw() {
     }
 }
 
+/// <summary>
+/// 旋转圆圈动画
+/// </summary>
+/// <param name="label"></param>
+/// <param name="radius"></param>
+/// <param name="thickness"></param>
+/// <param name="color"></param>
+/// <returns></returns>
+bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+    const ImGuiID id = window->GetID(label);
+
+    ImVec2 pos = window->DC.CursorPos;
+    ImVec2 size((radius) * 2, (radius + style.FramePadding.y) * 2);
+
+    const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+    ImGui::ItemSize(bb, style.FramePadding.y);
+    if (!ImGui::ItemAdd(bb, id))
+        return false;
+
+    // Render
+    window->DrawList->PathClear();
+
+    int num_segments = 30;
+    int start = abs(ImSin(g.Time * 1.8f) * (num_segments - 5));
+
+    const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
+    const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
+
+    const ImVec2 centre = ImVec2(pos.x + radius, pos.y + radius + style.FramePadding.y);
+
+    for (int i = 0; i < num_segments; i++) {
+        const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
+        window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a + g.Time * 8) * radius,
+            centre.y + ImSin(a + g.Time * 8) * radius));
+    }
+
+    window->DrawList->PathStroke(color, false, thickness);
+}
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
@@ -654,13 +701,119 @@ void drawMenu() {
                     ImGui::TextDisabled(str("Not Running", "未运行"));
                 }
 
-                //昵称颜色
-                ImGui::TableNextColumn();
                 //版本
-                ImGui::Text(str("Version:", "版本："));
-                ImGui::SameLine();
-                ImGui::Text(hackSettings.guiSettings.version);
-                ImGui::SameLine();
+                {
+                    ImGui::TableNextColumn();
+
+                    ImGui::Text(str("Version:", "版本："));
+                    ImGui::SameLine();
+
+
+                    static time_t lastTimeClickCheckVersions = -1;
+
+                    //点击版本按钮
+                    if (ImGui::Button(hackSettings.guiSettings.hackVersion.c_str())) {
+
+                        time(&lastTimeClickCheckVersions);
+
+                        //TODO: 检查更新
+                        ImGui::OpenPopup("check version");
+                        //手动更新一次
+                        httpDataUpdater.addHttpTask(std::bind(HttpTask::checkLatestVersions, 1));
+                    }
+                    //TODO: 检查更新
+                    if (ImGui::BeginPopup("check version")) {
+                        if (ImGui::BeginTable("check_version_table", 2,
+                            ImGuiTableFlags_SizingFixedFit /* | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg*/
+                        )) {
+
+
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //辅助版本
+                            //TODO: 判断版本是否有更新，标红提示
+                            ImGui::Text(str("Current hack version:", "当前辅助版本:"));
+                            ImGui::TableNextColumn();
+                            ImGui::TextDisabled(hackSettings.guiSettings.hackVersion.c_str());
+
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //适配游戏版本
+                            ImGui::Text(str("Works on game version:", "适配的游戏版本:"));
+                            ImGui::TableNextColumn();
+                            ImGui::TextDisabled(hackSettings.guiSettings.gameVersion.c_str());
+
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+                            //最新辅助版本
+                            ImGui::Text(str("Latest hack version:", "最新辅助版本:"));
+                            ImGui::TableNextColumn();
+                            if (!hackSettings.latestVersions.hasUpdatedLatestVersions()) {
+                                //显示加载动画
+                                Spinner("latest_hack_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+                            }
+                            else {
+                                //显示数据
+                                if (time(NULL) - lastTimeClickCheckVersions < 2) {
+                                    //如果动画没有播放到指定时长仍显示加载动画
+                                    //显示加载动画
+                                    Spinner("latest_hack_version_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+                                }
+                                else {
+                                    ImGui::TextDisabled("%s%s",
+                                        "",
+                                        hackSettings.latestVersions.latestHackVersion);
+                                }                                                
+                            }
+
+                            //提示是否是最新版本,下载最新版本
+                            ImGui::TableNextRow();
+                            ImGui::TableNextColumn();
+
+                            //有服务器版本信息
+                            if (hackSettings.latestVersions.hasUpdatedLatestVersions()) {
+                                //
+                                if (utils.isLatestHackVersion(hackSettings.guiSettings.hackVersion, hackSettings.latestVersions.latestHackVersion)) {
+                                    ImGui::TextColored(ImColor(0, 255, 0), str("Up to date Version", "已是最新版本!"));
+                                }
+                                else {
+                                    ImGui::TextColored(ImColor(255, 255, 0),str("Update available","新版本已可用"));
+                                    ImGui::TableNextColumn();
+                                    if (ImGui::Button(str("Download##latest_hack", "下载##最新版本"))) {
+                                        ShellExecute(0, 0, hackSettings.latestVersions.url.c_str(), 0, 0, SW_SHOW);
+                                    }
+                                }
+                            }
+
+                            ImGui::EndTable();
+                        }                
+
+                        ImGui::EndPopup();
+                    }
+
+                    ImGui::SameLine();
+
+                    //未连接远程服务器
+                    if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::DOWN) {
+                        //红色
+                        ImGui::TextColored(ImColor(255, 0, 0), str("Connection Failed", "连接失败"));
+                    }
+                    else if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::NORMAL) {
+                        ImGui::TextColored(ImColor(0, 255, 0), str("Connected", "已连接"));
+                    }
+                    else if (hackSettings.remoteServerSettings.serverState == RemoteMasterServerState::UNKNOWN) {
+                        ImGui::TextDisabled(str("Unknown", "未知"));
+                    }
+                    else {
+                        ImGui::TextDisabled(str("Unknown", "未知"));
+                    }
+                    ImGui::SameLine();
+                    HelpMarker(str("Remote master server connection state\nClick version to check update", "远程主服务器连接状态"));
+
+                    //TODO:警告，当前版本不适配游戏
+                    //判断游戏版本是否匹配
+                    //TODO:
+                }
             }
             ImGui::EndTable();
         }
@@ -700,7 +853,10 @@ void drawMenu() {
                 minSpeed = 5.0f;
             }
 
+            //ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
+            HelpMarker(str("Notice: server - sided CD can not be removed", "注意：服务器端CD无法修改，如鸭子刀人CD"));
+            //::EndDisabled();
 
             ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
@@ -845,10 +1001,6 @@ void drawMenu() {
         //菜单3
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
-            ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
-            HelpMarker(
-                str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
-            );
             //TODO:失效
             //ImGui::BeginDisabled();
             ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
@@ -909,14 +1061,45 @@ void drawMenu() {
 
             ImGui::NewLine();
 
-            ImGui::Text(str("Delayed time for completing tasks", "开局延时自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
-            ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
-            ImGui::SameLine(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
-            ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+            ImGui::Checkbox(str("Enable##auto_tasks", "启用##auto_tasks"), &hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
 
-            ImGui::Checkbox(str("Auto Complete Tasks + Auto Ready", "自动完成任务+自动准备"), &hackSettings.guiSettings.b_autoCompleteTasks_and_autoReady);
-            ImGui::Checkbox(str("Auto Complete Tasks", "仅自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
-            ImGui::Checkbox(str("Auto Ready", "仅自动准备"), &hackSettings.guiSettings.b_autoReady);
+            ImGui::BeginDisabled(!hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
+
+            if (ImGui::BeginTable("float_settings_for_autoTasks", 2,
+                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+            ))
+            {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+
+                ImGui::Text(str("Delayed time for completing tasks", "开局延迟自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
+                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
+                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+
+                ImGui::Text(str("Interval between tasks", "最小间隔时间")); HelpMarker(str("Min interval between every completed task", "限制自动完成任务的间隔不小于?秒"));
+                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_minInterval", &hackSettings.guiSettings.f_minInterval, 10.0f, 15.0f, "%.0f");
+                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                ImGui::EndTable();
+            }
+
+            //ImGui::NewLine();
+                        
+            ImGui::Checkbox(str("Auto Complete Tasks", "自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
+            ImGui::Checkbox(str("Auto Ready", "自动准备"), &hackSettings.guiSettings.b_autoReady);
+            ImGui::EndDisabled();
+
+            //三个checkBox互斥
+            {
+
+            }
 
             /*无单独完成任务功能，暂时注释掉
             //显示所有任务
@@ -963,8 +1146,8 @@ void drawMenu() {
         if (ImGui::BeginTabItem(str("README", "说明")))
         {
             //显示版本信息
-            ImGui::Text(str("Version: ", "版本: ")); ImGui::SameLine(); ImGui::Text(hackSettings.guiSettings.version);
-            ImGui::Text(str("This an open-source project from Liuhaixv", "这是一个来自Liuhaixv的开源项目"));
+            ImGui::Text(str("Version: ", "版本: ")); ImGui::SameLine(); ImGui::Text(hackSettings.guiSettings.hackVersion.c_str());
+            ImGui::Text(str("This an free software from Liuhaixv", "这是一个来自Liuhaixv的免费项目"));
             ImGui::SameLine();
             if (ImGui::Button(str("Link to project", "查看项目"))) {
                 ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
@@ -988,38 +1171,57 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
-            //游戏进程ID
-            ImGui::Text(str("PID:", "PID: "));
-            ImGui::SameLine();
-
-            ImGui::Text("%d", memory.pID); ImGui::SameLine();
             //选择进程
-
-            static int selected_process = -1;
-            const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
-
-            //枚举所有游戏进程
-            if (ImGui::Button(str("Select Process", "选择进程"))) {
-                memory.searchGameProcess();
-                ImGui::OpenPopup("select_process_popup");
-            }
-            if (ImGui::BeginPopup("select_process_popup"))
             {
-                ImGui::Separator();
-                if (memory.pIDs.size() == 0) {
-                    //没有可用进程
-                    ImGui::Text(str("None", "无"));
+                //游戏进程ID
+                ImGui::Text(str("PID:", "PID: "));
+                ImGui::SameLine();
+
+                ImGui::Text("%d", memory.pID); ImGui::SameLine();
+
+                static int selected_process = -1;
+                const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
+
+                //枚举所有游戏进程
+                if (ImGui::Button(str("Select Process", "选择进程"))) {
+                    memory.searchGameProcess();
+                    ImGui::OpenPopup("select_process_popup");
                 }
-                else {
-                    for (int i = 0; i < memory.pIDs.size(); i++) {
-                        if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
-                            //附加到进程
-                            memory.attachToGameProcess(memory.pIDs[i]);
+                if (ImGui::BeginPopup("select_process_popup"))
+                {
+                    ImGui::Separator();
+                    if (memory.pIDs.size() == 0) {
+                        //没有可用进程
+                        ImGui::Text(str("None", "无"));
+                    }
+                    else {
+                        for (int i = 0; i < memory.pIDs.size(); i++) {
+                            if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
+                                //附加到进程
+                                memory.attachToGameProcess(memory.pIDs[i]);
+                            }
                         }
                     }
-                }
 
-                ImGui::EndPopup();
+                    ImGui::EndPopup();
+                }
+            }
+
+            //反封禁
+            {
+                ImGui::Checkbox(str("Bypass Ban", "反封禁"), &hackSettings.guiSettings.b_bypassNormalBan);
+                HelpMarker(
+                    str("Allow you to play game with banned account", "获得可以使用被封禁的账号进行游戏的能力")
+                );
+            }
+
+            //反挂机
+            {
+                ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
+                HelpMarker(
+                    str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
+                );
+
             }
 
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
@@ -1033,28 +1235,42 @@ void drawMenu() {
                 ImGui::TextColored(test_color, str("Test color", "测试颜色"));
                 ImGui::ColorEdit3("Coloredit3_test", &test_color.Value.x, ImGuiColorEditFlags_NoInputs);
 
+
+                static std::stringstream ss;
                 //测试VirtualAllocEx
                 {
-
                     static int64_t allocatedAddress = 0x0;
-                    static std::stringstream s;
                     static std::string hexStringAddress;
 
-                    s.clear();
+                    ss.clear();
                     if (ImGui::Button(str("Allocate memory", "申请内存空间"))) {
                         allocatedAddress = (int64_t)VirtualAllocEx(memory.processHandle,
                             NULL,
                             0x1000,
                             MEM_COMMIT | MEM_RESERVE,
                             PAGE_EXECUTE_READWRITE);
-                        s << std::hex << allocatedAddress;
+                        ss << std::hex << allocatedAddress;
                         hexStringAddress.clear();
-                        s >> hexStringAddress;
+                        ss >> hexStringAddress;
                     }
                     auto a = NULL;
                     ImGui::Text("Allocated memory's base address: "); ImGui::SameLine();
                     ImGui::Text(hexStringAddress.c_str());
 
+                }
+
+                //测试createRemoteThread
+                {
+                    static char createRemoteThreadStartAddress[2+8*2];//0x????????????????
+                    static int64_t remoteThreadStartAddress = 0;
+                    ImGui::InputText("createRemoteThread", createRemoteThreadStartAddress, 2 + 8 * 2);
+                    if (ImGui::Button(str("Start thread", "启动线程"))) {
+                        //获取地址
+                        ss.clear();
+                        ss << std::hex<< createRemoteThreadStartAddress;
+                        ss >> remoteThreadStartAddress;
+                        memory.createRemoteThread(remoteThreadStartAddress);
+                    }
                 }
             }
             ImGui::EndTabItem();

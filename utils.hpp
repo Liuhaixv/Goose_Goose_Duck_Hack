@@ -24,6 +24,15 @@ public:
 
     Utils() {
         b_chineseOS = isChineseLanguageOS();
+    } 
+
+    /// <summary>
+    /// 检查currentVersion是否为最新
+    /// </summary>
+    /// <returns></returns>
+    /// https://www.geeksforgeeks.org/compare-two-version-numbers/
+    bool isLatestHackVersion(std::string currentVersion, std::string versionFromServer) {
+        return versionCompare(currentVersion, versionFromServer) >= 0;
     }
 
     /// <summary>
@@ -121,6 +130,32 @@ public:
         };
 
         return bytes;
+    }
+
+    /// <summary>
+    /// 转换4字节地址为小端字节数组
+    /// </summary>
+    /// <param name="address"></param>
+    /// <returns></returns>
+    std::vector<byte> addressToLittleEndianBytes(IN const int32_t& address) {
+        std::vector<byte> bytes = {
+            (byte)((address & 0x000000ff) >> 0),
+            (byte)((address & 0x0000ff00) >> 8),
+            (byte)((address & 0x00ff0000) >> 16),
+            (byte)((address & 0xff000000) >> 24)
+        };
+
+        return bytes;
+    }
+
+    template<typename var>
+    std::vector<var> combineVectors(IN std::initializer_list<std::vector<var>> vectors) {
+        std::vector<var> result;
+        //遍历拼接Vector
+        for (auto v : vectors) {
+            result.insert(result.end(), v.begin(), v.end());
+        }
+        return result;
     }
 
     /// <summary>
@@ -611,6 +646,45 @@ public:
     }
 
 private:
+
+    int versionCompare(std::string v1, std::string v2)
+    {
+        // vnum stores each numeric 
+        // part of version 
+        int vnum1 = 0, vnum2 = 0;
+
+        // loop until both string are 
+        // processed 
+        for (int i = 0, j = 0; (i < v1.length()
+            || j < v2.length());) {
+            // storing numeric part of 
+            // version 1 in vnum1 
+            while (i < v1.length() && v1[i] != '.') {
+                vnum1 = vnum1 * 10 + (v1[i] - '0');
+                i++;
+            }
+
+            // storing numeric part of 
+            // version 2 in vnum2 
+            while (j < v2.length() && v2[j] != '.') {
+                vnum2 = vnum2 * 10 + (v2[j] - '0');
+                j++;
+            }
+
+            if (vnum1 > vnum2)
+                return 1;
+            if (vnum2 > vnum1)
+                return -1;
+
+            // if equal, reset variables and 
+            // go for next numeric part 
+            vnum1 = vnum2 = 0;
+            i++;
+            j++;
+        }
+        return 0;
+    }
+
     /// <summary>
     /// 检查当前系统是否使用中文
     /// </summary>

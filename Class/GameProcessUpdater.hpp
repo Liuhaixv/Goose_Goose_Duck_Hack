@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <Windows.h>
-#include "../Memory.h"
+#include "../Memory/Memory.h"
 #include "../Struct/HackSettings.hpp"
 #include "Updater.h"
 #include"../Client.h"
