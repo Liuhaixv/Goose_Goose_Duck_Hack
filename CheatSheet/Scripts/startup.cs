@@ -70,6 +70,48 @@ public static class Utils
         return lobbySceneHandler;
     }
 
+    static Handlers.GameHandlers.TaskHandlers.TasksHandler GetTasksHandler()
+    {
+        //获取当前游戏场景中的Handlers
+        GameObject handlers = GameObject.Find("Handlers");
+
+        if (handlers == null)
+        {
+            return null;
+        }
+
+        //获取LobbySceneHandler
+        Handlers.GameHandlers.TaskHandlers.TasksHandler tasksHandler = handlers.GetComponent<Handlers.GameHandlers.TaskHandlers.TasksHandler>();
+
+        if (tasksHandler == null)
+        {
+            return null;
+        }
+
+        return tasksHandler;
+    }
+
+    //完成所有任务
+    static void CompleteAllTasks()
+    {
+        //1.获取TasksHandler
+        //2.获取assignedTasks
+        //3.获取assignedTasks中的entries
+        //4.获取entries的count，即任务数量
+        //5.遍历entries，key即为TaskId
+        //6.使用TasksHandler.CompleteTask(string taskId, false, false, false, true)完成任务
+
+        Handlers.GameHandlers.TaskHandlers.TasksHandler tasksHandler = Utils.GetTasksHandler();
+
+        //Dictionary<string GameTask>
+        var assignedTasks = tasksHandler.assignedTasks;
+
+        foreach (string taskId in assignedTasks.Keys)
+        {
+            tasksHandler.CompleteTask(taskId, false, false, false, true);
+        }
+    }
+
     //放屁
     static void Fart()
     {
