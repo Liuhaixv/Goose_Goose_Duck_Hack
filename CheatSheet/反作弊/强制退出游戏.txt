@@ -1,0 +1,11 @@
+﻿检测到根目录有以下任意文件夹，则会调用ForceCrash
+MelonLoader
+
+//使用了MelonLoader
+UnityEngine_Diagnostics_Utils__ForceCrash
+GameAssembly.dll+ 8d5fd9
+8d573b'd4f635
+7cd136
+7ccc04
+
+检测到dll文件被修改，会弹窗报错退出，但不是ForceCrash，也不是Quit

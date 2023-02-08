@@ -2,10 +2,10 @@
 #include <string>
 struct GuiSettings {
     //辅助程序版本
-    const std::string hackVersion = "0.7.1.6.1";
+    const std::string hackVersion = "0.7.1.7";
     //TODO：通过signature获取
     //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
-    const std::string gameVersion = "2.16.02";
+    const std::string gameVersion = "2.17.01";
 
     //全局开关
     bool b_draw = true;
@@ -40,7 +40,7 @@ struct GuiSettings {
     float f_minInterval = 1.0f;//TODO
 
     //反挂机踢出房间
-    bool b_antiIdleKick = true;
+    bool b_antiIdleKick = false;
 
     //debugmode
     bool b_debug = false;
@@ -49,5 +49,5 @@ struct GuiSettings {
     bool b_bypassNormalBan = false;
 
     //bypass version check
-    bool b_bypassVersionCheck = true;
+    bool b_bypassVersionCheck = false;
 };

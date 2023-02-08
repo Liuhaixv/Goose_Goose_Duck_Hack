@@ -14,6 +14,12 @@ public:
         this->rawBytes = rawBytes;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="offsetToGameAssembly"></param>
+    /// <param name="rawBytesPart1">hook跳转后立即执行的代码</param>
+    /// <param name="rawBytesPart2">hook跳转后执行完逻辑再执行的代码</param>
     CallHook(int64_t offsetToGameAssembly, std::vector<byte> rawBytesPart1, std::vector<byte> rawBytesPart2) {
         this->offsetToGameAssembly = offsetToGameAssembly;
         this->rawBytesPart1 = rawBytesPart1;

@@ -4,6 +4,7 @@
 
 namespace Offsets {
 
+    //2.16.02
     //private sealed class RoomManager.LIPKINCBJEJ : IEnumerator<object>, IEnumerator, IDisposable // TypeDefIndex: 1322
     namespace RoomManager_LIPKINCBJEJ {
         /*
@@ -27,6 +28,7 @@ namespace Offsets {
         */
     }
 
+    //2.16.02
     //private sealed class RoomManager.NOGLKBCBCCN : IEnumerator<object>, IEnumerator, IDisposable // TypeDefIndex: 1327
     namespace RoomManager_NOGLKBCBCCN {
         /*
@@ -51,11 +53,13 @@ namespace Offsets {
         constexpr int64_t firstChar = 0x14;//字符串的第一个起始字节
     }
 
+    //2.16.02
     namespace GameTask {
         constexpr int64_t taskId = 0x10;//string
         constexpr int64_t taskDisplayName = 0x18;//string
     }
 
+    //2.16.02
     namespace TasksHandler {
         // Fields
         constexpr int64_t tasks = 0x18;//GameTask[] tasks; // 0x18
@@ -67,6 +71,7 @@ namespace Offsets {
         constexpr int64_t timesReplenished = 0x48;// timesReplenished; // 0x48
     }
 
+    //2.16.02
     namespace LobbySceneHandler {
         namespace Class {
             namespace StaticField {
@@ -87,6 +92,7 @@ namespace Offsets {
         constexpr int64_t f_timeInRoom = 0x458;
     }
 
+    //2.16.02
     namespace Rigidbody2D {
         namespace UnknownClass0 {
             namespace UnknownFields {
@@ -98,6 +104,7 @@ namespace Offsets {
         constexpr int64_t ptr_UnknownClass0 = 0x10;
     }
 
+    //2.16.02
     namespace PlayerController {
         namespace Class {
             namespace StaticField {
@@ -138,14 +145,17 @@ namespace Offsets {
         constexpr int64_t b_isRemoteSpectating = 0x38B; // Boolean
     }
 
+    //2.16.02
     namespace CinemachineStateDrivenCamera {
         constexpr int64_t ptr_m_AnimatedTarget = 0xB0;//Animator
     }
 
+    //2.16.02
     namespace CinemachineVirtualCamera {
         constexpr int64_t f_m_zoomSize = 0xB4;//Float
     }
 
+    //2.17.01
     namespace LocalPlayer {
         namespace Class {
             namespace StaticField {
@@ -158,16 +168,16 @@ namespace Offsets {
             constexpr int64_t ptr_staticFields = 0xB8;
         }
         constexpr int64_t ptr_Class = 0x0;
-        constexpr int64_t staticField = 0x10;
         constexpr int64_t ptr_playerController = 0x18;//PlayerController of localplayer
         constexpr int64_t ptr_fogOfWarHandler = 0x20;//FogOfWarHandler
 
-        constexpr int64_t b_disableMovement = 0x60;
+        constexpr int64_t b_disableMovement = 0x78;
 
         constexpr int64_t ptr_cinemachineStateDrivenCamera = 0x68;// CinemachineStateDrivenCamera
         constexpr int64_t ptr_cinemachineVirtualCamera = 0x70;// CinemachineVirtualCamera
     }
 
+    //2.17.01
     namespace FogOfWarHandler {
         constexpr int64_t struct_obscured_layerMask = 0x18;//已加密ObscuredInt
         constexpr int64_t i_layerMask = 0x2C;//Bit
@@ -177,6 +187,7 @@ namespace Offsets {
         constexpr int64_t b_targetPlayerSet = 0x88;
     }
 
+    //2.16.02
     namespace CapsuleCollider2D {
         namespace UnknownClass0 {
             constexpr int64_t b_enableCollider = 0x38;
@@ -185,6 +196,7 @@ namespace Offsets {
         constexpr int64_t ptr_unknownClass1 = 0x30;
     }
 
+    //2.16.02
     namespace UICooldownButton {
         constexpr int64_t struct_cooldownTime = 0x84;//已加密ObscuredFloat
     }
@@ -193,62 +205,65 @@ namespace Offsets {
 namespace GameAssembly {
     //RVA offsets
     namespace Method {
-
+        //2.16.02
         namespace RoomManager_LIPKINCBJEJ {
             // RVA: 0xA1EAA0 Offset: 0xA1DEA0 VA: 0x180A1EAA0 Slot: 6
             //private bool MoveNext() { }
             constexpr int64_t MoveNext = 0xA1EAA0;
         }
-
+        //2.16.02
         namespace RoomManager_NOGLKBCBCCN {
             // RVA: 0xA1F5E0 Offset: 0xA1E9E0 VA: 0x180A1F5E0 Slot: 6
             //private bool MoveNext() { }
             constexpr int64_t MoveNext = 0xA1F5E0;
         }
-
+        //2.17.01
         namespace PlayerPropertiesManager {
-            constexpr int64_t ChangeReadyState = 0x8F2460;//public void ChangeReadyState(int KBGNPKGDFGK) { }
+            constexpr int64_t ChangeReadyState = 0xD7B940;//public void ChangeReadyState(int KBGNPKGDFGK) { }
         }
-
+        //2.17.01
         namespace TasksHandler {
-            constexpr int64_t CompleteTask = 0xED2630;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
+            constexpr int64_t CompleteTask = 0x1C35AB0;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
         }
-
+        //2.17.01
         namespace UICooldownButton {
-            constexpr int64_t Update = 0x104E6A0;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0x148D650;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
-
+        //2.17.01
         namespace LocalPlayer {
-            constexpr int64_t Update = 0xFCC7E0;
+            constexpr int64_t Update = 0x1D32EB0;
         }
-
+        //2.16.02
         namespace Application {
             constexpr int64_t Quit = 0x3257DE0;//退出游戏
         }
-
+        //2.17.01
         namespace AntiCheat {
             namespace Utils {
                 namespace ThreadSafeRandom {
-                    constexpr int64_t Next = 0x2AAB20;//public static int Next(int minInclusive, int maxExclusive) { }
+                    constexpr int64_t Next = 0x863B50;//public static int Next(int minInclusive, int maxExclusive) { }
                 }
             }
         }
     }
 
     namespace Class {
-        constexpr int64_t ptr_LobbySceneHandlerClass = 0x3CDAAE0;//Handlers_LobbyHandlers_LobbySceneHandler_c *
-        constexpr int64_t ptr_PlayerControllerClass = 0x3D084C8;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x3CDB720;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_LobbySceneHandlerClass = 0x4D18CA8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
+        constexpr int64_t ptr_PlayerControllerClass = 0x4D4EAF0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t ptr_LocalPlayerClass = 0x4D19958;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
     }
 
     namespace BytesPatch {
+
+        //2.17.01
         namespace CooldownTime {
             constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0x22F;
-            const std::vector<byte> raw{ 0xE8,0xEC,0x70,0x25,0x02 };//call Time.get_deltaTime
+            const std::vector<byte> raw{ 0xE8,0x1C,0xB4,0xAD,0x02 };//call Time.get_deltaTime
             const std::vector<byte> removeCooldownTime{ 0x41,0x0F,0x28,0xC1,0x90 };//movaps xmm0, xmm9
         }
 
         /// <summary>
+        /// 2.16.02
         /// 禁用反作弊随机数种子，禁用后加密秘钥将为0，加密后的内容等于明文
         /// </summary>
         namespace RandomSeed {
@@ -263,6 +278,7 @@ namespace GameAssembly {
             const std::vector<byte> disableRandomSeed{ 0x48,0x31,0xC,0xC3 };
         }
 
+        //2.16.02
         namespace QuitGame {
             constexpr int64_t address = GameAssembly::Method::Application::Quit;
 
@@ -274,11 +290,13 @@ namespace GameAssembly {
             const std::vector<byte>  disableQuitGame = { 0xC3 };
         }
 
+        //2.16.02
         namespace BypassBan {
             //房主过检测
             namespace Step1 {
                 constexpr int64_t address = GameAssembly::Method::RoomManager_LIPKINCBJEJ::MoveNext + 0x301;
 
+                //if ( body->fields.isBanned )
                 const std::vector<byte> raw = { 0x80, 0x78, 0x10, 0x00,
                                                 0x0f, 0x85, 0xAA, 0x01, 0x00, 0x00 };
                 const std::vector<byte>  bypassBan = { 0xc7, 0x40, 0x10, 0x00, 0x00, 0x00, 0x00,
@@ -363,6 +381,8 @@ namespace GameAssembly {
 
 namespace UnityPlayer {
     namespace BytesPatch {
+
+        //2.16.02
         namespace BypassVersionCheck {
             //利用dll空闲空间创建CodeCave
             namespace BuildCodeCave {

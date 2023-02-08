@@ -37,7 +37,7 @@ public:
                 Sleep(100);
                 continue;
             }
-            
+
             if (codeCave.staticFieldEntry == NULL || codeCave.codeEntry == NULL) {
                 codeCave.buildCodeCave(&this->localPlayer_update_hook);
             }
@@ -54,7 +54,7 @@ public:
                         continue;
                     }
 
-                    if (!memory.write_bytes(address, GameAssembly::BytesPatch::QuitGame::disableQuitGame )
+                    if (!memory.write_bytes(address, GameAssembly::BytesPatch::QuitGame::disableQuitGame)
                         ) {
                         continue;
                     }
@@ -185,7 +185,7 @@ public:
             }
 
             //自动完成任务以及自动准备判断
-            {                
+            {
                 if (this->localPlayer_update_hook.hookEntry == NULL) {
                     this->localPlayer_update_hook.init();
                 }
@@ -233,10 +233,17 @@ private:
 
     bool b_bypassVersionCheck = false;
 
-    CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0x103E,
-                                       {},                                       
-                                      {0x45,0x0F,0x28,0x5B,0xA0,0x45,0x0F,0x28,0x7B,0x90,0x49,0x8B,0xE3,0x41,0x5F,0x41,0x5E,0x5F,0x5E,0x5B}
-};
+    CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0xF70,
+                                       {},
+                                        {0x41,0x0F,0x28,0x7B,0xE0,
+                                        0x45,0x0F,0x28,0x43,0xD0,
+                                        0x49,0x8B,0xE3,
+                                        0x41,0x5F,
+                                        0x41,0x5E,
+                                        0x5F,
+                                        0x5E,
+                                        0x5B}
+    };
 
     void autoCompleteTasks(bool enableHook) {
 
@@ -260,8 +267,8 @@ private:
                 else {
                     //做一次任务
                     this->lastTimeTaskComplete = currentTime;
-                        do_autoCompleteTasks();
-                }               
+                    do_autoCompleteTasks();
+                }
             }
             else {
                 //尚未超过延迟时间，如果hook则需要unhook
@@ -296,7 +303,7 @@ private:
             if (g_client.inGameScene()) {
                 //尚未准备
                 if (!g_client.localPlayerReadied()) {
-                    do_autoReady();                    
+                    do_autoReady();
                 }
                 /*
                 //已经准备
