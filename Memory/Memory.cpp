@@ -92,10 +92,12 @@ OpenProcessState Memory::attachToGameProcess(DWORD pid) {
     }
 
     char gameAssemblyModuleName[] = "GameAssembly.dll";
+    char unityPlayerModuleName[] = "UnityPlayer.dll";
     gameAssemblyBaseAddress = GetModuleBaseAddress(_T(gameAssemblyModuleName), pid);
+    unityPlayerBaseAddress = GetModuleBaseAddress(_T(unityPlayerModuleName), pid);
 
     //Game found but failed to load dll module
-    if (gameAssemblyBaseAddress == NULL) {
+    if (gameAssemblyBaseAddress == NULL || unityPlayerBaseAddress == NULL) {
         hackSettings.gameStateSettings.openProcessState = OpenProcessState::FailedToLoadDLL;
         return OpenProcessState::FailedToLoadDLL;
     }

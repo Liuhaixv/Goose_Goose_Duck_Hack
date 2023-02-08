@@ -14,7 +14,7 @@ class MemoryUpdater :public Updater {
 public:
     //查找游戏进程的间隔时间(秒)
     //Min time before searching the game process again
-    double interval = 2.0;
+    double interval = 0.2;
     MemoryUpdater(Client* client, HackSettings* hackSettings) {
         this->hackSettings = hackSettings;
     }
@@ -48,7 +48,6 @@ public:
             else {
                 //Game not found, sleeping for $interval$ secs
                 hackSettings->gameStateSettings.b_gameProcessRunning = false;
-                Sleep(5000);
 
                 ++connect_count;
                 Sleep(interval * 1000);

@@ -360,3 +360,32 @@ namespace GameAssembly {
         return offsets;
     }
 }
+
+namespace UnityPlayer {
+    namespace BytesPatch {
+        namespace BypassVersionCheck {
+            //利用dll空闲空间创建CodeCave
+            namespace BuildCodeCave {
+                constexpr int64_t address = 0x33F911;
+
+                const std::vector<byte>  bytes = { 0x48,0x83,0xC4,0x50,
+                                                        0x48,0x83,0xC3,0x10,
+                                                        0xC6,0x03,0x07,
+                                                        0x48,0x83,0xC3,0x08,
+                                                        0xC7,0x03,0x31,0x00,0x37,0x00,
+                                                        0x48,0x83,0xC3,0x06,
+                                                        0xC7,0x03,0x30,0x00,0x30,0x00,
+                                                        0x5B,
+                                                        0xC3 };
+            }
+
+            //加入游戏过检测
+            namespace JmpToCodeCave {
+                constexpr int64_t address = 0xB1639;
+
+                const std::vector<byte> raw = { 0x48,0x83,0xC4,0x50,0x5B };
+                const std::vector<byte>  bypass = {0xE9, 0xD3,0xE2,0x28,0x00};
+            }
+        }
+    }
+}

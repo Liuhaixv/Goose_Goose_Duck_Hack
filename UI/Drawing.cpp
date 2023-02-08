@@ -1171,6 +1171,16 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
+            //篡改版本号为2.17.00
+            {
+                ImGui::Checkbox("##enable_bypass_version", &hackSettings.guiSettings.b_bypassVersionCheck);
+                ImGui::SameLine();
+                ImGui::Text(str("Anti update", "反更新"));
+                HelpMarker(
+                    str("Must be checked to bypass update checking\nMust run cheat before game", "必须勾选以跳过版本更新\n必须在游戏启动前启动辅助")
+                );
+            }
+
             //选择进程
             {
                 //游戏进程ID

@@ -20,6 +20,7 @@ public:
     DWORD pID = NULL;
     HANDLE processHandle = NULL;
     int64_t gameAssemblyBaseAddress = NULL;
+    int64_t unityPlayerBaseAddress = NULL;
 
     //TODO
     std::unique_ptr<PatternScanner> gameAssemblyPatternScanner;

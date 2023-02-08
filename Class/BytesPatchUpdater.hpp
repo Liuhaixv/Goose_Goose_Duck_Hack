@@ -77,6 +77,39 @@ public:
                 }
             }
 
+            //Bypass version check
+            {
+                ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_bypassVersionCheck, &b_bypassVersionCheck);
+
+                if (state == SHOULD_ACTIVATE_NOW) {
+
+                    if (memory.unityPlayerBaseAddress == NULL) {
+                        continue;
+                    }
+
+                    //过检测:步骤1 构建CodeCave
+                    int64_t address = memory.unityPlayerBaseAddress + UnityPlayer::BytesPatch::BypassVersionCheck::BuildCodeCave::address;
+
+                    memory.write_bytes(address, UnityPlayer::BytesPatch::BypassVersionCheck::BuildCodeCave::bytes);
+
+                    //过检测:步骤2 篡改Jmp至CodeCave
+                    address = memory.unityPlayerBaseAddress + UnityPlayer::BytesPatch::BypassVersionCheck::JmpToCodeCave::address;
+
+                    memory.write_bytes(address, UnityPlayer::BytesPatch::BypassVersionCheck::JmpToCodeCave::bypass);
+                }
+                else if (state == SHOULD_DEACTIVATE_NOW) {
+                    //恢复检测
+                    if (memory.unityPlayerBaseAddress == NULL) {
+                        continue;
+                    }
+
+                    //恢复版本检测
+                    int64_t address = memory.unityPlayerBaseAddress + UnityPlayer::BytesPatch::BypassVersionCheck::JmpToCodeCave::address;
+
+                    memory.write_bytes(address, UnityPlayer::BytesPatch::BypassVersionCheck::JmpToCodeCave::raw);
+                }
+            }
+
             //Bypass normal ban
             {
                 ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_bypassNormalBan, &b_bypassNormalBan);
@@ -197,6 +230,8 @@ private:
     bool b_antiAC_enabled = false;
 
     bool b_bypassNormalBan = false;
+
+    bool b_bypassVersionCheck = false;
 
     CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0x103E,
                                        {},                                       
