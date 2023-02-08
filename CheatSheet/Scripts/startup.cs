@@ -18,8 +18,24 @@ public class startup : MonoBehaviour
     }
 }
 
+public static class HookUpdate
+{
+    public static void AutoChangeColor()
+    {
+        Utils.changeColorTimer += Time.deltaTime;
+        if (Utils.changeColorTimer >= Utils.minIntervalChangingColor)
+        {
+            Utils.changeColorTimer = 0;
+            Utils.ChangeColor();
+        }
+    }
+}
+
 public static class Utils
 {
+    public static float changeColorTimer = 0.0f;
+    public static float minIntervalChangingColor = 0.5f;
+
     //获取LocalPlayer
     static Handlers.GameHandlers.PlayerHandlers.LocalPlayer GetLocalPlayer()
     {
@@ -91,6 +107,28 @@ public static class Utils
         return tasksHandler;
     }
 
+    static Handlers.LobbyHandlers.PlayerCustomizationPanelHandler GetPlayerCustomizationPanelHandler()
+    {
+        //获取当前游戏场景中的Canvas
+        GameObject canvas = GameObject.Find("Canvas");
+
+        if (canvas == null)
+        {
+            return null;
+        }
+
+        GameObject customizationPanel = canvas.transform.Find("CustomizationPanel").gameObject;
+
+        if (customizationPanel == null)
+        {
+            return null;
+        }
+
+        var playerCustomizationPanelHandler = customizationPanel.GetComponent<Handlers.LobbyHandlers.PlayerCustomizationPanelHandler>();
+
+        return playerCustomizationPanelHandler;
+    }
+
     //完成所有任务
     static void CompleteAllTasks()
     {
@@ -112,10 +150,36 @@ public static class Utils
         }
     }
 
+    static void ChangeColor()
+    {
+        PlayerCustomizationPanelHandler.ChangeColor(Utils.GetPlayerCustomizationPanelHandler());
+    }
+
+    static void ChangeColor(int color)
+    {
+        PlayerCustomizationPanelHandler.ChangeColor(Utils.GetPlayerCustomizationPanelHandler(), color);
+    }
+
     //放屁
     static void Fart()
     {
         GetLocalPlayer().SendFart();
     }
 
+}
+
+public static class PlayerCustomizationPanelHandler
+{
+    static void ChangeColor(Handlers.LobbyHandlers.PlayerCustomizationPanelHandler playerCustomizationPanelHandler)
+    {
+        //0-19
+        int color = UnityEngine.Random.Range(0, 20);
+
+        PlayerCustomizationPanelHandler.ChangeColor(playerCustomizationPanelHandler, color);
+    }
+
+    static void ChangeColor(Handlers.LobbyHandlers.PlayerCustomizationPanelHandler playerCustomizationPanelHandler, int color)
+    {
+        playerCustomizationPanelHandler.ChangeColor(color);
+    }
 }
