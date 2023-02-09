@@ -4,6 +4,7 @@
 #include<memory>
 #include "CompleteOneTask.h"
 #include "GetReady.h"
+#include "../JmpHook.h"
 #include "../CallHook.h"
 #include "ChangeColor.h"
 
@@ -101,6 +102,8 @@ public:
     /// </summary>
     /// <returns></returns>
     bool buildCodeCave(CallHook* callHook);
+
+    bool buildCodeCave(JmpHook* jmpHook);
 
 private:
 

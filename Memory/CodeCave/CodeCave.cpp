@@ -3,6 +3,7 @@
 #include "CompleteOneTask.h"
 #include "GetReady.h"
 #include"../../utils.hpp"
+#include "../JmpHook.h"
 
 extern Memory memory;
 extern Utils utils;
@@ -194,6 +195,116 @@ bool CodeCave::buildCodeCave(CallHook* callHook)
         }
 
     endBytes.push_back(0xC3);//ret
+
+    std::vector<byte> result = utils.combineVectors({
+        beginBytes,
+        functionsCallCheck,
+        endBytes
+        }
+    );
+
+    memory.allocExecutableMemory(0x2000, &this->staticFieldEntry);
+    this->codeEntry = this->staticFieldEntry + this->staticField.staticFieldSize;
+
+    memory.write_bytes(this->codeEntry, result);
+
+    return true;
+}
+
+bool CodeCave::buildCodeCave(JmpHook* jmpHook)
+{
+    //TODO
+    if (memory.processHandle == NULL) {
+        return false;
+    }
+
+    this->completeOneTask = std::make_unique<CompleteOneTask>();
+    this->getReady = std::make_unique<GetReady>();
+    this->changeColor = std::make_unique<ChangeColor>();
+
+
+    this->callableFunctions.clear();
+    this->callableFunctions.push_back(completeOneTask.get());//Fn_CompleteOneTask,
+    this->callableFunctions.push_back(getReady.get());//Fn_GetReady
+    this->callableFunctions.push_back(changeColor.get());//Fn_ChangeColor
+
+    std::vector<byte> beginBytes;
+
+    std::vector<byte> push_all = {
+        //rax rbx rcx rdx rbp rdi rsi r8 r9 r10 r11 r12 r13 r14 r15
+        0x50,
+        0x53,
+        0x51,
+        0x52,
+        0x55,
+        0x57,
+        0x56,
+        0x41, 0x50,
+        0x41, 0x51,
+        0x41, 0x52,
+        0x41, 0x53,
+        0x41, 0x54,
+        0x41, 0x55,
+        0x41, 0x56,
+        0x41, 0x57 };
+
+    std::vector<byte> pop_all = {
+      { 0x41, 0x5F,
+        0x41, 0x5E,
+        0x41, 0x5D,
+        0x41, 0x5C,
+        0x41, 0x5B,
+        0x41, 0x5A,
+        0x41, 0x59,
+        0x41, 0x58,
+        0x5E,
+        0x5F,
+        0x5D,
+        0x5A,
+        0x59,
+        0x5B,
+        0x58 }
+    };
+
+    beginBytes = utils.combineVectors({
+            beginBytes,
+            /*push_all,*/
+            //获取当前函数地址，即codeEntry
+            //lea rbx,[rip-8-16]
+            { 0x48, 0x8D, 0x1D, 0xF9, 0xFF, 0xFF, 0xFF,
+            //sub rbx, 0x1000
+            0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
+            //sub rsp, 0x40
+            {0x48,0x83,0xEC,0x40}
+        });
+
+    //添加各个要执行的函数，以及执行前的判断
+    std::vector<byte> functionsCallCheck = utils.combineVectors({
+            checkIfShouldCallAndDecreaseBy1(Fn_CompleteOneTask, this->completeOneTask.get()->getEntryAddress()),
+            checkIfShouldCallAndDecreaseBy1(Fn_GetReady, this->getReady.get()->getEntryAddress()),
+            checkIfShouldCall(Fn_ChangeColor,this->changeColor.get()->getEntryAddress())
+        });
+
+    std::vector<byte> endBytes = utils.combineVectors({
+        //add rsp, 0x40
+        std::vector<byte>{ 0x48,0x83,0xc4,0x40 },
+        /*pop_all*/ });
+
+            //执行后置代码
+    for (auto b : jmpHook->coveredBytes) {
+        endBytes.push_back(b);
+    }
+
+    endBytes = utils.combineVectors({
+        endBytes,
+        //ASM_mov_rax       
+        { 0x48,0xB8},
+        //address
+        utils.addressToLittleEndianBytes(jmpHook->jmpBackAddress),
+        //ASM_jmp_rax
+        {0xFF, 0xE0}
+    });
+      
 
     std::vector<byte> result = utils.combineVectors({
         beginBytes,

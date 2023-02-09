@@ -8,6 +8,7 @@
 #include"Updater.h"
 #include "../Memory/CallHook.h"
 #include "../Memory/CodeCave/CodeCave.h"
+#include "../Memory/JmpHook.h"
 
 extern HackSettings hackSettings;
 extern Utils utils;
@@ -259,15 +260,9 @@ private:
     };*/
 
     
-    CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0xF70,                                       
-                                        {0x41,0x0F,0x28,0x7B,0xE0,
-                                        0x45,0x0F,0x28,0x43,0xD0,
-                                        0x49,0x8B,0xE3,
-                                        0x41,0x5F,
-                                        0x41,0x5E,
-                                        0x5F,
-                                        0x5E,
-                                        0x5B},{}
+    JmpHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update,                                       
+                                        {0x48,0x8B,0xC4,0x48,0x89,0x48,0x08,0x53,0x56,0x57,0x41,0x56},
+                                        GameAssembly::Method::LocalPlayer::Update + 0xC
     };
 
     void autoCompleteTasks(bool enableHook) {
@@ -365,7 +360,7 @@ private:
         //检查hook
         if (!this->localPlayer_update_hook.b_hasHooked) {
             //连接到CodeCave
-            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.setJmpAddress(codeCave.codeEntry);
             this->localPlayer_update_hook.hook();
             this->localPlayer_update_hook.b_hasHooked = true;
         }
@@ -379,7 +374,7 @@ private:
         //检查hook
         if (!this->localPlayer_update_hook.b_hasHooked) {
             //连接到CodeCave
-            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.setJmpAddress(codeCave.codeEntry);
             this->localPlayer_update_hook.hook();
             this->localPlayer_update_hook.b_hasHooked = true;
         }
@@ -393,7 +388,7 @@ private:
         //检查hook
         if (!this->localPlayer_update_hook.b_hasHooked) {
             //连接到CodeCave
-            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.setJmpAddress(codeCave.codeEntry);
             this->localPlayer_update_hook.hook();
             this->localPlayer_update_hook.b_hasHooked = true;
         }
@@ -409,7 +404,7 @@ private:
         //检查是否已经hook
         if (!this->localPlayer_update_hook.b_hasHooked) {
             //连接到CodeCave
-            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.setJmpAddress(codeCave.codeEntry);
             this->localPlayer_update_hook.hook();
             this->localPlayer_update_hook.b_hasHooked = true;
         }

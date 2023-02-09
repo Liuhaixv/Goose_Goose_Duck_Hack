@@ -5,9 +5,9 @@
 extern Memory memory;
 extern Utils utils;
 
-void JmpHook::setCallAddress(int64_t callAddress)
+void JmpHook::setJmpAddress(int64_t jmpAddress)
 {
-    this->callAddress = callAddress;
+    this->jmpAddress = jmpAddress;
 }
 
 bool JmpHook::hook()
@@ -16,7 +16,7 @@ bool JmpHook::hook()
         return false;
     }
 
-    if (this->callAddress == NULL) {
+    if (this->jmpAddress == NULL) {
         //TODO: ERR
         return false;
     }
@@ -30,12 +30,12 @@ bool JmpHook::hook()
         0xFF, 0xE0
     };
 
-    for (int i = JmpHook::coveredBytes; i < this->rawBytes.size(); i++) {
+    for (int i = JmpHook::jmpASMbytes; i < this->coveredBytes.size(); i++) {
         //补全nop
         this->hookedBytes.push_back(0x90);//nop
     }
 
-    *(int64_t*)(&hookedBytes[0] + 2) = this->callAddress;
+    *(int64_t*)(&hookedBytes[0] + 2) = this->jmpAddress;
 
     memory.write_bytes(this->hookEntry, hookedBytes);
 
@@ -49,7 +49,7 @@ bool JmpHook::unhook()
     if (memory.gameAssemblyBaseAddress == NULL || memory.processHandle == NULL) {
         return false;
     }
-    memory.write_bytes(hookEntry, rawBytes);
+    memory.write_bytes(hookEntry, coveredBytes);
 
     this->b_hasHooked = false;
     return true;
@@ -62,6 +62,7 @@ bool JmpHook::init()
     }
 
     this->hookEntry = memory.gameAssemblyBaseAddress + this->offsetToGameAssembly;
+    this->jmpBackAddress = memory.gameAssemblyBaseAddress + this->jmpBackAddressOffsetToGameAssembly;
 
     return true;
 }

@@ -67,6 +67,5 @@ private:
     int64_t offsetToGameAssembly = NULL;
     //包括因为覆盖后多余无效的多余指令
     std::vector<byte> hookedBytes;
-
 };
 
