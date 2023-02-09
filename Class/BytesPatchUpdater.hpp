@@ -77,6 +77,18 @@ public:
                 }
             }
 
+            //不断更换随机彩虹颜色
+            {
+                ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_enableRainbowColors, &b_enableRainbowColors);
+
+                if (state == SHOULD_ACTIVATE_NOW) {
+                    enableAutoChangeColor();
+                }
+                else if (state == SHOULD_DEACTIVATE_NOW) {
+                    disableAutoChangeColor();
+                }
+            }
+
             //Bypass version check
             {
                 ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_bypassVersionCheck, &b_bypassVersionCheck);
@@ -203,8 +215,8 @@ public:
                 }
                 else {
                     if (this->localPlayer_update_hook.b_hasHooked) {
-                        this->unhook_LocalPlayer_from_CodeCave();
-
+                        //this->unhook_LocalPlayer_from_CodeCave();
+                        this->unhook_LocalPlayer_Update();
                         this->b_has_hooked_autoCompleteTasks = false;
                         this->b_has_hooked_autoReady = false;
                     }
@@ -233,8 +245,21 @@ private:
 
     bool b_bypassVersionCheck = false;
 
+    bool b_enableRainbowColors = false;
+    /*
     CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0xF70,
-                                       {},
+                                    {0x41,0x0F,0x28,0x7B,0xE0,
+                                    0x45,0x0F,0x28,0x43,0xD0,
+                                    0x49,0x8B,0xE3,
+                                    0x41,0x5F,
+                                    0x41,0x5E,
+                                    0x5F,
+                                    0x5E,
+                                    0x5B},{}
+    };*/
+
+    
+    CallHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update + 0xF70,                                       
                                         {0x41,0x0F,0x28,0x7B,0xE0,
                                         0x45,0x0F,0x28,0x43,0xD0,
                                         0x49,0x8B,0xE3,
@@ -242,7 +267,7 @@ private:
                                         0x41,0x5E,
                                         0x5F,
                                         0x5E,
-                                        0x5B}
+                                        0x5B},{}
     };
 
     void autoCompleteTasks(bool enableHook) {
@@ -326,6 +351,7 @@ private:
         this->localPlayer_update_hook.unhook();
     }
 
+    //TODO: 历史遗留代码，需要删除
     void unhook_LocalPlayer_Update() {
 
         b_has_hooked_autoCompleteTasks = false;
@@ -333,6 +359,34 @@ private:
 
         codeCave.staticField.writeField(Fn_GetReady, 0);
         codeCave.staticField.writeField(Fn_CompleteOneTask, 0);
+    }
+
+    void enableAutoChangeColor() {
+        //检查hook
+        if (!this->localPlayer_update_hook.b_hasHooked) {
+            //连接到CodeCave
+            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.hook();
+            this->localPlayer_update_hook.b_hasHooked = true;
+        }
+
+        this->b_enableRainbowColors = true;
+
+        codeCave.staticField.writeField(Fn_ChangeColor, 1);
+    }
+
+    void disableAutoChangeColor() {
+        //检查hook
+        if (!this->localPlayer_update_hook.b_hasHooked) {
+            //连接到CodeCave
+            this->localPlayer_update_hook.setCallAddress(codeCave.codeEntry);
+            this->localPlayer_update_hook.hook();
+            this->localPlayer_update_hook.b_hasHooked = true;
+        }
+
+        this->b_enableRainbowColors = false;
+
+        codeCave.staticField.writeField(Fn_ChangeColor, 0);
     }
 
     void do_autoCompleteTasks() {

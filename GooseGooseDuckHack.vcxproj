@@ -202,11 +202,13 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Memory\CodeCave\ChangeColor.cpp" />
     <ClCompile Include="Memory\CallHook.cpp" />
     <ClCompile Include="Memory\CodeCave\GetReady.cpp" />
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="Memory\CodeCave\ChangeColor.h" />
     <ClInclude Include="Memory\CallHook.h" />
     <ClInclude Include="Memory\CodeCave\GetReady.h" />
     <ClInclude Include="Memory\CodeCave\CompleteOneTask.h" />

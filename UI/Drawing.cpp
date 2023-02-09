@@ -846,7 +846,10 @@ void drawMenu() {
         //菜单1
         if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
-            ImGui::Text(playerController->nickname.c_str());
+            //彩虹换色
+            {
+                ImGui::Checkbox(str("Rainbow Goose", "彩虹鹅"), &hackSettings.guiSettings.b_enableRainbowColors);
+            }
 
             float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
             if (minSpeed <= 0) {

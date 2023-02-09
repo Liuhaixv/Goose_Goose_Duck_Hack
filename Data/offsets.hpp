@@ -245,12 +245,24 @@ namespace GameAssembly {
                 }
             }
         }
+        //2.17.01
+        namespace UnityEngine {
+            namespace Random {
+                constexpr int64_t RandomRangeInt = 0x3F4BEB0;//int32_t UnityEngine_Random__RandomRangeInt(int32_t minInclusive, int32_t maxExclusive, const MethodInfo *method)
+            }
+        }
+
+        namespace PlayerCustomizationPanelHandler {
+            constexpr int64_t ChangeColor = 0x1E92490;//void __stdcall Handlers_LobbyHandlers_PlayerCustomizationPanelHandler__ChangeColor(Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_o *this, int32_t GHCFJPBDGED, const MethodInfo *method)
+        }
     }
 
+    //2.17.01
     namespace Class {
         constexpr int64_t ptr_LobbySceneHandlerClass = 0x4D18CA8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
         constexpr int64_t ptr_PlayerControllerClass = 0x4D4EAF0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x4D19958;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x4CB5948;//Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
     }
 
     namespace BytesPatch {

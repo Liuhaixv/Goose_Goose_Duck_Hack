@@ -7,7 +7,13 @@
 extern Memory memory;
 extern Utils utils;
 
-std::vector<byte> checkIfShouldCall(int staticFieldIndex, int64_t functionAddress) {
+/// <summary>
+/// 构建汇编代码，判断是否要call函数，如果值大于0则减1并执行
+/// </summary>
+/// <param name="staticFieldIndex"></param>
+/// <param name="functionAddress"></param>
+/// <returns></returns>
+std::vector<byte> checkIfShouldCallAndDecreaseBy1(int staticFieldIndex, int64_t functionAddress) {
     const int size = 31;
     byte bytesJE[size] = {
         //cmp cmp [rbx+0], 0
@@ -34,6 +40,32 @@ std::vector<byte> checkIfShouldCall(int staticFieldIndex, int64_t functionAddres
     return std::vector<byte>(bytesJE, bytesJE + size);
 }
 
+/// <summary>
+/// 判断不为0则执行
+/// </summary>
+/// <param name="staticFieldIndex"></param>
+/// <param name="functionAddress"></param>
+/// <returns></returns>
+std::vector<byte> checkIfShouldCall(int staticFieldIndex, int64_t functionAddress) {
+    const int size = 25;
+    byte bytesJE[size] = {
+        //cmp cmp [rbx+0], 0
+        0x83, 0xBB, 0x00,0x00,0x00,0x00, 0x00,
+        //je +0xC
+        0x74, 0xC,
+        //mov rax, 0x0000000000000000
+        0x48, 0xB8 ,0,0,0,0,0,0,0,0,
+        //call rax
+        0xFF,0xD0,
+        //add rbx, 0x10
+        0x48, 0x83, 0xC3, 0x10,
+    };
+
+    *(int64_t*)(bytesJE + 11) = functionAddress;
+
+    return std::vector<byte>(bytesJE, bytesJE + size);
+}
+
 void CodeCave::StaticField::writeField(int _FunctionOrder, int data)
 {
     memory.write_mem<int>(this->codeCave->staticFieldEntry + _FunctionOrder * 0x10, data);
@@ -56,10 +88,13 @@ bool CodeCave::buildCodeCave(CallHook* callHook)
 
     this->completeOneTask = std::make_unique<CompleteOneTask>();
     this->getReady = std::make_unique<GetReady>();
+    this->changeColor = std::make_unique<ChangeColor>();
+    
 
     this->callableFunctions.clear();
     this->callableFunctions.push_back(completeOneTask.get());//Fn_CompleteOneTask,
     this->callableFunctions.push_back(getReady.get());//Fn_GetReady
+    this->callableFunctions.push_back(changeColor.get());//Fn_ChangeColor
 
     std::vector<byte> beginBytes;
 
@@ -118,11 +153,10 @@ bool CodeCave::buildCodeCave(CallHook* callHook)
 
     beginBytes = utils.combineVectors({
             beginBytes,
-            //push all
             push_all,
             //获取当前函数地址，即codeEntry
             //lea rbx,[rip-8-16]
-            { 0x48, 0x8D, 0x1D, 0xE2, 0xFF, 0xFF, 0xFF,
+            { 0x48, 0x8D, 0x1D, 0xCE, 0xFF, 0xFF, 0xFF,
             //sub rbx, 0x1000
             0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
             //sub rsp, 0x40
@@ -131,13 +165,14 @@ bool CodeCave::buildCodeCave(CallHook* callHook)
 
     //添加各个要执行的函数，以及执行前的判断
     std::vector<byte> functionsCallCheck = utils.combineVectors({
-            checkIfShouldCall(Fn_CompleteOneTask, this->completeOneTask.get()->getEntryAddress()),
-            checkIfShouldCall(Fn_GetReady, this->getReady.get()->getEntryAddress()),
+            checkIfShouldCallAndDecreaseBy1(Fn_CompleteOneTask, this->completeOneTask.get()->getEntryAddress()),
+            checkIfShouldCallAndDecreaseBy1(Fn_GetReady, this->getReady.get()->getEntryAddress()),
+            checkIfShouldCall(Fn_ChangeColor,this->changeColor.get()->getEntryAddress())
         });
 
     std::vector<byte> endBytes = utils.combineVectors({
         //add rsp, 0x40
-        {0x48,0x83,0xc4,0x40},
+        std::vector<byte>{ 0x48,0x83,0xc4,0x40 },
         pop_all
         });
 

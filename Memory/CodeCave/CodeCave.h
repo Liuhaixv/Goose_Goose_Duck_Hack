@@ -5,6 +5,7 @@
 #include "CompleteOneTask.h"
 #include "GetReady.h"
 #include "../CallHook.h"
+#include "ChangeColor.h"
 
 #undef byte
 typedef unsigned char byte;
@@ -106,11 +107,13 @@ private:
     //保存所有要调用的函数
     std::unique_ptr<CompleteOneTask> completeOneTask;
     std::unique_ptr<GetReady> getReady;
+    std::unique_ptr<ChangeColor> changeColor;
     std::vector<CallableFunction*> callableFunctions;
 };
 
 enum FunctionOrder {
     Fn_CompleteOneTask,
-    Fn_GetReady
+    Fn_GetReady,
+    Fn_ChangeColor
 };
 
