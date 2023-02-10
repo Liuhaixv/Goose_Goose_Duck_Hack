@@ -11,7 +11,7 @@ class JmpHook
 public:
 
     /// <summary>
-    /// 从GameAssembly.dll + offsetToGameAssembly处hook，跳转到指定CodeCave，执行完代码后再执行coveredBytes，然后jmp至jmpBackAddressOffsetToGameAssembly地址
+    /// 从GameAssembly.dll + offsetToGameAssembly处hook，跳转到指定CodeCave，先执行coveredBytes，然后执行codeCave代码,然后jmp至jmpBackAddressOffsetToGameAssembly地址
     /// </summary>
     /// <param name="offsetToGameAssembly"></param>
     /// <param name="coveredBytes"></param>
@@ -49,7 +49,7 @@ public:
     bool init();
 
     //jmp指令使用的字节数量
-    static const int jmpASMbytes = 12;
+    static const int jmpASMbytes = 0x10;
 
 private:
     int64_t offsetToGameAssembly = NULL;

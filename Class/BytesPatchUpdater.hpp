@@ -39,8 +39,13 @@ public:
                 continue;
             }
 
-            if (codeCave.staticFieldEntry == NULL || codeCave.codeEntry == NULL) {
-                codeCave.buildCodeCave(&this->localPlayer_update_hook);
+            if (this->localPlayer_update_hook.hookEntry == NULL) {
+                if (this->localPlayer_update_hook.init()) {
+                    if (codeCave.staticFieldEntry == NULL || codeCave.codeEntry == NULL) {
+                        codeCave.buildCodeCave(&this->localPlayer_update_hook);
+                    }
+                }
+
             }
 
             //anti AC
@@ -199,10 +204,7 @@ public:
 
             //自动完成任务以及自动准备判断
             {
-                if (this->localPlayer_update_hook.hookEntry == NULL) {
-                    this->localPlayer_update_hook.init();
-                }
-                else if (hackSettings.guiSettings.b_enable_autoTasks_and_autoReady) {
+                if (hackSettings.guiSettings.b_enable_autoTasks_and_autoReady) {
 
                     bool enabled_autoReady = hackSettings.guiSettings.b_autoReady;
                     bool enabled_autoCompleteTasks = hackSettings.guiSettings.b_autoCompleteTasks;
@@ -259,10 +261,17 @@ private:
                                     0x5B},{}
     };*/
 
-    
-    JmpHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update,                                       
-                                        {0x48,0x8B,0xC4,0x48,0x89,0x48,0x08,0x53,0x56,0x57,0x41,0x56},
-                                        GameAssembly::Method::LocalPlayer::Update + 0xC
+
+    JmpHook localPlayer_update_hook{ GameAssembly::Method::LocalPlayer::Update,
+                                        {0x48,0x8B,0xC4,
+        0x48,0x89,0x48,0x08,
+        0x53,
+        0x56,
+        0x57,
+        0x41,0x56,
+        0x41, 0x57,
+        0x48,0x81,0xEC, 0x0, 0x1, 0x0,0x0},
+                                        GameAssembly::Method::LocalPlayer::Update + JmpHook::jmpASMbytes
     };
 
     void autoCompleteTasks(bool enableHook) {

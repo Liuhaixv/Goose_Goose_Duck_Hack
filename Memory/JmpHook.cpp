@@ -21,6 +21,7 @@ bool JmpHook::hook()
         return false;
     }
 
+    /*会改变rax，弃用
     this->hookedBytes = {
         //ASM_mov_rax       
         0x48,0xB8,
@@ -29,13 +30,28 @@ bool JmpHook::hook()
         //ASM_jmp_rax
         0xFF, 0xE0
     };
+    */
+
+    this->hookedBytes = {
+        //push rax   
+        0x50,
+        //mov rax, [address]
+        0x48, 0xB8,
+        //address
+        0,0,0,0,0,0,0,0,
+        //xchg qword ptr ss:[rsp], rax 交换寄存器
+        0x48, 0x87, 0x04, 0x24,
+        //ret
+        0xC3
+    };
+
 
     for (int i = JmpHook::jmpASMbytes; i < this->coveredBytes.size(); i++) {
         //补全nop
         this->hookedBytes.push_back(0x90);//nop
     }
 
-    *(int64_t*)(&hookedBytes[0] + 2) = this->jmpAddress;
+    *(int64_t*)(&hookedBytes[0] + 3) = this->jmpAddress;
 
     memory.write_bytes(this->hookEntry, hookedBytes);
 

@@ -266,17 +266,21 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
         0x58 }
     };
 
+    std::vector<byte> ASM_FF25_JMP = {0xff,0x25,0,0,0,0};
+
     beginBytes = utils.combineVectors({
             beginBytes,
+            push_all,
             /*push_all,*/
             //获取当前函数地址，即codeEntry
             //lea rbx,[rip-8-16]
-            { 0x48, 0x8D, 0x1D, 0xF9, 0xFF, 0xFF, 0xFF,
+            //{ 0x48, 0x8D, 0x1D, 0xF9, 0xFF, 0xFF, 0xFF,
             //sub rbx, 0x1000
-            0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
+            //0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
             //sub rsp, 0x40
-            {0x48,0x83,0xEC,0x40}
+            //{0x48,0x83,0xEC,0x40}
         });
+
 
     //添加各个要执行的函数，以及执行前的判断
     std::vector<byte> functionsCallCheck = utils.combineVectors({
@@ -285,30 +289,29 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
             checkIfShouldCall(Fn_ChangeColor,this->changeColor.get()->getEntryAddress())
         });
 
-    std::vector<byte> endBytes = utils.combineVectors({
-        //add rsp, 0x40
-        std::vector<byte>{ 0x48,0x83,0xc4,0x40 },
-        /*pop_all*/ });
+    std::vector<byte> endBytes;
 
-            //执行后置代码
-    for (auto b : jmpHook->coveredBytes) {
-        endBytes.push_back(b);
-    }
+    
+    //  std::vector<byte> endBytes = utils.combineVectors({
+    //   //add rsp, 0x40
+    //   std::vector<byte>{ 0x48,0x83,0xc4,0x40 },
+    //   /*pop_all*/ });
+    //
 
+
+    //跳转回原始地址
     endBytes = utils.combineVectors({
         endBytes,
-        //ASM_mov_rax       
-        { 0x48,0xB8},
-        //address
-        utils.addressToLittleEndianBytes(jmpHook->jmpBackAddress),
-        //ASM_jmp_rax
-        {0xFF, 0xE0}
+        pop_all,
+        jmpHook->coveredBytes,
+        //jmp  to jmpBackAddress
+        ASM_FF25_JMP, utils.addressToLittleEndianBytes(jmpHook->jmpBackAddress),
     });
       
 
     std::vector<byte> result = utils.combineVectors({
         beginBytes,
-        functionsCallCheck,
+        //functionsCallCheck,    //TODO:暂时移除
         endBytes
         }
     );
