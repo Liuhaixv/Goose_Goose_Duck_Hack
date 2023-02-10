@@ -114,9 +114,9 @@ private:
     std::vector<CallableFunction*> callableFunctions;
 };
 
-enum FunctionOrder {
+enum FunctionOrder{
     Fn_CompleteOneTask,
     Fn_GetReady,
-    Fn_ChangeColor
+    Fn_ChangeColor,
 };
 

@@ -90,7 +90,7 @@ bool CodeCave::buildCodeCave(CallHook* callHook)
     this->completeOneTask = std::make_unique<CompleteOneTask>();
     this->getReady = std::make_unique<GetReady>();
     this->changeColor = std::make_unique<ChangeColor>();
-    
+
 
     this->callableFunctions.clear();
     this->callableFunctions.push_back(completeOneTask.get());//Fn_CompleteOneTask,
@@ -230,8 +230,12 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
 
     std::vector<byte> beginBytes;
 
+    //16 * 8 bytes（多一个是为了偶数个对齐栈）
     std::vector<byte> push_all = {
-        //rax rbx rcx rdx rbp rdi rsi r8 r9 r10 r11 r12 r13 r14 r15
+        //rax rax rbx rcx rdx rbp rdi rsi r8 r9 r10 r11 r12 r13 r14 r15
+        //push所有寄存器，已对齐0x10
+        //db 50 50 53 51 52 55 57 56 41 50 41 51 41 52 41 53 41 54 41 55 41 56 41 57 
+        0x50,
         0x50,
         0x53,
         0x51,
@@ -248,6 +252,8 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
         0x41, 0x56,
         0x41, 0x57 };
 
+    //pop所有寄存器，已对齐0x10
+    //db 41 5F 41 5E 41 5D 41 5C 41 5B 41 5A 41 59 41 58 5E 5F 5D 5A 59 5B 58 58
     std::vector<byte> pop_all = {
       { 0x41, 0x5F,
         0x41, 0x5E,
@@ -263,20 +269,21 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
         0x5A,
         0x59,
         0x5B,
+        0x58,
         0x58 }
     };
 
-    std::vector<byte> ASM_FF25_JMP = {0xff,0x25,0,0,0,0};
+    std::vector<byte> ASM_FF25_JMP = { 0xff,0x25,0,0,0,0 };
 
     beginBytes = utils.combineVectors({
             beginBytes,
             push_all,
-            /*push_all,*/
             //获取当前函数地址，即codeEntry
-            //lea rbx,[rip-8-16]
-            //{ 0x48, 0x8D, 0x1D, 0xF9, 0xFF, 0xFF, 0xFF,
+            //lea rbx,[rip-??]
+            { 0x48, 0x8D, 0x1D, 0xE1, 0xFF, 0xFF, 0xFF},
             //sub rbx, 0x1000
-            //0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
+            {0x48, 0x81,0xEB},utils.addressToLittleEndianBytes(this->staticField.staticFieldSize),
+
             //sub rsp, 0x40
             //{0x48,0x83,0xEC,0x40}
         });
@@ -284,14 +291,20 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
 
     //添加各个要执行的函数，以及执行前的判断
     std::vector<byte> functionsCallCheck = utils.combineVectors({
-            checkIfShouldCallAndDecreaseBy1(Fn_CompleteOneTask, this->completeOneTask.get()->getEntryAddress()),
-            checkIfShouldCallAndDecreaseBy1(Fn_GetReady, this->getReady.get()->getEntryAddress()),
-            checkIfShouldCall(Fn_ChangeColor,this->changeColor.get()->getEntryAddress())
+        //sub rsp, 0x20
+        std::vector<byte>{0x48,0x83,0xEC,0x28},
+        
+        checkIfShouldCallAndDecreaseBy1(Fn_CompleteOneTask, this->completeOneTask.get()->getEntryAddress()),
+        checkIfShouldCallAndDecreaseBy1(Fn_GetReady, this->getReady.get()->getEntryAddress()),
+        checkIfShouldCall(Fn_ChangeColor,this->changeColor.get()->getEntryAddress()),
+
+        //add rsp, 0x20
+        {0x48,0x83,0xC4,0x28}
         });
 
     std::vector<byte> endBytes;
 
-    
+
     //  std::vector<byte> endBytes = utils.combineVectors({
     //   //add rsp, 0x40
     //   std::vector<byte>{ 0x48,0x83,0xc4,0x40 },
@@ -306,12 +319,12 @@ bool CodeCave::buildCodeCave(JmpHook* jmpHook)
         jmpHook->coveredBytes,
         //jmp  to jmpBackAddress
         ASM_FF25_JMP, utils.addressToLittleEndianBytes(jmpHook->jmpBackAddress),
-    });
-      
+        });
+
 
     std::vector<byte> result = utils.combineVectors({
         beginBytes,
-        //functionsCallCheck,    //TODO:暂时移除
+        functionsCallCheck,    //TODO:暂时移除
         endBytes
         }
     );
