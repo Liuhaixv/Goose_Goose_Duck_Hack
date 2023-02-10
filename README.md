@@ -13,7 +13,7 @@
 
 由于存在很多人二次打包出售的行为，源码的更新将暂停，目前只会发布二进制文件，我将不会解答`任何`关于源码以及源码编译的问题。
 
-关于多开游戏，[传送门](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/tag/%E5%A4%9A%E5%BC%80%E5%B7%A5%E5%85%B7)
+关于多开游戏，[传送门](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/tag/v0.7.1.8.1)
 
 # 进程
 
