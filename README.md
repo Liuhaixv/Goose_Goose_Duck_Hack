@@ -2,14 +2,14 @@
 
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
-[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group8.jpg?raw=true)
+[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)
 
 
 鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
 
 有功能需求可以提Issue，我都会回复。
 
-如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group8.jpg?raw=true)中私聊我。
+如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)中私聊我。
 
 由于存在很多人二次打包出售的行为，源码的更新将暂停，目前只会发布二进制文件，我将不会解答`任何`关于源码以及源码编译的问题。
 
