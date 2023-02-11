@@ -2,7 +2,7 @@
 #include <string>
 struct GuiSettings {
     //辅助程序版本
-    const std::string hackVersion = "0.7.1.8";
+    const std::string hackVersion = "0.7.2";
     //TODO：通过signature获取
     //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
     const std::string gameVersion = "2.17.01";
@@ -36,8 +36,10 @@ struct GuiSettings {
     bool b_enable_autoTasks_and_autoReady = false;
     bool b_autoCompleteTasks = false;
     bool b_autoReady = false;
+    bool b_oneTapCompletingTask = false;
     float f_delayedEnableTime = 0.0f;//延时自动做任务
     float f_minInterval = 1.0f;//TODO
+
 
     //彩虹颜色
     bool b_enableRainbowColors = false;

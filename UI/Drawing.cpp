@@ -76,6 +76,123 @@ void Drawing::Draw() {
     }
 }
 
+static void ShowDemoWindowPopups()
+{
+    if (!ImGui::CollapsingHeader("Popups & Modal windows"))
+        return;
+
+    // The properties of popups windows are:
+    // - They block normal mouse hovering detection outside them. (*)
+    // - Unless modal, they can be closed by clicking anywhere outside them, or by pressing ESCAPE.
+    // - Their visibility state (~bool) is held internally by Dear ImGui instead of being held by the programmer as
+    //   we are used to with regular Begin() calls. User can manipulate the visibility state by calling OpenPopup().
+    // (*) One can use IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) to bypass it and detect hovering even
+    //     when normally blocked by a popup.
+    // Those three properties are connected. The library needs to hold their visibility state BECAUSE it can close
+    // popups at any time.
+
+    // Typical use for regular windows:
+    //   bool my_tool_is_active = false; if (ImGui::Button("Open")) my_tool_is_active = true; [...] if (my_tool_is_active) Begin("My Tool", &my_tool_is_active) { [...] } End();
+    // Typical use for popups:
+    //   if (ImGui::Button("Open")) ImGui::OpenPopup("MyPopup"); if (ImGui::BeginPopup("MyPopup") { [...] EndPopup(); }
+
+    // With popups we have to go through a library call (here OpenPopup) to manipulate the visibility state.
+    // This may be a bit confusing at first but it should quickly make sense. Follow on the examples below.
+
+    if (ImGui::TreeNode("Popups"))
+    {
+        ImGui::TextWrapped(
+            "When a popup is active, it inhibits interacting with windows that are behind the popup. "
+            "Clicking outside the popup closes it.");
+
+        static int selected_fish = -1;
+        const char* names[] = { "Bream", "Haddock", "Mackerel", "Pollock", "Tilefish" };
+        static bool toggles[] = { true, false, false, false, false };
+
+        // Simple selection popup (if you want to show the current selection inside the Button itself,
+        // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
+        if (ImGui::Button("Select.."))
+            ImGui::OpenPopup("my_select_popup");
+        ImGui::SameLine();
+        ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : names[selected_fish]);
+        if (ImGui::BeginPopup("my_select_popup"))
+        {
+            ImGui::Text("Aquarium");
+            ImGui::Separator();
+            for (int i = 0; i < IM_ARRAYSIZE(names); i++)
+                if (ImGui::Selectable(names[i]))
+                    selected_fish = i;
+            ImGui::EndPopup();
+        }
+
+        // Showing a menu with toggles
+        if (ImGui::Button("Toggle.."))
+            ImGui::OpenPopup("my_toggle_popup");
+        if (ImGui::BeginPopup("my_toggle_popup"))
+        {
+            for (int i = 0; i < IM_ARRAYSIZE(names); i++)
+                ImGui::MenuItem(names[i], "", &toggles[i]);
+            if (ImGui::BeginMenu("Sub-menu"))
+            {
+                ImGui::MenuItem("Click me");
+                ImGui::EndMenu();
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Tooltip here");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("I am a tooltip over a popup");
+
+            if (ImGui::Button("Stacked Popup"))
+                ImGui::OpenPopup("another popup");
+            if (ImGui::BeginPopup("another popup"))
+            {
+                for (int i = 0; i < IM_ARRAYSIZE(names); i++)
+                    ImGui::MenuItem(names[i], "", &toggles[i]);
+                if (ImGui::BeginMenu("Sub-menu"))
+                {
+                    ImGui::MenuItem("Click me");
+                    if (ImGui::Button("Stacked Popup"))
+                        ImGui::OpenPopup("another popup");
+                    if (ImGui::BeginPopup("another popup"))
+                    {
+                        ImGui::Text("I am the last one here.");
+                        ImGui::EndPopup();
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndPopup();
+            }
+            ImGui::EndPopup();
+        }
+
+        // Call the more complete ShowExampleMenuFile which we use in various places of this demo
+        if (ImGui::Button("With a menu.."))
+            ImGui::OpenPopup("my_file_popup");
+        if (ImGui::BeginPopup("my_file_popup", ImGuiWindowFlags_MenuBar))
+        {
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("File"))
+                {
+                    ImGui::EndMenu();
+                }
+                if (ImGui::BeginMenu("Edit"))
+                {
+                    ImGui::MenuItem("Dummy");
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
+            ImGui::Text("Hello from popup!");
+            ImGui::Button("This is a dummy button..");
+            ImGui::EndPopup();
+        }
+
+        ImGui::TreePop();
+    }
+}
+
 /// <summary>
 /// 旋转圆圈动画
 /// </summary>
@@ -1025,7 +1142,49 @@ void drawMenu() {
         //菜单
         if (ImGui::BeginTabItem(str("Tasks", "任务")))
         {
-            ImGui::TextColored(ImColor(255, 0, 0), str("Not recommend to use", "任务功能疑似已被和谐"));
+            if (ImGui::CollapsingHeader(str("Patched", "已废弃功能"))) {
+
+                ImGui::TextColored(ImColor(255, 0, 0), str("Not recommend to use due to server-side checking\nServer may kick you instantly", "由于服务器添加了坐标等验证，自动完成任务会导致你被踢出游戏"));
+                ImGui::NewLine();
+
+                ImGui::Checkbox(str("Enable##auto_tasks", "启用##auto_tasks"), &hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
+
+                ImGui::BeginDisabled(!hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
+
+                if (ImGui::BeginTable("float_settings_for_autoTasks", 2,
+                    ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+                ))
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn();
+
+                    ImGui::Text(str("Delayed time for completing tasks", "开局延迟自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
+                    ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                    ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
+                    ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn();
+
+                    ImGui::Text(str("Interval between tasks", "最小间隔时间")); HelpMarker(str("Min interval between every completed task", "限制自动完成任务的间隔不小于?秒"));
+                    ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
+
+                    ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_minInterval", &hackSettings.guiSettings.f_minInterval, 10.0f, 15.0f, "%.0f");
+                    ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
+
+                    ImGui::EndTable();
+                }
+
+                //ImGui::NewLine();
+
+                ImGui::Checkbox(str("Auto Complete Tasks", "自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
+                ImGui::Checkbox(str("Auto Ready", "自动准备"), &hackSettings.guiSettings.b_autoReady);
+                ImGui::EndDisabled();
+
+                ImGui::NewLine();
+            }
+
 
             ImGui::Text(str("Tasks num:", "任务数量：")); ImGui::SameLine();
 
@@ -1063,86 +1222,9 @@ void drawMenu() {
             else {
                 ImGui::TextDisabled(str("Not ready", "未准备"));
             }
-
-            ImGui::NewLine();
-
-            ImGui::Checkbox(str("Enable##auto_tasks", "启用##auto_tasks"), &hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
-
-            ImGui::BeginDisabled(!hackSettings.guiSettings.b_enable_autoTasks_and_autoReady);
-
-            if (ImGui::BeginTable("float_settings_for_autoTasks", 2,
-                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
-            ))
-            {
-                ImGui::TableNextRow();
-                ImGui::TableNextColumn();
-
-                ImGui::Text(str("Delayed time for completing tasks", "开局延迟自动完成任务")); HelpMarker(str("Tasks will not be completed until game has begined ? seconds ago", "自动完成任务将在游戏开局?秒后才会生效"));
-                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
-
-                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_delayedEnableTime", &hackSettings.guiSettings.f_delayedEnableTime, 10.0f, 15.0f, "%.0f");
-                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
-
-                ImGui::TableNextRow();
-                ImGui::TableNextColumn();
-
-                ImGui::Text(str("Interval between tasks", "最小间隔时间")); HelpMarker(str("Min interval between every completed task", "限制自动完成任务的间隔不小于?秒"));
-                ImGui::SetNextItemWidth(6.0f * ImGui::GetFontSize());
-
-                ImGui::TableNextColumn(); ImGui::InputFloat("##CompleteTasks_f_minInterval", &hackSettings.guiSettings.f_minInterval, 10.0f, 15.0f, "%.0f");
-                ImGui::SameLine(); ImGui::Text(str("sec", "秒"));
-
-                ImGui::EndTable();
-            }
-
-            //ImGui::NewLine();
-                        
-            ImGui::Checkbox(str("Auto Complete Tasks", "自动完成任务"), &hackSettings.guiSettings.b_autoCompleteTasks);
-            ImGui::Checkbox(str("Auto Ready", "自动准备"), &hackSettings.guiSettings.b_autoReady);
-            ImGui::EndDisabled();
-
-            //三个checkBox互斥
-            {
-
-            }
-
-            /*无单独完成任务功能，暂时注释掉
-            //显示所有任务
-            if (ImGui::BeginTable("tasks_table", 3,
-                ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-            ))
-            {
-                //设置表头
-                ImGui::TableSetupColumn(str("Index", "索引"));
-                ImGui::TableSetupColumn(str("Task Id", "任务Id"));
-                ImGui::TableSetupColumn(str("One tap complete task", "一键完成任务"));
-                ImGui::TableHeadersRow();
-
-                //取消显示拖拽和名称
-                ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoInputs;
-
-                int index = 0;
-                for (const auto& task : g_client.lobbySceneHandler.tasksHandler.assignedTasks) {
-                    ImGui::TableNextRow();
-
-                    //索引
-                    ImGui::TableNextColumn();
-                    ImGui::Text("%d", index++);
-
-                    //任务Id
-                    ImGui::TableNextColumn();
-                    ImGui::Text(string(task.taskId).get_std_string().c_str());
-
-                    //一键完成任务
-                    ImGui::TableNextColumn();
-                    if (ImGui::Button(str("Complete", "完成"))) {
-                        // 完成任务
-                    }
-                }
-
-                ImGui::EndTable();
-            }
-            */
+                      
+            ImGui::Checkbox(str("One-tap completing task", "秒任务"), &hackSettings.guiSettings.b_oneTapCompletingTask);
+           
 
             ImGui::EndTabItem();
         }

@@ -95,6 +95,34 @@ public:
                 }
             }
 
+            //one-tap完成任务，一键完成任务
+            {
+                ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_oneTapCompletingTask, &b_hasEnabledOneTapCompletingTask);
+
+                if (state == SHOULD_ACTIVATE_NOW) {
+                    
+                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::SkipPlayingGameToCompleteTask::address;
+                    if (address == NULL) {
+                        continue;
+                    }
+
+                    memory.write_bytes(address,
+                            GameAssembly::BytesPatch::SkipPlayingGameToCompleteTask::oneTapCompleteTask                        
+                    );
+                }
+                else if (state == SHOULD_DEACTIVATE_NOW) {
+                    //恢复任务
+                    int64_t address = memory.gameAssemblyBaseAddress + GameAssembly::BytesPatch::SkipPlayingGameToCompleteTask::address;
+                    if (address == NULL) {
+                        continue;
+                    }
+
+                    memory.write_bytes(address,
+                        GameAssembly::BytesPatch::SkipPlayingGameToCompleteTask::raw
+                    );
+                }
+            }
+
             //Bypass version check
             {
                 ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_bypassVersionCheck, &b_bypassVersionCheck);
@@ -236,6 +264,8 @@ private:
 
     bool b_allocatedMemory_autoCompleteTasks = false;
     bool b_allocatedMemory_autoReady = false;
+
+    bool b_hasEnabledOneTapCompletingTask = false;
 
     time_t lastTimeTaskComplete = -1;
 

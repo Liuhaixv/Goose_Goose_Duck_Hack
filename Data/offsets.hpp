@@ -252,8 +252,14 @@ namespace GameAssembly {
             }
         }
 
+        //2.17.01
         namespace PlayerCustomizationPanelHandler {
             constexpr int64_t ChangeColor = 0x1E92490;//void __stdcall Handlers_LobbyHandlers_PlayerCustomizationPanelHandler__ChangeColor(Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_o *this, int32_t GHCFJPBDGED, const MethodInfo *method)
+        }
+
+        //2.17.01
+        namespace TaskPanelHandler {
+            constexpr int64_t OpenPanel = 0x1C666F0;//void __stdcall Handlers_GameHandlers_TaskHandlers_TaskPanelHandler__OpenPanel(Handlers_GameHandlers_TaskHandlers_TaskPanelHandler_o *this, const MethodInfo *method)
         }
     }
 
@@ -322,6 +328,16 @@ namespace GameAssembly {
                 const std::vector<byte> raw = {0x48,0x89,0x70,0x20 };
                 const std::vector<byte>  bypassBan = {0xC6,0x40,0x20,0x00 };
             }
+        }
+
+        //跳过任务小游戏，直接完成任务
+        //原理为替换api，让OpenPanel跳转到CompleteTask，因为都是无参函数，所以直接jmp即可
+        //2.17.01
+        namespace SkipPlayingGameToCompleteTask {
+            constexpr int64_t address = GameAssembly::Method::TaskPanelHandler::OpenPanel;
+
+            const std::vector<byte> raw = {0x48,0x89,0x5C,0x24,0x08};// mov     [rsp+arg_0], rbx
+            const std::vector<byte>  oneTapCompleteTask = { 0xE9, 0x6B,0xEF,0xFF,0xFF };//Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.OpenPanel - E9 6BEFFFFF - jmp Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.CompleteTask
         }
 
         /*
