@@ -9,7 +9,7 @@
 
 有功能需求可以提Issue，我都会回复。
 
-如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)中私聊我。
+如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)中私聊我。如果微信群加不了可以加qq群263336267
 
 由于存在很多人二次打包出售的行为，源码的更新将暂停，目前只会发布二进制文件，我将不会解答`任何`关于源码以及源码编译的问题。
 
