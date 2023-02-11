@@ -60,7 +60,7 @@
 2. `Delete`小地图
 
 # 已知Bug
-1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
+1. 当前已无法从服务器获取身份。<del>目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)</del>
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -115,8 +115,8 @@ Fixing bugs
 2. `Delete` minimap
 
 # Known bugs
-1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
-[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
+1. No longer be able to get other players' role info now due to bug fixed server-side. <del>It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
+[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)</del>
 
 # Notice
 I am not responsible for any problems caused by abusing this project
