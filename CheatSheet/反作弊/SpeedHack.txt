@@ -1,0 +1,65 @@
+﻿有时间作弊检测
+
+//获取作弊保护的时间
+float __stdcall CodeStage_AntiCheat_Time_SpeedHackProofTime__get_deltaTime(const MethodInfo *method)
+{
+  CodeStage_AntiCheat_Time_SpeedHackProofTime_c *v1; // rdx
+  Il2CppObject *Instance; // rax
+  __int64 v3; // rdx
+  __int64 v4; // rcx
+  struct CodeStage_AntiCheat_Time_SpeedHackProofTime_StaticFields *static_fields; // rax
+
+  if ( !byte_4F049A6 )
+  {
+    sub_788FB0(&CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo);
+    byte_4F049A6 = 1;
+  }
+  v1 = CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo;
+  if ( !CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo->static_fields->inited )
+  {
+    if ( !byte_4F049A2 )
+    {
+      sub_788FB0(&Method_CodeStage_AntiCheat_Common_KeepAliveBehaviour_SpeedHackProofTime__get_GetOrCreateInstance__);
+      sub_788FB0(&CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo);
+      byte_4F049A2 = 1;
+    }
+    Instance = CodeStage_AntiCheat_Common_KeepAliveBehaviour_object___get_GetOrCreateInstance(Method_CodeStage_AntiCheat_Common_KeepAliveBehaviour_SpeedHackProofTime__get_GetOrCreateInstance__);
+    if ( !Instance )
+      sub_7891F0(v4, v3);
+    CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo->static_fields->inited = CodeStage_AntiCheat_Time_SpeedHackProofTime__InitInternal(
+                                                                                    (CodeStage_AntiCheat_Time_SpeedHackProofTime_o *)Instance,
+                                                                                    0i64);
+    v1 = CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo;
+  }
+  static_fields = v1->static_fields;
+  if ( static_fields->speedHackDetected )
+    return static_fields->reliableDeltaTime;
+  else
+    return UnityEngine_Time__get_deltaTime(0i64);
+}
+
+//检测到作弊
+void __stdcall CodeStage_AntiCheat_Time_SpeedHackProofTime__OnSpeedHackDetected(
+        CodeStage_AntiCheat_Time_SpeedHackProofTime_o *this,
+        const MethodInfo *method)
+{
+  bool v3; // zf
+  System_DateTime_o v4; // [rsp+30h] [rbp+8h] BYREF
+
+  if ( !byte_4F049AD )
+  {
+    sub_788FB0(&CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo);
+    byte_4F049AD = 1;
+  }
+  v3 = byte_4F0499F == 0;
+  CodeStage_AntiCheat_Time_SpeedHackProofTime_TypeInfo->static_fields->speedHackDetected = 1;
+  if ( v3 )
+  {
+    sub_788FB0(&System_DateTime_TypeInfo);
+    byte_4F0499F = 1;
+  }
+  if ( !System_DateTime_TypeInfo->_2.cctor_finished )
+    il2cpp_runtime_class_init(System_DateTime_TypeInfo);
+  v4.fields._dateData = System_DateTime__get_UtcNow(0i64).fields._dateData;
+  this->fields.lastFrameReliableTicks = System_DateTime__get_Ticks((System_DateTime_o)&v4, 0i64);
+}
