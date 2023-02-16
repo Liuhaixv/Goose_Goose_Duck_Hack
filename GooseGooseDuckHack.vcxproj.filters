@@ -96,6 +96,9 @@
     <ClCompile Include="Memory\JmpHook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UI\DebugConsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\Memory.h">
@@ -272,6 +275,9 @@
     <ClInclude Include="Memory\JmpHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\DebugConsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -285,5 +291,10 @@
     <ResourceCompile Include="UI\GooseGooseDuckHack.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CheatSheet\反作弊\EAC.txt" />
+    <Text Include="CheatSheet\关于玩家语音.txt" />
+    <Text Include="CheatSheet\绑定账号\获取uid等信息绑定机器码.txt" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DevelopRelease|x64">
@@ -202,6 +202,9 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="http\json_stuct\UserInfoJson.cpp" />
+    <ClCompile Include="md5\md5.cpp" />
+    <ClCompile Include="UI\DebugConsole.cpp" />
     <ClCompile Include="Memory\JmpHook.cpp" />
     <ClCompile Include="Memory\CodeCave\ChangeColor.cpp" />
     <ClCompile Include="Memory\CallHook.cpp" />
@@ -209,6 +212,9 @@
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="http\http_api\UploadUserInfoApi.h" />
+    <ClInclude Include="md5\md5.h" />
+    <ClInclude Include="UI\DebugConsole.h" />
     <ClInclude Include="Memory\JmpHook.h" />
     <ClInclude Include="Memory\CodeCave\ChangeColor.h" />
     <ClInclude Include="Memory\CallHook.h" />
@@ -253,7 +259,6 @@
     <ClInclude Include="http\http_api\Ping.h" />
     <ClInclude Include="http\http_api\virtual\RemoteServerHttpApi.h" />
     <ClInclude Include="http\json_stuct\LatestVersionsJson.h" />
-    <ClCompile Include="http\json_stuct\LatestVersionsJson.cpp" />
     <ClInclude Include="http\json_stuct\virtual\BaseJsonStruct.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Memory\PatternScanner.h" />
@@ -292,12 +297,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include="http\json_stuct\UserInfoJson.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="UI\GooseGooseDuckHack.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CheatSheet\关于玩家语音.txt" />
+    <Text Include="CheatSheet\反作弊\EAC.txt" />
+    <Text Include="CheatSheet\绑定账号\获取uid等信息绑定机器码.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

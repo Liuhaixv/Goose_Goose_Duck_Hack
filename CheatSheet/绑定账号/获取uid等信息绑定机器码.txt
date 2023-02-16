@@ -1,0 +1,10 @@
+﻿//获取GaggleID
+FriendManager
+    -GaggleNickName // pig
+    -GaggleNumber   // 9123
+    -GaggleID       // pig#9123
+
+//获取userId
+//获取nickname
+LocalPlayer.Player = PlayerController ->
+PlayerController.userId

@@ -1,0 +1,40 @@
+﻿//2.17.01
+// Namespace: 
+[CompilerGenerated]
+private sealed class IAPManager.JODDHCEBDJL : IEnumerator<object>, IEnumerator, IDisposable // TypeDefIndex: 870
+{
+	// Fields
+	private int <>1__state; // 0x10
+	private object <>2__current; // 0x18
+	public IAPManager <>4__this; // 0x20
+	private Task<RequestResponse<BanStatusResponse>> <getBanTimeTask>5__2; // 0x28
+
+	// Properties
+	private object System.Collections.Generic.IEnumerator<System.Object>.Current { get; }
+	private object System.Collections.IEnumerator.Current { get; }
+
+	// Methods
+
+	[DebuggerHidden]
+	// RVA: 0x863F60 Offset: 0x863360 VA: 0x180863F60
+	public void .ctor(int <>1__state) { }
+
+	[DebuggerHidden]
+	// RVA: 0x83D050 Offset: 0x83C450 VA: 0x18083D050 Slot: 5
+	private void System.IDisposable.Dispose() { }
+
+	// RVA: 0xAD0C00 Offset: 0xAD0000 VA: 0x180AD0C00 Slot: 6
+	private bool MoveNext() { }
+
+	[DebuggerHidden]
+	// RVA: 0x847E10 Offset: 0x847210 VA: 0x180847E10 Slot: 4
+	private object System.Collections.Generic.IEnumerator<System.Object>.get_Current() { }
+
+	[DebuggerHidden]
+	// RVA: 0xAD0F60 Offset: 0xAD0360 VA: 0x180AD0F60 Slot: 8
+	private void System.Collections.IEnumerator.Reset() { }
+
+	[DebuggerHidden]
+	// RVA: 0x847E10 Offset: 0x847210 VA: 0x180847E10 Slot: 7
+	private object System.Collections.IEnumerator.get_Current() { }
+}
