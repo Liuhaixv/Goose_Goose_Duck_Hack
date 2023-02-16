@@ -204,7 +204,7 @@
   <ItemGroup>
     <ClCompile Include="http\json_stuct\UserInfoJson.cpp" />
     <ClCompile Include="md5\md5.cpp" />
-    <ClCompile Include="UI\DebugConsole.cpp" />
+    <ClCompile Include="Class\DebugConsole.cpp" />
     <ClCompile Include="Memory\JmpHook.cpp" />
     <ClCompile Include="Memory\CodeCave\ChangeColor.cpp" />
     <ClCompile Include="Memory\CallHook.cpp" />
@@ -214,7 +214,7 @@
     <ClCompile Include="Class\Hack.cpp" />
     <ClInclude Include="http\http_api\UploadUserInfoApi.h" />
     <ClInclude Include="md5\md5.h" />
-    <ClInclude Include="UI\DebugConsole.h" />
+    <ClInclude Include="Class\DebugConsole.h" />
     <ClInclude Include="Memory\JmpHook.h" />
     <ClInclude Include="Memory\CodeCave\ChangeColor.h" />
     <ClInclude Include="Memory\CallHook.h" />

@@ -3,9 +3,12 @@
 #include"Client.h"
 
 #include"Class/Hack.hpp"
+#include "Class/DebugConsole.h"
 
 extern Hack hack;
 extern HackSettings hackSettings;
+extern DebugConsole debugConsole;
+
 Client::Client()
 {
     for (int i = 0; i < n_players; i++) {
@@ -37,24 +40,35 @@ void Client::resetGuiSettings() {
 /// 重置所有玩家的数据
 /// </summary>
 void Client::resetPlayersData() {
+
+    debugConsole.log(DebugType::FUNCTION, "resetPlayersData");
+
     for (auto playerController : this->playerControllers) {
         playerController->resetMemberFields();
     }
 }
 
 void Client::onLocalPlayerQuitGame() {
+
+    //TODO: bug
+    //debugConsole.log(DebugType::EVENT, "OnLocalPlayerQuitGame");
+
     Client::onGameEnded();
 }
 
 void Client::onEnteringRoom()
 {
     //TODO: 不知道干啥
+    debugConsole.log(DebugType::EVENT, "OnEnteringRoom");
 }
 
 /// <summary>
 /// 游戏开始
 /// </summary>
 void Client::onGameStarted() {
+
+    debugConsole.log(DebugType::EVENT, "OnGameStarted");
+
     //更新游戏内初始数据
     //updateGameOriginalData();
 
@@ -66,6 +80,9 @@ void Client::onGameStarted() {
 /// 游戏结束
 /// </summary>
 void Client::onGameEnded() {
+
+    debugConsole.log(DebugType::EVENT, "OnGameEnded");
+
     //TODO: 重置玩家数据，例如死亡时附近的玩家
     resetPlayersData();
     //TODO: 重置hack中的激活状态
