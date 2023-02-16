@@ -1,0 +1,13 @@
+﻿//移除要监听的玩家语音，InterestGroupFromUserId 范围为1-16
+//在判定玩家超出范围时候触发
+//例如 Handlers_GameHandlers_PlayerHandlers_ProximityHandlers_ProximityChatCollider__OnTriggerExit2D
+Managers_GameManagers_PhotonVoiceManager__RemoveGroupToListen(photonVoiceManager, InterestGroupFromUserId, 0i64);
+
+//同理还有添加监听的玩家语音
+void __stdcall Managers_GameManagers_PhotonVoiceManager__AddGroupToListen(
+        Managers_GameManagers_PhotonVoiceManager_o *this,
+        int32_t HCLBNIEILAO,
+        const MethodInfo *method)
+
+listenToAllGroups
+listenToNoGroups

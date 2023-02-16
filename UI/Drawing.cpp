@@ -9,6 +9,7 @@
 #include<algorithm>
 
 #include"../Class/HttpDataUpdater.h"
+#include "../Class/DebugConsole.h"
 //#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
@@ -25,6 +26,8 @@ extern Memory memory;
 
 extern UserSettings userSettings;
 extern HttpDataUpdater httpDataUpdater;
+
+extern DebugConsole debugConsole;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
@@ -74,6 +77,30 @@ void Drawing::Draw() {
 
         }
     }
+}
+
+//TODO:
+//显示调试Log窗口
+// Demonstrate creating a simple log window with basic filtering.
+static void ShowExampleAppLog(bool* p_open)
+{
+
+    // For the demo: add a debug button _BEFORE_ the normal log window contents
+    // We take advantage of a rarely used feature: multiple calls to Begin()/End() are appending to the _same_ window.
+    // Most of the contents of the window will be added by the log.Draw() call.
+    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Debug log console", p_open);
+    if (ImGui::SmallButton("[Debug] Add 5 entries"))
+    {
+        for (int n = 0; n < 5; n++)
+        {
+            debugConsole.log("test");
+        }
+    }
+    ImGui::End();
+
+    // Actually call in the regular Log helper (which will Begin() into the same window as we just did)
+    debugConsole.Draw("Debug log console", p_open);
 }
 
 static void ShowDemoWindowPopups()
@@ -1255,7 +1282,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单6
+        //菜单7
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
             //选择进程
@@ -1327,8 +1354,19 @@ void drawMenu() {
 
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
 
+
             //秘密菜单
             if (hackSettings.guiSettings.b_debug) {
+
+                static bool b_open_debug_log = false;
+                if (ImGui::Button(str("Debug log##secret zone", "Log窗口##secret zone"))) {
+                    b_open_debug_log = true;
+                }
+
+                if (b_open_debug_log) {
+                    ShowExampleAppLog(&b_open_debug_log);
+                }
+
                 ImGui::Checkbox(str("Disable write memory", "禁用写入内存"), &hackSettings.b_debug_disableWriteMemory);
 
                 ImColor& test_color = userSettings.getColor(UserSettingsNames::test_color_0, ImColor(1.0f, 0.0f, 0.0f));

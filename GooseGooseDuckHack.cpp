@@ -32,6 +32,7 @@
 #include "./UI/UI.h"
 #include "Class/HttpDataUpdater.h"
 #include "Memory/CodeCave/CodeCave.h"
+#include "Class/DebugConsole.h"
 
 
 Utils utils;
@@ -62,6 +63,8 @@ HttpDataUpdater httpDataUpdater;
 std::vector<Updater*> updaters;
 
 CodeCave codeCave;
+
+DebugConsole debugConsole;
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
