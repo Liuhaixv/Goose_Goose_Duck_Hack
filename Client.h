@@ -27,7 +27,7 @@ public:
     /// <summary>
     /// 重置所有玩家的数据
     /// </summary>
-    void resetPlayersData();
+    void resetAllPlayersData();
 
     /// <summary>
     /// 本地玩家退出游戏

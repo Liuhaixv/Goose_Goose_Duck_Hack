@@ -39,9 +39,9 @@ void Client::resetGuiSettings() {
 /// <summary>
 /// 重置所有玩家的数据
 /// </summary>
-void Client::resetPlayersData() {
+void Client::resetAllPlayersData() {
 
-    debugConsole.log(DebugType::FUNCTION, "resetPlayersData");
+    debugConsole.log(DebugType::FUNCTION, "ResetAllPlayersData");
 
     for (auto playerController : this->playerControllers) {
         playerController->resetMemberFields();
@@ -84,7 +84,7 @@ void Client::onGameEnded() {
     debugConsole.log(DebugType::EVENT, "OnGameEnded");
 
     //TODO: 重置玩家数据，例如死亡时附近的玩家
-    resetPlayersData();
+    resetAllPlayersData();
     //TODO: 重置hack中的激活状态
     hack.resetActivationStates();
     //重置Gui设置
