@@ -2,14 +2,14 @@
 
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
-[<img src="https://img.shields.io/badge/%E5%8A%A0%E5%85%A5%E4%BA%A4%E6%B5%81%E7%BE%A4-%E5%BE%AE%E4%BF%A1%E7%BE%A4-green" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)
+[<img src="https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
 
 
 鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
 
 有功能需求可以提Issue，我都会回复。
 
-如果你有什么问题或技术交流，可在[微信群](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat_group9.jpg?raw=true)中私聊我。
+如果你有什么问题或技术交流，可在Q群中私聊我
 
 由于存在很多人二次打包出售的行为，源码的更新将暂停，目前只会发布二进制文件，我将不会解答`任何`关于源码以及源码编译的问题。
 
@@ -60,7 +60,7 @@
 2. `Delete`小地图
 
 # 已知Bug
-1. 目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
+1. 当前已无法从服务器获取身份。<del>目前只有中途加入游戏的旁观能够看到所有玩家的职业身份，待解决。[临时解决方案](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)</del>
 
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
@@ -115,8 +115,8 @@ Fixing bugs
 2. `Delete` minimap
 
 # Known bugs
-1. It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
-[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)
+1. No longer be able to get other players' role info now due to bug fixed server-side. <del>It seems that all players other than localplayer's rolenames are hidden and only shown when the game has ended. Patched in 2023/1/5 's update? **However, You can see all players' rolenames if you joined the game halfway (as spectator).**
+[See temporary solution](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/discussions/90)</del>
 
 # Notice
 I am not responsible for any problems caused by abusing this project
@@ -125,3 +125,4 @@ I am not responsible for any problems caused by abusing this project
 
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
+](https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue)](https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue)
