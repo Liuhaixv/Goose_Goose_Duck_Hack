@@ -9,7 +9,8 @@ public:
         return this->path;
     }
 
-    //httplib::Params getParams(UserInfo userInfo);
+    static Params getParams(UserInfo userInfo);
+
 private:
 #if defined(DEVELOP)
     const std::string path = "/ggd/v2";

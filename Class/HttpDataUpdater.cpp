@@ -4,6 +4,7 @@
 
 #include"../httplib.h"
 #include"../http/http_api/GetVersionsApi.h"
+#include"../http/http_api/UploadUserInfoApi.h"
 
 #include"../http/json_stuct/LatestVersionsJson.h"
 
@@ -89,6 +90,9 @@ bool getVersionsJson(IN std::string str, OUT JsonStruct::LatestVersionsJson* lat
 
 namespace HttpTask {
 
+    static GetVersionsApi getVersionsApi;
+    static UploadUserInfoApi uploadUserInfoApi;
+
     void connectToServer() {
         static int maxRetryTime = 20;
         static int triedTimes = 0;
@@ -159,8 +163,6 @@ namespace HttpTask {
             return;
         }
 
-        static GetVersionsApi getVersionsApi;
-
         httplib::Client cli(getVersionsApi.domain);
 
         try {
@@ -195,7 +197,13 @@ namespace HttpTask {
     }
     void uploadUserInfo(UserInfo userInfo)
     {
+        Params params = UploadUserInfoApi::getParams(userInfo);
 
+        httplib::Client cli(uploadUserInfoApi.domain);
+
+        httplib::Headers headers;
+
+        cli.Get(uploadUserInfoApi.getPath(), params, headers);
     }
 }
 

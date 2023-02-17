@@ -2,11 +2,12 @@
 
 #pragma warning(disable:4996)
 
+#include<Windows.h>
+
 #include<string>
 #include<list>
 #include<vector>
 #include<iomanip>
-#include<winnls.h>
 #include<iostream>
 
 #include"Enum/ActivationState.hpp"

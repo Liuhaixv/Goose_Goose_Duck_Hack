@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+//Windows
+#include<Windows.h>
+
 #include<list>
 #include<thread>
 #include <stdlib.h>
@@ -20,8 +23,6 @@
 
 #include"./Class/Game/PlayerController.h"
 
-//Windows
-#include<Windows.h>
 #include<dwmapi.h>
 #include<d3d11.h>
 //ImGui

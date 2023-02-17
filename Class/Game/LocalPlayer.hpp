@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include<Windows.h>
+
 #include"../utils.hpp"
 #include"../Struct/Common.hpp"
 #include"../Memory/Memory.h"
@@ -8,7 +10,6 @@
 
 #include"../../Struct/ObscuredTypes.hpp"
 
-#include<Windows.h>
 
 extern Memory memory;
 class LocalPlayer {

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include <Windows.h>
 #include"../Struct/HackSettings.hpp"
 #include"Updater.h"
-#include <Windows.h>
 
 /// <summary>
 /// Thread functions that update data.

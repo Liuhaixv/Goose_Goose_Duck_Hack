@@ -1,8 +1,9 @@
 ﻿#pragma once
 
+#include <Windows.h>
+
 #include"../Struct/HackSettings.hpp"
 
-#include <Windows.h>
 #include <d3d11.h>
 #include <tchar.h>
 
