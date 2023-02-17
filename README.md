@@ -1,8 +1,12 @@
-﻿# 鹅鸭杀辅助
+# 鹅鸭杀辅助
 
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E6%94%AF%E4%BB%98%E5%AE%9D-blue" alt="支付宝" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
 [<img src="https://img.shields.io/badge/%E6%8D%90%E8%B5%A0-%E5%BE%AE%E4%BF%A1-brightgreen" alt="微信" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)
-[<img src="https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue" alt="微信" align="right" height="30"/>](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/alipay.jpg?raw=true)
+[<img src="https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue" alt="QQ group" align="right" height="30"/>](https://qm.qq.com/cgi-bin/qm/qr?k=HKMamAhRt0StyEqadi6O43G4l9Avr3Ws&jump_from=webapi&authKey=i0XF947ztPH1QODC5l5T0YHZzRYsoS4PgOLeEqDmnkvdiB8q+c5/CGM+3MGkDUll)
+
+<a href="https://discord.gg/mj3TcBQKcR"><img href="https://discord.gg/mj3TcBQKcR" src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" align="right" height="30"/></a>
+
+
 
 
 鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
@@ -125,4 +129,3 @@ I am not responsible for any problems caused by abusing this project
 
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
 [![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
-](https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue)](https://img.shields.io/badge/Q%E7%BE%A4-263336267-blue)
