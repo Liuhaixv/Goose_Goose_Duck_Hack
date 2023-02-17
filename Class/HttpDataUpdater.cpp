@@ -193,5 +193,9 @@ namespace HttpTask {
             hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;
         }
     }
+    void uploadUserInfo(UserInfo userInfo)
+    {
+
+    }
 }
 

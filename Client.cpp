@@ -60,6 +60,7 @@ void Client::onEnteringRoom()
 {
     //TODO: 不知道干啥
     debugConsole.log(DebugType::EVENT, "OnEnteringRoom");
+    
 }
 
 /// <summary>

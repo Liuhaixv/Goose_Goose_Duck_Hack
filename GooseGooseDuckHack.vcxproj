@@ -202,7 +202,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="http\json_stuct\UserInfoJson.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="Class\DebugConsole.cpp" />
     <ClCompile Include="Memory\JmpHook.cpp" />
@@ -226,6 +225,7 @@
     <ClCompile Include="Memory\CodeCave\CodeCave.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Memory\PatternScanner.cpp" />
+    <ClCompile Include="Struct\UserInfo.cpp" />
     <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -264,6 +264,7 @@
     <ClInclude Include="Memory\PatternScanner.h" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
     <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />
+    <ClInclude Include="Struct\UserInfo.h" />
     <ClInclude Include="Struct\VersionState.hpp" />
     <ClInclude Include="UI\Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
@@ -297,7 +298,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="http\json_stuct\UserInfoJson.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon\icon.ico" />

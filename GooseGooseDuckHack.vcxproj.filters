@@ -96,10 +96,10 @@
     <ClCompile Include="Class\DebugConsole.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="http\json_stuct\UserInfoJson.cpp">
+    <ClCompile Include="md5\md5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="md5\md5.cpp">
+    <ClCompile Include="Struct\UserInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,12 +287,12 @@
     <ClInclude Include="md5\md5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Struct\UserInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="http\json_stuct\UserInfoJson.h">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon\icon.ico">

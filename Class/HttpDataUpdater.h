@@ -2,6 +2,7 @@
 #include "Updater.h"
 #include <queue>
 #include <functional>
+#include "../Struct/UserInfo.h"
 
 /// <summary>
 /// Thread functions that update data from http server
@@ -23,4 +24,5 @@ private:
 namespace HttpTask {
     void connectToServer();
     void checkLatestVersions(bool forceReconnect);
+    void uploadUserInfo(UserInfo userInfo);
 }
