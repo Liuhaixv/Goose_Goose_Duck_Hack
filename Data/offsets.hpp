@@ -131,6 +131,9 @@ namespace Offsets {
         constexpr int64_t b_hasBomb = 0x144; // Boolean
         constexpr int64_t b_isGhost = 0x198; // Boolean
         constexpr int64_t i_timeOfDeath = 0x19C;//int
+
+        constexpr int64_t ptr_userId = 0x1A8; // System_String
+
         constexpr int64_t b_isLocal = 0x1D0; // Boolean
         constexpr int64_t ptr_nickname = 0x1E0; // System_String
 
@@ -153,6 +156,17 @@ namespace Offsets {
     //2.16.02
     namespace CinemachineVirtualCamera {
         constexpr int64_t f_m_zoomSize = 0xB4;//Float
+    }
+
+    //2.17.01
+    namespace FriendManager {
+        namespace Class {
+            namespace StaticField {
+                constexpr int64_t ptr_friendManager = 0x0;
+            }
+            constexpr int64_t ptr_staticFields = 0xB8;
+        }
+        constexpr int64_t ptr_GaggleID = 0x1B0;//string
     }
 
     //2.17.01

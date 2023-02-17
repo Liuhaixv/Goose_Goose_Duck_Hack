@@ -7,8 +7,12 @@
 #include"../http/http_api/UploadUserInfoApi.h"
 
 #include"../http/json_stuct/LatestVersionsJson.h"
+#include "DebugConsole.h"
 
 extern HackSettings hackSettings;
+
+
+extern DebugConsole debugConsole;
 
 //public
 void HttpDataUpdater::addHttpTask(IN std::function<void()> callable) {
@@ -203,7 +207,22 @@ namespace HttpTask {
 
         httplib::Headers headers;
 
-        cli.Get(uploadUserInfoApi.getPath(), params, headers);
+        try {
+            auto res = cli.Get(uploadUserInfoApi.getPath(), params, headers);
+
+            if (res->status == 200) {
+                //success
+                debugConsole.log(DebugType::FUNCTION, "UploadUserInfo successed");
+            }
+            else {
+
+                debugConsole.log(DebugType::FUNCTION, "UploadUserInfo failed!");
+                std::cout << "Error: " << res->status << std::endl;
+            }
+        }
+        catch (...) {
+            hackSettings.remoteServerSettings.serverState = RemoteMasterServerState::DOWN;
+        }
     }
 }
 

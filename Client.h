@@ -3,8 +3,9 @@
 #include "Memory.h"
 #include "Struct/HackSettings.hpp"
 #include "Class/Game/PlayerController.h"
-#include"Class/Game/LocalPlayer.hpp"
+#include"Class/Game/LocalPlayer.h"
 #include "Class/Game/LobbySceneHandler.h"
+#include "Struct/UserInfo.h"
 
 class Client
 {
@@ -88,7 +89,7 @@ public:
     void updateGameOriginalData();
 
     [[deprecated("Replaced with GUI, won't do anything now")]]
-    void printAllPlayersInfo(Utils* utils = nullptr);
+    //void printAllPlayersInfo(Utils* utils = nullptr);
 
     bool teleportTo(IN const Vector2& to);
 
@@ -102,4 +103,6 @@ public:
 private:
     //上一次游戏开始的时间
     time_t time_gameStart = NULL;
+
+    UserInfo getUserInfo();
 };

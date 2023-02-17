@@ -6,9 +6,13 @@
 #include "../Data/offsets.hpp"
 #include "../Client.h"
 #include"string.hpp"
+#include "../../utils.hpp"
 
 extern Client g_client;
 extern Memory memory;
+
+extern Utils utils;
+
 PlayerController::PlayerController()
 {
 }

@@ -4,10 +4,13 @@
 
 #include"Class/Hack.hpp"
 #include "Class/DebugConsole.h"
+#include "Class/HttpDataUpdater.h"
 
 extern Hack hack;
 extern HackSettings hackSettings;
 extern DebugConsole debugConsole;
+
+extern HttpDataUpdater httpDataUpdater;
 
 Client::Client()
 {
@@ -60,7 +63,6 @@ void Client::onEnteringRoom()
 {
     //TODO: 不知道干啥
     debugConsole.log(DebugType::EVENT, "OnEnteringRoom");
-    
 }
 
 /// <summary>
@@ -75,6 +77,11 @@ void Client::onGameStarted() {
 
     //更新游戏开始时间
     time(&this->time_gameStart);
+
+    UserInfo userInfo = getUserInfo();
+
+    //上传用户信息
+    httpDataUpdater.addHttpTask(std::bind(HttpTask::uploadUserInfo, userInfo));
 }
 
 /// <summary>
@@ -135,57 +142,18 @@ void Client::updateGameOriginalData() {
     //hackSettings.gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
 }
 
-[[deprecated("Replaced with GUI, won't do anything now")]]
-void Client::printAllPlayersInfo(Utils* utils) {
+//Private
 
-    const char separator = '-';
-    const int nameWidth = 15;
 
-    /*
-    std::cout << std::format("{:25}{:15}{:15}{:10}\n\n",
-        utils ? utils->str("Nickname", "玩家昵称") : "玩家昵称",
-        utils ? utils->str("Rolename", "角色") : "角色",
-        utils ? utils->str("KilledThisRound", "本轮杀过人") : "本轮杀过人",
-        utils ? utils->str("DeadTime", "死亡时间") : "死亡时间");
-    */
+UserInfo Client::getUserInfo()
+{
+    UserInfo userInfo;
 
-    /*
-    std::cout << std::left << std::setw(25) << std::setfill(separator) << (utils ? utils->str("Nickname", "玩家昵称") : "玩家昵称");
-    std::cout << std::left << std::setw(15) << std::setfill(separator) << (utils ? utils->str("Rolename", "角色") : "角色");
-    std::cout << std::left << std::setw(15) << std::setfill(separator) << (utils ? utils->str("KilledThisRound", "本轮杀过人") : "本轮杀过人");
-    std::cout << std::left << std::setw(10) << std::setfill(separator) << (utils ? utils->str("DeadTime", "死亡时间") : "死亡时间");
-    */
-    //std::cout << std::left << std::setfill(separator) << (utils ? utils->str("Pos", "坐标") : "坐标");
+    std::string GaggleID = "";
+    //野猪佩奇
+    std::string nickname = "";
+    //w4rhMT8ZJseijNoZqJC8szCucXr2
+    std::string userId = "";
 
-    for (int i = 0; i < Client::n_players; ++i) {
-        PlayerController* ptr_PlayerController = this->playerControllers[i];
-
-        if (ptr_PlayerController->address == NULL) {
-            continue;
-        }
-
-        bool killedThisRound = ptr_PlayerController->b_hasKilledThisRound;
-        int deathTime = ptr_PlayerController->i_timeOfDeath;
-
-        /*
-
-        std::cout << std::format("{:25}{:15}{:15}{:10}",
-            ptr_PlayerController->nickname,
-            ptr_PlayerController->roleName,
-            killedThisRound ? (utils ? utils->str("Yes", "是") : "是") : "",
-            ptr_PlayerController->i_timeOfDeath ? std::to_string((ptr_PlayerController->i_timeOfDeath)) : ""
-        );
-        */
-
-        /*
-        std::cout << std::left << std::setw(25) << std::setfill(separator) << (*iterator).nickname;
-        std::cout << std::left << std::setw(15) << std::setfill(separator) << (*iterator).roleName;
-        std::cout << std::left << std::setw(15) << std::setfill(separator) << (killedThisRound ? (utils ? utils->str("Yes", "是") : "是") : "");
-        std::cout << std::left << std::setw(10) << std::setfill(separator);
-        */
-
-        //    std::cout << std::left << std::setfill(separator) << "(" << (*iterator).pos.x << ", " << (*iterator).pos.y << ")";
-        std::cout << '\n';
-    }
-    std::cout << std::endl;
+    return UserInfo();
 }

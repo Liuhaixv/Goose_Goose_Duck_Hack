@@ -202,6 +202,8 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\Game\LocalPlayer.cpp" />
+    <ClCompile Include="Class\Game\string.cpp" />
     <ClCompile Include="http\http_api\UploadUserInfoApi.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="Class\DebugConsole.cpp" />
@@ -246,7 +248,7 @@
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
     <ClInclude Include="Class\HotkeyUpdater.hpp" />
-    <ClInclude Include="Class\Game\LocalPlayer.hpp" />
+    <ClInclude Include="Class\Game\LocalPlayer.h" />
     <ClInclude Include="Class\GameProcessUpdater.hpp" />
     <ClInclude Include="Class\Game\PlayerController.h" />
     <ClInclude Include="Client.h" />

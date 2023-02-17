@@ -7,6 +7,7 @@
 #include"../Enum/ActivationState.hpp"
 
 #include"../Struct/ObscuredTypes.hpp"
+#include "../utils.hpp"
 
 extern Memory memory;
 extern Utils utils;

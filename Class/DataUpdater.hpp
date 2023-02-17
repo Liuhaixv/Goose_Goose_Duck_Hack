@@ -4,7 +4,7 @@
 
 #include"../Client.h"
 #include"../Class/Hack.hpp"
-#include"./Game/LocalPlayer.hpp"
+#include"./Game/LocalPlayer.h"
 #include"../utils.hpp"
 
 #include"Updater.h"
