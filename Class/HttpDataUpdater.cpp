@@ -210,6 +210,10 @@ namespace HttpTask {
         try {
             auto res = cli.Get(uploadUserInfoApi.getPath(), params, headers);
 
+            if (res.error() != httplib::Error::Success) {
+                throw res;
+            }
+
             if (res->status == 200) {
                 //success
                 debugConsole.log(DebugType::FUNCTION, "UploadUserInfo successed");

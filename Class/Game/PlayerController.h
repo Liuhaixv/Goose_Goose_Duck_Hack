@@ -48,6 +48,7 @@ public:
 
     std::string nickname = "";
     std::string roleName = "";
+    std::string userId = "";
 
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
 
@@ -84,6 +85,12 @@ public:
     //TODO: 导致程序崩溃？
     void updateNickname();
 
+    void updateUserid();
+
+    std::string getNickname();
+
+    std::string getUserid();
+
     /// <summary>
     /// Reset and update after replacing address
     /// </summary>
@@ -92,7 +99,7 @@ public:
     bool update(IN int64_t address);
 
 private:
-    std::vector<PlayerController*> getPlayersNearby();
+    //std::vector<PlayerController*> getPlayersNearby();
 
     //检查该地址是PlayerController实例
     bool validateAddress(IN int64_t address);

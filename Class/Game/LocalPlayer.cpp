@@ -4,6 +4,8 @@
 #include"../Memory/Memory.h"
 #include"../Data/offsets.hpp"
 
+#include"../../Class/Game/string.hpp"
+
 #include"../../Struct/ObscuredTypes.hpp"
 
 extern Memory memory;
@@ -76,6 +78,34 @@ float LocalPlayer::getBaseMovementSpeed() {
     }
 
     return true;
+}
+
+UserInfo LocalPlayer::getUserInfo()
+{
+    UserInfo userInfo;
+
+    if (this->playerController.address == NULL) {
+        this->update();
+    }
+
+    userInfo.nickname = this->playerController.getNickname();
+    userInfo.userId = this->playerController.getUserid();
+
+    //从FriendManager获取GaggleID
+
+    std::vector<int64_t> offsets = {
+        GameAssembly::Class::ptr_FriendManagerClass,
+        Offsets::FriendManager::Class::ptr_staticFields,
+        Offsets::FriendManager::Class::StaticField::ptr_friendManager,
+        Offsets::FriendManager::ptr_GaggleID,
+        0
+    };
+
+    int64_t gaggleid_Addr = memory.FindPointer(memory.gameAssemblyBaseAddress, offsets);
+
+    userInfo.GaggleID = string(gaggleid_Addr).get_std_string();
+
+    return userInfo;
 }
 
 bool LocalPlayer::update() {

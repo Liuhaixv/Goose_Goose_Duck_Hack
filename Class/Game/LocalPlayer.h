@@ -3,6 +3,7 @@
 #include<Windows.h>
 
 #include"PlayerController.h"
+#include "../../Struct/UserInfo.h"
 
 class LocalPlayer {
 public:
@@ -53,6 +54,8 @@ public:
 
         return update();
     }
+
+    UserInfo getUserInfo();
 
 private:
     bool update();

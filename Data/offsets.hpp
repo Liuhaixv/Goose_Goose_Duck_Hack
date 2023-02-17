@@ -279,6 +279,8 @@ namespace GameAssembly {
 
     //2.17.01
     namespace Class {
+        constexpr int64_t ptr_FriendManagerClass = 0x4CC11A8;//Gaggle_Friends_FriendManager_c *
+
         constexpr int64_t ptr_LobbySceneHandlerClass = 0x4D18CA8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
         constexpr int64_t ptr_PlayerControllerClass = 0x4D4EAF0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
         constexpr int64_t ptr_LocalPlayerClass = 0x4D19958;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *

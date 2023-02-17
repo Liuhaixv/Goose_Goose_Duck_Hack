@@ -78,10 +78,16 @@ void Client::onGameStarted() {
     //更新游戏开始时间
     time(&this->time_gameStart);
 
-    UserInfo userInfo = getUserInfo();
+    {
+        if (localPlayer.address != NULL) {
+            //上传用户信息
+            debugConsole.log(DebugType::NORMAL, "UploadUserInfo");
 
-    //上传用户信息
-    httpDataUpdater.addHttpTask(std::bind(HttpTask::uploadUserInfo, userInfo));
+            UserInfo userInfo = localPlayer.getUserInfo();
+
+            httpDataUpdater.addHttpTask(std::bind(HttpTask::uploadUserInfo, userInfo));
+        }
+    }
 }
 
 /// <summary>
@@ -143,17 +149,3 @@ void Client::updateGameOriginalData() {
 }
 
 //Private
-
-
-UserInfo Client::getUserInfo()
-{
-    UserInfo userInfo;
-
-    std::string GaggleID = "";
-    //野猪佩奇
-    std::string nickname = "";
-    //w4rhMT8ZJseijNoZqJC8szCucXr2
-    std::string userId = "";
-
-    return UserInfo();
-}

@@ -93,16 +93,7 @@ public:
 
     bool teleportTo(IN const Vector2& to);
 
-    /// <summary>
-    /// 修改相机远近距离
-    /// </summary>
-    /// <param name="size"></param>
-    /// <returns></returns>
-    bool overrideOrthographicSize(float size);
-
 private:
     //上一次游戏开始的时间
     time_t time_gameStart = NULL;
-
-    UserInfo getUserInfo();
 };

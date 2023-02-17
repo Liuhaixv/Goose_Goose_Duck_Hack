@@ -41,6 +41,7 @@ PlayerController& PlayerController::operator=(PlayerController& o)
 
     this->nickname = o.nickname;
     this->roleName = o.roleName;
+    this->userId = o.userId;
 
     this->v3_position = o.v3_position;
 
@@ -79,6 +80,8 @@ void PlayerController::resetMemberFields()
 
     nickname = "";
     roleName = "";
+    userId = "";
+
     v3_position = { 0.0f, 0.0f, 0.0f };
 
     i_readyState = ReadyState::ReadyState_NotReady;
@@ -191,6 +194,36 @@ void PlayerController::updateNickname()
     this->nickname = string(nickname_Addr).get_std_string();
 }
 
+void PlayerController::updateUserid()
+{
+    if (!PlayerController::validateAddress(this->address))
+    {
+        return;
+    }
+
+    int64_t userid_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::ptr_userId, NULL);
+
+    this->userId = string(userid_Addr).get_std_string();
+}
+
+std::string PlayerController::getNickname()
+{
+    //if (this->nickname == "") {
+        this->updateNickname();
+    //}
+
+    return this->nickname;
+}
+
+std::string PlayerController::getUserid()
+{
+    //if (this->userId == "") {
+        this->updateUserid();
+    //}
+
+    return this->userId;
+}
+
 /// <summary>
 /// Reset and update after replacing address
 /// </summary>
@@ -250,9 +283,13 @@ bool PlayerController::update()
     }
 
     // 更新昵称
-    if (this->nickname[0] == 0)
+    if (this->nickname == "")
     {
         updateNickname();
+    }
+
+    if (this->userId == "") {
+        updateUserid();
     }
 
     // TODO: ??? 游戏没开始这个值也是1 局内角色已确定(游戏开始)
