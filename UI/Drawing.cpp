@@ -991,10 +991,11 @@ void drawMenu() {
         if (ImGui::BeginTabItem(str("LocalPlayer", "本地玩家")))
         {
             //彩虹换色
+            /*
             {
                 ImGui::Checkbox(str("Rainbow", "彩虹"), &hackSettings.guiSettings.b_enableRainbowColors);
                 HelpMarker(str("You are the most shining one","变成最闪耀的那一个"));
-            }
+            }*/
 
             float minSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
             if (minSpeed <= 0) {
