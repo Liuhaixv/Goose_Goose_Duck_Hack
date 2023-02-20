@@ -10,6 +10,7 @@
 
 #include"../Class/HttpDataUpdater.h"
 #include "../Class/DebugConsole.h"
+#include "../Class/MelonLoaderHelper.h"
 //#include "Struct/UserSettings.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
@@ -907,7 +908,7 @@ void drawMenu() {
                                     ImGui::TextDisabled("%s%s",
                                         "",
                                         hackSettings.latestVersions.latestHackVersion);
-                                }                                                
+                                }
                             }
 
                             //提示是否是最新版本,下载最新版本
@@ -921,7 +922,7 @@ void drawMenu() {
                                     ImGui::TextColored(ImColor(0, 255, 0), str("Up to date Version", "已是最新版本!"));
                                 }
                                 else {
-                                    ImGui::TextColored(ImColor(255, 255, 0),str("Update available","新版本已可用"));
+                                    ImGui::TextColored(ImColor(255, 255, 0), str("Update available", "新版本已可用"));
                                     ImGui::TableNextColumn();
                                     if (ImGui::Button(str("Download##latest_hack", "下载##最新版本"))) {
                                         ShellExecute(0, 0, hackSettings.latestVersions.url.c_str(), 0, 0, SW_SHOW);
@@ -930,7 +931,7 @@ void drawMenu() {
                             }
 
                             ImGui::EndTable();
-                        }                
+                        }
 
                         ImGui::EndPopup();
                     }
@@ -1250,9 +1251,9 @@ void drawMenu() {
             else {
                 ImGui::TextDisabled(str("Not ready", "未准备"));
             }
-                      
+
             ImGui::Checkbox(str("One-tap completing task", "秒任务"), &hackSettings.guiSettings.b_oneTapCompletingTask);
-           
+
 
             ImGui::EndTabItem();
         }
@@ -1279,6 +1280,51 @@ void drawMenu() {
             HelpMarker(
                 str("Create Issue to report bug if you can't see two green lines and yellow rect line", "如果你看不到屏幕上有横竖两条绿线以及环绕整个显示器的黄色矩形的话,请到Issue提交bug")
             );
+
+            ImGui::EndTabItem();
+        }
+
+        //菜单6
+        if (ImGui::BeginTabItem(str("ML", "ML")))
+        {
+            //TODO：
+
+            if (ImGui::Button(str("How to install mod##install mod", "安装mod教程##install mod"))) {
+                ShellExecute(0, 0, "https://github.com/Liuhaixv/GGDH_ML", 0, 0, SW_SHOW);
+            }
+            ImGui::SameLine();
+            ImGui::Text(str("Features below only work when you have installed GGD_Hack mod", "下面的所有功能只有安装了GGD_Hack的mod后才能使用"));
+
+            ImGui::NewLine();
+
+            static int testTCP_connection = -1;
+            if (ImGui::Button(str("Test TCP connection with ML", "测试与ML框架的TCP连接"))) {
+                testTCP_connection = MelonLoaderHelper::testConnection();
+            }
+            ImGui::SameLine();
+            switch (testTCP_connection) {
+            case -1:
+                ImGui::TextDisabled(str("Unknown", "未知"));
+                break;
+            case 0:
+                ImGui::TextColored(ImColor(255, 0, 0), str("Failed", "失败"));
+                HelpMarker(str("Check if you have installed MelonLoader\nCheck if you have installed mod\nCheck if game is running",
+                    "检查是否正确安装MelonLoader框架\n检查是否正确安装了mod\n检查游戏是否正在运行"));
+                break;
+            case 1:
+                ImGui::TextColored(ImColor(0, 255, 0), str("Success", "成功"));
+                break;
+            }
+
+            ImGui::NewLine();
+
+            //游戏内发送聊天消息
+            const int chatMessageLen = 256;
+            static char chatMessage[chatMessageLen] = "";
+            ImGui::InputTextWithHint("##Chat input", str("Enter chat message","要发送的聊天消息"), chatMessage, chatMessageLen);
+            if (ImGui::Button(str("Send##Send message ingame", "发送"))) {
+                MelonLoaderHelper::sendChat(chatMessage);
+            }
 
             ImGui::EndTabItem();
         }
@@ -1401,13 +1447,13 @@ void drawMenu() {
 
                 //测试createRemoteThread
                 {
-                    static char createRemoteThreadStartAddress[2+8*2];//0x????????????????
+                    static char createRemoteThreadStartAddress[2 + 8 * 2];//0x????????????????
                     static int64_t remoteThreadStartAddress = 0;
                     ImGui::InputText("createRemoteThread", createRemoteThreadStartAddress, 2 + 8 * 2);
                     if (ImGui::Button(str("Start thread", "启动线程"))) {
                         //获取地址
                         ss.clear();
-                        ss << std::hex<< createRemoteThreadStartAddress;
+                        ss << std::hex << createRemoteThreadStartAddress;
                         ss >> remoteThreadStartAddress;
                         memory.createRemoteThread(remoteThreadStartAddress);
                     }

@@ -1,11 +1,29 @@
-﻿检测到根目录有以下任意文件夹，则会调用ForceCrash
-MelonLoader
+﻿1.检测到dll文件被修改，会弹窗报错退出，但不是ForceCrash，也不是Quit
 
-//使用了MelonLoader
+2.检测到加载了其他dll，则会调用ForceCrash
+
+//2.17.01
+2.1使用了MelonLoader，会因为检测到提前加载了游戏dll，强制崩溃
 UnityEngine_Diagnostics_Utils__ForceCrash
 GameAssembly.dll+ 8d5fd9
-8d573b'd4f635
-7cd136
-7ccc04
+8D573B
+D4F635
+7CD136
+7CCC04
 
-检测到dll文件被修改，会弹窗报错退出，但不是ForceCrash，也不是Quit
+2.2屏蔽了检测提前加载的检测后，仍然会崩溃
+UnityEngine_Diagnostics_Utils__ForceCrash
+GameAssembly.dll+ 8D5720
+D4F635
+7CD136
+7CCC04
+
+//已确认是由于检测文件是否存在而强制崩溃
+// v7 = System_IO_Path__Combine(v4, v6, 0i64);
+//    if ( System_IO_File__Exists(v7, 0i64) )
+//      sub_8D5750(0i64, v8);//ForceCrash
+
+检测字符串存在则崩溃:
+.\MelonLoader\MelonLoader.dll
+
+绕过2.1和2.2后不加载EAC可以成功启动游戏

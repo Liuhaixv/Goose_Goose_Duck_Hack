@@ -2,7 +2,7 @@
 #include <string>
 struct GuiSettings {
     //辅助程序版本
-    const std::string hackVersion = "0.7.2.1";
+    const std::string hackVersion = "0.7.4";
     //TODO：通过signature获取
     //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
     const std::string gameVersion = "2.17.01";

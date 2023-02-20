@@ -1,4 +1,4 @@
-// dear imgui: Platform Backend for Windows (standard windows API for 32-bits AND 64-bits applications)
+﻿// dear imgui: Platform Backend for Windows (standard windows API for 32-bits AND 64-bits applications)
 // This needs to be used along with a Renderer (e.g. DirectX11, OpenGL3, Vulkan..)
 
 // Implemented features:
@@ -692,6 +692,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
     case WM_KILLFOCUS:
         io.AddFocusEvent(msg == WM_SETFOCUS);
         return 0;
+    /*
     case WM_CHAR:
         if (::IsWindowUnicode(hwnd))
         {
@@ -706,6 +707,38 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARA
             io.AddInputCharacter(wch);
         }
         return 0;
+    */
+    //修复中文输入法输入的字符为问号
+    case WM_CHAR:
+    {
+        DWORD wChar = wParam;
+        if (wChar <= 127)
+        {
+            io.AddInputCharacter(wChar);
+        }
+        return 0;
+    }
+    case WM_IME_CHAR:
+    {
+        auto& io = ImGui::GetIO();
+        DWORD wChar = wParam;
+        if (wChar <= 127)
+        {
+            io.AddInputCharacter(wChar);
+        }
+        else
+        {
+            // swap lower and upper part.
+            BYTE low = (BYTE)(wChar & 0x00FF);
+            BYTE high = (BYTE)((wChar & 0xFF00) >> 8);
+            wChar = MAKEWORD(high, low);
+            wchar_t ch[6];
+            MultiByteToWideChar(CP_ACP, 0, (LPCSTR)&wChar, 4, ch, 3);
+            io.AddInputCharacter(ch[0]);
+        }
+        return 0;
+    }
+
     case WM_SETCURSOR:
         // This is required to restore cursor when transitioning from e.g resize borders to client area.
         if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
