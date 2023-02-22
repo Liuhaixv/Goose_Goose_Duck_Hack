@@ -174,6 +174,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy /S /Y "$(ProjectDir)Font\*.*" "$(TargetDir)Font\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PublicRelease|x64'">
     <ClCompile>
@@ -200,10 +203,14 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>xcopy /S /Y "$(ProjectDir)Font\*.*" "$(TargetDir)Font\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Game\LocalPlayer.cpp" />
     <ClCompile Include="Class\Game\string.cpp" />
+    <ClCompile Include="utils.cpp" />
     <ClCompile Include="http\http_api\UploadUserInfoApi.cpp" />
     <ClCompile Include="md5\md5.cpp" />
     <ClCompile Include="Class\DebugConsole.cpp" />
@@ -215,6 +222,7 @@
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="UI\IconsMaterialDesign.h" />
     <ClInclude Include="http\http_api\UploadUserInfoApi.h" />
     <ClInclude Include="md5\md5.h" />
     <ClInclude Include="Class\DebugConsole.h" />

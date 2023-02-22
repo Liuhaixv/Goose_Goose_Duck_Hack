@@ -2,6 +2,7 @@
 
 #include<imgui_internal.h>
 #include"../Struct/UserSettings.hpp"
+#include "IconsMaterialDesign.h"
 
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
@@ -370,7 +371,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
 
     //中文字体
     //chinese font
-    if (utils.b_chineseOS) {
+    if (utils.b_useChineseLanguage) {
         ImGui::GetIO().Fonts->AddFontFromFileTTF(
             "c:/Windows/Fonts/simhei.ttf",
             cfg.SizePixels,
@@ -380,6 +381,23 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     else {
         ImGui::GetIO().Fonts->AddFontDefault(&cfg);
     }
+
+    //图标字体范围
+    static const ImWchar ranges[] =
+    {
+        ICON_MIN_MD, ICON_MAX_MD,
+        0,
+    };
+
+    //添加图标字体
+    ImGui::GetIO().Fonts->AddFontFromFileTTF(
+        "./Font/MaterialIcons-Regular.ttf",
+        cfg.SizePixels,
+        NULL,
+        &ranges[0]
+    );
+
+    ImGui::GetIO().Fonts->Build();
 
 
     //保存GUI窗口信息

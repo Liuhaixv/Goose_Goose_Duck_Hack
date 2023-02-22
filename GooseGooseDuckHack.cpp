@@ -35,8 +35,6 @@
 #include "Memory/CodeCave/CodeCave.h"
 #include "Class/DebugConsole.h"
 
-
-Utils utils;
 Hack hack;
 
 HackSettings hackSettings;
@@ -47,6 +45,8 @@ Client g_client;
 
 //全局变量保存用户配置
 UserSettings userSettings;
+
+Utils utils;
 
 //初始化RPM工具类
 //Init RPM classes

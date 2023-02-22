@@ -1,6 +1,7 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 
 #include "Drawing.h"
+
 #include "../Memory/memory.h"
 #include "../Client.h"
 #include "../Struct/UserSettings.hpp"
@@ -8,10 +9,12 @@
 #include "../Class/Game/string.hpp"
 #include<algorithm>
 
-#include"../Class/HttpDataUpdater.h"
+#include "../Class/HttpDataUpdater.h"
 #include "../Class/DebugConsole.h"
 #include "../Class/MelonLoaderHelper.h"
 //#include "Struct/UserSettings.hpp"
+
+#include "IconsMaterialDesign.h"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -32,7 +35,7 @@ extern DebugConsole debugConsole;
 
 //#define str(eng,cn) (const char*)u8##cn
 //#define str(eng,cn) (const char*)u8##cnshij
-#define str(eng,cn) utils.b_chineseOS?(const char*)u8##cn:(const char*)u8##eng
+#define str(eng,cn) utils.b_useChineseLanguage?(const char*)u8##cn:(const char*)u8##eng
 //拼接组件和常量名
 //#define labelName(componentName,constStr) std::u8string(componentName).append(constStr).c_str()
 
@@ -828,8 +831,8 @@ void drawMenu() {
 
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginTable("minimap_color_settings_table", 2,
-            ImGuiTableFlags_SizingStretchSame | ImGuiTableFlags_NoBordersInBody
+        if (ImGui::BeginTable("minimap_color_settings_table", 3,
+            ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_NoBordersInBody
         ))
         {
             {
@@ -958,6 +961,20 @@ void drawMenu() {
                     //TODO:警告，当前版本不适配游戏
                     //判断游戏版本是否匹配
                     //TODO:
+                }
+
+                //切换语言
+                {
+                    ImGui::TableNextColumn();
+                    
+                    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
+                    if (ImGui::Button((std::string(ICON_MD_LANGUAGE) + "##language").c_str())) {
+                        utils.changeLanguage();
+                    }
+                    ImGui::PopFont();
+                    ImGui::SameLine();
+                    ImGui::Text("Change Language");
+
                 }
             }
             ImGui::EndTable();
@@ -1321,10 +1338,25 @@ void drawMenu() {
             //游戏内发送聊天消息
             const int chatMessageLen = 256;
             static char chatMessage[chatMessageLen] = "";
-            ImGui::InputTextWithHint("##Chat input", str("Enter chat message","要发送的聊天消息"), chatMessage, chatMessageLen);
+            ImGui::InputTextWithHint("##Chat input", str("Enter chat message", "要发送的聊天消息"), chatMessage, chatMessageLen);
+            ImGui::SameLine();
             if (ImGui::Button(str("Send##Send message ingame", "发送"))) {
                 MelonLoaderHelper::sendChat(chatMessage);
             }
+
+            //启动飞船
+            if (ImGui::Button(str("Remote##Remote Control Shuttle", "遥控"))) {
+                MelonLoaderHelper::moveShuttle();
+            }
+            ImGui::SameLine();
+
+            //显示图标
+            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
+            ImGui::Text(ICON_MD_SETTINGS_REMOTE);
+            ImGui::PopFont(); ImGui::SameLine();
+
+            ImGui::Text(str("Move Shuttle","移动飞船"));
+            HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too","点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
 
             ImGui::EndTabItem();
         }
@@ -1387,6 +1419,7 @@ void drawMenu() {
                     str("Allow you to play game with banned account", "获得可以使用被封禁的账号进行游戏的能力")
                 );
             }
+            ImGui::EndDisabled();
 
             //反挂机
             {
@@ -1396,8 +1429,6 @@ void drawMenu() {
                 );
 
             }
-
-            ImGui::EndDisabled();
 
             ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
 

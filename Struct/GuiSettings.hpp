@@ -45,7 +45,7 @@ struct GuiSettings {
     bool b_enableRainbowColors = false;
 
     //反挂机踢出房间
-    bool b_antiIdleKick = false;
+    bool b_antiIdleKick = true;
 
     //debugmode
     bool b_debug = false;

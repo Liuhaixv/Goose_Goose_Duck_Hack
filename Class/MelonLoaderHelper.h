@@ -12,6 +12,11 @@ public:
         return sendMessage(message.append(chatMessage).c_str());
     }
 
+    static bool moveShuttle() {
+        std::string message = "MoveShuttle";
+        return sendMessage(message.c_str());
+    }
+
 private:
     static bool sendMessage(const char* message) {
         return send_and_receive(1234, message) >= 0;

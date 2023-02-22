@@ -21,11 +21,11 @@ class Utils {
 public:
     //当前操作系统是否为中文
     //true if current OS's language is Chinese
-    bool b_chineseOS = false;
+    bool b_useChineseLanguage = 0;
 
-    Utils() {
-        b_chineseOS = isChineseLanguageOS();
-    } 
+    Utils();
+
+    void changeLanguage();
 
     /// <summary>
     /// 检查currentVersion是否为最新
@@ -207,7 +207,7 @@ public:
     /// <param name="cn"></param>
     /// <returns></returns>
     std::string str(std::string eng, std::string cn) {
-        return (this->b_chineseOS) ? cn : eng;
+        return (this->b_useChineseLanguage) ? cn : eng;
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ public:
 
     const char8_t* getRoleName(int id) {
         //返回中文角色名
-        if (this->b_chineseOS) {
+        if (this->b_useChineseLanguage) {
             switch (id)
             {
                 case gameRoleId::None:
@@ -713,9 +713,11 @@ private:
     static bool isChineseLanguageOS() {
         try {
             std::string locale = __CheckLocale();
-            if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
-                //中文 
+            if (locale.find("zh-CN") != std::string::npos){
+            //简体中文 
                 return true;
+                //if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
+             
             }
             return false;
         }
