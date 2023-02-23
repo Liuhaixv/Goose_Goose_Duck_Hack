@@ -2,7 +2,7 @@
 
 #include<imgui_internal.h>
 #include"../Struct/UserSettings.hpp"
-#include "IconsMaterialDesign.h"
+#include "IconsFontAwesome6Pro.h"
 
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
@@ -369,36 +369,32 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     }
     //ImGui::GetIO().Fonts->AddFontDefault();
 
+    ImFont* font1 = nullptr;
+
     //中文字体
     //chinese font
     if (utils.b_useChineseLanguage) {
-        ImGui::GetIO().Fonts->AddFontFromFileTTF(
+        font1 = ImGui::GetIO().Fonts->AddFontFromFileTTF(
             "c:/Windows/Fonts/simhei.ttf",
             cfg.SizePixels,
             NULL,
             ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
     }
     else {
-        ImGui::GetIO().Fonts->AddFontDefault(&cfg);
+        font1 = ImGui::GetIO().Fonts->AddFontDefault(&cfg);
     }
 
-    //图标字体范围
-    static const ImWchar ranges[] =
-    {
-        ICON_MIN_MD, ICON_MAX_MD,
-        0,
-    };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
 
-    //添加图标字体
-    ImGui::GetIO().Fonts->AddFontFromFileTTF(
-        "./Font/MaterialIcons-Regular.ttf",
-        cfg.SizePixels,
-        NULL,
-        &ranges[0]
-    );
-
-    ImGui::GetIO().Fonts->Build();
-
+    // merge in icons from Font Awesome
+    float iconFontSize = cfg.SizePixels;
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    
+    icons_config.PixelSnapH = true;
+    icons_config.GlyphMinAdvanceX = iconFontSize;
+    io.Fonts->AddFontFromFileTTF("./Font/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
+    io.Fonts->Build();
 
     //保存GUI窗口信息
     ImGui::GetIO().IniFilename = "imgui.ini";

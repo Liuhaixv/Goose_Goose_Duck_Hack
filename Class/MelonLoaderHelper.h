@@ -17,6 +17,11 @@ public:
         return sendMessage(message.c_str());
     }
 
+    static bool suicide() {
+        std::string message = "Suicide";
+        return sendMessage(message.c_str());
+    }    
+
 private:
     static bool sendMessage(const char* message) {
         return send_and_receive(1234, message) >= 0;

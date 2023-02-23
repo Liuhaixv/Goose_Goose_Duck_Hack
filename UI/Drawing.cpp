@@ -14,7 +14,7 @@
 #include "../Class/MelonLoaderHelper.h"
 //#include "Struct/UserSettings.hpp"
 
-#include "IconsMaterialDesign.h"
+#include "IconsFontAwesome6Pro.h"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -33,13 +33,9 @@ extern HttpDataUpdater httpDataUpdater;
 
 extern DebugConsole debugConsole;
 
-//#define str(eng,cn) (const char*)u8##cn
-//#define str(eng,cn) (const char*)u8##cnshij
 #define str(eng,cn) utils.b_useChineseLanguage?(const char*)u8##cn:(const char*)u8##eng
-//拼接组件和常量名
-//#define labelName(componentName,constStr) std::u8string(componentName).append(constStr).c_str()
 
-//#define labelName(componentName,constStr) getLabelName
+#define icon_str(icon,str) (std::string(icon)+" "+std::string(str)).c_str()
 
 void drawMinimap();
 void drawMenu();
@@ -966,12 +962,12 @@ void drawMenu() {
                 //切换语言
                 {
                     ImGui::TableNextColumn();
-                    
-                    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
-                    if (ImGui::Button((std::string(ICON_MD_LANGUAGE) + "##language").c_str())) {
+
+                    //ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
+                    if (ImGui::Button((std::string(ICON_FA_GLOBE) + "##language").c_str())) {
                         utils.changeLanguage();
                     }
-                    ImGui::PopFont();
+                    //ImGui::PopFont();
                     ImGui::SameLine();
                     ImGui::Text("Change Language");
 
@@ -1021,27 +1017,31 @@ void drawMenu() {
             }
 
             //ImGui::BeginDisabled();
-            ImGui::Checkbox(str("Remove skill cooldown", "移除技能冷却时间"), &hackSettings.b_removeSkillCoolDown);
+            ImGui::Checkbox(icon_str(ICON_FA_CLOCK_ROTATE_LEFT,str("Remove skill cooldown", "移除技能冷却时间")), &hackSettings.b_removeSkillCoolDown);
             HelpMarker(str("Notice: server - sided CD can not be removed", "注意：服务器端CD无法修改，如鸭子刀人CD"));
             //::EndDisabled();
 
-            ImGui::Checkbox(str("Enable##speedHack", "启用##speedHack"), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::Checkbox(icon_str(ICON_FA_PERSON_RUNNING,str("##Enable speedHack", "##启用 speedHack")), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
+            ImGui::BeginDisabled(!hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SliderFloat(
                 str("Movement speed", "移速"),
                 &hackSettings.guiSettings.f_movementSpeed,
                 minSpeed,
                 minSpeed * 2
             );
+            ImGui::EndDisabled();
 
-            ImGui::Checkbox(str("Enable##zoomHack", "启用##zoomHack"), &hackSettings.guiSettings.b_enableZoomHack);
+            ImGui::Checkbox(icon_str(ICON_FA_MAGNIFYING_GLASS_PLUS, str("##Enable zoomHack", "##启用 zoomHack")), &hackSettings.guiSettings.b_enableZoomHack);
             ImGui::SameLine();
+            ImGui::BeginDisabled(!hackSettings.guiSettings.b_enableZoomHack);
             ImGui::SliderFloat(
                 str("Zoom Size", "相机缩放"),
                 &hackSettings.guiSettings.f_zoomSize,
                 0.5,
                 40
             );
+            ImGui::EndDisabled();
 
             //玩家移速
             //ImGui::Text("{%.2f, %.2f}", playerController->v3_position.x, playerController->v3_position.y);
@@ -1059,7 +1059,7 @@ void drawMenu() {
             {
                 ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_NoSort);
                 ImGui::TableSetupColumn(str("Role", "角色"), ImGuiTableColumnFlags_NoSort);
-                ImGui::TableSetupColumn(str("Killed this round", "本轮杀过人"), ImGuiTableColumnFlags_NoSort);
+                ImGui::TableSetupColumn(str("Possible role", "可能的身份"), ImGuiTableColumnFlags_NoSort);
                 ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
                 ImGui::TableSetupColumn(str("Snapshot onDeath", "死亡快照"), ImGuiTableColumnFlags_NoSort);
 
@@ -1170,13 +1170,13 @@ void drawMenu() {
         {
             //TODO:失效
             //ImGui::BeginDisabled();
-            ImGui::Checkbox(str("Remove fog of war", "隐藏战争迷雾"), &hackSettings.guiSettings.b_disableFogOfWar);
+            ImGui::Checkbox(icon_str(ICON_FA_SMOKE, str("Remove fog of war", "隐藏战争迷雾")), &hackSettings.guiSettings.b_disableFogOfWar);
             HelpMarker(
                 str("Remove shadows and let you see other players behind walls", "可以透过墙看到和听到其他玩家，隐藏视野阴影")
             );
             //ImGui::EndDisabled();
 
-            ImGui::Checkbox(str("Noclip", "穿墙"), &hackSettings.guiSettings.b_alwaysEnableNoclip);
+            ImGui::Checkbox(icon_str((const char*)u8"\ue3db", str("Noclip", "穿墙")), &hackSettings.guiSettings.b_alwaysEnableNoclip);
             HelpMarker(
                 str("Walk through anything\nYou can press Left ALT to temporarily enable noclip", "穿墙模式\n长按左ALT键来临时穿墙")
             );
@@ -1315,7 +1315,7 @@ void drawMenu() {
             ImGui::NewLine();
 
             static int testTCP_connection = -1;
-            if (ImGui::Button(str("Test TCP connection with ML", "测试与ML框架的TCP连接"))) {
+            if (ImGui::Button(icon_str(ICON_FA_NETWORK_WIRED,str("Test TCP connection with ML", "测试与ML框架的TCP连接")))) {
                 testTCP_connection = MelonLoaderHelper::testConnection();
             }
             ImGui::SameLine();
@@ -1338,25 +1338,30 @@ void drawMenu() {
             //游戏内发送聊天消息
             const int chatMessageLen = 256;
             static char chatMessage[chatMessageLen] = "";
-            ImGui::InputTextWithHint("##Chat input", str("Enter chat message", "要发送的聊天消息"), chatMessage, chatMessageLen);
+            ImGui::InputTextWithHint("##Chat input", icon_str(ICON_FA_MESSAGES,str("Enter chat message", "要发送的聊天消息")), chatMessage, chatMessageLen);
             ImGui::SameLine();
             if (ImGui::Button(str("Send##Send message ingame", "发送"))) {
                 MelonLoaderHelper::sendChat(chatMessage);
             }
 
             //启动飞船
-            if (ImGui::Button(str("Remote##Remote Control Shuttle", "遥控"))) {
-                MelonLoaderHelper::moveShuttle();
+            {
+                if (ImGui::Button(icon_str(ICON_FA_SHUTTLE_SPACE, str("Remote control shuttle", "远程控制飞船")))) {
+                    MelonLoaderHelper::moveShuttle();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
             }
-            ImGui::SameLine();
 
-            //显示图标
-            ImGui::PushFont(ImGui::GetIO().Fonts->Fonts.back());
-            ImGui::Text(ICON_MD_SETTINGS_REMOTE);
-            ImGui::PopFont(); ImGui::SameLine();
-
-            ImGui::Text(str("Move Shuttle","移动飞船"));
-            HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too","点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
+            //自杀
+            {
+                //std::string suicideButton = std::string(ICON_FA_SKULL_CROSSBONES) + std::string(str("Suicide", "自爆"));
+                if (ImGui::Button(icon_str(ICON_FA_SKULL_CROSSBONES, str("Suicide", "自爆")))) {
+                    MelonLoaderHelper::suicide();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Suicide", "自杀"));
+            }
 
             ImGui::EndTabItem();
         }
@@ -1423,14 +1428,14 @@ void drawMenu() {
 
             //反挂机
             {
-                ImGui::Checkbox(str("No idle kick", "反挂机"), &hackSettings.guiSettings.b_antiIdleKick);
+                ImGui::Checkbox(icon_str(ICON_FA_SNOOZE,str("No idle kick", "反挂机")), &hackSettings.guiSettings.b_antiIdleKick);
                 HelpMarker(
                     str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
                 );
 
             }
 
-            ImGui::Checkbox(str("Enable debug", "开启调试"), &hackSettings.guiSettings.b_debug);
+            ImGui::Checkbox(icon_str(ICON_FA_BUG,str("Enable debug", "开启调试")), &hackSettings.guiSettings.b_debug);
 
 
             //秘密菜单

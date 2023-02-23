@@ -308,7 +308,7 @@
     <ClInclude Include="Class\MelonLoaderHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UI\IconsMaterialDesign.h">
+    <ClInclude Include="UI\IconsFontAwesome6Pro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

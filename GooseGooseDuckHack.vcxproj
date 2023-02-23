@@ -222,7 +222,6 @@
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
-    <ClInclude Include="UI\IconsMaterialDesign.h" />
     <ClInclude Include="http\http_api\UploadUserInfoApi.h" />
     <ClInclude Include="md5\md5.h" />
     <ClInclude Include="Class\DebugConsole.h" />
@@ -303,6 +302,7 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="Struct\UserSettings.hpp" />
     <ClInclude Include="Class\Game\TasksHandler.h" />
+    <ClInclude Include="UI\IconsFontAwesome6Pro.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="Class\Updater.h" />
     <ClInclude Include="utils.hpp" />
