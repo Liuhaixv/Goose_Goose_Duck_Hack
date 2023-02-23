@@ -210,6 +210,7 @@
   <ItemGroup>
     <ClCompile Include="Class\Game\LocalPlayer.cpp" />
     <ClCompile Include="Class\Game\string.cpp" />
+    <ClCompile Include="PossibleRole.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="http\http_api\UploadUserInfoApi.cpp" />
     <ClCompile Include="md5\md5.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="http\json_stuct\virtual\BaseJsonStruct.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Memory\PatternScanner.h" />
+    <ClInclude Include="PossibleRole.h" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
     <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />
     <ClInclude Include="Struct\UserInfo.h" />

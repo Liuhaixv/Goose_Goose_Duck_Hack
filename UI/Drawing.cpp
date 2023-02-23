@@ -281,6 +281,14 @@ static void HelpMarker(const char* desc)
     }
 }
 
+static void HintUpdateModIfFailed(bool failed) {
+    if (failed) {
+        ImGui::SameLine();
+        ImGui::TextColored(ImColor(255, 0, 0), str("Failed", "失败"));
+        HelpMarker(str("Failed to execute command\nCheck if your mod is up to date", "执行命令失败！\n检查你的mod是否是最新版本"));
+    }
+}
+
 bool drawLocalPlayerOnMap(GameMap& map, const ImVec2& mapLeftBottomPointOnScreen) {
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
 
@@ -1017,11 +1025,11 @@ void drawMenu() {
             }
 
             //ImGui::BeginDisabled();
-            ImGui::Checkbox(icon_str(ICON_FA_CLOCK_ROTATE_LEFT,str("Remove skill cooldown", "移除技能冷却时间")), &hackSettings.b_removeSkillCoolDown);
+            ImGui::Checkbox(icon_str(ICON_FA_CLOCK_ROTATE_LEFT, str("Remove skill cooldown", "移除技能冷却时间")), &hackSettings.b_removeSkillCoolDown);
             HelpMarker(str("Notice: server - sided CD can not be removed", "注意：服务器端CD无法修改，如鸭子刀人CD"));
             //::EndDisabled();
 
-            ImGui::Checkbox(icon_str(ICON_FA_PERSON_RUNNING,str("##Enable speedHack", "##启用 speedHack")), &hackSettings.guiSettings.b_enableSpeedHack);
+            ImGui::Checkbox(icon_str(ICON_FA_PERSON_RUNNING, str("##Enable speedHack", "##启用 speedHack")), &hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SameLine();
             ImGui::BeginDisabled(!hackSettings.guiSettings.b_enableSpeedHack);
             ImGui::SliderFloat(
@@ -1049,7 +1057,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单2
+        //角色信息菜单
         if (ImGui::BeginTabItem(str("Players Info", "角色信息")))
         {
             if (ImGui::BeginTable("players_info_table", 5,
@@ -1058,8 +1066,8 @@ void drawMenu() {
             ))
             {
                 ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_NoSort);
-                ImGui::TableSetupColumn(str("Role", "角色"), ImGuiTableColumnFlags_NoSort);
-                ImGui::TableSetupColumn(str("Possible role", "可能的身份"), ImGuiTableColumnFlags_NoSort);
+                ImGui::TableSetupColumn(str("Role", "身份"), ImGuiTableColumnFlags_NoSort);
+                ImGui::TableSetupColumn(str("Possible role", "可能的身份"), ImGuiTableColumnFlags_NoSort);//TODO:
                 ImGui::TableSetupColumn(str("Death Time", "死亡时间"));
                 ImGui::TableSetupColumn(str("Snapshot onDeath", "死亡快照"), ImGuiTableColumnFlags_NoSort);
 
@@ -1121,17 +1129,14 @@ void drawMenu() {
                     //昵称
                     ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->nickname.c_str());
 
-                    //角色
+                    //角色身份
                     ImGui::TableNextColumn(); ImGui::Text(ptr_playerController->roleName.c_str());
 
-                    //本轮杀过人
-                    if (ptr_playerController->b_hasKilledThisRound) {
-                        ImGui::TableNextColumn(); ImGui::Text(str("Yes", "是"));
+                    //TODO: 可能的身份
+                    ImGui::TableNextColumn();
+                    {
+                        ImGui::Text(ICON_FA_SQUARE_QUESTION);
                     }
-                    else {
-                        ImGui::TableNextColumn(); ImGui::Text(str("", ""));
-                    }
-
                     //死亡时间
                     if (ptr_playerController->i_timeOfDeath != 0) {
                         ImGui::TableNextColumn(); ImGui::Text("%d", ptr_playerController->i_timeOfDeath);
@@ -1165,7 +1170,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单3
+        //功能类菜单
         if (ImGui::BeginTabItem(str("Misc", "功能类")))
         {
             //TODO:失效
@@ -1185,7 +1190,7 @@ void drawMenu() {
             ImGui::EndTabItem();
         }
 
-        //菜单
+        //任务菜单
         if (ImGui::BeginTabItem(str("Tasks", "任务")))
         {
             if (ImGui::CollapsingHeader(str("Patched", "已废弃功能"))) {
@@ -1314,58 +1319,132 @@ void drawMenu() {
 
             ImGui::NewLine();
 
-            static int testTCP_connection = -1;
-            if (ImGui::Button(icon_str(ICON_FA_NETWORK_WIRED,str("Test TCP connection with ML", "测试与ML框架的TCP连接")))) {
-                testTCP_connection = MelonLoaderHelper::testConnection();
-            }
-            ImGui::SameLine();
-            switch (testTCP_connection) {
-            case -1:
-                ImGui::TextDisabled(str("Unknown", "未知"));
-                break;
-            case 0:
-                ImGui::TextColored(ImColor(255, 0, 0), str("Failed", "失败"));
-                HelpMarker(str("Check if you have installed MelonLoader\nCheck if you have installed mod\nCheck if game is running",
-                    "检查是否正确安装MelonLoader框架\n检查是否正确安装了mod\n检查游戏是否正在运行"));
-                break;
-            case 1:
-                ImGui::TextColored(ImColor(0, 255, 0), str("Success", "成功"));
-                break;
+            //检查TCP连接状态
+            {
+                static int testTCP_connection = -1;
+                if (ImGui::Button(icon_str(ICON_FA_NETWORK_WIRED, str("Test TCP connection with ML", "测试与ML框架的TCP连接")))) {
+                    testTCP_connection = MelonLoaderHelper::testConnection();
+                }
+                ImGui::SameLine();
+                switch (testTCP_connection) {
+                case -1:
+                    ImGui::TextDisabled(str("Unknown", "未知"));
+                    break;
+                case 0:
+                    ImGui::TextColored(ImColor(255, 0, 0), str("Failed", "失败"));
+                    HelpMarker(str("Check if you have installed MelonLoader\nCheck if you have installed mod\nCheck if game is running",
+                        "检查是否正确安装MelonLoader框架\n检查是否正确安装了mod\n检查游戏是否正在运行"));
+                    break;
+                case 1:
+                    ImGui::TextColored(ImColor(0, 255, 0), str("Success", "成功"));
+                    break;
+                }
             }
 
             ImGui::NewLine();
 
+            //功能开始
+
             //游戏内发送聊天消息
-            const int chatMessageLen = 256;
-            static char chatMessage[chatMessageLen] = "";
-            ImGui::InputTextWithHint("##Chat input", icon_str(ICON_FA_MESSAGES,str("Enter chat message", "要发送的聊天消息")), chatMessage, chatMessageLen);
-            ImGui::SameLine();
-            if (ImGui::Button(str("Send##Send message ingame", "发送"))) {
-                MelonLoaderHelper::sendChat(chatMessage);
+            {
+                static bool sendChatFailed = false;
+                const int chatMessageLen = 256;
+                static char chatMessage[chatMessageLen] = "";
+                ImGui::InputTextWithHint("##Chat input", icon_str(ICON_FA_MESSAGES, str("Enter chat message", "要发送的聊天消息")), chatMessage, chatMessageLen);
+                ImGui::SameLine();
+
+                if (ImGui::Button(str("Send##Send message ingame", "发送"))) {
+                    sendChatFailed = !MelonLoaderHelper::sendChat(chatMessage);
+                }
+                HintUpdateModIfFailed(sendChatFailed);
             }
 
             //启动飞船
             {
+                static bool moveShuttleFailed = false;
                 if (ImGui::Button(icon_str(ICON_FA_SHUTTLE_SPACE, str("Remote control shuttle", "远程控制飞船")))) {
-                    MelonLoaderHelper::moveShuttle();
+                    moveShuttleFailed = !MelonLoaderHelper::moveShuttle();
                 }
                 ImGui::SameLine();
                 HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
+                HintUpdateModIfFailed(moveShuttleFailed);
             }
 
             //自杀
             {
-                //std::string suicideButton = std::string(ICON_FA_SKULL_CROSSBONES) + std::string(str("Suicide", "自爆"));
-                if (ImGui::Button(icon_str(ICON_FA_SKULL_CROSSBONES, str("Suicide", "自爆")))) {
-                    MelonLoaderHelper::suicide();
+                static bool suicideFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_SKULL_CROSSBONES, str("Suicide", "非自然死亡")))) {
+                    suicideFailed = !MelonLoaderHelper::suicide();
                 }
                 ImGui::SameLine();
                 HelpMarker(str("Suicide", "自杀"));
+                HintUpdateModIfFailed(suicideFailed);
             }
 
-            ImGui::EndTabItem();
-        }
+            //远程杀人
+            {
+                static bool remoteKillFailed = false;
+                // 显示一个按钮
+                if (ImGui::Button(icon_str(ICON_FA_KNIFE_KITCHEN, str("Remote Kill", "远程杀人")))) {
+                    ImGui::OpenPopup("Select player to kill");  // 打开弹出窗口
+                }
+                HelpMarker(str("Pay attention to the remaining CD of kill\nOtherwise you will fail to kill","注意杀戮剩余CD时间\n否则击杀无效"));
 
+                // 显示弹出窗口选择要杀的人
+                if (ImGui::BeginPopup("Select player to kill", ImGuiWindowFlags_AlwaysAutoResize)) {
+
+                    ImGui::BeginTable("People Table", 2);
+
+                    // 设置表格列宽
+                    ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_WidthStretch);
+                    ImGui::TableSetupColumn("Age", ImGuiTableColumnFlags_WidthStretch);
+
+                    bool hasTargetData = false;
+                    auto playerControllers = g_client.playerControllers;
+                    for (int i = 0; i < g_client.playerControllers.size(); i++)
+                    {
+                        PlayerController* ptr_playerController = g_client.playerControllers[i];
+
+                        //跳过无效玩家、本地玩家、死亡玩家
+                        if (ptr_playerController->address == NULL ||
+                            ptr_playerController->b_isLocal ||
+                            ptr_playerController->nickname == "" ||
+                            ptr_playerController->i_timeOfDeath != 0) {
+                            continue;
+                        }
+
+                        hasTargetData = true;
+
+                        ImGui::TableNextRow();
+
+                        //昵称
+                        ImGui::TableNextColumn();
+                        ImGui::Text(ptr_playerController->nickname.c_str());
+
+                        //击杀按钮
+                        ImGui::TableNextColumn();
+
+                        std::string killButtonName = icon_str(ICON_FA_CROSSHAIRS, str("Kill", "击杀"));
+                        
+                        if (ImGui::Button((killButtonName + "##" + std::to_string(i)).c_str())) {
+                            MelonLoaderHelper::remoteKill(ptr_playerController->userId);
+                        }
+                    }                                      
+
+                    // 结束ImGui表格布局
+                    ImGui::EndTable();
+
+                    if (!hasTargetData) {
+                        ImGui::Text(icon_str((const char*)u8"\ue5c5", str("No targets available!", "当前没有可击杀目标!")));
+                    }
+                    HintUpdateModIfFailed(remoteKillFailed);
+
+                    ImGui::EndPopup();
+                }
+
+                ImGui::EndTabItem();
+            }
+        }
         //菜单7
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
@@ -1428,14 +1507,14 @@ void drawMenu() {
 
             //反挂机
             {
-                ImGui::Checkbox(icon_str(ICON_FA_SNOOZE,str("No idle kick", "反挂机")), &hackSettings.guiSettings.b_antiIdleKick);
+                ImGui::Checkbox(icon_str(ICON_FA_SNOOZE, str("No idle kick", "反挂机")), &hackSettings.guiSettings.b_antiIdleKick);
                 HelpMarker(
                     str("You will not be kicked automatically if idled for too much time in room", "你将不会因为挂机而被系统自动踢出房间")
                 );
 
             }
 
-            ImGui::Checkbox(icon_str(ICON_FA_BUG,str("Enable debug", "开启调试")), &hackSettings.guiSettings.b_debug);
+            ImGui::Checkbox(icon_str(ICON_FA_BUG, str("Enable debug", "开启调试")), &hackSettings.guiSettings.b_debug);
 
 
             //秘密菜单

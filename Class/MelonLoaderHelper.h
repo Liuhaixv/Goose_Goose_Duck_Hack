@@ -4,7 +4,7 @@
 class MelonLoaderHelper {
 public:
     static bool testConnection() {
-        return send_and_receive(1234, "TestConnection") >= 0;
+        return send_and_receive(port, "TestConnection");
     }
 
     static bool sendChat(std::string chatMessage) {
@@ -20,15 +20,22 @@ public:
     static bool suicide() {
         std::string message = "Suicide";
         return sendMessage(message.c_str());
-    }    
+    }
+
+    static bool remoteKill(std::string userId) {
+        std::string message = "RemoteKill\n";
+        return sendMessage((message + userId).c_str());
+    }
 
 private:
+    static const int port = 1234;
+
     static bool sendMessage(const char* message) {
-        return send_and_receive(1234, message) >= 0;
+        return send_and_receive(port, message);
     }
     
 private:
-    static int send_and_receive(int server_port, const char* message);
+    static bool send_and_receive(int server_port, const char* message);
 };
 
 

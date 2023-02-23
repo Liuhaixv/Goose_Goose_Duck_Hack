@@ -6,6 +6,7 @@
 #include"../Struct/Common.hpp"
 
 #include "../../Enum/ReadyState.hpp"
+#include "../../PossibleRole.h"
 
 class Client;
 class PlayerController {
@@ -51,6 +52,8 @@ public:
     std::string userId = "";
 
     Vector3 v3_position{ 0.0f, 0.0f, 0.0f };
+
+    PossibleRole possibleRole;
 
     void reset();
 
