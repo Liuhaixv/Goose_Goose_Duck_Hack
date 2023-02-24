@@ -37,7 +37,15 @@
 5. **[新]** 点击地图即可传送到想要的位置
 6. **[新]** 查看任意玩家死亡时所有人的位置
 <img src="https://user-images.githubusercontent.com/49237108/212057146-7d13ca40-daf3-450a-8005-52691e19fcf6.png" alt="drawing" width="600"/>
- 
+
+### Mod类
+需要MelonLoader框架及mod支持，[传送门](https://github.com/Liuhaixv/GGDH_ML)
+1. 游戏内Minimap显示所有玩家位置
+2. 游戏内Minimap点击传送
+3. 远程控制连结殖民地中的飞船
+4. 发送聊天消息
+5. 自杀
+6. 远程击杀玩家
 
 ### 功能类
 1. 按住`左ALT键`穿墙
