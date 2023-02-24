@@ -27,6 +27,11 @@ public:
         return sendMessage((message + userId).c_str());
     }
 
+    static bool unlockAllItems() {
+        std::string message = "UnlockAllItems";
+        return sendMessage(message.c_str());
+    }
+
 private:
     static const int port = 1234;
 

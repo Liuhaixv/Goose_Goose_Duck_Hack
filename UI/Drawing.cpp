@@ -1444,6 +1444,19 @@ void drawMenu() {
 
                 ImGui::EndTabItem();
             }
+
+            ImGui::NewLine();
+
+            //解锁使用装扮
+            {
+                static bool unlockAllItemsFailed = false;
+                if (ImGui::Button((const char*)u8"\uf6e2 \uf553 \uf6e8 \uf5e4")) {
+                    unlockAllItemsFailed = !MelonLoaderHelper::unlockAllItems();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Grants you access to all unlockable items", "获取使用所有可解锁项的权限"));
+                HintUpdateModIfFailed(unlockAllItemsFailed);
+            }
         }
         //菜单7
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
