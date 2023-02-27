@@ -1136,7 +1136,9 @@ void drawMenu() {
                     ImGui::TableNextColumn();
                     {
                         ImGui::Text(ICON_FA_SQUARE_QUESTION);
+                        HelpMarker(str("Not available now","功能尚未开发完毕"));
                     }
+
                     //死亡时间
                     if (ptr_playerController->i_timeOfDeath != 0) {
                         ImGui::TableNextColumn(); ImGui::Text("%d", ptr_playerController->i_timeOfDeath);
@@ -1344,6 +1346,12 @@ void drawMenu() {
             ImGui::NewLine();
 
             //功能开始
+
+            //地图Minimap传送
+            {
+                ImGui::Text(icon_str(ICON_FA_MAP_LOCATION_DOT, str("Minimap Teleport", "Minimap传送")));
+                HelpMarker(str("Right click minimap to TP","右键点击游戏内地图传送"));
+            }
 
             //游戏内发送聊天消息
             {

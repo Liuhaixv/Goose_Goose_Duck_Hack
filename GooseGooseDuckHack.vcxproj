@@ -191,6 +191,7 @@
       <BrowseInformation>true</BrowseInformation>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DebugInformationFormat>None</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
