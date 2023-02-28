@@ -1136,7 +1136,7 @@ void drawMenu() {
                     ImGui::TableNextColumn();
                     {
                         ImGui::Text(ICON_FA_SQUARE_QUESTION);
-                        HelpMarker(str("Not available now","功能尚未开发完毕"));
+                        HelpMarker(str("Not available now", "功能尚未开发完毕"));
                     }
 
                     //死亡时间
@@ -1350,7 +1350,7 @@ void drawMenu() {
             //地图Minimap传送
             {
                 ImGui::Text(icon_str(ICON_FA_MAP_LOCATION_DOT, str("Minimap Teleport", "Minimap传送")));
-                HelpMarker(str("Right click minimap to TP","右键点击游戏内地图传送"));
+                HelpMarker(str("Right click minimap to TP", "右键点击游戏内地图传送"));
             }
 
             //游戏内发送聊天消息
@@ -1367,36 +1367,14 @@ void drawMenu() {
                 HintUpdateModIfFailed(sendChatFailed);
             }
 
-            //启动飞船
-            {
-                static bool moveShuttleFailed = false;
-                if (ImGui::Button(icon_str(ICON_FA_SHUTTLE_SPACE, str("Remote control shuttle", "远程控制飞船")))) {
-                    moveShuttleFailed = !MelonLoaderHelper::moveShuttle();
-                }
-                ImGui::SameLine();
-                HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
-                HintUpdateModIfFailed(moveShuttleFailed);
-            }
-
-            //自杀
-            {
-                static bool suicideFailed = false;
-                if (ImGui::Button(icon_str(ICON_FA_SKULL_CROSSBONES, str("Suicide", "非自然死亡")))) {
-                    suicideFailed = !MelonLoaderHelper::suicide();
-                }
-                ImGui::SameLine();
-                HelpMarker(str("Suicide", "自杀"));
-                HintUpdateModIfFailed(suicideFailed);
-            }
-
             //远程杀人
             {
                 static bool remoteKillFailed = false;
                 // 显示一个按钮
-                if (ImGui::Button(icon_str(ICON_FA_KNIFE_KITCHEN, str("Remote Kill", "远程杀人")))) {
+                if (ImGui::Button(icon_str(ICON_FA_KNIFE_KITCHEN, str("Remote Kill/Eat", "远程杀人/吃人")))) {
                     ImGui::OpenPopup("Select player to kill");  // 打开弹出窗口
                 }
-                HelpMarker(str("Pay attention to the remaining CD of kill\nOtherwise you will fail to kill","注意杀戮剩余CD时间\n否则击杀无效"));
+                HelpMarker(str("Pay attention to the remaining CD of kill\nOtherwise you will fail to kill", "注意杀戮剩余CD时间\n否则击杀无效"));
 
                 // 显示弹出窗口选择要杀的人
                 if (ImGui::BeginPopup("Select player to kill", ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -1433,11 +1411,11 @@ void drawMenu() {
                         ImGui::TableNextColumn();
 
                         std::string killButtonName = icon_str(ICON_FA_CROSSHAIRS, str("Kill", "击杀"));
-                        
+
                         if (ImGui::Button((killButtonName + "##" + std::to_string(i)).c_str())) {
                             MelonLoaderHelper::remoteKill(ptr_playerController->userId);
                         }
-                    }                                      
+                    }
 
                     // 结束ImGui表格布局
                     ImGui::EndTable();
@@ -1451,6 +1429,76 @@ void drawMenu() {
                 }
 
                 ImGui::EndTabItem();
+            }
+
+
+            //启动飞船
+            {
+                static bool moveShuttleFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_SHUTTLE_SPACE, str("Remote control shuttle", "远程控制飞船")))) {
+                    moveShuttleFailed = !MelonLoaderHelper::moveShuttle();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
+                HintUpdateModIfFailed(moveShuttleFailed);
+            }           
+
+            //静音所有其他玩家
+            {
+                static bool muteAllPlayersFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_MICROPHONE_LINES_SLASH, str("Silence other players", "禁言所有玩家")))) {
+                    muteAllPlayersFailed = !MelonLoaderHelper::muteAllPlayers();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Silence all other players with silencer's skill\n(You must be the duck Silencer)", "禁言所有其他玩家\n(你必须是静语者)"));
+                HintUpdateModIfFailed(muteAllPlayersFailed);
+            }
+
+            //追踪所有玩家箭头
+            {
+                static bool showAllPlayers = false;
+                if (ImGui::Button(icon_str(ICON_FA_LOCATION_ARROW, str("Track players", "追踪所有玩家")))) {
+                    showAllPlayers = !MelonLoaderHelper::showAllPlayersArrow();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Track all players with arrows", "箭头追踪所有玩家"));
+                HintUpdateModIfFailed(showAllPlayers);
+            }
+
+            //自杀
+            {
+                static bool suicideFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_SKULL_CROSSBONES, str("Suicide", "非自然死亡")))) {
+                    suicideFailed = !MelonLoaderHelper::suicide();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Suicide", "自杀"));
+                HintUpdateModIfFailed(suicideFailed);
+            }         
+
+            
+
+            //一键抛尸
+            {
+                static bool throwAllBodiesFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_TRASH_CAN, str("No bodies", "一键抛尸")))) {
+                    throwAllBodiesFailed = !MelonLoaderHelper::throwAllBodiesAwayFromMap();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Throw all bodies away from map\n(You must be the Undertaker)", "将所有鸡腿扔出地图外\n(你必须是丧葬者)"));
+                HintUpdateModIfFailed(throwAllBodiesFailed);
+            }
+
+            //RingBell
+           //拉铃
+            {
+                static bool ringBellFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_BELL_EXCLAMATION, str("Ring bell", "拉铃")))) {
+                    ringBellFailed = !MelonLoaderHelper::ringBell();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Ring bell from any distance", "远程拉铃"));
+                HintUpdateModIfFailed(ringBellFailed);
             }
 
             ImGui::NewLine();

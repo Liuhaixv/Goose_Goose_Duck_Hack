@@ -32,8 +32,28 @@ public:
         return sendMessage(message.c_str());
     }
 
+    static bool muteAllPlayers() {
+        std::string message = "SilenceAllOtherPlayers";
+        return sendMessage(message.c_str()); 
+    }
+
+    static bool ringBell() {
+        std::string message = "RingBell";
+        return sendMessage(message.c_str());
+    }
+
+    static bool showAllPlayersArrow() {
+        std::string message = "ShowAllPlayersArrow";
+        return sendMessage(message.c_str());
+    }
+
+    static bool throwAllBodiesAwayFromMap() {
+        std::string message = "ThrowAllBodiesAwayFromMap";
+        return sendMessage(message.c_str());
+    }
+
 private:
-    static const int port = 1234;
+    static const int port = 29241;
 
     static bool sendMessage(const char* message) {
         return send_and_receive(port, message);
