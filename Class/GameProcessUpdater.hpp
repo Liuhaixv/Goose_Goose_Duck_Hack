@@ -1,14 +1,16 @@
 ﻿#pragma once
 
 #include <Windows.h>
-#include "../Memory.hpp"
+#include "../Memory.h"
 #include "../Struct/HackSettings.hpp"
+#include "Updater.h"
+#include"../Client.h"
 
 
 /// <summary>
 /// Thread functions that update data.
 /// </summary>
-class MemoryUpdater {
+class MemoryUpdater :public Updater {
 public:
     //查找游戏进程的间隔时间(秒)
     //Min time before searching the game process again
@@ -18,7 +20,7 @@ public:
     }
 
     /// <summary>
-    /// 查找游戏进程并更新Memory<para/>
+    /// 查找游戏进程并更新Memory。只适用于第一次自动连接到游戏<para/>
     /// Thread that search for game process and update Memory instance
     /// </summary>
     void gameProcessUpdater() {
@@ -28,14 +30,19 @@ public:
         {
             Sleep(2);
 
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
+
             if (memory.processHandle && memory.gameAssemblyBaseAddress) {
                 if (hackSettings->gameStateSettings.b_gameProcessRunning == false) {
-                    std::cout << "Game found" << std::endl;
+                    //std::cout << "Game found" << std::endl;
 
                     hackSettings->gameStateSettings.b_gameProcessRunning = true;
-                    hackSettings->gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
-                    //暂时没有添加检测游戏退出，所以这里直接返回结束线程
-                    return;
+                    //hackSettings->gameStateSettings.openProcessState = OpenProcessState::GameFoundAndLoadedDLL;
+                    //TODO: 添加检测游戏退出
+                    continue;
                 }
             }
             else {
@@ -49,8 +56,8 @@ public:
                 if (connect_count >= 2) {
                     connect_count = 0;
 
-                    //搜索游戏进程
-                    hackSettings->gameStateSettings.openProcessState = memory.searchGameProcess();
+                    //搜索游戏进程并尝试附加
+                    memory.searchGameProcessAndAttach();
                 }
             }
         }

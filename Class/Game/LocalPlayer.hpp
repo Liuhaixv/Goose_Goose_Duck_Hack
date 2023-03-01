@@ -2,9 +2,11 @@
 
 #include"../utils.hpp"
 #include"../Struct/Common.hpp"
-#include"../Memory.hpp"
+#include"../Memory.h"
 #include"PlayerController.h"
 #include"../Data/offsets.hpp"
+
+#include"../../Struct/ObscuredTypes.hpp"
 
 #include<Windows.h>
 
@@ -29,26 +31,28 @@ public:
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,
                Offsets::LocalPlayer::Class::ptr_staticFields,
-               Offsets::LocalPlayer::Class::StaticField::f_movementSpeed };
+               Offsets::LocalPlayer::Class::StaticField::struct_movementSpeed };
 
-            int64_t addr = memory.FindPointer(this->address, offsets);
-            if (addr == NULL) {
+            int64_t movementSpeed_addr = memory.FindPointer(this->address, offsets);
+
+            if (movementSpeed_addr == NULL) {
                 return -1;
             }
 
-            float result = memory.read_mem<float>(addr, -1.0f);
+            ObscuredFloat movementSpeed;
+            memory.read_mem_EX<ObscuredFloat>(movementSpeed_addr, movementSpeed);
 
-            if (result <= 0) {
+            float f_movementSpeed = movementSpeed.Decrypt();
+
+            if (f_movementSpeed <= 0) {
                 return -1;
             }
 
-            return result;
+            return f_movementSpeed;
         }
         catch (...) {
             return -1;
         }
-
-        return true;
     }
     /// <summary>
     /// 获取初始速度

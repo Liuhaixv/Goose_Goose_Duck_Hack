@@ -1,12 +1,13 @@
 ﻿#pragma once
 
 #include"../Struct/HackSettings.hpp"
+#include"Updater.h"
 #include <Windows.h>
 
 /// <summary>
 /// Thread functions that update data.
 /// </summary>
-class HotkeyUpdater {
+class HotkeyUpdater :public Updater {
 public:
     HotkeyUpdater(IN HackSettings* hackSettings) {
         this->hackSettings = hackSettings;
@@ -19,10 +20,20 @@ public:
     void hackSettingsUpdater() {
         while (true)
         {
-            Sleep(2);
+            Sleep(10);
+
+            if (this->paused) {
+                Sleep(100);
+                continue;
+            }
 
             //长按类
             {
+                if (hackSettings == nullptr) {
+                    Sleep(50);
+                    continue;
+                }
+
                 //Left ALT to enable noclip
                 //左ALT键开启穿墙
                 if (GetAsyncKeyState(VK_LMENU))

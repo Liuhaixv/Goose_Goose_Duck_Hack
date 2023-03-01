@@ -2,8 +2,8 @@
 
 #include <Windows.h>
 
-#include"Struct/HackSettings.hpp"
-#include "ImGui/imgui.h"
+#include"../Struct/HackSettings.hpp"
+#include "../ImGui/imgui.h"
 #include"UI.h"
 
 class Drawing

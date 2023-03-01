@@ -29,16 +29,17 @@
 #include<imgui_impl_dx11.h>
 #include<imgui_impl_win32.h>
 //UI
-#include "UI.h"
+#include "./UI/UI.h"
 
 
 Utils utils;
 Hack hack;
 
+HackSettings hackSettings;
+
 //初始化辅助设置类
 //settings
-HackSettings hackSettings;
-Client* g_client;
+Client g_client;
 
 //全局变量保存用户配置
 UserSettings userSettings;
@@ -47,23 +48,29 @@ UserSettings userSettings;
 //Init RPM classes
 Memory memory;
 
+//初始化更新类线程
+//Init updaters
+//TODO: 处理NULL
+HotkeyUpdater hotkeyUpdater(&hackSettings);
+DataUpdater dataUpdater(&g_client);
+BytesPatchUpdater bytesUpdater;
+MemoryUpdater memoryUpdater(&g_client, &hackSettings);
+
+std::vector<Updater*> updaters;
+
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     {
         //修改设置
         //Edit hacksettings
         hackSettings.guiSettings.b_disableFogOfWar = false;
     }
-    Client client(&hackSettings);
-    hack.setClient(&client);
+    hack.setClient(&g_client);
 
-    g_client = &client;
-
-    //初始化更新类线程
-    //Init updaters
-    HotkeyUpdater hotkeyUpdater(&hackSettings);
-    DataUpdater dataUpdater(&client);
-    BytesPatchUpdater bytesUpdater;
-    MemoryUpdater memoryUpdater(& client, & hackSettings);
+    //存放所有Updater
+    updaters.push_back(&hotkeyUpdater);
+    updaters.push_back(&dataUpdater);
+    updaters.push_back(&bytesUpdater);
+    updaters.push_back(&memoryUpdater);
 
     //监听热键
     //Listen to keyboard

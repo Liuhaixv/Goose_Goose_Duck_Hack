@@ -5,6 +5,8 @@
 #include<string>
 #include"../Struct/Common.hpp"
 
+#include "../../Enum/ReadyState.hpp"
+
 class Client;
 class PlayerController {
 public:
@@ -41,6 +43,9 @@ public:
     int invisibilityDistance = 0;
     int i_timeOfDeath = 0;
 
+    //准备状态
+    int i_readyState = ReadyState::ReadyState_NotReady;
+
     std::string nickname = "";
     std::string roleName = "";
 
@@ -61,6 +66,12 @@ public:
     /// </summary>
     /// <param name="position"></param>
     bool teleportTo(IN const Vector2& to);
+
+    /// <summary>
+    /// 是否已经准备
+    /// </summary>
+    /// <returns></returns>
+    bool hasReadied();
 
     /// <summary>
     /// 更新玩家坐标信息<para/>

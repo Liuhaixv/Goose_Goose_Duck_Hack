@@ -75,7 +75,7 @@
     <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>.\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>H:\Documents\GitHub\GooseGooseDuckHack\ImGui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <Optimization>Disabled</Optimization>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -144,7 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\Hack.hpp" />
-    <ClCompile Include="Drawing.cpp" />
+    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="UI\Drawing.cpp" />
     <ClCompile Include="GooseGooseDuckHack.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -155,9 +156,12 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Class\Game\LobbySceneHandler.cpp" />
     <ClCompile Include="Class\Game\TasksHandler.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UI\UI.cpp" />
+    <ClCompile Include="Class\Updater.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="CheatSheet\关于反作弊.txt" />
+    <Text Include="CheatSheet\trash.txt" />
     <ClInclude Include="Class\BytesPatchUpdater.hpp" />
     <ClInclude Include="Class\DataUpdater.hpp" />
     <ClInclude Include="Class\Game\GameTask.hpp" />
@@ -169,9 +173,11 @@
     <ClInclude Include="Data\offsets.hpp" />
     <ClCompile Include="Class\Game\PlayerController.cpp" />
     <ClInclude Include="Data\GameData.hpp" />
-    <ClInclude Include="Drawing.h" />
+    <ClInclude Include="Struct\ObscuredTypes.hpp" />
+    <ClInclude Include="UI\Drawing.h" />
     <ClInclude Include="Enum\ActivationState.hpp" />
     <ClInclude Include="Enum\EnumGameMaps.hpp" />
+    <ClInclude Include="Enum\ReadyState.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -192,13 +198,21 @@
     <ClInclude Include="Enum\OpenProcessState.hpp" />
     <ClInclude Include="Struct\UserSettings.hpp" />
     <ClInclude Include="Class\Game\TasksHandler.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI\UI.h" />
+    <ClInclude Include="Class\Updater.h" />
     <ClInclude Include="utils.hpp" />
     <ClCompile Include="Client.cpp" />
-    <ClInclude Include="Memory.hpp" />
+    <ClInclude Include="Memory.h" />
+    <Text Include="CheatSheet\准备.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UI\GooseGooseDuckHack.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

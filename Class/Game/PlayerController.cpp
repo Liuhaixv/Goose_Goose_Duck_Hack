@@ -7,7 +7,7 @@
 #include "../Client.h"
 #include"string.hpp"
 
-extern Client* g_client;
+extern Client g_client;
 extern Memory memory;
 PlayerController::PlayerController()
 {
@@ -53,7 +53,8 @@ void PlayerController::reset()
 void PlayerController::resetMemberFields()
 {
     b_hasRecordedPlayersNearby = false;
-    this->playersNearbyOnDeath.clear();
+    if (this->playersNearbyOnDeath.size() > 0)
+        this->playersNearbyOnDeath.clear();
 
     playerRole = NULL;
 
@@ -75,6 +76,8 @@ void PlayerController::resetMemberFields()
     nickname = "";
     roleName = "";
     v3_position = { 0.0f, 0.0f, 0.0f };
+
+    i_readyState = ReadyState::ReadyState_NotReady;
 }
 
 /// <summary>
@@ -140,6 +143,11 @@ bool PlayerController::teleportTo(IN const Vector2& to)
     return true;
 }
 
+bool PlayerController::hasReadied()
+{
+    return this->i_readyState == ReadyState::ReadyState_Ready;
+}
+
 /// <summary>
 /// 更新玩家坐标信息<para/>
 /// Update player's position and returns true if data valid
@@ -174,7 +182,7 @@ void PlayerController::updateNickname()
         return;
     }
 
-    int64_t nickname_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_nickname, NULL);
+    int64_t nickname_Addr = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::ptr_nickname, NULL);
 
     this->nickname = string(nickname_Addr).get_std_string();
 }
@@ -252,6 +260,8 @@ bool PlayerController::update()
     // 是否为本地玩家
     b_isLocal = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isLocal, false);
 
+    i_readyState = memory.read_mem<int>(this->address + Offsets::PlayerController::i_readyState, ReadyState::ReadyState_NotReady);
+
     if (b_isPlayerRoleSet)
     {
         // 更新玩家坐标
@@ -264,8 +274,8 @@ bool PlayerController::update()
         invisibilityDistance = memory.read_mem<int>(this->address + Offsets::PlayerController::fl_invisibilityDistance, -1);
         b_isRemoteSpectating = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isRemoteSpectating, false);
         b_hasKilledThisRound = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_hasKilledThisRound, false);
-        playerRole = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::fl_playerRoleId, NULL);
-        i_playerRoleId = memory.read_mem<int>(playerRole + 0x10, 0) ;
+        playerRole = memory.read_mem<int64_t>(this->address + Offsets::PlayerController::ptr_playerRole, NULL);
+        i_playerRoleId = memory.read_mem<int>(playerRole + 0x10, 0);
 
         float timeOfDeath = memory.read_mem<int>(this->address + Offsets::PlayerController::i_timeOfDeath, 0);
 
@@ -280,7 +290,9 @@ bool PlayerController::update()
 
         std::u8string rolename = utils.getRoleName(i_playerRoleId);
         roleName = std::string(rolename.begin(), rolename.end());
+
     }
+
     return true;
 }
 
@@ -289,7 +301,7 @@ bool PlayerController::update()
 /// </summary>
 void PlayerController::onDeath()
 {
-    for (PlayerController* suspectKiller : g_client->playerControllers) {
+    for (PlayerController* suspectKiller : g_client.playerControllers) {
         if (!suspectKiller || suspectKiller->address == NULL) {
             continue;
         }

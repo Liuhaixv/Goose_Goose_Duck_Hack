@@ -5,11 +5,9 @@
 #include"Class/Hack.hpp"
 
 extern Hack hack;
-
-Client::Client(HackSettings* hackSettings)
+extern HackSettings hackSettings;
+Client::Client()
 {
-    this->hackSettings = hackSettings;
-
     for (int i = 0; i < n_players; i++) {
         playerControllers.push_back(new PlayerController());
     }
@@ -19,19 +17,18 @@ Client::~Client() {
     for (auto ptr_playerController : playerControllers) {
         delete ptr_playerController;
     }
-    playerControllers.clear();
+    if (playerControllers.size() > 0)
+        playerControllers.clear();
 }
 
 /// <summary>
 /// 重置GUI设置
 /// </summary>
 void Client::resetGuiSettings() {
-    HackSettings* hackSettings = this->hackSettings;
-    GuiSettings* guiSettings = &hackSettings->guiSettings;
-
+    GuiSettings* guiSettings = &hackSettings.guiSettings;
 
     //reset player's target speed
-    guiSettings->f_movementSpeed = this->hackSettings->gameOriginalData.f_baseMovementSpeed;
+    guiSettings->f_movementSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
     guiSettings->b_alwaysEnableNoclip = false;
     guiSettings->b_disableFogOfWar = false;
 }
@@ -49,12 +46,20 @@ void Client::onLocalPlayerQuitGame() {
     Client::onGameEnded();
 }
 
+void Client::onEnteringRoom()
+{
+    //TODO: 不知道干啥
+}
+
 /// <summary>
 /// 游戏开始
 /// </summary>
 void Client::onGameStarted() {
     //更新游戏内初始数据
-    updateGameOriginalData();
+    //updateGameOriginalData();
+
+    //更新游戏开始时间
+    time(&this->time_gameStart);
 }
 
 /// <summary>
@@ -67,6 +72,8 @@ void Client::onGameEnded() {
     hack.resetActivationStates();
     //重置Gui设置
     resetGuiSettings();
+
+    this->time_gameStart = NULL;
 }
 
 /// <summary>
@@ -75,6 +82,21 @@ void Client::onGameEnded() {
 /// <param name="playerController"></param>
 void Client::onPlayerDeath(IN PlayerController* playerController) {
     //TODO: 统计死亡位置附近的玩家
+}
+
+bool Client::gameHasStarted()
+{
+    return this->time_gameStart != NULL;
+}
+
+bool Client::inGameScene()
+{
+    return lobbySceneHandler.b_InGameScene;
+}
+
+bool Client::localPlayerReadied()
+{
+    return this->localPlayer.playerController.hasReadied();
 }
 
 bool Client::teleportTo(IN const Vector2& to) {
@@ -92,7 +114,7 @@ bool Client::teleportTo(IN const Vector2& to) {
 }
 
 void Client::updateGameOriginalData() {
-    hackSettings->gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
+    //hackSettings.gameOriginalData.f_baseMovementSpeed = localPlayer.getBaseMovementSpeed();
 }
 
 [[deprecated("Replaced with GUI, won't do anything now")]]

@@ -5,7 +5,11 @@
 #include"../Data/offsets.hpp"
 #include"../Enum/ActivationState.hpp"
 
+#include"../Struct/ObscuredTypes.hpp"
+
 extern Memory memory;
+extern Utils utils;
+extern HackSettings hackSettings;
 
 class Hack {
 public:
@@ -31,6 +35,9 @@ public:
 
     //只需要激活一次
     void removeFogOfWar(PlayerController* localPlayerController) {
+        if (localPlayerController == nullptr) {
+            return;
+        }
 
         ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_disableFogOfWar, &this->b_hasDisabledFOW);
         if (state == IDLE_DO_NOTHING) {
@@ -41,41 +48,77 @@ public:
         if (state == SHOULD_ACTIVATE_NOW) {
             //修改fog of war
             if (localPlayerController->b_isLocal) {
-                if (this->client && this->client->hackSettings) {
+                if (this->client) {
                     //memory.write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
-                    int64_t fogOfWarHandler_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory.read_mem<int64_t>(fogOfWarHandler_addr, NULL);
+                    int64_t localPlayer_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer());
 
-                    if (memory.read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
-                        //disable fow
+                    int64_t fogOfWarHandler_addr = NULL;
+                    memory.read_mem_EX(localPlayer_addr + Offsets::LocalPlayer::ptr_fogOfWarHandler, fogOfWarHandler_addr);
+
+                    if (memory.read_mem<bool>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
+                        //disable FOW
                         //set layermask
-                        memory.write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 0);
+                        //由于layerMask已被加密，需要同时修改加密的数值
+
+                        int targetValueOfLayerMask = 0;
+
+                        ObscuredInt obscured_layerMask;
+                        memory.read_mem_EX<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
+
+                        obscured_layerMask.Encrypt(targetValueOfLayerMask);
+
+                        //写入加密数值
+                        memory.write_mem<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
+                        //写入非加密数值
+                        memory.write_mem<int>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::i_layerMask, targetValueOfLayerMask);
 
                         //7.5 is enough to see the whole screen
                         //f_baseViewDistance * f_viewDistanceMultiplier = 6 * 1.25 = 7.5
-                        float f_viewDistanceMultiplier = memory.read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
+                        ObscuredFloat viewDistanceMultiplier;
+                        ObscuredFloat baseViewDistance;
+
+                        memory.read_mem_EX(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_viewDistanceMultiplier, viewDistanceMultiplier);
+                        memory.read_mem_EX(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_baseViewDistance, baseViewDistance);
+
+                        float f_viewDistanceMultiplier = viewDistanceMultiplier.Decrypt();
                         if (f_viewDistanceMultiplier != 0) {
-                            memory.write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                            baseViewDistance.Encrypt(7.5 / f_viewDistanceMultiplier);
+                            memory.write_mem<ObscuredFloat>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_baseViewDistance, baseViewDistance);
                         }
+                        //float f_viewDistanceMultiplier = memory.read_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_viewDistanceMultiplier, 0);
+                        //if (f_viewDistanceMultiplier != 0) {
+                        //    memory.write_mem<float>(fogOfWarHandler + Offsets::FogOfWarHandler::f_baseViewDistance, 7.5 / f_viewDistanceMultiplier);
+                        //}
                     }
 
                 }
             }
         }
         else if (state == SHOULD_DEACTIVATE_NOW) {
-            //TODO: 反激活，启用战争迷雾
+            //反激活，禁用用战争迷雾
             if (localPlayerController->b_isLocal) {
-                if (this->client && this->client->hackSettings) {
+                if (this->client) {
                     //memory.write_mem<bool>(PlayerController + Offsets::PlayerController::b_fogOfWarEnabled, false);
 
-                    int64_t fogOfWarHandler_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer()) + Offsets::LocalPlayer::ptr_fogOfWarHandler;
-                    int64_t fogOfWarHandler = memory.read_mem<int64_t>(fogOfWarHandler_addr, NULL);
+                    int64_t localPlayer_addr = memory.FindPointer(memory.gameAssemblyBaseAddress, GameAssembly::localPlayer());
 
-                    if (memory.read_mem<bool>(fogOfWarHandler + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
+                    int64_t fogOfWarHandler_addr = NULL;
+                    memory.read_mem_EX(localPlayer_addr + Offsets::LocalPlayer::ptr_fogOfWarHandler, fogOfWarHandler_addr);
+
+                    if (memory.read_mem<bool>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::b_targetPlayerSet, false)) {
                         //enable fow
                         //set layermask
-                        memory.write_mem<int>(fogOfWarHandler + Offsets::FogOfWarHandler::i_layerMask, 131090);
+                        int targetValueOfLayerMask = 131090;
+
+                        ObscuredInt obscured_layerMask;
+                        memory.read_mem_EX<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
+                        obscured_layerMask.Encrypt(targetValueOfLayerMask);
+
+                        //写入加密数值
+                        memory.write_mem<ObscuredInt>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::struct_obscured_layerMask, obscured_layerMask);
+                        //写入非加密数值
+                        memory.write_mem<int>(fogOfWarHandler_addr + Offsets::FogOfWarHandler::i_layerMask, targetValueOfLayerMask);
                     }
                 }
             }
@@ -102,7 +145,7 @@ public:
         }
 
         std::vector<int64_t> offsets{
-                Offsets::PlayerController::ptr_bodyCollider,
+                Offsets::PlayerController::ptr_playerCollider,
                 Offsets::CapsuleCollider2D::ptr_unknownClass0,
                 Offsets::CapsuleCollider2D::UnknownClass0::b_enableCollider };
 
@@ -124,9 +167,9 @@ public:
     void noclip(PlayerController* localPlayerController) {
         //开启穿墙
         if (localPlayerController && localPlayerController->b_isLocal) {
-            if (this->client && this->client->hackSettings) {
+            if (this->client) {
                 enableNoclip(localPlayerController,
-                    this->client->hackSettings->guiSettings.b_alwaysEnableNoclip || this->client->hackSettings->tempEnableNoclip);
+                    hackSettings.guiSettings.b_alwaysEnableNoclip || hackSettings.tempEnableNoclip);
             }
         }
     }
@@ -136,18 +179,18 @@ public:
         float targetSpeed = -1.0f;
 
         //检查是否启用移速hack
-        ActivationState state = utils.shouldActivateOnce(this->client->hackSettings->guiSettings.b_enableSpeedHack, &this->b_enabledSpeedHackLastTime);
+        ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.b_enableSpeedHack, &this->b_enabledSpeedHackLastTime);
 
         switch (state) {
             case SHOULD_DEACTIVATE_NOW:
-                //TODO: 用户关闭了speedhack，恢复正常移速
-                targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
+                //用户关闭了speedhack，恢复正常移速
+                targetSpeed = this->client->localPlayer.getBaseMovementSpeed();
                 break;
 
                 //speedhack没有被切换开关
             case IDLE_DO_NOTHING:
                 //没有开启
-                if (!this->client->hackSettings->guiSettings.b_enableSpeedHack) {
+                if (!hackSettings.guiSettings.b_enableSpeedHack) {
                     return false;
                 }
                 else {
@@ -157,11 +200,11 @@ public:
 
                 //用户刚刚开启speedhack
             case SHOULD_ACTIVATE_NOW:
-                //TODO: 检查启用状态下当前目标速度是否更新
-                targetSpeed = this->client->hackSettings->guiSettings.f_movementSpeed;
+                //检查启用状态下当前目标速度是否更新
+                targetSpeed = hackSettings.guiSettings.f_movementSpeed;
 
                 //和上一次设置的速度一样，无变化，直接返回
-                if (this->lastTimeSetMovementSpeed == this->client->hackSettings->guiSettings.f_movementSpeed) {
+                if (this->f_lastTimeSetMovementSpeed == hackSettings.guiSettings.f_movementSpeed) {
                     return false;
                 }
                 break;
@@ -170,25 +213,86 @@ public:
         //修改移速逻辑从这里开始       
 
         if (targetSpeed < 0) {
-            targetSpeed = this->client->hackSettings->gameOriginalData.f_baseMovementSpeed;
+            targetSpeed = hackSettings.gameOriginalData.f_baseMovementSpeed;
         }
 
-        //开启穿墙
+        //修改移速
         if (localPlayer) {
             std::vector<int64_t> offsets = {
                 Offsets::LocalPlayer::ptr_Class,
                 Offsets::LocalPlayer::Class::ptr_staticFields,
-                Offsets::LocalPlayer::Class::StaticField::f_movementSpeed
+                Offsets::LocalPlayer::Class::StaticField::struct_movementSpeed
             };
+
+            //当前移速的struct地址
             int64_t movementSpeed_addr = memory.FindPointer(localPlayer->address, offsets);
 
-            memory.write_mem<float>(movementSpeed_addr, targetSpeed);
+            if (movementSpeed_addr == NULL) {
+                return false;
+            }
+
+            ObscuredFloat movementSpeed;
+            memory.read_mem_EX<ObscuredFloat>(movementSpeed_addr, movementSpeed);
+
+            //将数值加密保存进结构
+            movementSpeed.Encrypt(targetSpeed);
+
+            memory.write_mem<ObscuredFloat>(movementSpeed_addr, movementSpeed);
 
             //更新GUI显示的设置速度
-            this->client->hackSettings->guiSettings.f_movementSpeed = targetSpeed;
+            hackSettings.guiSettings.f_movementSpeed = targetSpeed;
             //更新上一次设置的速度
-            this->lastTimeSetMovementSpeed = targetSpeed;
+            this->f_lastTimeSetMovementSpeed = targetSpeed;
         }
+    }
+
+    void zoomHack(LocalPlayer* localPlayer)
+    {
+        float targetZoomSize = hackSettings.guiSettings.f_zoomSize;
+
+        //未启用zoomHack
+        if (!hackSettings.guiSettings.b_enableZoomHack) {
+            return;
+        }
+
+        //检查是否启用移速hack
+        ActivationState state = utils.shouldActivateOnce(hackSettings.guiSettings.f_zoomSize, &this->f_lastTimeZoomSize);
+
+        if (state == ActivationState::SHOULD_ACTIVATE_NOW) {
+            //Override覆写相机距离
+            overrideOrthographicSize(localPlayer, targetZoomSize);
+        }
+    }
+
+    /// <summary>
+    /// 设置相机的远近距离
+    /// </summary>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    bool overrideOrthographicSize(LocalPlayer* localPlayer, float targetZoomSize)
+    {
+        if (localPlayer) {
+            //启用Override
+            std::vector<int64_t> offsets1 = {
+                Offsets::LocalPlayer::ptr_cinemachineStateDrivenCamera,
+                Offsets::CinemachineStateDrivenCamera::ptr_m_AnimatedTarget
+            };
+            int64_t changeValue_addr = memory.FindPointer(localPlayer->address, offsets1);
+
+            memory.write_mem<int64_t>(changeValue_addr, 0);
+
+            //修改zoomSize
+            std::vector<int64_t> offsets2 = {
+                Offsets::LocalPlayer::ptr_cinemachineVirtualCamera,
+                Offsets::CinemachineVirtualCamera::f_m_zoomSize
+            };
+            int64_t zoomSize_addr = memory.FindPointer(localPlayer->address, offsets2);
+
+            memory.write_mem<float>(zoomSize_addr, targetZoomSize);
+
+            return true;
+        }
+        return false;
     }
 
 private:
@@ -200,5 +304,6 @@ private:
     //上一次设置移速hack是否开启
     bool b_enabledSpeedHackLastTime = false;
     //上一次设置的玩家移速
-    float lastTimeSetMovementSpeed = -1;
+    float f_lastTimeSetMovementSpeed = -1;
+    float f_lastTimeZoomSize = -1;
 };
