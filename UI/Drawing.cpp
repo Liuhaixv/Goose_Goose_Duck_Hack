@@ -15,6 +15,7 @@
 //#include "Struct/UserSettings.hpp"
 
 #include "IconsFontAwesome6Pro.h"
+#include "../Password_Offline.cpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -40,6 +41,7 @@ extern DebugConsole debugConsole;
 void drawMinimap();
 void drawMenu();
 void drawESP();
+void drawVerification();
 
 void Drawing::Active()
 {
@@ -55,27 +57,33 @@ void Drawing::Draw() {
     static bool* b_previousEnableMenu = nullptr;
     if (isActive())
     {
-        if (hackSettings.guiSettings.b_debug) {
-            ImGui::ShowDemoWindow();
-        }
+        do {
+            //验证
+            drawVerification();
+                break;
+
+            if (hackSettings.guiSettings.b_debug) {
+                ImGui::ShowDemoWindow();
+            }
 
 
-        if (hackSettings.guiSettings.b_enableMinimap) {
-            drawMinimap();
-        }
+            if (hackSettings.guiSettings.b_enableMinimap) {
+                drawMinimap();
+            }
 
-        //绘制菜单
-        if (hackSettings.guiSettings.b_enableMenu) {
-            drawMenu();
-        }
+            //绘制菜单
+            if (hackSettings.guiSettings.b_enableMenu) {
+                drawMenu();
+            }
 
-        //ESP
-        if (hackSettings.guiSettings.b_enableESP) {
-            drawESP();
-        }
-        else {
+            //ESP
+            if (hackSettings.guiSettings.b_enableESP) {
+                drawESP();
+            }
+            else {
 
-        }
+            }
+        } while (false);
     }
 }
 
@@ -1441,7 +1449,7 @@ void drawMenu() {
                 ImGui::SameLine();
                 HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
                 HintUpdateModIfFailed(moveShuttleFailed);
-            }           
+            }
 
             //静音所有其他玩家
             {
@@ -1474,9 +1482,9 @@ void drawMenu() {
                 ImGui::SameLine();
                 HelpMarker(str("Suicide", "自杀"));
                 HintUpdateModIfFailed(suicideFailed);
-            }         
+            }
 
-            
+
 
             //一键抛尸
             {
@@ -1686,4 +1694,112 @@ void drawESP() {
 
     ImGui::GetForegroundDrawList()->AddRect({ 0, 0 }, { ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y }, ImColor(1.0f, 1.0f, 0.0f), 50.0f, 0, 3.0f);
     */
+}
+
+void drawVerification()
+{
+    static std::string login_token = HashVerificator::get_hwid_password();
+    char captcha[] = "pwd";
+    
+    ImGui::Begin(str("Welcome", "欢迎页"), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+
+    //ImGui::SetCursorPos(ImVec2(118, 20));
+    ImGui::TextDisabled(str("This is a free cheat software","这是一个免费辅助项目"));
+
+    ImGui::Text("Log into your account");
+
+        ImGui::TextDisabled(str("Login token", "登录令牌"));
+
+        ImGui::Text(login_token.c_str());
+
+        ImGui::TextDisabled(str("CAPTCHA","验证码"));
+
+        ImGui::SetCursorPos(ImVec2(180, 130));
+        ImGui::TextDisabled(str("How to get CAPTCHA","如何获取验证码"));
+        HelpMarker(str("Subscribe to wechat or join Discord\nSend your login token to bot",
+            "关注微信号或Discord服务器\n发送登录令牌给机器人"));
+
+        ImGui::InputText("##CAPTCHA", captcha, IM_ARRAYSIZE(captcha));
+    
+
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
+    if (ImGui::Button("Login", ImVec2(260.f, 30.f)))
+    {
+       // show_login = false;
+       // show_register = true;
+    }
+    ImGui::PopStyleVar();
+
+    ImGui::TextDisabled("Don't have an account? Sign up!");
+
+    if (ImGui::BeginTable("table_nested1", 1, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
+    {
+        //ImGui::TableSetupColumn("A0");
+        ImGui::TableHeadersRow();
+
+        ImGui::TableNextColumn();
+        ImGui::Text("A0 Row 0");
+
+        {
+            //float rows_height = 15 * 2;
+            if (ImGui::BeginTable("table_nested2", 2, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
+            {
+                ImGui::TableSetupColumn("B0");
+                ImGui::TableSetupColumn("B1");
+                ImGui::TableHeadersRow();
+
+                ImGui::TableNextRow(ImGuiTableRowFlags_None);
+                ImGui::TableNextColumn();
+                ImGui::Text("B0 Row 0");
+                ImGui::TableNextColumn();
+                ImGui::Text("B1 Row 0");
+                ImGui::TableNextRow(ImGuiTableRowFlags_None);
+                ImGui::TableNextColumn();
+                ImGui::Text("B0 Row 1");
+                ImGui::TableNextColumn();
+                ImGui::Text("B1 Row 1");
+
+                ImGui::EndTable();
+            }
+        }
+        ImGui::TableNextColumn(); ImGui::Text("A0 Row 1");
+        ImGui::EndTable();
+    }
+
+    /*
+    if (ImGui::BeginTable("table_nested1", 1, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
+    {
+        ImGui::TableSetupColumn("A0");
+        ImGui::TableHeadersRow();
+
+        ImGui::TableNextColumn();
+        ImGui::Text("A0 Row 0");
+        {
+        //float rows_height = 15 * 2;
+            if (ImGui::BeginTable("table_nested2", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
+            {
+                ImGui::TableSetupColumn("B0");
+                ImGui::TableSetupColumn("B1");
+                ImGui::TableHeadersRow();
+
+                ImGui::TableNextRow(ImGuiTableRowFlags_None);
+                ImGui::TableNextColumn();
+                ImGui::Text("B0 Row 0");
+                ImGui::TableNextColumn();
+                ImGui::Text("B1 Row 0");
+                ImGui::TableNextRow(ImGuiTableRowFlags_None);
+                ImGui::TableNextColumn();
+                ImGui::Text("B0 Row 1");
+                ImGui::TableNextColumn();
+                ImGui::Text("B1 Row 1");
+
+                ImGui::EndTable();
+            }
+        }
+        ImGui::TableNextColumn(); ImGui::Text("A0 Row 1");
+        ImGui::EndTable();
+    }
+    */
+
+    ImGui::End();
 }

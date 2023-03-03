@@ -211,6 +211,7 @@
   <ItemGroup>
     <ClCompile Include="Class\Game\LocalPlayer.cpp" />
     <ClCompile Include="Class\Game\string.cpp" />
+    <ClCompile Include="Password_Offline.cpp" />
     <ClCompile Include="PossibleRole.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="http\http_api\UploadUserInfoApi.cpp" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Memory\CodeCave\CompleteOneTask.cpp" />
     <ClCompile Include="Memory\CodeCave\CallableFunction.cpp" />
     <ClCompile Include="Class\Hack.cpp" />
+    <ClInclude Include="antiAC.hpp" />
     <ClInclude Include="http\http_api\UploadUserInfoApi.h" />
     <ClInclude Include="md5\md5.h" />
     <ClInclude Include="Class\DebugConsole.h" />

@@ -361,11 +361,11 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     ImFontConfig cfg;
 
     const float fScale = 2.0f;
-    cfg.SizePixels = 13;
+    cfg.SizePixels = 15;
 
     if (monitor_height > 1080)
     {
-        cfg.SizePixels = 13 * fScale;
+        cfg.SizePixels *= fScale;
     }
     //ImGui::GetIO().Fonts->AddFontDefault();
 

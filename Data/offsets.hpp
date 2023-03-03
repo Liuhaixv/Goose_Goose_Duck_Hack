@@ -104,7 +104,7 @@ namespace Offsets {
         constexpr int64_t ptr_UnknownClass0 = 0x10;
     }
 
-    //2.17.02 未详细检查
+    //2.18.00 未详细检查
     namespace PlayerController {
         namespace Class {
             namespace StaticField {
@@ -149,7 +149,7 @@ namespace Offsets {
         constexpr int64_t b_isRemoteSpectating = 0x38B; // Boolean
     }
 
-    //2.17.02
+    //2.18.00
     namespace CinemachineStateDrivenCamera {
         constexpr int64_t ptr_m_AnimatedTarget = 0xB0;//Animator
     }
@@ -159,7 +159,7 @@ namespace Offsets {
         constexpr int64_t f_m_zoomSize = 0xB4;//Float
     }
 
-    //2.17.02
+    //2.18.00
     namespace FriendManager {
         namespace Class {
             namespace StaticField {
@@ -170,7 +170,7 @@ namespace Offsets {
         constexpr int64_t ptr_GaggleID = 0x1B0;//string
     }
 
-    //2.17.02
+    //2.18.00
     namespace LocalPlayer {
         namespace Class {
             namespace StaticField {
@@ -192,7 +192,7 @@ namespace Offsets {
         constexpr int64_t ptr_cinemachineVirtualCamera = 0x70;// CinemachineVirtualCamera
     }
 
-    //2.17.02
+    //2.18.00
     namespace FogOfWarHandler {
         constexpr int64_t struct_obscured_layerMask = 0x18;//已加密ObscuredInt
         constexpr int64_t i_layerMask = 0x2C;//LayerMask Bit
@@ -211,7 +211,7 @@ namespace Offsets {
         constexpr int64_t ptr_unknownClass1 = 0x30;
     }
 
-    //2.17.02
+    //2.18.00
     namespace UICooldownButton {
         constexpr int64_t struct_cooldownTime = 0x84;//已加密ObscuredFloat
     }
@@ -232,38 +232,39 @@ namespace GameAssembly {
             //private bool MoveNext() { }
             constexpr int64_t MoveNext = 0xA1F5E0;
         }
-        //2.17.02
+
+        //2.18.00
         namespace PlayerPropertiesManager {
-            constexpr int64_t ChangeReadyState = 0xE37D10;//public void ChangeReadyState(int KBGNPKGDFGK) { }
+            constexpr int64_t ChangeReadyState = 0xF9C7C0;//public void ChangeReadyState(int KBGNPKGDFGK) { }
         }
-        //2.17.02
+        //2.18.00
         namespace TasksHandler {
-            constexpr int64_t CompleteTask = 0x1C13F20;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
+            constexpr int64_t CompleteTask = 0x1DF0390;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
         }
-        //2.17.02
+        //2.18.00
         namespace UICooldownButton {
-            constexpr int64_t Update = 0x134BD30;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0x1177BD0;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
-        //2.17.02
+        //2.18.00
         namespace LocalPlayer {
-            constexpr int64_t Update = 0x1CA78C0;
+            constexpr int64_t Update = 0x1EB4FE0;
         }
         //2.16.02
         namespace Application {
             constexpr int64_t Quit = 0x3257DE0;//退出游戏
         }
-        //2.17.02
+        //2.18.00
         namespace AntiCheat {
             namespace Utils {
                 namespace ThreadSafeRandom {
-                    constexpr int64_t Next = 0x845B20;//public static int Next(int minInclusive, int maxExclusive) { }
+                    constexpr int64_t Next = 0x8A5B50;//public static int Next(int minInclusive, int maxExclusive) { }
                 }
             }
         }
-        //2.17.02
+        //2.18.00
         namespace UnityEngine {
             namespace Random {
-                constexpr int64_t RandomRangeInt = 0x3EB39C0;//int32_t UnityEngine_Random__RandomRangeInt(int32_t minInclusive, int32_t maxExclusive, const MethodInfo *method)
+                constexpr int64_t RandomRangeInt = 0x409D1C0;//int32_t UnityEngine_Random__RandomRangeInt(int32_t minInclusive, int32_t maxExclusive, const MethodInfo *method)
             }
         }
 
@@ -272,28 +273,28 @@ namespace GameAssembly {
             constexpr int64_t ChangeColor = 0x1DE8810;//void __stdcall Handlers_LobbyHandlers_PlayerCustomizationPanelHandler__ChangeColor(Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_o *this, int32_t GHCFJPBDGED, const MethodInfo *method)
         }
 
-        //2.17.02
+        //2.18.00
         namespace TaskPanelHandler {
-            constexpr int64_t OpenPanel = 0x1C03DC0;//void __stdcall Handlers_GameHandlers_TaskHandlers_TaskPanelHandler__OpenPanel(Handlers_GameHandlers_TaskHandlers_TaskPanelHandler_o *this, const MethodInfo *method)
+            constexpr int64_t OpenPanel = 0x1DCD540;//void __stdcall Handlers_GameHandlers_TaskHandlers_TaskPanelHandler__OpenPanel(Handlers_GameHandlers_TaskHandlers_TaskPanelHandler_o *this, const MethodInfo *method)
         }
     }
 
-    //2.17.02
+    //2.18.00
     namespace Class {
-        constexpr int64_t ptr_FriendManagerClass = 0x4C1E2F0;//Gaggle_Friends_FriendManager_c *
+        constexpr int64_t ptr_FriendManagerClass = 0x4E22340;//Gaggle_Friends_FriendManager_c *
 
         constexpr int64_t ptr_LobbySceneHandlerClass = 0x4D18CA8;//Handlers_LobbyHandlers_LobbySceneHandler_c *
-        constexpr int64_t ptr_PlayerControllerClass = 0x4CACA28;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x4C78210;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
-        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x4C13C20;//Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
+        constexpr int64_t ptr_PlayerControllerClass = 0x4EAF028;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        constexpr int64_t ptr_LocalPlayerClass = 0x4E7AA10;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x4EAF110;//Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
     }
 
     namespace BytesPatch {
 
-        //2.17.02
+        //2.18.00
         namespace CooldownTime {
             constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0x22F;
-            const std::vector<byte> raw{ 0xE8,0x7C,0x48,0xB8,0x02 };//call Time.get_deltaTime
+            const std::vector<byte> raw{ 0xE8,0x5C,0x4C,0xF4,0x02 };//call Time.get_deltaTime
             const std::vector<byte> removeCooldownTime{ 0x41,0x0F,0x28,0xC1,0x90 };//movaps xmm0, xmm9
         }
 
@@ -349,12 +350,12 @@ namespace GameAssembly {
 
         //跳过任务小游戏，直接完成任务
         //原理为替换api，让OpenPanel跳转到CompleteTask，因为都是无参函数，所以直接jmp即可
-        //2.17.02
+        //2.18.00
         namespace SkipPlayingGameToCompleteTask {
             constexpr int64_t address = GameAssembly::Method::TaskPanelHandler::OpenPanel;
 
             const std::vector<byte> raw = { 0x48,0x89,0x5C,0x24,0x08 };// mov     [rsp+arg_0], rbx
-            const std::vector<byte>  oneTapCompleteTask = { 0xE9,0x6B,0xC5,0xFF,0xFF };//Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.OpenPanel - E9 6BEFFFFF - jmp Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.CompleteTask
+            const std::vector<byte>  oneTapCompleteTask = { 0xE9,0xEB,0xDA,0xFF,0xFF };//Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.OpenPanel - E9 6BEFFFFF - jmp Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.CompleteTask
         }
 
         /*

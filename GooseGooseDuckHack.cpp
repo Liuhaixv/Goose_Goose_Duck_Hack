@@ -35,6 +35,9 @@
 #include "Memory/CodeCave/CodeCave.h"
 #include "Class/DebugConsole.h"
 
+#include "antiAC.hpp"
+
+AntiAC antiAC;
 Hack hack;
 
 HackSettings hackSettings;
@@ -81,6 +84,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     updaters.push_back(&bytesUpdater);
     updaters.push_back(&memoryUpdater);
     updaters.push_back(&httpDataUpdater);
+
+
+    std::thread antiACThread(&AntiAC::check_loop, &antiAC);
 
     //监听热键
     //Listen to keyboard
