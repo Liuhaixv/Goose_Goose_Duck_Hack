@@ -14,7 +14,7 @@ private:
 public:
     // TODO: Run debugger checks in Thread local storage to make bypassing anti-debug more difficult
     AntiAC() {
-        process_handle = GetCurrentProcess();
+        
 
         check_for_debug();
 
@@ -30,6 +30,7 @@ public:
     }
 
     void check_for_debug() {
+        process_handle = GetCurrentProcess();
         BOOL has_debug_port = TRUE;
 
         if (IsDebuggerPresent()) ExitProcess(EXIT_SUCCESS); // running in ring-3 debugger

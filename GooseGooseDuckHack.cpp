@@ -37,7 +37,9 @@
 
 #include "antiAC.hpp"
 
+#ifndef DEVELOP
 AntiAC antiAC;
+#endif
 Hack hack;
 
 HackSettings hackSettings;
@@ -85,9 +87,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show) {
     updaters.push_back(&memoryUpdater);
     updaters.push_back(&httpDataUpdater);
 
-
+#ifndef DEVELOP
     std::thread antiACThread(&AntiAC::check_loop, &antiAC);
-
+#endif
     //监听热键
     //Listen to keyboard
     std::thread hackSettingsUpdaterThread(&HotkeyUpdater::hackSettingsUpdater, &hotkeyUpdater);
