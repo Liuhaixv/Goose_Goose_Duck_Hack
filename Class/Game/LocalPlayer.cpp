@@ -80,6 +80,7 @@ float LocalPlayer::getBaseMovementSpeed() {
     return true;
 }
 
+//获取用户信息
 UserInfo LocalPlayer::getUserInfo()
 {
     UserInfo userInfo;

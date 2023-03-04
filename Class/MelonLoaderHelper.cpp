@@ -16,7 +16,7 @@ bool MelonLoaderHelper::send_and_receive(int server_port, const char* message) {
 
     // 设置超时时间
     struct timeval timeout;
-    timeout.tv_sec = 1; // 1秒超时
+    timeout.tv_sec = 3; // 1秒超时
     timeout.tv_usec = 0;
 
     if (setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof(timeout)) < 0) {

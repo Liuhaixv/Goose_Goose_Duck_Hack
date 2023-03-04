@@ -42,6 +42,10 @@ public:
         int checksum2 = calculate_checksum(numWithChecksum);
         int sixDigitNumber = abs(numWithChecksum * 10 + checksum2);
 
+        if (sixDigitNumber < 100000) {
+            sixDigitNumber += 100000;
+        }
+
         stringstream ss;
         ss << std::setw(6) << std::setfill('0') << sixDigitNumber;
         std::string formatted = ss.str();

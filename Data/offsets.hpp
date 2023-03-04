@@ -211,7 +211,7 @@ namespace Offsets {
         constexpr int64_t ptr_unknownClass1 = 0x30;
     }
 
-    //2.18.00
+    //2.18.00.2
     namespace UICooldownButton {
         constexpr int64_t struct_cooldownTime = 0x84;//已加密ObscuredFloat
     }
@@ -233,38 +233,38 @@ namespace GameAssembly {
             constexpr int64_t MoveNext = 0xA1F5E0;
         }
 
-        //2.18.01
+        //2.18.00.02
         namespace PlayerPropertiesManager {
-            constexpr int64_t ChangeReadyState = 0xF73A90;//public void ChangeReadyState(int KBGNPKGDFGK) { }
+            constexpr int64_t ChangeReadyState = 0xDE85A0;//public void ChangeReadyState(int KBGNPKGDFGK) { }
         }
-        //2.18.01
+        //2.18.00.02
         namespace TasksHandler {
-            constexpr int64_t CompleteTask = 0x1D82150;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
+            constexpr int64_t CompleteTask = 0x1C52FD0;//public void CompleteTask(string EDADCOILIAL, bool BEHGOBBIKEO, bool IOFAGBIBBIM = False, bool LHCBIJPIOBC = False, bool CAAPDAFENNA = True) { }
         }
-        //2.18.01
+        //2.18.00.02
         namespace UICooldownButton {
-            constexpr int64_t Update = 0x11484E0;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
+            constexpr int64_t Update = 0x1124840;//void __stdcall UICooldownButton__Update(UICooldownButton_o *this, const MethodInfo *method)
         }
-        //2.18.01
+        //2.18.00.02
         namespace LocalPlayer {
-            constexpr int64_t Update = 0x1E59060;
+            constexpr int64_t Update = 0x1D30C60;
         }
         //2.16.02
         namespace Application {
             constexpr int64_t Quit = 0x3257DE0;//退出游戏
         }
-        //2.18.01
+        //2.18.00.02
         namespace AntiCheat {
             namespace Utils {
                 namespace ThreadSafeRandom {
-                    constexpr int64_t Next = 0x879B50;//public static int Next(int minInclusive, int maxExclusive) { }
+                    constexpr int64_t Next = 0x885B60;//public static int Next(int minInclusive, int maxExclusive) { }
                 }
             }
         }
-        //2.18.01
+        //2.18.00.02
         namespace UnityEngine {
             namespace Random {
-                constexpr int64_t RandomRangeInt = 0x406F090;//int32_t UnityEngine_Random__RandomRangeInt(int32_t minInclusive, int32_t maxExclusive, const MethodInfo *method)
+                constexpr int64_t RandomRangeInt = 0x3F4F1E0;//int32_t UnityEngine_Random__RandomRangeInt(int32_t minInclusive, int32_t maxExclusive, const MethodInfo *method)
             }
         }
 
@@ -273,29 +273,31 @@ namespace GameAssembly {
             constexpr int64_t ChangeColor = 0x1DE8810;//void __stdcall Handlers_LobbyHandlers_PlayerCustomizationPanelHandler__ChangeColor(Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_o *this, int32_t GHCFJPBDGED, const MethodInfo *method)
         }
 
-        //2.18.01
+        //2.18.00.02
         namespace TaskPanelHandler {
-            constexpr int64_t OpenPanel = 0x1DBF000;//void __stdcall Handlers_GameHandlers_TaskHandlers_TaskPanelHandler__OpenPanel(Handlers_GameHandlers_TaskHandlers_TaskPanelHandler_o *this, const MethodInfo *method)
+            constexpr int64_t OpenPanel = 0x1C2B5B0;//void __stdcall Handlers_GameHandlers_TaskHandlers_TaskPanelHandler__OpenPanel(Handlers_GameHandlers_TaskHandlers_TaskPanelHandler_o *this, const MethodInfo *method)
         }
     }
 
-    //2.18.01
+    //2.18.00.02
     namespace Class {
-        constexpr int64_t ptr_FriendManagerClass = 0x4DF7310;//Gaggle_Friends_FriendManager_c *
+        constexpr int64_t ptr_FriendManagerClass = 0x4CCD0F8;//Gaggle_Friends_FriendManager_c *
 
-        constexpr int64_t ptr_LobbySceneHandlerClass = 0x4E4D4F0;//Handlers_LobbyHandlers_LobbySceneHandler_c *
-        constexpr int64_t ptr_PlayerControllerClass = 0x4E839A0;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
-        constexpr int64_t ptr_LocalPlayerClass = 0x4E4E198;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
-        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x4E83A88;//Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
+        constexpr int64_t ptr_LobbySceneHandlerClass = 0x4D23A38;//Handlers_LobbyHandlers_LobbySceneHandler_c *
+        //Handlers.GameHandlers.PlayerHandlers.PlayerController
+        constexpr int64_t ptr_PlayerControllerClass = 0x4D59F48;//Handlers_GameHandlers_PlayerHandlers_PlayerController_c *
+        //Handlers.GameHandlers.PlayerHandlers.LocalPlayer
+        constexpr int64_t ptr_LocalPlayerClass = 0x4D246E8;//Handlers_GameHandlers_PlayerHandlers_LocalPlayer_c *
+        constexpr int64_t ptr_PlayerCustomizationPanelHandlerClass = 0x4D5A030;//Handlers_LobbyHandlers_PlayerCustomizationPanelHandler_c *
     }
 
     namespace BytesPatch {
 
-        //2.18.01
+        //2.18.00.02
         //0F 82 ? ? ? ?  80 BF ? ? ? ?  00 0F 85 ? ? ? ?  45 33 C0 C6 87 ? ? ? ?  01 B2 01 48 8D 4D E7
         namespace CooldownTime {
             constexpr int64_t address = GameAssembly::Method::UICooldownButton::Update + 0x22F;
-            const std::vector<byte> raw{ 0xE8,0x1C,0x62,0xF4,0x02 };//call Time.get_deltaTime
+            const std::vector<byte> raw{ 0xE8,0x0C,0xA0,0xE4,0x02 };//call Time.get_deltaTime
             const std::vector<byte> removeCooldownTime{ 0x41,0x0F,0x28,0xC1,0x90 };//movaps xmm0, xmm9
         }
 
@@ -351,12 +353,12 @@ namespace GameAssembly {
 
         //跳过任务小游戏，直接完成任务
         //原理为替换api，让OpenPanel跳转到CompleteTask，因为都是无参函数，所以直接jmp即可
-        //2.18.01
+        //2.18.00.02
         namespace SkipPlayingGameToCompleteTask {
             constexpr int64_t address = GameAssembly::Method::TaskPanelHandler::OpenPanel;
 
-            const std::vector<byte> raw = { 0x48,0x89,0x5C,0x24,0x08 };// mov     [rsp+arg_0], rbx
-            const std::vector<byte>  oneTapCompleteTask = { 0xE9,0xBB,0xE5,0xFF,0xFF };//Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.OpenPanel - E9 6BEFFFFF - jmp Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.CompleteTask
+            const std::vector<byte> raw = { 0x48, 0x89, 0x5C, 0x24, 0x08 };// mov     [rsp+arg_0], rbx
+            const std::vector<byte>  oneTapCompleteTask = { 0xE9,0xBB,0xE2,0xFF,0xFF };//Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.OpenPanel - E9 6BEFFFFF - jmp Handlers.GameHandlers.TaskHandlers.TaskPanelHandler.CompleteTask
         }
 
         /*

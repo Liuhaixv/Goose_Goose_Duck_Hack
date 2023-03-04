@@ -37,6 +37,8 @@ extern DebugConsole debugConsole;
 
 #define str(eng,cn) utils.b_useChineseLanguage?(const char*)u8##cn:(const char*)u8##eng
 
+#define EnOrCn(a, b) utils.b_useChineseLanguage?b:a
+
 #define icon_str(icon,str) (std::string(icon)+" "+std::string(str)).c_str()
 
 void drawMinimap();
@@ -1395,6 +1397,12 @@ void drawMenu() {
                 HelpMarker(str("Right click minimap to TP", "右键点击游戏内地图传送"));
             }
 
+            //刺客可以狙击肉汁和大白鹅
+            {
+                ImGui::Text(icon_str(ICON_FA_CROSSHAIRS, str("Enhanced Assassin", "刺客增强版")));
+                HelpMarker(str("Allow you to shoot Gravy and Goose(which has no skill)", "允许你狙击肉汁和大白鹅"));
+            }
+
             //游戏内发送聊天消息
             {
                 static bool sendChatFailed = false;
@@ -1798,14 +1806,16 @@ void drawVerification()
 {
     static std::string login_token = HashVerificator::get_hwid_password();
 
-    ImGui::Begin(str("Welcome", "欢迎页"), NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin(str("Welcome", "欢迎页"), NULL, ImGuiWindowFlags_AlwaysAutoResize |/* ImGuiWindowFlags_NoResize  |*/ ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 
-    if (ImGui::BeginTable("login_table", 1, ImGuiTableFlags_SizingFixedFit)) {
+    if (ImGui::BeginTable("login_table", 1, ImGuiTableFlags_SizingStretchSame)) {
 
         ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
         ImGui::TextColored(ImColor(255, 255, 0), str("This is a free cheat software", "这是一个免费辅助项目"));
+
+        HelpMarker(str("If you bought this from anywhere, you are scammed", "如果你是从别处购买的，那么你被骗了"));
         //ImGui::Text(str("Input CAPTCHA to access", "输入验证码以继续"));
 
         if (ImGui::BeginTable("login_token", 2, ImGuiTableFlags_SizingFixedFit)) {
@@ -1865,14 +1875,15 @@ void drawVerification()
 
             ImGui::EndTable();
         }
+
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
-        ImGui::TableSetColumnIndex(0);
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
 
+   
         static time_t lastTimeClickLogin = -1;
         static bool showLoginFailedIcon = false;
-        if (ImGui::Button("Login", ImVec2(260.f, 30.f)))
+        if (ImGui::Button("Login", ImVec2(260.f, 50.f)))
         {
             lastTimeClickLogin = time(NULL);
         }
@@ -1882,7 +1893,7 @@ void drawVerification()
         if (lastTimeClickLogin != -1) {
             if (time(NULL) - lastTimeClickLogin <= 2 && lastTimeClickLogin) {
                 showLoginFailedIcon = false;
-                Spinner("login_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+                Spinner("login_spinner", 20.0f, 2.0f, ImColor(0, 255, 0));
             }
             else {
                 //验证
@@ -1900,7 +1911,12 @@ void drawVerification()
         }
 
         if (showLoginFailedIcon) {
+
+            ImGui::SetWindowFontScale(1.5f); // 设置新的缩放比例
+
             ImGui::TextColored(ImColor(255, 0, 0), ICON_FA_CIRCLE_XMARK);
+
+            ImGui::SetWindowFontScale(1.0f); // 恢复原始缩放比例
         }
 
 
