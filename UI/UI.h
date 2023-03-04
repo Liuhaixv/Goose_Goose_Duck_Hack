@@ -20,6 +20,8 @@
 #include "stb_image.h"
 #include <map>
 
+#include"../Struct/MyImage.h"
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 class UI
@@ -28,6 +30,8 @@ public:
     static HWND hwnd;
 
     static std::map<int, GameMap> miniMaps;
+    static MyImage wx_QR;//wechat
+    static MyImage dc_QR;//discord
 
     static void Render(HINSTANCE instance, INT cmd_show);
 

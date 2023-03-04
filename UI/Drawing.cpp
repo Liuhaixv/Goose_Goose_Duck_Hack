@@ -15,7 +15,8 @@
 //#include "Struct/UserSettings.hpp"
 
 #include "IconsFontAwesome6Pro.h"
-#include "../Password_Offline.cpp"
+#include "../Password_Offline.h"
+#include "../obfuscator.hpp"
 
 #define IM_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR)))) 
 
@@ -58,9 +59,28 @@ void Drawing::Draw() {
     if (isActive())
     {
         do {
-            //验证
-            drawVerification();
-                break;
+            if (hackSettings.guiSettings.b_hasVerified == false) {
+                static bool hasInitedFromSettings = false;//是否从配置文件判断过验证
+
+                if (hasInitedFromSettings == false) {
+                    //从配置文件读取判断是否正确
+                    int captcha = userSettings.getInt(u8"captcha", 0);
+
+                    if (to_string(captcha) == HashVerificator::get_password(HashVerificator::get_hwid_password())) {
+                        hackSettings.guiSettings.b_hasVerified = true;
+                        continue;
+                    }
+
+                    hasInitedFromSettings = true;
+                }
+
+                //验证
+                drawVerification();
+            }
+
+            if (hackSettings.guiSettings.b_hasVerified == false) {
+                continue;
+            }
 
             if (hackSettings.guiSettings.b_debug) {
                 ImGui::ShowDemoWindow();
@@ -1301,6 +1321,20 @@ void drawMenu() {
                 ShellExecute(0, 0, "https://github.com/Liuhaixv/Goose_Goose_Duck_Hack", 0, 0, SW_SHOW);
             }
 
+            ImGui::Text(str("Donate via Alipay", "支付宝捐赠"));
+            ImGui::SameLine();
+            if (ImGui::Button(str("Donate##alipay", "捐赠##alipay"))) {
+                static const char*  aliUrl = cryptor::create("https://ibb.co/Xb89VJF").decrypt();
+                ShellExecute(0, 0, aliUrl, 0, 0, SW_SHOW);
+            }
+
+            ImGui::Text(str("Donate via Wechat", "微信捐赠"));
+            ImGui::SameLine();
+            if (ImGui::Button(str("Donate##wechat", "捐赠##wechat"))) {
+                static  const char* wechatUrl = cryptor::create("https://ibb.co/9H9DbSk").decrypt();
+                ShellExecute(0, 0, wechatUrl, 0, 0, SW_SHOW);
+            }
+
             ImGui::EndTabItem();
         }
 
@@ -1375,6 +1409,7 @@ void drawMenu() {
                 HintUpdateModIfFailed(sendChatFailed);
             }
 
+
             //远程杀人
             {
                 static bool remoteKillFailed = false;
@@ -1421,7 +1456,7 @@ void drawMenu() {
                         std::string killButtonName = icon_str(ICON_FA_CROSSHAIRS, str("Kill", "击杀"));
 
                         if (ImGui::Button((killButtonName + "##" + std::to_string(i)).c_str())) {
-                            MelonLoaderHelper::remoteKill(ptr_playerController->userId);
+                            remoteKillFailed = !MelonLoaderHelper::remoteKill(ptr_playerController->userId);
                         }
                     }
 
@@ -1429,16 +1464,12 @@ void drawMenu() {
                     ImGui::EndTable();
 
                     if (!hasTargetData) {
-                        ImGui::Text(icon_str((const char*)u8"\ue5c5", str("No targets available!", "当前没有可击杀目标!")));
+                        ImGui::Text(icon_str((const char*)u8"\ue5c5", str("No targets available!", "当前无可用目标!")));
                     }
-                    HintUpdateModIfFailed(remoteKillFailed);
-
                     ImGui::EndPopup();
                 }
-
-                ImGui::EndTabItem();
+                HintUpdateModIfFailed(remoteKillFailed);
             }
-
 
             //启动飞船
             {
@@ -1449,18 +1480,7 @@ void drawMenu() {
                 ImGui::SameLine();
                 HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
                 HintUpdateModIfFailed(moveShuttleFailed);
-            }
-
-            //静音所有其他玩家
-            {
-                static bool muteAllPlayersFailed = false;
-                if (ImGui::Button(icon_str(ICON_FA_MICROPHONE_LINES_SLASH, str("Silence other players", "禁言所有玩家")))) {
-                    muteAllPlayersFailed = !MelonLoaderHelper::muteAllPlayers();
-                }
-                ImGui::SameLine();
-                HelpMarker(str("Silence all other players with silencer's skill\n(You must be the duck Silencer)", "禁言所有其他玩家\n(你必须是静语者)"));
-                HintUpdateModIfFailed(muteAllPlayersFailed);
-            }
+            }            
 
             //追踪所有玩家箭头
             {
@@ -1484,16 +1504,89 @@ void drawMenu() {
                 HintUpdateModIfFailed(suicideFailed);
             }
 
+            //静音其他玩家
+            {
+                static bool remoteSilenceFailed = false;
+                // 显示一个按钮
+                if (ImGui::Button(icon_str(ICON_FA_MICROPHONE_LINES_SLASH, str("Remote silence", "远程静音")))) {
+                    ImGui::OpenPopup("Select player to silence");  // 打开弹出窗口
+                }
+                HelpMarker(str("Silence player per round\nSilencer only", "每轮可远程静音一名玩家\n仅限静语者鸭子"));
+
+                // 显示弹出窗口选择要静音的人
+                if (ImGui::BeginPopup("Select player to silence", ImGuiWindowFlags_AlwaysAutoResize)) {
+
+                    ImGui::BeginTable("People Table##silence", 2);
+
+                    // 设置表格列宽
+                    ImGui::TableSetupColumn(str("Nickname", "昵称"), ImGuiTableColumnFlags_WidthStretch);
+                    ImGui::TableSetupColumn(str("Button", "按钮"), ImGuiTableColumnFlags_WidthStretch);
+
+                    bool hasTargetData = false;
+                    auto playerControllers = g_client.playerControllers;
+                    for (int i = 0; i < g_client.playerControllers.size(); i++)
+                    {
+                        PlayerController* ptr_playerController = g_client.playerControllers[i];
+
+                        //跳过无效玩家、本地玩家、死亡玩家
+                        if (ptr_playerController->address == NULL ||
+                            ptr_playerController->b_isLocal ||
+                            ptr_playerController->nickname == "" ||
+                            ptr_playerController->i_timeOfDeath != 0) {
+                            continue;
+                        }
+
+                        hasTargetData = true;
+
+                        ImGui::TableNextRow();
+
+                        //昵称
+                        ImGui::TableNextColumn();
+                        ImGui::Text(ptr_playerController->nickname.c_str());
+
+                        //静音按钮
+                        ImGui::TableNextColumn();
+
+                        std::string silenceButtonName = icon_str(ICON_FA_MICROPHONE_LINES_SLASH, str("Silence", "静语"));
+
+                        if (ImGui::Button((silenceButtonName + "##" + std::to_string(i)).c_str())) {
+                            remoteSilenceFailed = !MelonLoaderHelper::silencePlayer(ptr_playerController->userId);
+                        }
+                    }
+
+                    // 结束ImGui表格布局
+                    ImGui::EndTable();
+
+                    if (!hasTargetData) {
+                        ImGui::Text(icon_str((const char*)u8"\ue5c5", str("No targets available!", "当前无可用目标!")));
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                HintUpdateModIfFailed(remoteSilenceFailed);
+            }
 
 
-            //一键抛尸
+            //远程吃尸体
+            {
+                //                
+                static bool remoteEatFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_UTENSILS, str("Launch Time", "午餐时刻")))) {
+                    remoteEatFailed = !MelonLoaderHelper::remoteEat();
+                }
+                HelpMarker(str("Eat one random body", "随机吃掉一个尸体"));
+                HintUpdateModIfFailed(remoteEatFailed);
+            }
+
+            //一键捡尸体
             {
                 static bool throwAllBodiesFailed = false;
-                if (ImGui::Button(icon_str(ICON_FA_TRASH_CAN, str("No bodies", "一键抛尸")))) {
-                    throwAllBodiesFailed = !MelonLoaderHelper::throwAllBodiesAwayFromMap();
+                if (ImGui::Button(icon_str(ICON_FA_PERSON_CARRY_BOX, str("Pick up all bodies", "一键捡尸")))) {
+                    throwAllBodiesFailed = !MelonLoaderHelper::pickUpAllBodies();
                 }
                 ImGui::SameLine();
-                HelpMarker(str("Throw all bodies away from map\n(You must be the Undertaker)", "将所有鸡腿扔出地图外\n(你必须是丧葬者)"));
+                HelpMarker(str("Pick up all bodies\n(You must be the Undertaker)", "捡起所有鸡腿\n(你必须是丧葬者)"));
                 HintUpdateModIfFailed(throwAllBodiesFailed);
             }
 
@@ -1521,11 +1614,14 @@ void drawMenu() {
                 HelpMarker(str("Grants you access to all unlockable items", "获取使用所有可解锁项的权限"));
                 HintUpdateModIfFailed(unlockAllItemsFailed);
             }
+
+            ImGui::EndTabItem();
         }
         //菜单7
         if (ImGui::BeginTabItem(str("Secret zone", "秘密菜单")))
         {
-            //选择进程
+            //选择进程 TODO: 由于增加了验证，切换进程会导致已保存的验证码丢失，待解决
+            /*
             {
                 //游戏进程ID
                 ImGui::Text(str("PID:", "PID: "));
@@ -1553,13 +1649,15 @@ void drawMenu() {
                             if (ImGui::Selectable(std::to_string(memory.pIDs[i]).c_str(), memory.pIDs[i])) {
                                 //附加到进程
                                 memory.attachToGameProcess(memory.pIDs[i]);
+                                //防止重新验证
+                                hackSettings.guiSettings.b_hasVerified = true;
                             }
                         }
                     }
 
                     ImGui::EndPopup();
                 }
-            }
+            }*/
 
             ImGui::BeginDisabled();
 
@@ -1699,107 +1797,118 @@ void drawESP() {
 void drawVerification()
 {
     static std::string login_token = HashVerificator::get_hwid_password();
-    char captcha[] = "pwd";
-    
-    ImGui::Begin(str("Welcome", "欢迎页"), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 
-    //ImGui::SetCursorPos(ImVec2(118, 20));
-    ImGui::TextDisabled(str("This is a free cheat software","这是一个免费辅助项目"));
+    ImGui::Begin(str("Welcome", "欢迎页"), NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 
-    ImGui::Text("Log into your account");
+    if (ImGui::BeginTable("login_table", 1, ImGuiTableFlags_SizingFixedFit)) {
 
-        ImGui::TextDisabled(str("Login token", "登录令牌"));
-
-        ImGui::Text(login_token.c_str());
-
-        ImGui::TextDisabled(str("CAPTCHA","验证码"));
-
-        ImGui::SetCursorPos(ImVec2(180, 130));
-        ImGui::TextDisabled(str("How to get CAPTCHA","如何获取验证码"));
-        HelpMarker(str("Subscribe to wechat or join Discord\nSend your login token to bot",
-            "关注微信号或Discord服务器\n发送登录令牌给机器人"));
-
-        ImGui::InputText("##CAPTCHA", captcha, IM_ARRAYSIZE(captcha));
-    
-
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
-    if (ImGui::Button("Login", ImVec2(260.f, 30.f)))
-    {
-       // show_login = false;
-       // show_register = true;
-    }
-    ImGui::PopStyleVar();
-
-    ImGui::TextDisabled("Don't have an account? Sign up!");
-
-    if (ImGui::BeginTable("table_nested1", 1, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
-    {
-        //ImGui::TableSetupColumn("A0");
-        ImGui::TableHeadersRow();
-
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableNextRow();
         ImGui::TableNextColumn();
-        ImGui::Text("A0 Row 0");
+        ImGui::TextColored(ImColor(255, 255, 0), str("This is a free cheat software", "这是一个免费辅助项目"));
+        //ImGui::Text(str("Input CAPTCHA to access", "输入验证码以继续"));
 
-        {
-            //float rows_height = 15 * 2;
-            if (ImGui::BeginTable("table_nested2", 2, ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
+        if (ImGui::BeginTable("login_token", 2, ImGuiTableFlags_SizingFixedFit)) {
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            ImGui::TextDisabled(str("Your Login Token:", "你的登录令牌:"));
+            ImGui::TableNextColumn();
+            ImGui::Text(login_token.c_str());
+
+            ImGui::EndTable();
+        }
+
+        //6位数字
+        static char captcha[6 + 1];
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        ImGui::InputTextWithHint("##CAPTCHA", str("CAPTCHA", "验证码"), captcha, IM_ARRAYSIZE(captcha), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_AutoSelectAll);
+
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        if (ImGui::BeginTable("get_captcha", 2, ImGuiTableFlags_SizingFixedFit)) {
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            ImGui::TextDisabled(str("Where can I get my CAPTCHA", "如何获取验证码"));
+            HelpMarker(str("Subscribe to wechat or join Discord\nSend your login token to bot",
+                "关注微信号或Discord服务器\n发送登录令牌给机器人"));
+            ImGui::TableNextColumn();
+
+            if (ImGui::Button(ICON_FA_COMMENTS)) {
+                //微信
+                ImGui::OpenPopup("wechat_qr_popup");
+            }
+            ImGui::SameLine();
+
+            if (ImGui::Button(ICON_FA_DISCORD)) {
+                //discord
+                ImGui::OpenPopup("discord_qr_popup");
+            }
+
+            if (ImGui::BeginPopup("wechat_qr_popup"))
             {
-                ImGui::TableSetupColumn("B0");
-                ImGui::TableSetupColumn("B1");
-                ImGui::TableHeadersRow();
+                if (ImGui::ImageButton(UI::wx_QR.texture, ImVec2(512, 512))) {
+                    ImGui::CloseCurrentPopup();
+                }
 
-                ImGui::TableNextRow(ImGuiTableRowFlags_None);
-                ImGui::TableNextColumn();
-                ImGui::Text("B0 Row 0");
-                ImGui::TableNextColumn();
-                ImGui::Text("B1 Row 0");
-                ImGui::TableNextRow(ImGuiTableRowFlags_None);
-                ImGui::TableNextColumn();
-                ImGui::Text("B0 Row 1");
-                ImGui::TableNextColumn();
-                ImGui::Text("B1 Row 1");
+                ImGui::EndPopup();
+            }
 
-                ImGui::EndTable();
+            if (ImGui::BeginPopup("discord_qr_popup"))
+            {
+                if (ImGui::ImageButton(UI::dc_QR.texture, ImVec2(512, 512))) {
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+
+            ImGui::EndTable();
+        }
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        ImGui::TableSetColumnIndex(0);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
+
+        static time_t lastTimeClickLogin = -1;
+        static bool showLoginFailedIcon = false;
+        if (ImGui::Button("Login", ImVec2(260.f, 30.f)))
+        {
+            lastTimeClickLogin = time(NULL);
+        }
+
+        ImGui::SameLine();
+
+        if (lastTimeClickLogin != -1) {
+            if (time(NULL) - lastTimeClickLogin <= 2 && lastTimeClickLogin) {
+                showLoginFailedIcon = false;
+                Spinner("login_spinner", 10.0f, 2.0f, ImColor(0, 255, 0));
+            }
+            else {
+                //验证
+                lastTimeClickLogin = -1;
+                if (captcha == HashVerificator::get_password(login_token)) {
+                    hackSettings.guiSettings.b_hasVerified = true;
+
+                    //保存验证过正确的密码到配置文件
+                    userSettings.getInt(u8"captcha", 0) = stoi(HashVerificator::get_password(login_token));
+                }
+                else {
+                    showLoginFailedIcon = true;
+                }
             }
         }
-        ImGui::TableNextColumn(); ImGui::Text("A0 Row 1");
-        ImGui::EndTable();
-    }
 
-    /*
-    if (ImGui::BeginTable("table_nested1", 1, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
-    {
-        ImGui::TableSetupColumn("A0");
-        ImGui::TableHeadersRow();
-
-        ImGui::TableNextColumn();
-        ImGui::Text("A0 Row 0");
-        {
-        //float rows_height = 15 * 2;
-            if (ImGui::BeginTable("table_nested2", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable))
-            {
-                ImGui::TableSetupColumn("B0");
-                ImGui::TableSetupColumn("B1");
-                ImGui::TableHeadersRow();
-
-                ImGui::TableNextRow(ImGuiTableRowFlags_None);
-                ImGui::TableNextColumn();
-                ImGui::Text("B0 Row 0");
-                ImGui::TableNextColumn();
-                ImGui::Text("B1 Row 0");
-                ImGui::TableNextRow(ImGuiTableRowFlags_None);
-                ImGui::TableNextColumn();
-                ImGui::Text("B0 Row 1");
-                ImGui::TableNextColumn();
-                ImGui::Text("B1 Row 1");
-
-                ImGui::EndTable();
-            }
+        if (showLoginFailedIcon) {
+            ImGui::TextColored(ImColor(255, 0, 0), ICON_FA_CIRCLE_XMARK);
         }
-        ImGui::TableNextColumn(); ImGui::Text("A0 Row 1");
+
+
+
+        ImGui::PopStyleVar();
+        ImGui::TableNextColumn();
+
         ImGui::EndTable();
     }
-    */
-
     ImGui::End();
 }

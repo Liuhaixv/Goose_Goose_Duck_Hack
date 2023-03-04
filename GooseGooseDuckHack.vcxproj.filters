@@ -120,9 +120,6 @@
     <ClCompile Include="PossibleRole.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Password_Offline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\Memory.h">
@@ -321,6 +318,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="antiAC.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\MyImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Password_Offline.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="obfuscator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

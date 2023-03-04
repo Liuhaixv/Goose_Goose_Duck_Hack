@@ -3,6 +3,7 @@
 #include<imgui_internal.h>
 #include"../Struct/UserSettings.hpp"
 #include "IconsFontAwesome6Pro.h"
+#include "../obfuscator.hpp"
 
 ID3D11Device* UI::pd3dDevice = nullptr;
 ID3D11DeviceContext* UI::pd3dDeviceContext = nullptr;
@@ -10,10 +11,15 @@ IDXGISwapChain* UI::pSwapChain = nullptr;
 ID3D11RenderTargetView* UI::pMainRenderTargetView = nullptr;
 
 std::map<int, GameMap> UI::miniMaps;
+MyImage UI::wx_QR;//wechat
+MyImage UI::dc_QR;//discord
+
 
 extern Utils utils;
 
 void getScaledResolution(int& resolutionX, int& resolutionY);
+
+
 
 // Simple helper function to load an image into a DX11 texture with common settings
 bool UI::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
@@ -75,14 +81,18 @@ void UI::loadMapsTexture() {
     GameMap map6(u8"BlackSwan", u8"黑天鹅");
     GameMap map7(u8"SS MotherGoose", u8"老妈鹅星球飞船");
 
-    UI::LoadTextureFromFile("./img/maps/0.png", &map0.texture, &map0.width, &map0.height);
-    UI::LoadTextureFromFile("./img/maps/1.png", &map1.texture, &map1.width, &map1.height);
-    UI::LoadTextureFromFile("./img/maps/2.png", &map2.texture, &map2.width, &map2.height);
-    UI::LoadTextureFromFile("./img/maps/3.png", &map3.texture, &map3.width, &map3.height);
-    UI::LoadTextureFromFile("./img/maps/4.png", &map4.texture, &map4.width, &map4.height);
-    UI::LoadTextureFromFile("./img/maps/5.png", &map5.texture, &map5.width, &map5.height);
-    UI::LoadTextureFromFile("./img/maps/6.png", &map6.texture, &map6.width, &map6.height);
-    UI::LoadTextureFromFile("./img/maps/7.png", &map7.texture, &map7.width, &map7.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/0.png").decrypt(), &map0.texture, &map0.width, &map0.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/1.png").decrypt(), &map1.texture, &map1.width, &map1.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/2.png").decrypt(), &map2.texture, &map2.width, &map2.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/3.png").decrypt(), &map3.texture, &map3.width, &map3.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/4.png").decrypt(), &map4.texture, &map4.width, &map4.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/5.png").decrypt(), &map5.texture, &map5.width, &map5.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/6.png").decrypt(), &map6.texture, &map6.width, &map6.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/maps/7.png").decrypt(), &map7.texture, &map7.width, &map7.height);
+
+    //读取wechat和discord的群
+    UI::LoadTextureFromFile(cryptor::create("./img/wx.jpg").decrypt(), &wx_QR.texture, &wx_QR.width, &wx_QR.height);
+    UI::LoadTextureFromFile(cryptor::create("./img/discord.png").decrypt(), &dc_QR.texture, &dc_QR.width, &dc_QR.height);
 
     //处理缩放
     map0.scaleToGamePosition = 0.086;
@@ -280,7 +290,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
         wc.lpszClassName,
         "External Overlay",
         WS_POPUP,
-        0, 0, resolutionX, resolutionY, nullptr, nullptr,
+        resolutionX/2, resolutionY/2, resolutionX, resolutionY, nullptr, nullptr,
         wc.hInstance,
         nullptr
     );
@@ -394,6 +404,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     icons_config.PixelSnapH = true;
     icons_config.GlyphMinAdvanceX = iconFontSize;
     io.Fonts->AddFontFromFileTTF("./Font/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
+    io.Fonts->AddFontFromFileTTF("./Font/fa-brands-400.ttf", iconFontSize, &icons_config, icons_ranges);
     io.Fonts->Build();
 
     //保存GUI窗口信息

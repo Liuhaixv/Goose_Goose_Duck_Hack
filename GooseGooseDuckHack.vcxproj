@@ -211,7 +211,8 @@
   <ItemGroup>
     <ClCompile Include="Class\Game\LocalPlayer.cpp" />
     <ClCompile Include="Class\Game\string.cpp" />
-    <ClCompile Include="Password_Offline.cpp" />
+    <ClInclude Include="obfuscator.hpp" />
+    <ClInclude Include="Password_Offline.h" />
     <ClCompile Include="PossibleRole.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="http\http_api\UploadUserInfoApi.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Memory\PatternScanner.h" />
     <ClInclude Include="PossibleRole.h" />
+    <ClInclude Include="Struct\MyImage.h" />
     <ClInclude Include="Struct\ObscuredTypes.hpp" />
     <ClInclude Include="Struct\RemoteMasterServerSettings.hpp" />
     <ClInclude Include="Struct\UserInfo.h" />

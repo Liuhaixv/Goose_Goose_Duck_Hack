@@ -32,9 +32,9 @@ public:
         return sendMessage(message.c_str());
     }
 
-    static bool muteAllPlayers() {
-        std::string message = "SilenceAllOtherPlayers";
-        return sendMessage(message.c_str()); 
+    static bool silencePlayer(std::string userId) {
+        std::string message = "SilencePlayer\n";
+        return sendMessage((message + userId).c_str());
     }
 
     static bool ringBell() {
@@ -47,8 +47,17 @@ public:
         return sendMessage(message.c_str());
     }
 
-    static bool throwAllBodiesAwayFromMap() {
-        std::string message = "ThrowAllBodiesAwayFromMap";
+    static bool pickUpAllBodies() {
+        std::string message = "PickUpAllBodies";
+        return sendMessage(message.c_str());
+    }
+
+    /// <summary>
+    /// 远程吃尸体
+    /// </summary>
+    /// <returns></returns>
+    static bool remoteEat() {
+        std::string message = "RemoteEat";
         return sendMessage(message.c_str());
     }
 
