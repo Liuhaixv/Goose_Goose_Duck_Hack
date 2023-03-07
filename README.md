@@ -78,9 +78,9 @@
 # 声明
 本项目仅做个人学习用途，我不会对因为滥用该项目导致的任何问题负责。
 
-[![](https://img.shields.io/badge/LatestRelease-%E4%B8%8B%E8%BD%BD-brightgreen)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
-[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
-[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
+[![](https://img.shields.io/badge/LatestRelease-%E4%B8%8B%E8%BD%BD-brightgreen)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest)
+[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest)
+[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest)
 
 ---
 
@@ -136,5 +136,5 @@ I am not responsible for any problems caused by abusing this project
 
 ---
 
-[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
-[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest/download/Release.zip)
+[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/latest/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest)
+[![](https://img.shields.io/github/downloads/Liuhaixv/Goose_Goose_Duck_Hack/total)](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/releases/latest)
