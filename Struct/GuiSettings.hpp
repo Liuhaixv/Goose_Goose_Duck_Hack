@@ -2,7 +2,7 @@
 #include <string>
 struct GuiSettings {
     //辅助程序版本
-    const std::string hackVersion = "0.8.7.2";
+    const std::string hackVersion = "0.8.7.3";
     //TODO：通过signature获取
     //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
     const std::string gameVersion = "2.18.02";
@@ -57,5 +57,9 @@ struct GuiSettings {
     bool b_bypassVersionCheck = false;
 
     //验证登录
+#ifdef DEVELOP
+    bool b_hasVerified = true;
+#else
     bool b_hasVerified = false;
+#endif
 };

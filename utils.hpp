@@ -271,8 +271,7 @@ private:
     static bool isChineseLanguageOS() {
         try {
             std::string locale = __CheckLocale();
-            if (locale.find("zh-CN") != std::string::npos){
-            //简体中文 
+            if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos){
                 return true;
                 //if (locale.find("zh") != std::string::npos || locale.find("CN") != std::string::npos) {
              

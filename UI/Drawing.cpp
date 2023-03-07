@@ -1442,11 +1442,12 @@ void drawMenu() {
                     {
                         PlayerController* ptr_playerController = g_client.playerControllers[i];
 
-                        //跳过无效玩家、本地玩家、死亡玩家
+                        //跳过无效玩家、本地玩家、死亡玩家、鹈鹕肚子里玩家
                         if (ptr_playerController->address == NULL ||
                             ptr_playerController->b_isLocal ||
                             ptr_playerController->nickname == "" ||
-                            ptr_playerController->i_timeOfDeath != 0) {
+                            ptr_playerController->i_timeOfDeath != 0||
+                            ptr_playerController->b_isInPelican) {
                             continue;
                         }
 
@@ -1477,6 +1478,17 @@ void drawMenu() {
                     ImGui::EndPopup();
                 }
                 HintUpdateModIfFailed(remoteKillFailed);
+            }
+
+            //丢掉炸弹
+            {
+                static bool throwAwayBomb = false;
+                if (ImGui::Button(icon_str(ICON_FA_BOMB, str("Not my bomb", "移除炸弹")))) {
+                    throwAwayBomb = !MelonLoaderHelper::throwAwayBomb();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Throw away bomb to other player", "将身上的炸弹丢给其他玩家"));
+                HintUpdateModIfFailed(throwAwayBomb);
             }
 
             //启动飞船

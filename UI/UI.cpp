@@ -385,7 +385,7 @@ void UI::Render(HINSTANCE instance, INT cmd_show)
     //chinese font
     if (utils.b_useChineseLanguage) {
         font1 = ImGui::GetIO().Fonts->AddFontFromFileTTF(
-            "c:/Windows/Fonts/simhei.ttf",
+            "c:/Windows/Fonts/msyh.ttc",
             cfg.SizePixels,
             NULL,
             ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());

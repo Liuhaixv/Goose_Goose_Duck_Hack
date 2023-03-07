@@ -63,6 +63,7 @@ void PlayerController::resetMemberFields()
 
     playerRole = NULL;
 
+    b_isInPelican = false;
     b_isSilenced = false;
     b_isInfected = false;
     b_isPlayerRoleSet = false;
@@ -304,6 +305,7 @@ bool PlayerController::update()
         // 更新玩家坐标
         updatePosition();
 
+        b_isInPelican = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isInPelican, false);
         b_inVent = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_inVent, false);
         b_hasBomb = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_hasBomb, false);
         b_isGhost = memory.read_mem<bool>(this->address + Offsets::PlayerController::b_isGhost, false);

@@ -147,6 +147,7 @@ namespace Offsets {
         constexpr int64_t b_fogOfWarEnabled = 0x389;
         constexpr int64_t b_isSpectator = 0x38A; // Boolean
         constexpr int64_t b_isRemoteSpectating = 0x38B; // Boolean
+        constexpr int64_t  b_isInPelican = 0x3A4;//Boolean
     }
 
     //2.18.00

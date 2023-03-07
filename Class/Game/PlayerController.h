@@ -31,6 +31,7 @@ public:
     bool b_isSilenced = false;
     bool b_isInfected = false;
     bool b_isPlayerRoleSet = false;
+    bool b_isInPelican = false;
     bool b_inVent = false;
     bool b_hasBomb = false;
     bool b_isGhost = false;

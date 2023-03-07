@@ -52,6 +52,11 @@ public:
         return sendMessage(message.c_str());
     }
 
+    static bool throwAwayBomb() {
+        std::string message = "ThrowAwayBomb";
+        return sendMessage(message.c_str());
+    }
+
     /// <summary>
     /// 远程吃尸体
     /// </summary>
