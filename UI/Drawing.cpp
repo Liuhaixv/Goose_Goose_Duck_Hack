@@ -881,6 +881,7 @@ void drawMenu() {
                 }
                 else {
                     ImGui::TextDisabled(str("Not Running", "未运行"));
+                    HelpMarker(str("Check if you have changed settings.json in EAC's folder", "检查是否正确修改了EAC目录的settings.json"));
                 }
 
                 //版本
@@ -1480,16 +1481,7 @@ void drawMenu() {
                 HintUpdateModIfFailed(remoteKillFailed);
             }
 
-            //丢掉炸弹
-            {
-                static bool throwAwayBomb = false;
-                if (ImGui::Button(icon_str(ICON_FA_BOMB, str("Not my bomb", "移除炸弹")))) {
-                    throwAwayBomb = !MelonLoaderHelper::throwAwayBomb();
-                }
-                ImGui::SameLine();
-                HelpMarker(str("Throw away bomb to other player", "将身上的炸弹丢给其他玩家"));
-                HintUpdateModIfFailed(throwAwayBomb);
-            }
+     
 
             //启动飞船
             {
@@ -1598,6 +1590,18 @@ void drawMenu() {
                 HelpMarker(str("Eat one random body", "随机吃掉一个尸体"));
                 HintUpdateModIfFailed(remoteEatFailed);
             }
+
+            //丢掉炸弹
+            {
+                static bool throwAwayBomb = false;
+                if (ImGui::Button(icon_str(ICON_FA_BOMB, str("Not my bomb", "移除炸弹")))) {
+                    throwAwayBomb = !MelonLoaderHelper::throwAwayBomb();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Throw away bomb to other player", "将身上的炸弹丢给其他玩家"));
+                HintUpdateModIfFailed(throwAwayBomb);
+            }
+
 
             //一键捡尸体
             {
