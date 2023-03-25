@@ -269,7 +269,7 @@ bool Hack::overrideOrthographicSize(LocalPlayer* localPlayer, float targetZoomSi
         //修改zoomSize
         std::vector<int64_t> offsets2 = {
             Offsets::LocalPlayer::ptr_cinemachineVirtualCamera,
-            Offsets::CinemachineVirtualCamera::f_m_zoomSize
+            Offsets::CinemachineVirtualCamera::f_OrthographicSize
         };
         int64_t zoomSize_addr = memory.FindPointer(localPlayer->address, offsets2);
 

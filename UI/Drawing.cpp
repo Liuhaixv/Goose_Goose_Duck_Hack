@@ -311,6 +311,22 @@ static void HelpMarker(const char* desc)
     }
 }
 
+static void IconMarker(const char* desc, const char* icon = ICON_FA_TRIANGLE_EXCLAMATION, ImColor color = ImColor(255, 0, 0))
+{
+    ImGui::SameLine();
+    ImGui::TextColored(color, icon);
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+    {
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}
+static void BanWarningMarker() {
+    IconMarker(str("May get you kicked or banned", "可能导致踢出或封禁"));
+}
 static void HintUpdateModIfFailed(bool failed) {
     if (failed) {
         ImGui::SameLine();
@@ -1327,7 +1343,7 @@ void drawMenu() {
             ImGui::Text(str("Donate via Alipay", "支付宝捐赠"));
             ImGui::SameLine();
             if (ImGui::Button(str("Donate##alipay", "捐赠##alipay"))) {
-                static const char*  aliUrl = cryptor::create("https://ibb.co/Xb89VJF").decrypt();
+                static const char* aliUrl = cryptor::create("https://ibb.co/Xb89VJF").decrypt();
                 ShellExecute(0, 0, aliUrl, 0, 0, SW_SHOW);
             }
 
@@ -1356,6 +1372,26 @@ void drawMenu() {
         //菜单6
         if (ImGui::BeginTabItem(str("ML", "ML")))
         {
+            //废弃功能
+            if (ImGui::CollapsingHeader(str("Patched Features##ML", "已废弃功能##ML"))) {
+
+                //解锁使用装扮
+                {
+                    static bool unlockAllItemsFailed = false;
+                    if (ImGui::Button((const char*)u8"\uf6e2 \uf553 \uf6e8 \uf5e4")) {
+                        unlockAllItemsFailed = !MelonLoaderHelper::unlockAllItems();
+                    }
+                    ImGui::SameLine();
+                    HelpMarker(str("Grants you access to all unlockable items", "获取使用所有可解锁项的权限"));
+                    HintUpdateModIfFailed(unlockAllItemsFailed);
+                }
+                //刺客可以狙击肉汁和大白鹅
+                {
+                    ImGui::Text(icon_str(ICON_FA_CROSSHAIRS, str("Enhanced Assassin", "刺客增强版")));
+                    HelpMarker(str("Allow you to shoot Gravy and Goose(which has no skill)", "允许你狙击肉汁和大白鹅"));
+                }
+            }
+
             //TODO：
 
             if (ImGui::Button(str("How to install mod##install mod", "安装mod教程##install mod"))) {
@@ -1398,11 +1434,7 @@ void drawMenu() {
                 HelpMarker(str("Right click minimap to TP", "右键点击游戏内地图传送"));
             }
 
-            //刺客可以狙击肉汁和大白鹅
-            {
-                ImGui::Text(icon_str(ICON_FA_CROSSHAIRS, str("Enhanced Assassin", "刺客增强版")));
-                HelpMarker(str("Allow you to shoot Gravy and Goose(which has no skill)", "允许你狙击肉汁和大白鹅"));
-            }
+           
 
             //游戏内发送聊天消息
             {
@@ -1447,7 +1479,7 @@ void drawMenu() {
                         if (ptr_playerController->address == NULL ||
                             ptr_playerController->b_isLocal ||
                             ptr_playerController->nickname == "" ||
-                            ptr_playerController->i_timeOfDeath != 0||
+                            ptr_playerController->i_timeOfDeath != 0 ||
                             ptr_playerController->b_isInPelican) {
                             continue;
                         }
@@ -1481,8 +1513,6 @@ void drawMenu() {
                 HintUpdateModIfFailed(remoteKillFailed);
             }
 
-     
-
             //启动飞船
             {
                 static bool moveShuttleFailed = false;
@@ -1492,7 +1522,7 @@ void drawMenu() {
                 ImGui::SameLine();
                 HelpMarker(str("Move shuttle in map of nexus colony\nYou can fart to move shuttle too", "点击按钮远程控制连结殖民地地图中的飞船\n你也可以通过放屁来移动飞船"));
                 HintUpdateModIfFailed(moveShuttleFailed);
-            }            
+            }
 
             //追踪所有玩家箭头
             {
@@ -1513,6 +1543,7 @@ void drawMenu() {
                 }
                 ImGui::SameLine();
                 HelpMarker(str("Suicide", "自杀"));
+                BanWarningMarker();
                 HintUpdateModIfFailed(suicideFailed);
             }
 
@@ -1627,17 +1658,6 @@ void drawMenu() {
             }
 
             ImGui::NewLine();
-
-            //解锁使用装扮
-            {
-                static bool unlockAllItemsFailed = false;
-                if (ImGui::Button((const char*)u8"\uf6e2 \uf553 \uf6e8 \uf5e4")) {
-                    unlockAllItemsFailed = !MelonLoaderHelper::unlockAllItems();
-                }
-                ImGui::SameLine();
-                HelpMarker(str("Grants you access to all unlockable items", "获取使用所有可解锁项的权限"));
-                HintUpdateModIfFailed(unlockAllItemsFailed);
-            }
 
             ImGui::EndTabItem();
         }
@@ -1896,7 +1916,7 @@ void drawVerification()
         ImGui::TableNextColumn();
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
 
-   
+
         static time_t lastTimeClickLogin = -1;
         static bool showLoginFailedIcon = false;
         if (ImGui::Button("Login", ImVec2(260.f, 50.f)))

@@ -156,8 +156,23 @@ namespace Offsets {
     }
 
     //2.16.02
+    //LocalPlayer组件游戏对象名VCAM Scriptable
     namespace CinemachineVirtualCamera {
-        constexpr int64_t f_m_zoomSize = 0xB4;//Float
+        constexpr int64_t struct_m_Lens = 0xB0;//LensSettings
+
+        //以下几个数据实际上属于LensSettings结构体的一部分
+        
+        //This is the camera view in degrees. Display will be in vertical degress, unless the associated camera has its FOV axis setting set to Horizontal, in which case display will be in horizontal degress. Internally, it is always vertical degrees.  For cinematic people, a 50mm lens on a super-35mm sensor would equal a 19.6 degree FOV
+        constexpr int64_t f_FieldOfView = 0xB0;
+        //When using an orthographic camera, this defines the half-height, in world coordinates, of the camera view.
+        constexpr int64_t f_OrthographicSize = 0xB4;
+        //This defines the near region in the renderable range of the camera frustum. Raising this value will stop the game from drawing things near the camera, which can sometimes come in handy.  Larger values will also increase your shadow resolution.
+        constexpr int64_t f_NearClipPlane = 0xB8;
+        //This defines the far region of the renderable range of the camera frustum. Typically you want to set this value as low as possible without cutting off desired distant objects
+        constexpr int64_t f_FarClipPlane = 0xBC;
+        //Camera Z roll, or tilt, in degrees.
+        constexpr int64_t f_Dutch = 0xC0;
+        constexpr int64_t i_ModeOverride = 0xC4;//enum LensSettings.OverrideModes
     }
 
     //2.18.00
