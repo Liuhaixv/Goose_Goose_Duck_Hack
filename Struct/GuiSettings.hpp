@@ -5,7 +5,7 @@ struct GuiSettings {
     const std::string hackVersion = "0.8.8";
     //TODO：通过signature获取
     //https://www.unknowncheats.me/forum/programming-for-beginners/171994-understanding-pattern-scanning-concept.html#post1421991
-    const std::string gameVersion = "2.18.02";
+    const std::string gameVersion = "2.19.00";
 
     //全局开关
     bool b_draw = true;
