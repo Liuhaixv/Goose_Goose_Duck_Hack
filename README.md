@@ -12,6 +12,8 @@
 
 鹅鸭杀外部辅助程序，目前持续更新中，如果你喜欢我的项目请考虑[捐赠](https://github.com/Liuhaixv/Goose_Goose_Duck_Hack/blob/GUI/img/wechat.jpg?raw=true)，或者点亮Star收藏。
 
+已适配游戏版本2.19.00
+
 推荐搭配[Mod](https://github.com/Liuhaixv/GGDH_ML)使用。
 
 有功能需求可以提Issue，我都会回复。
