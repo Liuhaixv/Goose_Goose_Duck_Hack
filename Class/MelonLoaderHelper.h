@@ -57,6 +57,11 @@ public:
         return sendMessage(message.c_str());
     }
 
+    static bool startGame() {
+        std::string message = "StartGame";
+        return sendMessage(message.c_str());
+    }    
+
     /// <summary>
     /// 远程吃尸体
     /// </summary>

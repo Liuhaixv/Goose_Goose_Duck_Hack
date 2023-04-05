@@ -1657,6 +1657,17 @@ void drawMenu() {
                 HintUpdateModIfFailed(ringBellFailed);
             }
 
+            //轮抽重开游戏
+            {
+                static bool startGameFailed = false;
+                if (ImGui::Button(icon_str(ICON_FA_ARROWS_ROTATE, str("Start game", "重开游戏")))) {
+                    startGameFailed = !MelonLoaderHelper::startGame();
+                }
+                ImGui::SameLine();
+                HelpMarker(str("Start game", "轮抽选角色阶段重开游戏(仅限房主)"));
+                HintUpdateModIfFailed(startGameFailed);
+            }
+
             ImGui::NewLine();
 
             ImGui::EndTabItem();
